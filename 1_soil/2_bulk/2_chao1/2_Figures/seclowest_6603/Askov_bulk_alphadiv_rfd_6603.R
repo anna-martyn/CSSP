@@ -33,7 +33,15 @@ library(ggplot2)
 
 # Define colours and groups for plot.
 # colors <- data.frame(group=c("NPK","PK","UF"), color=c("#6D3B00","#A06A37","#D2B48C"))
-colors <- data.frame(group=c("NPK","PK","UF"), color=c("#341C02","#A06A37","#D2B48C"))
+# colors <- data.frame(group=c("NPK","PK","UF"), color=c("#341C02","#A06A37","#D2B48C"))
+# colors <- data.frame(group=c("NPK","PK","UF"),
+#                      color=c("#73675A","#A89F90","#D6C9B8"))
+# colors <- data.frame(group=c("NPK","PK","UF"),
+#                      color=c("#9CAF88","#D08970","#7A9E9F"))
+# colors <- data.frame(group=c("NPK","PK","UF"),
+#                      colors=c("#A8D17F","#E07B5F","#5FB0B7"))
+colors <- data.frame(group=c("NPK","PK","UF"),
+                     colors=c("#6F944F","#B2563C","#3C7D82"))
 l1 <- c("NPK", "PK", "UF")
 index_bulk$Soil <- factor(index_bulk$Soil, levels=l1)
 colors <- colors[match(l1, colors$group), ]
@@ -45,13 +53,13 @@ main_theme <- theme(panel.background=element_blank(),
                     axis.line.x=element_line(color="black"),
                     axis.line.y=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
-                    axis.text = element_text(size = 20, color = "black"),
-                    legend.text = element_text(size=20, color = "black"),
+                    axis.text = element_text(size = 8, color = "black"),
+                    legend.text = element_text(size=8, color = "black"),
                     legend.key=element_blank(),
-                    axis.title.y = element_text(size = 20),
+                    axis.title.y = element_text(size = 8),
                     legend.position="none",
                     legend.background=element_blank(),
-                    plot.title = element_text(size=20, hjust=1))
+                    plot.title = element_text(size=8, hjust=1))
 
 # Load package for statistics.
 library(dplyr)
@@ -87,20 +95,25 @@ anova_p <- summary(ano)[[1]][["Pr(>F)"]][1]
 
 # Make plot with significance letters and ANOVA p-value as plot title.
 p1 <- ggplot(index_bulk, aes(x=Soil, y=value, fill=Soil)) +
-  geom_boxplot(alpha=0.7, position=position_dodge(width = 0.7), outlier.color=NA, width=0.3) +
-  geom_jitter(position=position_jitter(width=0, height=0.17), size=4, alpha=1) +
+  geom_boxplot(alpha=0.7, position=position_dodge(width = 0.7),
+               outlier.color=NA, width=0.3) +
+  geom_jitter(position=position_jitter(width=0, height=0.17),
+              size=1, alpha=1) +
   scale_fill_manual(values=as.character(colors$color)) +
   labs(x="", y="Chao1 index",
        title = paste0("p = ", signif(anova_p, 3))) +  
-  geom_text(data=label_df, aes(x=Soil, y=y_position, label=Letters), inherit.aes=FALSE, size=6) +
+  # geom_text(data=label_df, aes(x=Soil, y=y_position, label=Letters),
+  #           inherit.aes=FALSE, size=6) +
   main_theme
 
 
 p1
 
 # Save the plot.
-ggsave("Askov_barley_bulk_chao1_rfd_6603.pdf", p1, width=3, height=5)
+ggsave("Askov_barley_bulk_chao1_rfd_6603.pdf", 
+       p1, width = 3, height = 5, units = "cm")
 saveRDS(p1, file = "Askov_barley_bulk_chao1_rfd_6603.rds")
+saveRDS(p1, file = "../../../6_final_figure/Askov_barley_bulk_chao1_rfd_6603.rds")
 
 # Save ANOVA Tukey HSD output file.
 write.csv(labels, file =  "Bulk_chao1_ANOVA_TukeyHSD_rfd_6603.csv")

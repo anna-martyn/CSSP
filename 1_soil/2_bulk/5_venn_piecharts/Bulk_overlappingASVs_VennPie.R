@@ -63,17 +63,18 @@ p <- ggVennDiagram(
   venn_data,
   label = "count",
   label_alpha = 0,
-  label_size = 8,
-  set_size = 8
+  label_size = 3,
+  set_size = 3
 ) +
   scale_fill_gradient(low = "white", high = "white") +
   labs(title = "Unique <i>vs</i>. Shared ASVs") +
-  theme(plot.title = element_markdown(size = 20, hjust = 0.5), legend.position = "none")
+  theme(plot.title = element_markdown(size = 12, hjust = 0.5), legend.position = "none")
 
 p
 
 ggsave(paste("Venn_ASVs_bulk.pdf", sep=""), p, width=5, height=5, bg="white")
 saveRDS(p, file = "Venn_ASVs_bulk.rds")
+saveRDS(p, file = "../6_final_figure/Venn_ASVs_bulk.rds")
 
 # Make a new dataframe for each combination of unique or overlapping ASVs.
 
@@ -200,7 +201,7 @@ for(i in seq_along(ASV_names)) {
     scale_fill_manual(values = colors, guide = guide_legend(ncol = 1)) +
     theme_void() +
     labs(title = plot_titles[i],fill="Bacterial order") +
-    theme(plot.title = element_text(hjust = 0.5, size = 10), margin = margin(b = 1))
+    theme(plot.title = element_text(hjust = 0.5, size = 6), margin = margin(b = 1))
   
   plot_list[[i]] <- p
 }
@@ -220,15 +221,15 @@ final_plot <- top_row / bottom_row +
   plot_layout(guides = "collect") & 
   theme(
     legend.position = "right",
-    legend.text  = element_text(size = 20),    # legend text size
-    legend.title = element_text(size = 20)     # legend header size
+    legend.text  = element_text(size = 6),    # legend text size
+    legend.title = element_text(size = 6)     # legend header size
   )
 
 # Update pie chart titles size and reduce distance to pie (both rows)
 final_plot <- final_plot & 
   theme(
     plot.title = element_text(
-      size = 20, 
+      size = 8, 
       hjust = 0.5,
       margin = margin(t=10, b = 1)  # very small space below title
     )
@@ -237,20 +238,26 @@ final_plot <- final_plot &
 # Add overall title
 final_plot <- final_plot + plot_annotation(
   title = "Taxonomic information of unique and shared ASVs",
-  theme = theme(plot.title = element_text(size = 20, hjust = 0.5))
+  theme = theme(plot.title = element_text(size = 12, hjust = 0.5))
 )
 
 # Display final plot
 final_plot
 
 # Save final plot.
-ggsave(paste("Barley_bulk_ASV_overlap_piecharts.pdf", sep=""), final_plot, width=12, height=6, bg="white")
+ggsave(paste("Barley_bulk_ASV_overlap_piecharts.pdf", sep=""),
+       final_plot, width=12, height=6, bg="white", units = "cm")
 saveRDS(final_plot, file = "Barley_bulk_ASV_overlap_piecharts.rds")
+saveRDS(final_plot, 
+        file = "../6_final_figure/Barley_bulk_ASV_overlap_piecharts.rds")
 
 # Create same final plot without a legend.
 final_plot_nolegend <- final_plot & theme(legend.position = "none")
 final_plot_nolegend
 
 ggsave("Barley_bulk_ASV_overlap_piecharts_nolegend.pdf", final_plot_nolegend,
-       width = 12, height = 6, bg = "white")
-saveRDS(final_plot_nolegend, file = "Barley_bulk_ASV_overlap_piecharts_nolegend.rds")
+       width = 12, height = 6, bg = "white", units = "cm")
+saveRDS(final_plot_nolegend, 
+        file = "Barley_bulk_ASV_overlap_piecharts_nolegend.rds")
+saveRDS(final_plot_nolegend, 
+        file = "../6_final_figure/Barley_bulk_ASV_overlap_piecharts_nolegend.rds")
