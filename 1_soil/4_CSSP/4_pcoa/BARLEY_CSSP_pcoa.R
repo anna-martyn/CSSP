@@ -1,0 +1,406 @@
+options(warn=-1)
+
+# cleanup
+rm(list=ls())
+
+# set working directory
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+# load plotting functions
+library("ggplot2")
+library("scales")
+library("grid")
+library("vegan")
+
+# files
+design.file <- paste("BarleyCSSP_Askov_reseq_metadata.txt", sep="")
+taxonomy.file <- paste("Barley_Askov_Rep_10_4_taxonomy.txt", sep="")
+otu_table.file <- paste("BarleyCSSP_Askov_reseq_ASVtable_10_4.txt", sep="")
+
+# load data
+design <- read.table(design.file, header=T, sep="\t")
+otu_table <- read.table(otu_table.file, sep="\t", header=T, row.names =1, check.names=F)
+taxonomy <- read.table(taxonomy.file, sep="\t", header=T, fill=T)
+
+#remove Lotus UF samples from dataset
+design <- design[1:188, ]
+
+# re-order data matrices
+idx <- design$Sample_ID %in% colnames(otu_table)
+design <- design[idx, ]
+# 
+idx <- match(design$Sample_ID, colnames(otu_table))
+otu_table <- otu_table[, idx]
+# 
+idx <- rownames(otu_table) %in% taxonomy[, 1]
+otu_table <- otu_table[idx, ]
+# 
+idx <- match(design$Sample_ID, colnames(otu_table))
+otu_table <- otu_table[, idx]
+
+# subset by compartment and soil type
+idx <- design$Compartment %in% c( "rhizosphere")
+design_rhizo <- design[idx, ]
+otu_table_rhizo <- otu_table[, idx]
+
+idx <- design$Compartment %in% c( "root")
+design_root <- design[idx, ]
+otu_table_root <- otu_table[, idx]
+
+idx <- design_rhizo$Soil %in% c( "NPK")
+design_rhizo_NPK <- design_rhizo[idx, ]
+otu_table_rhizo_NPK <- otu_table_rhizo[, idx]
+
+idx <- design_rhizo$Soil %in% c( "PK")
+design_rhizo_PK <- design_rhizo[idx, ]
+otu_table_rhizo_PK <- otu_table_rhizo[, idx]
+
+idx <- design_rhizo$Soil %in% c( "UF")
+design_rhizo_UF <- design_rhizo[idx, ]
+otu_table_rhizo_UF <- otu_table_rhizo[, idx]
+
+idx <- design_root$Soil %in% c( "NPK")
+design_root_NPK <- design_root[idx, ]
+otu_table_root_NPK <- otu_table_root[, idx]
+
+idx <- design_root$Soil %in% c( "PK")
+design_root_PK <- design_root[idx, ]
+otu_table_root_PK <- otu_table_root[, idx]
+
+idx <- design_root$Soil %in% c( "UF")
+design_root_UF <- design_root[idx, ]
+otu_table_root_UF <- otu_table_root[, idx]
+
+
+#########
+####Rhizosphere NPK
+# calculate Bray-Curtis distances
+otu_table_norm <- apply(otu_table_rhizo_NPK, 2, function(x) x / sum(x))
+bray_curtis <- vegdist(t(otu_table_norm), method="bray")
+
+# colors <- data.frame(group=c("WT","ccamk","symrk","nsp1","nsp2"), 
+#                      colors=c("#33a02c","#1f78b4","#ff7f00","#e31a1c", "#ffd700"))
+colors <- data.frame(group=c("WT", "symrk","ccamk","nsp1", "nsp2"), 
+                     color=c("#A9C289","#FEDA8B","#FDB366","#C0E4EF","#6EA6CD"))
+colors <- colors[colors$group %in% design_rhizo_NPK$Genotype, ]
+
+# PCoA Bray-Curtis
+bray_curtis <- vegdist(t(otu_table_norm), method="bray")
+k <- 2
+pcoa <- cmdscale(bray_curtis, k=k, eig=T)
+points <- pcoa$points
+eig <- pcoa$eig
+points <- as.data.frame(points)
+colnames(points) <- c("x", "y")
+points <- cbind(points, design_rhizo_NPK[match(rownames(points), design_rhizo_NPK$Sample_ID), ])
+colors <- colors[colors$group %in% points$Genotype, ]
+points$Genotype <- factor(points$Genotype, levels=colors$group)
+
+#plot
+pcoa_width <- 5
+pcoa_height <- 5
+pcoa_size <- 6
+pcoa_alpha <- 0.7
+
+main_theme <- theme(panel.background=element_blank(),
+                    panel.grid.major = element_line(color = "gray90"),
+                    panel.border = element_rect(colour = "black", fill=NA, size=1),
+                    axis.line=element_line(color="black", size=1),
+                    axis.ticks=element_line(color="black", size=1),
+                    axis.text = element_text(size = 20, color = "black"),
+                    legend.background=element_blank(),
+                    legend.text = element_text(size=20, color = "black"),
+                    legend.key=element_blank(),
+                    text=element_text(size=20, color="black"),
+                    legend.position="none")
+
+p <- ggplot(points, aes(x=x, y=y, color=Genotype)) +
+  geom_point(alpha=pcoa_alpha, size=pcoa_size) +
+  stat_ellipse(type = "norm", level = 0.8)+
+  scale_colour_manual(values=as.character(colors$color)) +
+  #scale_shape_manual(values=shapes$shape) +
+  labs(x=paste("PCoA 1 (", format(100 * eig[1] / sum(eig), digits=4), "%)", sep=""),
+       y=paste("PCoA 2 (", format(100 * eig[2] / sum(eig), digits=4), "%)", sep="")) +
+  #ggtitle("PCoA of Bray-Curtis distances") +
+  main_theme +
+  theme(legend.position="none")
+p
+# ggsave(paste("Barley_rhizo_NPK_PCoA.png", sep=""), p, width=pcoa_width, height=pcoa_height)
+ggsave(paste("Barley_rhizo_NPK_PCoA.pdf", sep=""), p, width=pcoa_width, height=pcoa_height)
+
+####Rhizosphere PK
+# calculate Bray-Curtis distances
+otu_table_norm <- apply(otu_table_rhizo_PK, 2, function(x) x / sum(x))
+bray_curtis <- vegdist(t(otu_table_norm), method="bray")
+
+# colors <- data.frame(group=c("WT","ccamk","symrk","nsp1","nsp2"), 
+#                      colors=c("#33a02c","#1f78b4","#ff7f00","#e31a1c", "#ffd700"))
+colors <- data.frame(group=c("WT", "symrk","ccamk","nsp1", "nsp2"), 
+                     color=c("#A9C289","#FEDA8B","#FDB366","#C0E4EF","#6EA6CD"))
+colors <- colors[colors$group %in% design_rhizo_PK$Genotype, ]
+
+# PCoA Bray-Curtis
+bray_curtis <- vegdist(t(otu_table_norm), method="bray")
+k <- 2
+pcoa <- cmdscale(bray_curtis, k=k, eig=T)
+points <- pcoa$points
+eig <- pcoa$eig
+points <- as.data.frame(points)
+colnames(points) <- c("x", "y")
+points <- cbind(points, design_rhizo_PK[match(rownames(points), design_rhizo_PK$Sample_ID), ])
+colors <- colors[colors$group %in% points$Genotype, ]
+points$Genotype <- factor(points$Genotype, levels=colors$group)
+
+#plot
+pcoa_width <- 5
+pcoa_height <- 5
+pcoa_size <- 6
+pcoa_alpha <- 0.7
+
+main_theme <- theme(panel.background=element_blank(),
+                    panel.grid.major = element_line(color = "gray90"),
+                    panel.border = element_rect(colour = "black", fill=NA, size=1),
+                    axis.line=element_line(color="black", size=1),
+                    axis.ticks=element_line(color="black", size=1),
+                    axis.text = element_text(size = 20, color = "black"),
+                    legend.background=element_blank(),
+                    legend.text = element_text(size=20, color = "black"),
+                    legend.key=element_blank(),
+                    text=element_text(size=20, color="black"),
+                    legend.position="none")
+
+p1 <- ggplot(points, aes(x=x, y=y, color=Genotype)) +
+  geom_point(alpha=pcoa_alpha, size=pcoa_size) +
+  stat_ellipse(type = "norm", level = 0.8)+
+  scale_colour_manual(values=as.character(colors$color)) +
+  #scale_shape_manual(values=shapes$shape) +
+  labs(x=paste("PCoA 1 (", format(100 * eig[1] / sum(eig), digits=4), "%)", sep=""),
+       y=paste("PCoA 2 (", format(100 * eig[2] / sum(eig), digits=4), "%)", sep="")) +
+  #ggtitle("PCoA of Bray-Curtis distances") +
+  main_theme +
+  theme(legend.position="none")
+p1
+# ggsave(paste("Barley_rhizo_PK_PCoA.png", sep=""), p1, width=pcoa_width, height=pcoa_height)
+ggsave(paste("Barley_rhizo_PK_PCoA.pdf", sep=""), p1, width=pcoa_width, height=pcoa_height)
+
+####Rhizosphere UF
+# calculate Bray-Curtis distances
+otu_table_norm <- apply(otu_table_rhizo_UF, 2, function(x) x / sum(x))
+bray_curtis <- vegdist(t(otu_table_norm), method="bray")
+
+# colors <- data.frame(group=c("WT","ccamk","symrk","nsp1","nsp2"), 
+#                      colors=c("#33a02c","#1f78b4","#ff7f00","#e31a1c", "#ffd700"))
+colors <- data.frame(group=c("WT", "symrk","ccamk","nsp1", "nsp2"), 
+                     color=c("#A9C289","#FEDA8B","#FDB366","#C0E4EF","#6EA6CD"))
+colors <- colors[colors$group %in% design_rhizo_UF$Genotype, ]
+
+# PCoA Bray-Curtis
+bray_curtis <- vegdist(t(otu_table_norm), method="bray")
+k <- 2
+pcoa <- cmdscale(bray_curtis, k=k, eig=T)
+points <- pcoa$points
+eig <- pcoa$eig
+points <- as.data.frame(points)
+colnames(points) <- c("x", "y")
+points <- cbind(points, design_rhizo_UF[match(rownames(points), design_rhizo_UF$Sample_ID), ])
+colors <- colors[colors$group %in% points$Genotype, ]
+points$Genotype <- factor(points$Genotype, levels=colors$group)
+
+#plot
+pcoa_width <- 5
+pcoa_height <- 5
+pcoa_size <- 6
+pcoa_alpha <- 0.7
+
+main_theme <- theme(panel.background=element_blank(),
+                    panel.grid.major = element_line(color = "gray90"),
+                    panel.border = element_rect(colour = "black", fill=NA, size=1),
+                    axis.line=element_line(color="black", size=1),
+                    axis.ticks=element_line(color="black", size=1),
+                    axis.text = element_text(size = 20, color = "black"),
+                    legend.background=element_blank(),
+                    legend.text = element_text(size=20, color = "black"),
+                    legend.key=element_blank(),
+                    text=element_text(size=20, color="black"),
+                    legend.position="none")
+
+p2 <- ggplot(points, aes(x=x, y=y, color=Genotype)) +
+  geom_point(alpha=pcoa_alpha, size=pcoa_size) +
+  stat_ellipse(type = "norm", level = 0.8)+
+  scale_colour_manual(values=as.character(colors$color)) +
+  #scale_shape_manual(values=shapes$shape) +
+  labs(x=paste("PCoA 1 (", format(100 * eig[1] / sum(eig), digits=4), "%)", sep=""),
+       y=paste("PCoA 2 (", format(100 * eig[2] / sum(eig), digits=4), "%)", sep="")) +
+  #ggtitle("PCoA of Bray-Curtis distances") +
+  main_theme +
+  theme(legend.position="none")
+p2
+# ggsave(paste("Barley_rhizo_UF_PCoA.png", sep=""), p2, width=pcoa_width, height=pcoa_height)
+ggsave(paste("Barley_rhizo_UF_PCoA.pdf", sep=""), p2, width=pcoa_width, height=pcoa_height)
+
+
+#########
+####Root NPK
+# calculate Bray-Curtis distances
+otu_table_norm <- apply(otu_table_root_NPK, 2, function(x) x / sum(x))
+bray_curtis <- vegdist(t(otu_table_norm), method="bray")
+
+# colors <- data.frame(group=c("WT","ccamk","symrk","nsp1","nsp2"), 
+#                      colors=c("#33a02c","#1f78b4","#ff7f00","#e31a1c", "#ffd700"))
+colors <- data.frame(group=c("WT", "symrk","ccamk","nsp1", "nsp2"), 
+                     color=c("#A9C289","#FEDA8B","#FDB366","#C0E4EF","#6EA6CD"))
+
+# PCoA Bray-Curtis
+bray_curtis <- vegdist(t(otu_table_norm), method="bray")
+k <- 2
+pcoa <- cmdscale(bray_curtis, k=k, eig=T)
+points <- pcoa$points
+eig <- pcoa$eig
+points <- as.data.frame(points)
+colnames(points) <- c("x", "y")
+points <- cbind(points, design_root_NPK[match(rownames(points), design_root_NPK$Sample_ID), ])
+colors <- colors[colors$group %in% points$Genotype, ]
+points$Genotype <- factor(points$Genotype, levels=colors$group)
+
+#plot
+pcoa_width <- 5
+pcoa_height <- 5
+pcoa_size <- 6
+pcoa_alpha <- 0.7
+
+main_theme <- theme(panel.background=element_blank(),
+                    panel.grid.major = element_line(color = "gray90"),
+                    panel.border = element_rect(colour = "black", fill=NA, size=1),
+                    axis.line=element_line(color="black", size=1),
+                    axis.ticks=element_line(color="black", size=1),
+                    axis.text = element_text(size = 20, color = "black"),
+                    legend.background=element_blank(),
+                    legend.text = element_text(size=20, color = "black"),
+                    legend.key=element_blank(),
+                    text=element_text(size=20, color="black"),
+                    legend.position="none")
+
+p3 <- ggplot(points, aes(x=x, y=y, color=Genotype)) +
+  geom_point(alpha=pcoa_alpha, size=pcoa_size) +
+  stat_ellipse(type = "norm", level = 0.8)+
+  scale_colour_manual(values=as.character(colors$color)) +
+  #scale_shape_manual(values=shapes$shape) +
+  labs(x=paste("PCoA 1 (", format(100 * eig[1] / sum(eig), digits=4), "%)", sep=""),
+       y=paste("PCoA 2 (", format(100 * eig[2] / sum(eig), digits=4), "%)", sep="")) +
+  #ggtitle("PCoA of Bray-Curtis distances") +
+  main_theme +
+  theme(legend.position="none")
+p3
+# ggsave(paste("Barley_root_NPK_PCoA.png", sep=""), p3, width=pcoa_width, height=pcoa_height)
+ggsave(paste("Barley_root_NPK_PCoA.pdf", sep=""), p3, width=pcoa_width, height=pcoa_height)
+
+####Root PK
+# calculate Bray-Curtis distances
+otu_table_norm <- apply(otu_table_root_PK, 2, function(x) x / sum(x))
+bray_curtis <- vegdist(t(otu_table_norm), method="bray")
+
+# colors <- data.frame(group=c("WT","ccamk","symrk","nsp1","nsp2"), 
+#                      colors=c("#33a02c","#1f78b4","#ff7f00","#e31a1c", "#ffd700"))
+colors <- data.frame(group=c("WT", "symrk","ccamk","nsp1", "nsp2"), 
+                     color=c("#A9C289","#FEDA8B","#FDB366","#C0E4EF","#6EA6CD"))
+colors <- colors[colors$group %in% design_root_PK$Genotype, ]
+
+# PCoA Bray-Curtis
+bray_curtis <- vegdist(t(otu_table_norm), method="bray")
+k <- 2
+pcoa <- cmdscale(bray_curtis, k=k, eig=T)
+points <- pcoa$points
+eig <- pcoa$eig
+points <- as.data.frame(points)
+colnames(points) <- c("x", "y")
+points <- cbind(points, design_root_PK[match(rownames(points), design_root_PK$Sample_ID), ])
+colors <- colors[colors$group %in% points$Genotype, ]
+points$Genotype <- factor(points$Genotype, levels=colors$group)
+
+#plot
+pcoa_width <- 5
+pcoa_height <- 5
+pcoa_size <- 6
+pcoa_alpha <- 0.7
+
+main_theme <- theme(panel.background=element_blank(),
+                    panel.grid.major = element_line(color = "gray90"),
+                    panel.border = element_rect(colour = "black", fill=NA, size=1),
+                    axis.line=element_line(color="black", size=1),
+                    axis.ticks=element_line(color="black", size=1),
+                    axis.text = element_text(size = 20, color = "black"),
+                    legend.background=element_blank(),
+                    legend.text = element_text(size=20, color = "black"),
+                    legend.key=element_blank(),
+                    text=element_text(size=20, color="black"),
+                    legend.position="none")
+
+p4 <- ggplot(points, aes(x=x, y=y, color=Genotype)) +
+  geom_point(alpha=pcoa_alpha, size=pcoa_size) +
+  stat_ellipse(type = "norm", level = 0.8)+
+  scale_colour_manual(values=as.character(colors$color)) +
+  #scale_shape_manual(values=shapes$shape) +
+  labs(x=paste("PCoA 1 (", format(100 * eig[1] / sum(eig), digits=4), "%)", sep=""),
+       y=paste("PCoA 2 (", format(100 * eig[2] / sum(eig), digits=4), "%)", sep="")) +
+  #ggtitle("PCoA of Bray-Curtis distances") +
+  main_theme +
+  theme(legend.position="none")
+p4
+# ggsave(paste("Barley_root_PK_PCoA.png", sep=""), p4, width=pcoa_width, height=pcoa_height)
+ggsave(paste("Barley_root_PK_PCoA.pdf", sep=""), p4, width=pcoa_width, height=pcoa_height)
+
+####Root UF
+# calculate Bray-Curtis distances
+otu_table_norm <- apply(otu_table_root_UF, 2, function(x) x / sum(x))
+bray_curtis <- vegdist(t(otu_table_norm), method="bray")
+
+# colors <- data.frame(group=c("WT","ccamk","symrk","nsp1","nsp2"), 
+#                      colors=c("#33a02c","#1f78b4","#ff7f00","#e31a1c", "#ffd700"))
+colors <- data.frame(group=c("WT", "symrk","ccamk","nsp1", "nsp2"), 
+                     color=c("#A9C289","#FEDA8B","#FDB366","#C0E4EF","#6EA6CD"))
+colors <- colors[colors$group %in% design_root_UF$Genotype, ]
+
+# PCoA Bray-Curtis
+bray_curtis <- vegdist(t(otu_table_norm), method="bray")
+k <- 2
+pcoa <- cmdscale(bray_curtis, k=k, eig=T)
+points <- pcoa$points
+eig <- pcoa$eig
+points <- as.data.frame(points)
+colnames(points) <- c("x", "y")
+points <- cbind(points, design_root_UF[match(rownames(points), design_root_UF$Sample_ID), ])
+colors <- colors[colors$group %in% points$Genotype, ]
+points$Genotype <- factor(points$Genotype, levels=colors$group)
+
+#plot
+pcoa_width <- 5
+pcoa_height <- 5
+pcoa_size <- 6
+pcoa_alpha <- 0.7
+
+main_theme <- theme(panel.background=element_blank(),
+                    panel.grid.major = element_line(color = "gray90"),
+                    panel.border = element_rect(colour = "black", fill=NA, size=1),
+                    axis.line=element_line(color="black", size=1),
+                    axis.ticks=element_line(color="black", size=1),
+                    axis.text = element_text(size = 20, color = "black"),
+                    legend.background=element_blank(),
+                    legend.text = element_text(size=20, color = "black"),
+                    legend.key=element_blank(),
+                    text=element_text(size=20, color="black"),
+                    legend.position="none")
+
+p5 <- ggplot(points, aes(x=x, y=y, color=Genotype)) +
+  geom_point(alpha=pcoa_alpha, size=pcoa_size) +
+  stat_ellipse(type = "norm", level = 0.8)+
+  scale_colour_manual(values=as.character(colors$color)) +
+  #scale_shape_manual(values=shapes$shape) +
+  labs(x=paste("PCoA 1 (", format(100 * eig[1] / sum(eig), digits=4), "%)", sep=""),
+       y=paste("PCoA 2 (", format(100 * eig[2] / sum(eig), digits=4), "%)", sep="")) +
+  #ggtitle("PCoA of Bray-Curtis distances") +
+  main_theme +
+  theme(legend.position="none")
+p5
+# ggsave(paste("Barley_root_UF_PCoA.png", sep=""), p5, width=pcoa_width, height=pcoa_height)
+ggsave(paste("Barley_root_UF_PCoA.pdf", sep=""), p5, width=pcoa_width, height=pcoa_height)
+
