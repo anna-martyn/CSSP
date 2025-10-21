@@ -1,0 +1,43 @@
+Soil-bulk:
+- fit to A4? (Or keep)
+- ⁠consider changing colours soils
+- ⁠manually add workflow (we can do this at the end. the workflow PDF is in the final figure subfolder, I just need to double check whether it’s the updated one - will do that when I get to work)
+- ⁠generally just make plot look nicer somehow?
+
+Soil-WT:
+- also here add workflow manually later (also here I’ll check for the correct pdf in the final figures subfolder)
+- ⁠fix legend cocoa (use lotus one to also have nodule compartment there)
+- ⁠consider moving heatmap yaxis text to right of it looks better
+- ⁠change heatmap colours?
+
+Soil-prediction:
+- good as it is
+
+Soil CSSP
+- not added to GitHub yet
+- ⁠clean scripts as for others need to be written still
+- ⁠needs to be minimised and more into supplementary
+- ⁠idea was to keep workflow and shoot fresh weights in row 1, then in row 2 one cpcoa (eg root only) for each plant and one soil type for root for each plant as example, row 3 with differential abundance plot (all other cpcoa, pcoa, relative abundance heatmap orders etc into supplementary (and made nicer in script as previously mostly done manually).
+
+Lotus SynCom
+- in D: make nodule compartment part of the plot less ugly
+- ⁠align legends better and remove redundant legends?
+- ⁠shoot freshweight boxplots : make jitter dot size smaller or alternatively only error bars to make plot cleaner
+- ⁠in DA plot: free y legends (consider switching to facet wrap), reduce height bubble plot
+- ⁠in supplementary figure module counts: remove statistics as only 0s for mutants > cannot be computed
+
+Barley SynCom:
+- Anna add folder and correct files etc. 
+
+Root exudates
+- add letters for panels
+- ⁠remove boxes around legends for consistency? 
+- ⁠adapt font sizes (I used 20 everywhere also for legends etc)
+- ⁠Anna double check metabolite choice for last plot
+- ⁠add feature IDs to facet title of individual shown metabolites
+
+General:
+- facet text (compartment names in grey boxes) - all bold or non bold - consistency
+- ⁠later: consider rerunning preprocessing only containing genotypes of interest, or alternatively rename non-needed genotypes in manifest file
+- ⁠for stacked barplots/bacterial order legends: consider removing black boxes around them for consistency
+- ⁠fit font size and font type everywhere
