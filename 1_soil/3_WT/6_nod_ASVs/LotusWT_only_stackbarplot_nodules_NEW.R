@@ -130,13 +130,13 @@ main_theme <- theme(
   axis.line.x=element_line(color="black"),
   axis.line.y=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text=element_text(size=20, color="black"),
-  legend.text=element_text(size=20, color="black"),
+  axis.text=element_text(size=8, color="black"),
+  legend.text=element_text(size=8, color="black"),
   legend.key=element_blank(),
-  axis.title.y=element_text(size=20),
+  axis.title.y=element_text(size=8),
   legend.position="right",
   legend.background=element_blank(),
-  text=element_text(family="sans", size=20, color="black")
+  text=element_text(family="sans", size=8, color="black")
 )
 
 # -----------------------------
@@ -149,13 +149,14 @@ p <- ggplot(df_long, aes(x = Soil_type, y = RA, fill = Isolate)) +
   labs(x = "", y = "Relative Abundance", title="Nodule ASVs (top20 ≥1% RA)") +
   main_theme +
   theme(
-    plot.title = element_text(size = 20, face = "bold", hjust = 0),
-    legend.title = element_text(size = 20)
+    plot.title = element_text(size = 8, face = "bold", hjust = 0),
+    legend.title = element_text(size = 8)
   )
-
 
 p
 
 # Save plot.
-ggsave("Soil_LotusWT_stackedbp_NoduleASVs.pdf", p, width = 10, height = 6)
+ggsave("Soil_LotusWT_stackedbp_NoduleASVs.pdf",
+       p, width = 10, height = 6, units = "cm")
 saveRDS(p, file = "Soil_LotusWT_stackedbp_NoduleASVs.rds")
+saveRDS(p, file = "../7_final_figures/Soil_LotusWT_stackedbp_NoduleASVs.rds")

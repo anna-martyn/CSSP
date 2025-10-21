@@ -51,26 +51,30 @@ Hordeum_asv_table_norm <- apply(Hordeum_asv_table, 2, function(x) x / sum(x))
 bray_curtis_Hordeum <- vegdist(t(Hordeum_asv_table_norm), method="bray")
 
 # Set colours and shapes for plot, as well as plotting parameters.
-colors <- data.frame(group=c("NPK","PK","UF"), 
-                     colors=c("#341C02","#A06A37","#D2B48C"))
+# colors <- data.frame(group=c("NPK","PK","UF"), 
+#                      colors=c("#341C02","#A06A37","#D2B48C"))
+
+colors <- data.frame(group=c("NPK","PK","UF"),
+                     colors=c("#6F944F","#B2563C","#3C7D82"))
 
 shapes <- data.frame(group=c("Rhizosphere","Root","Nodules"), shapes=c(15,16,17))
 
 main_theme <- theme(panel.background=element_blank(),
                     panel.grid.major = element_line(color = "gray90"),
-                    panel.border = element_rect(colour = "black", fill=NA, linewidth=1),
+                    panel.border = element_rect(colour = "black", fill=NA,
+                                                linewidth=1),
                     axis.line.x=element_line(color="black"),
                     axis.line.y=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
-                    axis.text = element_text(size = 20, color = "black"),
-                    legend.text = element_text(size=20, color = "black"),
+                    axis.text = element_text(size = 8, color = "black"),
+                    legend.text = element_text(size = 8, color = "black"),
                     legend.key=element_blank(),
-                    axis.title.y = element_text(size = 20),
-                    text=element_text(size=20, color="black"),
+                    axis.title.y = element_text(size = 8),
+                    text=element_text(size = 8, color="black"),
                     legend.position="none",
                     # legend.background=element_rect(colour="black", fill=NA),
                     legend.background=element_blank(),
-                    plot.title = element_text(size=20, hjust=0.9))
+                    plot.title = element_text(size = 8, hjust=0.9))
 
 # Lotus cpcoa analysis.
 sqrt_transform <- T
@@ -106,7 +110,7 @@ segments <- merge(points, setNames(centroids, c("Soil","Compartment","seg_x","se
 p1 <- ggplot(points, aes(x=x, y=y, color=Soil, shape=Compartment)) +
   geom_segment(data=segments, aes(x=x, y=y, xend=seg_x, yend=seg_y, color=Soil),
                alpha=0.5, show.legend=FALSE) +
-  geom_point(size=5, alpha=0.7) +
+  geom_point(size=3, alpha=0.7) +
   scale_colour_manual(values=as.character(colors$color)) +
   scale_shape_manual(values=shapes$shape) +
   labs(x=paste("CPCo 1 (", format(100 * eig[1] / sum(eig), digits=4), "%)", sep=""),
@@ -115,16 +119,17 @@ p1 <- ggplot(points, aes(x=x, y=y, color=Soil, shape=Compartment)) +
                                     "% of variance; p=", format(p.val, digits=2), sep="")) +
   main_theme +
   theme(legend.position="right",
-        legend.title = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
-        plot.title = element_text(face="bold", size=20, hjust=0),
-        plot.subtitle = element_text(size=20, hjust=0)) 
+        legend.title = element_text(size = 8),
+        axis.title.x = element_text(size = 8),
+        plot.title = element_text(face="bold", size = 8, hjust=0),
+        plot.subtitle = element_text(size = 8, hjust=0)) 
 
 p1
 
-ggsave(paste("cpcoa_Lotus_WT.pdf", sep=""), p1, width=5, height=5)
+ggsave(paste("cpcoa_Lotus_WT.pdf", sep=""), p1, width=5, height=5, units = "cm")
 # ggsave(paste("cpcoa_Lotus_WT.pdf", sep=""), p1, width=10, height=8)
 saveRDS(p1, file = "cpcoa_Lotus_WT.rds")
+saveRDS(p1, file = "../7_final_figures/cpcoa_Lotus_WT.rds")
 
 # Hordeum cpcoa analysis.
 sqrt_transform <- T
@@ -161,7 +166,7 @@ segments <- merge(points, setNames(centroids, c("Soil","Compartment","seg_x","se
 p2 <- ggplot(points, aes(x=x, y=y, color=Soil, shape=Compartment)) +
   geom_segment(data=segments, aes(x=x, y=y, xend=seg_x, yend=seg_y, color=Soil),
                alpha=0.5, show.legend=FALSE) +
-  geom_point(size=5, alpha=0.7) +
+  geom_point(size=3, alpha=0.7) +
   scale_colour_manual(values=as.character(colors$color)) +
   scale_shape_manual(values=shapes$shape) +
   labs(x=paste("CPCo 1 (", format(100 * eig[1] / sum(eig), digits=4), "%)", sep=""),
@@ -170,15 +175,16 @@ p2 <- ggplot(points, aes(x=x, y=y, color=Soil, shape=Compartment)) +
                                     "% of variance; p=", format(p.val, digits=2), sep="")) +
   main_theme +
   theme(legend.position="right",
-        legend.title = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
-        plot.title = element_text(face="bold", size=20, hjust=0),
-        plot.subtitle = element_text(size=20, hjust=0)) 
+        legend.title = element_text(size = 8),
+        axis.title.x = element_text(size = 8),
+        plot.title = element_text(face="bold", size = 8, hjust=0),
+        plot.subtitle = element_text(size = 8, hjust=0)) 
 
 p2
 
 ggsave(paste("cpcoa_Barley_WT.pdf", sep=""), p2, width=5, height=5)
 # ggsave(paste("cpcoa_Barley_WT.pdf", sep=""), p2, width=8, height=10)
 saveRDS(p2, file = "cpcoa_Barley_WT.rds")
+saveRDS(p2, file = "../7_final_figures/cpcoa_Barley_WT.rds")
 
 

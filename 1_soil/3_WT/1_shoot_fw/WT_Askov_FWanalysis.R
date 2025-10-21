@@ -15,7 +15,8 @@ library(multcompView)
 library(dplyr)
 
 # Load shoot fresh weight file and fix decimals
-weight <- read.table("Input_OX&SYM_mutant_harvest_2.txt", header = TRUE, sep = "\t")
+weight <- read.table("Input_OX&SYM_mutant_harvest_2.txt",
+                     header = TRUE, sep = "\t")
 weight$Fresh_weight <- as.numeric(gsub(",", ".", weight$Fresh_weight))
 
 # Subset to only WT samples of Lotus and Barley CSSP experiment
@@ -28,7 +29,11 @@ weight$Plant_species <- dplyr::recode(weight$Plant_species, "Barley" = "Hordeum"
 weight$Plant_species <- factor(weight$Plant_species, levels=c("Lotus","Hordeum"))
 
 # Set colours for the graph
-colors <- data.frame(group=c("NPK","PK","UF"), color=c("#341C02","#A06A37","#D2B48C"))
+# colors <- data.frame(group=c("NPK","PK","UF"),
+#                      color=c("#341C02","#A06A37","#D2B48C"))
+
+colors <- data.frame(group=c("NPK","PK","UF"),
+                     colors=c("#6F944F","#B2563C","#3C7D82"))
 
 # Function to get Tukey letters
 get_tukey_letters <- function(df){
@@ -104,8 +109,8 @@ main_theme <- theme(panel.background=element_blank(),
                     axis.line.x=element_line(color="black"),
                     axis.line.y=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
-                    axis.text.x = element_text(size = 20, colour = "black"),
-                    axis.text.y = element_text(size = 20, colour = "black"),
+                    axis.text.x = element_text(size = 8, colour = "black"),
+                    axis.text.y = element_text(size = 8, colour = "black"),
                     legend.background=element_blank(),
                     legend.key=element_blank(),
                     text=element_text(family="sans"))
@@ -113,15 +118,15 @@ main_theme <- theme(panel.background=element_blank(),
 # Generate plot
 p <- ggplot(weight, aes(x=Soil_type, y=Fresh_weight, fill=Soil_type)) +
   geom_boxplot(width=0.3, outlier.color=NA, alpha=0.7) +
-  geom_jitter(position=position_jitter(width=0), size=3, alpha=0.3) +
+  geom_jitter(position=position_jitter(width=0), size=1.5, alpha=0.3) +
 
   # Letters above boxes
   geom_text(data=weight_summary, aes(x=Soil_type, y=y_pos * 1.2, label=label),
-            inherit.aes=FALSE, size=6) +
+            inherit.aes=FALSE, size=4) +
 
   # Overall ANOVA significance per species
-  geom_text(data=anova_pvals, aes(x=2, y=y_position, label=asterisk), # x=2 centers above middle box
-            inherit.aes=FALSE, size=10) +
+  # geom_text(data=anova_pvals, aes(x=2, y=y_position, label=asterisk), # x=2 centers above middle box
+  #           inherit.aes=FALSE, size=10) +
 
   # Dummy points for upper limits
   geom_blank(data=upper_limits, aes(y=Fresh_weight)) +
@@ -131,9 +136,9 @@ p <- ggplot(weight, aes(x=Soil_type, y=Fresh_weight, fill=Soil_type)) +
   ylab("Shoot fresh weight/plant (g)") +
   theme(
     legend.position="none",
-    strip.text.x = element_text(size = 20),
+    strip.text.x = element_text(size = 8, face = "bold"),
     axis.title.x = element_blank(),
-    axis.title.y = element_text(size = 20)
+    axis.title.y = element_text(size = 8, colour = "black")
   ) +
   scale_y_continuous(
     breaks = scales::pretty_breaks(n = 4),
@@ -145,8 +150,9 @@ p <- ggplot(weight, aes(x=Soil_type, y=Fresh_weight, fill=Soil_type)) +
 p
 
 # Save plot
-ggsave("Askov_WT_shootfw_boxplots.pdf", p, width=3.5, height=6)
+ggsave("Askov_WT_shootfw_boxplots.pdf", p, width=3.5, height=6, units = "cm")
 saveRDS(p, file = "Askov_WT_shootfw_boxplots.rds")
+saveRDS(p, file = "../7_final_figures/Askov_WT_shootfw_boxplots.rds")
 
 # Function to perform Tukey & save results
 perform_anova_tukey <- function(df, species_name){
