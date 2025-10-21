@@ -108,13 +108,13 @@ main_theme <- theme(
   axis.line.x=element_line(color="black"),
   axis.line.y=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text=element_text(size=20, color="black"),
-  legend.text=element_text(size=20, color="black"),
+  axis.text=element_text(size=8, color="black"),
+  legend.text=element_text(size=8, color="black"),
   legend.key=element_blank(),
-  axis.title.y=element_text(size=20),
+  axis.title.y=element_text(size=8),
   legend.position="right",
   legend.background=element_blank(),
-  text=element_text(family="sans", size=20, color="black")
+  text=element_text(family="sans", size=8, color="black")
 )
 
 p1 <- ggplot(df.long_order, aes(x=sampleID, y=RA, fill=Order)) +
@@ -126,14 +126,15 @@ p1 <- ggplot(df.long_order, aes(x=sampleID, y=RA, fill=Order)) +
   ylab("Relative abundance") +
   labs(fill="Bacterial order") + 
   theme(axis.text.x=element_blank(),
-        strip.text.x=element_text(size=20, face="bold"),
+        strip.text.x=element_text(size=8, face="bold"),
         axis.title.x=element_blank()) +
   guides(fill=guide_legend(nrow=21))
 
 p1
 
 # Save plot.
-ggsave("Barley_bulk_order_top20_RA_stackedbp.pdf", p1, width=8, height=6)
+ggsave("Barley_bulk_order_top20_RA_stackedbp.pdf",
+       p1, width=8, height=6, units = "cm")
 saveRDS(p1, file="Barley_bulk_order_top20_RA_stackedbp.rds")
 
 # Now make the same plot but showing mean RA of orders across samples of same soil type.
@@ -167,12 +168,17 @@ p2 <- ggplot(df.mean_order, aes(x=Soil, y=RA, fill=Order)) +
 p2
 
 ## Save.
-ggsave("Barley_bulk_order_top20_RA_mean_stackedbp.pdf", p2, width=6, height=6)
+ggsave("Barley_bulk_order_top20_RA_mean_stackedbp.pdf",
+       p2, width=6, height=6, units = "cm")
 saveRDS(p2, file="Barley_bulk_order_top20_RA_mean_stackedbp.rds")
+saveRDS(p2, file="../6_final_figure/Barley_bulk_order_top20_RA_mean_stackedbp.rds")
 
 # Now save plot without legend also.
 p2_no_legend <- p2 + theme(legend.position = "none")
 p2_no_legend
 
-ggsave("Barley_bulk_order_top20_RA_mean_stackedbp_no_legend.pdf", p2_no_legend, width=6, height=6)
+ggsave("Barley_bulk_order_top20_RA_mean_stackedbp_no_legend.pdf",
+       p2_no_legend, width=6, height=6, units = "cm")
 saveRDS(p2_no_legend, file="Barley_bulk_order_top20_RA_mean_stackedbp_no_legend.rds")
+saveRDS(p2_no_legend, 
+        file="../6_final_figure/Barley_bulk_order_top20_RA_mean_stackedbp_no_legend.rds")

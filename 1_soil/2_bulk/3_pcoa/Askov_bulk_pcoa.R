@@ -48,8 +48,26 @@ bray_curtis <- vegdist(t(asv_table_norm), method="bray")
 # Make PCoA plot.
 
 ## Define colours and shapes for graph.
-colors <- data.frame(group=c("NPK","PK","UF"), 
-                     colors=c("#341C02","#A06A37","#D2B48C"))
+# colors <- data.frame(group=c("NPK","PK","UF"), 
+#                      colors=c("#341C02","#A06A37","#D2B48C"))
+
+# colors <- data.frame(group=c("NPK","PK","UF"),
+#                      colors=c("#73675A","#A89F90","#D6C9B8"))
+
+# colors <- data.frame(group=c("NPK","PK","UF"),
+#                      colors=c("#9CAF88","#D08970","#7A9E9F"))
+
+# colors <- data.frame(group=c("NPK","PK","UF"),
+#                      colors=c("#A8D17F","#E07B5F","#5FB0B7"))
+
+colors <- data.frame(group=c("NPK","PK","UF"),
+                     colors=c("#6F944F","#B2563C","#3C7D82"))
+
+# colors <- data.frame(group=c("NPK","PK","UF"),
+#                      colors=c("#A89C94","#B2A083","#9D7F6D"))
+
+# colors <- data.frame(group=c("NPK","PK","UF"), 
+#                      colors=c("#83695C","#B89A86","#E2CFC1"))
 
 # colors <- data.frame(group=c("NPK","PK","UF"), 
 #                      colors=c("#6D3B00","#A06A37","#D2B48C"))
@@ -91,24 +109,39 @@ main_theme <- theme(panel.background=element_blank(),
                     axis.line.x=element_line(color="black"),
                     axis.line.y=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
-                    axis.text = element_text(size = 20, color = "black"),
-                    legend.text = element_text(size=20, color = "black"),
+                    axis.text = element_text(size = 8, color = "black"),
+                    legend.text = element_text(size=8, color = "black"),
+                    legend.title = element_text(size=8, color = "black",
+                                                hjust = 0.5, margin = margin(b = -2)),
                     legend.key=element_blank(),
-                    axis.title.y = element_text(size = 20),
-                    text=element_text(size=20, color="black"),
+                    axis.title.y = element_text(size = 8),
+                    text=element_text(size=8, color="black"),
                     legend.position="right",
+                    legend.margin = margin(l = -10),
                     # legend.background=element_rect(colour="black", fill=NA),
                     legend.background=element_blank(),
-                    plot.title = element_text(size=20, hjust=0.9))
+                    plot.title = element_text(size=8, hjust=0.9),
+                    legend.key.spacing.y = unit(-0.3, 'cm'))
 
+# Old format with browns
+# p <- ggplot(points, aes(x=x, y=y, color=Soil, shape=Soil)) +
+#   geom_point(alpha=0.7, size=2) +
+#   geom_segment(data=segments,
+#                mapping=aes(x=x, y=y, xend=seg_x, yend=seg_y, color=Soil),
+#                alpha=0.5) +
+#   scale_colour_manual(values=as.character(colors$colors)) +
+#   scale_shape_manual(values=shapes$shape) +
+#   labs(x=paste("PCoA 1 (", format(100 * eig[1] / sum(eig), digits=4), "%)", sep=""),
+#        y=paste("PCoA 2 (", format(100 * eig[2] / sum(eig), digits=4), "%)", sep="")) +
+#   main_theme
 
-p <- ggplot(points, aes(x=x, y=y, color=Soil, shape=Soil)) +
-  geom_point(alpha=0.7, size=6) +
-  geom_segment(data=segments, 
-               mapping=aes(x=x, y=y, xend=seg_x, yend=seg_y, color=Soil), 
+p <- ggplot(points, aes(x=x, y=y, fill=Soil)) +
+  geom_point(alpha=0.7, size=3, shape = 21) +
+  geom_segment(data=segments,
+               mapping=aes(x=x, y=y, xend=seg_x, yend=seg_y, fill=Soil),
                alpha=0.5) +
-  scale_colour_manual(values=as.character(colors$colors)) +
-  scale_shape_manual(values=shapes$shape) +
+  scale_fill_manual(values=as.character(colors$colors)) +
+  # scale_shape_manual(values=shapes$shape) +
   labs(x=paste("PCoA 1 (", format(100 * eig[1] / sum(eig), digits=4), "%)", sep=""),
        y=paste("PCoA 2 (", format(100 * eig[2] / sum(eig), digits=4), "%)", sep="")) +
   main_theme
@@ -116,5 +149,8 @@ p <- ggplot(points, aes(x=x, y=y, color=Soil, shape=Soil)) +
 p
 
 # Save plot.
-ggsave(paste("Barley_bulk_PCoA.pdf", sep=""), p, width=5, height=5)
+ggsave(paste("Barley_bulk_PCoA.pdf", sep=""),
+       p, width=5, height=5, units = "cm")
 saveRDS(p, file = "Barley_bulk_PCoA.rds")
+saveRDS(p, file = "../6_final_figure/Barley_bulk_PCoA.rds")
+

@@ -134,7 +134,11 @@ df_plot_asterisk <- final_results %>%
 
 
 # Colors
-colors <- c("NPK"="#341C02","PK"="#A06A37","UF"="#D2B48C")
+# colors <- c("NPK"="#341C02","PK"="#A06A37","UF"="#D2B48C")
+# colors <- c("NPK"="#73675A","PK"="#A89F90","UF"="#D6C9B8")
+# colors <- c("NPK"="#9CAF88","PK"="#D08970","UF"="#7A9E9F")
+# colors <- c("NPK"="#A8D17F","PK"="#E07B5F","UF"="#5FB0B7")
+colors <- c("NPK"="#6F944F","PK"="#B2563C","UF"="#3C7D82")
 
 # Plot
 main_theme <- theme(panel.background=element_blank(),
@@ -142,37 +146,43 @@ main_theme <- theme(panel.background=element_blank(),
                     panel.border=element_rect(colour="black", fill=NA, linewidth=1),
                     axis.line=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
-                    axis.text=element_text(size=20, color="black"),
-                    legend.text=element_text(size=20),
+                    axis.text=element_text(size=8, color="black"),
+                    legend.text=element_text(size=8),
                     legend.key=element_blank(),
-                    axis.title.y=element_text(size=20),
+                    legend.key.size = unit(0.25, 'cm'),
+                    axis.title.y=element_text(size=8),
+                    legend.margin = margin(l = -8),
                     legend.position=c(0.95,0.9),
                     legend.background=element_rect(colour="black", fill=NA),
-                    text=element_text(family="sans", size=20))
+                    text=element_text(family="sans", size=8))
 
 p <- ggplot(df_order_summary, aes(x=Order, y=Mean_RA, fill=Soil)) +
-  geom_bar(stat="identity", position=position_dodge(width=0.9), width=0.8, alpha=0.8) +
+  geom_bar(stat="identity", position=position_dodge(width=0.9),
+           width=0.8, alpha=0.8) +
   geom_errorbar(aes(ymin=Mean_RA-SE_RA, ymax=Mean_RA+SE_RA),
                 width=0.3, position=position_dodge(width=0.9), color="black") +
   geom_text(data=df_plot_letters,
             aes(x=Order, y=Mean_RA + SE_RA + 0.005, label=Letter, fill=Soil),
             position=position_dodge(width=0.9),
             inherit.aes=FALSE,
-            vjust=0, size=6, family="sans") +
-  geom_text(data=df_plot_asterisk,
-            aes(x=Order, y=y_position, label=asterisk),
-            inherit.aes=FALSE,
-            vjust=0, size=10, family="sans") +   # match axis text size
+            vjust=0, size=3, family="sans") +
+  # geom_text(data=df_plot_asterisk,
+  #           aes(x=Order, y=y_position, label=asterisk),
+  #           inherit.aes=FALSE,
+  #           vjust=0, size=10, family="sans") +   # match axis text size
   scale_fill_manual(values=colors) +
   labs(x="", y="Relative Abundance") +
-  scale_y_continuous(limits=c(0,0.17), expand=c(0,0)) +
+  expand_limits(y = 0) + 
+  scale_y_continuous(expand=c(0,0)) +
   main_theme +
-  theme(axis.text.x=element_text(size=20, angle=50, hjust=1))
+  theme(axis.text.x=element_text(size=8, angle=50, hjust=1))
 
 p
 
-ggsave(paste("Barley_barplot_bulk_top20_RA.pdf", sep=""), p, width=12, height=6)
+ggsave(paste("Barley_barplot_bulk_top20_RA.pdf", sep=""),
+       p, width=12, height=6, units = "cm")
 saveRDS(p, file = "Barley_barplot_bulk_top20_RA.rds")
+saveRDS(p, file = "../6_final_figure/Barley_barplot_bulk_top20_RA.rds")
 
 ###########
 
@@ -192,29 +202,32 @@ df_plot_asterisk_sig <- df_plot_asterisk %>%
 
 # Make a graph only showing orders with significant differences across soil types.
 p_sig <- ggplot(df_order_summary_sig, aes(x=Order, y=Mean_RA, fill=Soil)) +
-  geom_bar(stat="identity", position=position_dodge(width=0.9), width=0.8, alpha=0.8) +
+  geom_bar(stat="identity", position=position_dodge(width=0.9),
+           width=0.8, alpha=0.8) +
   geom_errorbar(aes(ymin=Mean_RA-SE_RA, ymax=Mean_RA+SE_RA),
                 width=0.3, position=position_dodge(width=0.9), color="black") +
   geom_text(data=df_plot_letters_sig,
             aes(x=Order, y=Mean_RA + SE_RA + 0.005, label=Letter, fill=Soil),
             position=position_dodge(width=0.9),
             inherit.aes=FALSE,
-            vjust=0, size=6, family="sans") +
-  geom_text(data=df_plot_asterisk_sig,
-            aes(x=Order, y=y_position, label=asterisk),
-            inherit.aes=FALSE,
-            vjust=0, size=10, family="sans") +
+            vjust=0, size=3, family="sans") +
+  # geom_text(data=df_plot_asterisk_sig,
+  #           aes(x=Order, y=y_position, label=asterisk),
+  #           inherit.aes=FALSE,
+  #           vjust=0, size=10, family="sans") +
   scale_fill_manual(values=colors) +
   labs(x="", y="Relative Abundance") +
-  scale_y_continuous(limits=c(0,0.17), expand=c(0,0)) +
+  scale_y_continuous(expand=c(0,0), limits = c(0, 0.13)) +
   main_theme +
-  theme(axis.text.x=element_text(size=20, angle=50, hjust=1),
+  theme(axis.text.x=element_text(size=8, angle=50, hjust=1),
         legend.position = "right",
         legend.background=element_blank())
 
 p_sig
 
 # Save the updated plot
-ggsave(paste("Barley_barplot_bulk_top20_RA_sign.pdf", sep=""), p_sig, width=8, height=6)
+ggsave(paste("Barley_barplot_bulk_top20_RA_sign.pdf", sep=""),
+       p_sig, width=8, height=6, units = "cm")
 saveRDS(p_sig, file = "Barley_barplot_bulk_top20_RA_sign.rds")
+saveRDS(p_sig, file = "../6_final_figure/Barley_barplot_bulk_top20_RA_sign.rds")
 
