@@ -6,9 +6,9 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load data.
-design <- read.table("LotusCSSP_LjSC_metadata.txt", header=TRUE, sep="\t")
-asv_table <- read.table("feature-table_LotusSYM_LjSC.tsv", sep = "\t", header = TRUE, row.names = 1, check.names = FALSE, comment.char = "", skip = 1)
-taxonomy <- read.table("LjSC_taxonomy.txt", sep="\t", header=TRUE, fill=TRUE)
+design <- read.table("BarleyCSSP_SConly_metadata_NEW.txt", header=TRUE, sep="\t")
+asv_table <- read.table("feature-table_BarleyCSSP_CerealSConly.tsv", sep = "\t", header = TRUE, row.names = 1, check.names = FALSE, comment.char = "", skip = 1)
+taxonomy <- read.table("CerealSC_taxonomy_new_May23.txt", sep="\t", header=TRUE, fill=TRUE)
 
 # Load packages.
 library(dplyr)
@@ -25,11 +25,11 @@ library(scales)
 # Modify design and asv table file to only keep genotypes of interest, and to only keep matched ASVs.
 design_filtered <- design %>%
   filter(Genotype %in% c("WT","symrk","ccamk","nsp1","nsp2")) %>%
-  mutate(Compartment = recode(Compartment, "rhizo"="Rhizosphere", "endo"="Root", "nod"="Nodules"))
+  mutate(Compartment = recode(Compartment, "rhizo"="Rhizosphere", "endo"="Root"))
 samples_keep <- design_filtered$SampleID
 asv_table_filtered <- asv_table[, colnames(asv_table) %in% samples_keep]
 
-asv_table_matched <- asv_table_filtered[grepl("Lj", rownames(asv_table_filtered)), ]
+asv_table_matched <- asv_table_filtered[grepl("_", rownames(asv_table_filtered)), , drop = FALSE]
 
 # Check whether all matched ASVs are present in taxonomy file.
 missing_asvs <- setdiff(rownames(asv_table_matched), taxonomy$ASVid)
@@ -44,25 +44,31 @@ if(length(missing_asvs) == 0){
 asv_table_norm <- sweep(asv_table_matched, 2, colSums(asv_table_matched), "/")
 df <- as.data.frame(asv_table_norm) %>%
   rownames_to_column(var="ASVid") %>%
-  left_join(taxonomy %>% select(ASVid, order), by="ASVid")
+  left_join(taxonomy %>% select(ASVid, Order), by="ASVid")
 
 # Reshape to long format and add design info.
 df_long <- df %>%
-  pivot_longer(cols=-c(ASVid, order), names_to="SampleID", values_to="RA") %>%
+  pivot_longer(cols=-c(ASVid, Order), names_to="SampleID", values_to="RA") %>%
   left_join(design_filtered %>% select(SampleID, Compartment, Genotype), by="SampleID")
 
-# Summarize mean relative abundance per genotype-compartment combination.
+# Summarise mean relative abundance for wach order per genotype-compartment combination.
 df_summary <- df_long %>%
-  group_by(order, Genotype, Compartment) %>%
+  group_by(Order, Genotype, Compartment) %>%
   summarise(mean_RA = mean(RA, na.rm = TRUE), .groups = "drop") %>%
-  mutate(order = ifelse(is.na(order), "Unclassified", order)) %>%
+  mutate(Order = ifelse(is.na(Order), "Unclassified", Order)) %>%
   group_by(Genotype, Compartment) %>%
   mutate(mean_RA = mean_RA / sum(mean_RA)) %>%
   ungroup()
 
-# Ensure compartment order.
+# Remove orders that have relative abundance of 0 in all samples.
 df_summary <- df_summary %>%
-  mutate(Compartment = factor(Compartment, levels=c("Rhizosphere","Root","Nodules")))
+  group_by(Order) %>%
+  filter(sum(mean_RA) > 0) %>%
+  ungroup()
+
+# Set factor level for compartments.
+df_summary <- df_summary %>%
+  mutate(Compartment = factor(Compartment, levels=c("Rhizosphere","Root")))
 
 # Define colours for orders.
 colors <- c(
@@ -73,7 +79,8 @@ colors <- c(
   "Caulobacterales"    = "#8e3563",   # magenta
   "Chitinophagales"    = "#b55385",   # rose
   "Chloroflexales"     = "#CC99BB",   # light purple-pink
-  "Corynebacteriales"  = "#f6cefc",   # very light pink
+  "Corynebacteriales"  = "#f6cefc",
+  "Enterobacterales"   = "#191551",
   "Flavobacteriales"   = "#05294a",   # navy
   "Frankiales"         = "#114477",   # dark teal-blue
   "Gaiellales"         = "#4477AA",   # medium blue
@@ -87,10 +94,13 @@ colors <- c(
   "Pseudomonadales"    = "#88CCAA",   # pastel green
   "Pseudonocardiales"  = "#95bb72",   # lime green (stays in the green cluster)
   "Rhizobiales"        = "lightyellow",
+  "Rhodobacterales"    = "#C3834D",
+  "Rhodospirillales"   = "#302018",
   "S085"               = "#774411",   # brown
   "Solibacterales"     = "#DDAA77",   # beige-brown
+  "Sphingobacteriales" = "#8A6642",   
   "Sphingomonadales"   = "#fdbb6b",
-  "Streptomycetales"    = "#fed5a4",   # pink-magenta (to match other actinobacteria hues)
+  "Streptomycetales"   = "#fed5a4",   
   "Subgroup_7"         = "#AA4455",   # dark red
   "TK10"               = "#DD7788",   # reddish-pink
   "Xanthomonadales"    = "#ffc0cb",   # light pink
@@ -110,7 +120,7 @@ genotype_labels <- c(
   "nsp2"   = "*nsp2*"
 )
 
-# Plot stacked barplot.
+# Plot stacked barplot and save.
 main_theme <- theme(
   panel.background=element_blank(),
   panel.grid=element_blank(),
@@ -127,7 +137,7 @@ main_theme <- theme(
   text=element_text(family="sans", size=20, color="black")
 )
 
-p1 <- ggplot(df_summary, aes(x=Genotype, y=mean_RA, fill=order)) +
+p1 <- ggplot(df_summary, aes(x=Genotype, y=mean_RA, fill=Order)) +
   geom_bar(stat="identity", width=0.5) +
   facet_wrap(~Compartment, scales="free_x") +
   scale_fill_manual(values=colors) +
@@ -140,39 +150,47 @@ p1 <- ggplot(df_summary, aes(x=Genotype, y=mean_RA, fill=order)) +
   theme(axis.text.x = element_markdown(size=20, color="black", angle=30, hjust=1),
         strip.text.x=element_text(size=20, face="bold"),
         axis.title.x=element_blank()) +
-  guides(fill=guide_legend(nrow=9))
+  guides(fill=guide_legend(nrow=15))
 
 p1
 
-# Save plot.
-ggsave("LotusSC_order_RA_stackedbp.pdf", p1, width=12, height=6)
-saveRDS(p1, file="LotusSC_order_RA_stackedbp.rds")
+ggsave("HordeumSC_order_RA_stackedbp.pdf", p1, width=12, height=6)
+saveRDS(p1, file="HordeumSC_order_RA_stackedbp.rds")
 
 # Next we want to plot the relative abundances of all orders in the different compartment-genotype combinations using barplots.
-# We will only do this for the rhizosphere and root compartment, where we have data for all genotypes.
 
-# First we remove the nodule data from our dataframe.
+# Again, look at the relative abundance of each order in each sample.
 df_order_sample <- df_long %>%
-  filter(Compartment %in% c("Rhizosphere","Root")) %>%
-  group_by(order, SampleID, Compartment, Genotype) %>%
+  mutate(Order = ifelse(is.na(Order), "Unclassified", Order)) %>%
+  group_by(Order, SampleID, Compartment, Genotype) %>%
   summarise(RA = sum(RA), .groups = "drop")
 
-# Set genotype factor levels.
+# Remove orders that are zero in all samples.
+orders_nonzero <- df_order_sample %>%
+  group_by(Order) %>%
+  summarise(total_RA = sum(RA), .groups = "drop") %>%
+  filter(total_RA > 0) %>%
+  pull(Order)
+
+df_order_sample <- df_order_sample %>%
+  filter(Order %in% orders_nonzero)
+
+# Set the genotype factor levels.
 df_order_sample$Genotype <- factor(df_order_sample$Genotype,
                                    levels = c("WT","symrk","ccamk","nsp1","nsp2"))
 
-# Initialize final results list
+# Perform significance analysis (ANOVA and Tukey HSD) to look at differences in RA of orders among genotypes in each compartment.
+
 final_results_list <- list()
 tukey_results_list <- list()
 
-# Get levels
 compartments <- unique(df_order_sample$Compartment)
-orders <- unique(df_order_sample$order)
+orders <- unique(df_order_sample$Order)
 
 for(comp in compartments){
   for(ord in orders){
     df_sub <- df_order_sample %>%
-      filter(Compartment == comp, order == ord)
+      filter(Compartment == comp, Order == ord)
 
     # Skip if less than 2 genotypes with data
     genotypes_with_data <- df_sub %>%
@@ -187,14 +205,14 @@ for(comp in compartments){
       next
     }
 
-    # ANOVA
+    # ANOVA.
     ano <- aov(RA ~ Genotype, data=df_sub)
     p_value <- summary(ano)[[1]][["Pr(>F)"]][1]
 
-    # Tukey HSD
+    # Tukey HSD.
     tukey <- TukeyHSD(ano)
 
-    # Check if any p-values are NA
+    # Check if any p-values are NA.
     if(any(is.na(tukey$Genotype[,4]))){
       message("Skipping multcompLetters for order ", ord, " in compartment ", comp,
               " because Tukey HSD contains NA p-values")
@@ -203,13 +221,13 @@ for(comp in compartments){
       tukey_letters <- multcompLetters(tukey$Genotype[,4])$Letters
     }
 
-    # Save Tukey full results for this order/compartment
+    # Save Tukey full results for this order/compartment.
     tukey_df <- as.data.frame(tukey$Genotype) %>%
       rownames_to_column("Comparison") %>%
       mutate(Order=ord, Compartment=comp)
     tukey_results_list[[paste(ord,comp,sep="_")]] <- tukey_df
 
-    # Save letters for plotting
+    # Save letters for plotting.
     result_row <- data.frame(
       Order = ord,
       Compartment = comp,
@@ -225,31 +243,26 @@ for(comp in compartments){
   }
 }
 
-# Combine results
 final_results <- bind_rows(final_results_list)
 tukey_results <- bind_rows(tukey_results_list)
 
-# Save CSVs
-write.csv(final_results, "Lotus_order_RA_ANOVATukey_letters.csv", row.names=FALSE)
-write.csv(tukey_results, "Lotus_order_RA_TukeyHSD_full.csv", row.names=FALSE)
+# Save significance analysis results.
+write.csv(final_results, "Hordeum_order_RA_ANOVATukey_letters.csv", row.names=FALSE)
+write.csv(tukey_results, "Hordeum_order_RA_TukeyHSD_full.csv", row.names=FALSE)
 
-#----------------------------------------
-# Prepare data for plotting
-#----------------------------------------
+# Prepare data for plotting.
 
-# Summary for plotting mean and SE (per order-compartment-genotype)
+## Summary for plotting mean and SE (per order-compartment-genotype).
 df_order_summary <- df_order_sample %>%
-  group_by(order, Compartment, Genotype) %>%
+  group_by(Order, Compartment, Genotype) %>%
   summarise(Mean_RA = mean(RA), SE_RA = sd(RA)/sqrt(n()), .groups="drop")
 
-# Prepare letters for plotting
+## Prepare letters for plotting.
 df_plot_letters <- final_results %>%
   pivot_longer(cols=WT:nsp2, names_to="Genotype", values_to="Letter") %>%
-  left_join(df_order_summary, by=c("Order"="order","Compartment","Genotype"))
+  left_join(df_order_summary, by=c("Order"="Order","Compartment","Genotype"))
 
-#----------------------------------------
-# Define colors for genotypes
-#----------------------------------------
+## Set colours for genotypes.
 colors_geno <- c(
   "WT"     = "#A9C289",
   "symrk"  = "#FEDA8B",
@@ -258,7 +271,7 @@ colors_geno <- c(
   "nsp2"   = "#6EA6CD"
 )
 
-# Common theme
+## Set main theme.
 main_theme <- theme(
   panel.background=element_blank(),
   panel.grid=element_blank(),
@@ -274,15 +287,16 @@ main_theme <- theme(
   text=element_text(family="sans", size=20, color="black")
 )
 
-#----------------------------------------
-# Plot all orders
-#----------------------------------------
-# Make sure factor levels match
-df_order_summary$order <- factor(df_order_summary$order, levels = unique(df_order_summary$order))
-df_plot_letters$Order <- factor(df_plot_letters$Order, levels = levels(df_order_summary$order))
+# Now make plots.
+
+# 1) Plotting all orders (with non-significant and significant differences).
+
+## Make sure factor levels match
+df_order_summary$Order <- factor(df_order_summary$Order, levels = unique(df_order_summary$Order))
+df_plot_letters$Order <- factor(df_plot_letters$Order, levels = levels(df_order_summary$Order))
 df_plot_letters$Genotype <- factor(df_plot_letters$Genotype, levels = levels(df_order_summary$Genotype))
 
-# Define italic labels for legend
+## Define italic labels for legend.
 genotype_labels_legend <- c(
   "WT"     = "WT",
   "symrk"  = "*symrk*",
@@ -291,16 +305,16 @@ genotype_labels_legend <- c(
   "nsp2"   = "*nsp2*"
 )
 
-# Compute max RA per order × compartment for y-position
+## Compute max RA per order × compartment for y-position.
 asterisk_df <- df_order_summary %>%
-  group_by(order, Compartment) %>%
+  group_by(Order, Compartment) %>%
   summarise(
     y_position = max(Mean_RA + SE_RA, na.rm=TRUE) + 0.02,
     .groups="drop"
   ) %>%
   left_join(
     final_results %>% select(Order, Compartment, P_Value),
-    by = c("order"="Order", "Compartment")
+    by = c("Order"="Order", "Compartment")
   ) %>%
   mutate(
     asterisk = case_when(
@@ -312,10 +326,10 @@ asterisk_df <- df_order_summary %>%
   ) %>%
   filter(!is.na(asterisk))
 
-# Define dodge object
+## Define dodge object and plot.
 dodge <- position_dodge(width = 0.9)
 
-p_all <- ggplot(df_order_summary, aes(x=order, y=Mean_RA, fill=Genotype)) +
+p_all <- ggplot(df_order_summary, aes(x=Order, y=Mean_RA, fill=Genotype)) +
   geom_bar(stat="identity", position=dodge, width=0.8, alpha=0.9) +
   geom_errorbar(aes(ymin=Mean_RA-SE_RA, ymax=Mean_RA+SE_RA),
                 width=0.3, position=dodge) +
@@ -328,7 +342,7 @@ p_all <- ggplot(df_order_summary, aes(x=order, y=Mean_RA, fill=Genotype)) +
   ) +
   geom_text(
     data = asterisk_df,
-    aes(x = order, y = y_position, label = asterisk),
+    aes(x = Order, y = y_position, label = asterisk),
     inherit.aes = FALSE,
     size = 6
   ) +
@@ -347,31 +361,32 @@ p_all <- ggplot(df_order_summary, aes(x=order, y=Mean_RA, fill=Genotype)) +
 
 p_all
 
-ggsave("Lotus_order_RA_all_orders.pdf", p_all, width=14, height=6)
-saveRDS(p_all, file="Lotus_order_RA_all_orders.rds")
+ggsave("Hordeum_order_RA_all_orders.pdf", p_all, width=14, height=6)
+saveRDS(p_all, file="Hordeum_order_RA_all_orders.rds")
 
 # Now only plot significant orders.
-# Get significant orders and sort alphabetically
+
+## Get significant orders and sort alphabetically.
 sig_orders <- sort(final_results %>% filter(P_Value < 0.05) %>% pull(Order) %>% unique())
 
-# Filter summary and letters
-df_order_summary_sig <- df_order_summary %>% filter(order %in% sig_orders)
+## Filter summary and letters.
+df_order_summary_sig <- df_order_summary %>% filter(Order %in% sig_orders)
 df_plot_letters_sig <- df_plot_letters %>% filter(Order %in% sig_orders)
 
-# Reset factor levels to ensure alphabetical order
-df_order_summary_sig$order <- factor(df_order_summary_sig$order, levels = sig_orders)
+## Reset factor levels to ensure alphabetical order.
+df_order_summary_sig$Order <- factor(df_order_summary_sig$Order, levels = sig_orders)
 df_plot_letters_sig$Order <- factor(df_plot_letters_sig$Order, levels = sig_orders)
 
-# Recalculate y-positions for letters
+## Recalculate y-positions for letters.
 df_plot_letters_sig <- df_plot_letters_sig %>%
   mutate(y_pos = Mean_RA + SE_RA + 0.01)
 
-# Recalculate asterisk positions
+## Recalculate asterisk positions.
 asterisk_df_sig <- df_order_summary_sig %>%
-  group_by(order, Compartment) %>%
+  group_by(Order, Compartment) %>%
   summarise(y_position = max(Mean_RA + SE_RA, na.rm = TRUE) + 0.02, .groups="drop") %>%
   left_join(final_results %>% select(Order, Compartment, P_Value), 
-            by = c("order" = "Order", "Compartment")) %>%
+            by = c("Order" = "Order", "Compartment")) %>%
   mutate(
     asterisk = case_when(
       P_Value < 0.001 ~ "***",
@@ -382,8 +397,8 @@ asterisk_df_sig <- df_order_summary_sig %>%
   ) %>%
   filter(!is.na(asterisk))
 
-# Plot
-p_sig <- ggplot(df_order_summary_sig, aes(x=order, y=Mean_RA, fill=Genotype)) +
+## Plot.
+p_sig <- ggplot(df_order_summary_sig, aes(x=Order, y=Mean_RA, fill=Genotype)) +
   geom_bar(stat="identity", position=dodge, width=0.8, alpha=0.9) +
   geom_errorbar(aes(ymin=Mean_RA-SE_RA, ymax=Mean_RA+SE_RA),
                 width=0.3, position=dodge) +
@@ -396,7 +411,7 @@ p_sig <- ggplot(df_order_summary_sig, aes(x=order, y=Mean_RA, fill=Genotype)) +
   ) +
   geom_text(
     data=asterisk_df_sig,
-    aes(x=order, y=y_position, label=asterisk),
+    aes(x=Order, y=y_position, label=asterisk),
     inherit.aes=FALSE,
     size=6
   ) +
@@ -406,7 +421,7 @@ p_sig <- ggplot(df_order_summary_sig, aes(x=order, y=Mean_RA, fill=Genotype)) +
   labs(x="", y="Relative Abundance", fill="Genotype") +
   main_theme +
   theme(
-    axis.text.x = element_text(angle=30, hjust=1),
+    axis.text.x = element_text(angle=45, hjust=1),
     legend.text = element_markdown(),
     strip.text = element_text(face="bold", size=rel(1)),
     plot.title = element_text(size=20)
@@ -414,5 +429,9 @@ p_sig <- ggplot(df_order_summary_sig, aes(x=order, y=Mean_RA, fill=Genotype)) +
 
 p_sig
 
-ggsave("Lotus_order_RA_sign_orders.pdf", p_sig, width=12, height=6)
-saveRDS(p_sig, file="Lotus_order_RA_sign_orders.rds")
+ggsave("Hordeum_order_RA_sign_orders.pdf", p_sig, width=12, height=6)
+saveRDS(p_sig, file="Hordeum_order_RA_sign_orders.rds")
+
+# Comment: Order Enterobacterales has letter 'a' for all genotypes, but shows asterisk '*'.
+# This is due to the fact that at pairwise comparison levels, the differences are not significant,
+# but at an overall ANOVA levels that looks at the whole variance p<0.05.
