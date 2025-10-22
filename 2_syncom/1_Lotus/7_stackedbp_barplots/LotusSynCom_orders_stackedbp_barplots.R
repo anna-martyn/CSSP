@@ -86,10 +86,10 @@ colors <- c(
   "Propionibacteriales"= "#117744",   # forest green
   "Pseudomonadales"    = "#88CCAA",   # pastel green
   "Pseudonocardiales"  = "#95bb72",   # lime green (stays in the green cluster)
-  "Rhizobiales"        = "lightyellow",
+  "Rhizobiales"        = "#fdbb6b",
   "S085"               = "#774411",   # brown
   "Solibacterales"     = "#DDAA77",   # beige-brown
-  "Sphingomonadales"   = "#fdbb6b",
+  "Sphingomonadales"   = "lightyellow",
   "Streptomycetales"    = "#fed5a4",   # pink-magenta (to match other actinobacteria hues)
   "Subgroup_7"         = "#AA4455",   # dark red
   "TK10"               = "#DD7788",   # reddish-pink
@@ -118,35 +118,62 @@ main_theme <- theme(
   axis.line.x=element_line(color="black"),
   axis.line.y=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text=element_text(size=20, color="black"),
-  legend.text=element_text(size=20, color="black"),
+  axis.text=element_text(size=8, color="black"),
+  legend.text=element_text(size=8, color="black"),
   legend.key=element_blank(),
-  axis.title.y=element_text(size=20),
+  axis.title.y=element_text(size=8),
   legend.position="right",
   legend.background=element_blank(),
-  text=element_text(family="sans", size=20, color="black")
+  text=element_text(family="sans", size=8, color="black")
 )
 
 p1 <- ggplot(df_summary, aes(x=Genotype, y=mean_RA, fill=order)) +
   geom_bar(stat="identity", width=0.5) +
-  facet_wrap(~Compartment, scales="free_x") +
+  facet_wrap(~Compartment, scales="free_x", space = "free_x") +
   scale_fill_manual(values=colors) +
-  
   scale_x_discrete(labels = genotype_labels) +
   scale_y_continuous(expand=c(0,0)) +
   main_theme +
   ylab("Mean relative abundance") +
-  labs(fill="Bacterial order") + 
-  theme(axis.text.x = element_markdown(size=20, color="black", angle=30, hjust=1),
-        strip.text.x=element_text(size=20, face="bold"),
+  labs(fill="Bacterial order") +
+  theme(axis.text.x = element_markdown(size=8, color="black", angle=30, hjust=1),
+        strip.text.x=element_text(size=8, face="bold"),
+        legend.position = "bottom",
+        legend.title.position = "top",
+        legend.key.size = unit(0.25, "cm"),
+        legend.key.spacing.y = unit(0, 'cm'),
         axis.title.x=element_blank()) +
-  guides(fill=guide_legend(nrow=9))
+  guides(fill=guide_legend(nrow=3))+
+  NULL
+
+p1 <- ggplot(df_summary, aes(y=Genotype, x=mean_RA, fill=order)) +
+  geom_bar(stat="identity", width=0.5) +
+  facet_wrap(~Compartment, scales="free_y", space = "free_y", nrow = 3, 
+             strip.position = "right") +
+  scale_fill_manual(values=colors) +
+  scale_x_continuous(expand=c(0,0)) +
+  scale_y_discrete(labels = genotype_labels) +
+  main_theme +
+  ylab("Mean relative abundance") +
+  labs(fill="Bacterial order") +
+  theme(axis.text.x = element_markdown(size=8, color="black"),
+        # strip.text.x=element_text(size=8, face="bold"),
+        strip.text.y = element_text(angle = 0, size=8, face="bold"),
+        legend.position = "bottom",
+        legend.title.position = "top",
+        legend.key.size = unit(0.25, "cm"),
+        legend.key.spacing.y = unit(0, 'cm'),
+        axis.title.x=element_blank(),
+        axis.text.y = element_markdown()) +
+  guides(fill=guide_legend(nrow=3))+
+  NULL
 
 p1
 
 # Save plot.
-ggsave("LotusSC_order_RA_stackedbp.pdf", p1, width=12, height=6)
+ggsave("LotusSC_order_RA_stackedbp.pdf", p1, width=12, height=6, unit = "cm")
 saveRDS(p1, file="LotusSC_order_RA_stackedbp.rds")
+saveRDS(p1, file="../10_final_figures/LotusSC_order_RA_stackedbp.rds")
 
 # Next we want to plot the relative abundances of all orders in the different compartment-genotype combinations using barplots.
 # We will only do this for the rhizosphere and root compartment, where we have data for all genotypes.
@@ -265,13 +292,13 @@ main_theme <- theme(
   panel.border=element_rect(colour="black", fill=NA, linewidth=1),
   axis.line=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text=element_text(size=20, color="black"),
-  legend.text=element_text(size=20),
+  axis.text=element_text(size=8, color="black"),
+  legend.text=element_text(size=8),
   legend.key=element_blank(),
-  axis.title.y=element_text(size=20),
+  axis.title.y=element_text(size=8),
   legend.position="right",
   legend.background=element_blank(),
-  text=element_text(family="sans", size=20, color="black")
+  text=element_text(family="sans", size=8, color="black")
 )
 
 #----------------------------------------
@@ -326,12 +353,12 @@ p_all <- ggplot(df_order_summary, aes(x=order, y=Mean_RA, fill=Genotype)) +
     inherit.aes=FALSE,
     size=5
   ) +
-  geom_text(
-    data = asterisk_df,
-    aes(x = order, y = y_position, label = asterisk),
-    inherit.aes = FALSE,
-    size = 6
-  ) +
+  # geom_text(
+  #   data = asterisk_df,
+  #   aes(x = order, y = y_position, label = asterisk),
+  #   inherit.aes = FALSE,
+  #   size = 6
+  # ) +
   facet_wrap(~Compartment, scales="free_x") +
   scale_fill_manual(values=colors_geno, labels = genotype_labels_legend) +
   scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
@@ -341,14 +368,15 @@ p_all <- ggplot(df_order_summary, aes(x=order, y=Mean_RA, fill=Genotype)) +
     axis.text.x = element_text(angle=45, hjust=1),
     legend.text = element_markdown(),   # italic genotypes
     strip.text = element_text(face="bold", size=rel(1)),  # italic facet labels
-    plot.title = element_text(size=20)
+    plot.title = element_text(size=8)
   )
 
 
 p_all
 
-ggsave("Lotus_order_RA_all_orders.pdf", p_all, width=14, height=6)
+ggsave("Lotus_order_RA_all_orders.pdf", p_all, width=14, height=6, units = "cm")
 saveRDS(p_all, file="Lotus_order_RA_all_orders.rds")
+saveRDS(p_all, file="../10_final_figures/Lotus_order_RA_all_orders.rds")
 
 # Now only plot significant orders.
 # Get significant orders and sort alphabetically
@@ -389,17 +417,17 @@ p_sig <- ggplot(df_order_summary_sig, aes(x=order, y=Mean_RA, fill=Genotype)) +
                 width=0.3, position=dodge) +
   geom_text(
     data=df_plot_letters_sig,
-    aes(x=Order, y=y_pos, label=Letter, fill=Genotype),
+    aes(x=Order, y=y_pos+0.05, label=Letter, fill=Genotype),
     position=dodge,
     inherit.aes=FALSE,
-    size=5
+    size=2
   ) +
-  geom_text(
-    data=asterisk_df_sig,
-    aes(x=order, y=y_position, label=asterisk),
-    inherit.aes=FALSE,
-    size=6
-  ) +
+  # geom_text(
+  #   data=asterisk_df_sig,
+  #   aes(x=order, y=y_position, label=asterisk),
+  #   inherit.aes=FALSE,
+  #   size=6
+  # ) +
   facet_wrap(~Compartment, scales="free_x") +
   scale_fill_manual(values=colors_geno, labels=genotype_labels_legend) +
   scale_y_continuous(expand=c(0,0), limits=c(0,0.7)) +
@@ -409,10 +437,12 @@ p_sig <- ggplot(df_order_summary_sig, aes(x=order, y=Mean_RA, fill=Genotype)) +
     axis.text.x = element_text(angle=30, hjust=1),
     legend.text = element_markdown(),
     strip.text = element_text(face="bold", size=rel(1)),
+    legend.position = "none",
     plot.title = element_text(size=20)
   )
 
 p_sig
 
-ggsave("Lotus_order_RA_sign_orders.pdf", p_sig, width=12, height=6)
+ggsave("Lotus_order_RA_sign_orders.pdf", p_sig, width=12, height=6, unit = "cm")
 saveRDS(p_sig, file="Lotus_order_RA_sign_orders.rds")
+saveRDS(p_sig, file="../10_final_figures/Lotus_order_RA_sign_orders.rds")

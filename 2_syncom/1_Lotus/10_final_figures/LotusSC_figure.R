@@ -26,10 +26,10 @@ p0 <- ggplot() +
   annotate("text", x = 0.5, y = 0.5, label = "", size = 6, fontface="bold", hjust=0.5, vjust=0.5)
 p1 <- LotusSC_shootfw_LjSC_only
 p1_aligned <- p1 + labs(title = " ") +
-  theme(plot.title = element_text(size = 20, color = NA),
+  theme(plot.title = element_text(size = 8, color = NA),
         axis.text.x = element_text(angle=45, hjust=1))
 p2 <- LotusSynCom_pcoa_matchedASVs_byCompartment
-p3 <- LotusSC_order_top20_RA_stackedbp
+p3 <- LotusSC_order_RA_stackedbp
 p4 <- Lotus_order_RA_sign_orders
 p5 <- LotusSynCom_DA
 
@@ -44,15 +44,15 @@ p3 <- p3 +
     )
   )
 
-p4 <- p4 +
-  theme(legend.position = "bottom") +
-  guides(
-    fill = guide_legend(
-      ncol = 5, nrow = 1,
-      title.position = "top",
-      title.hjust = 0
-    )
-  )
+# p4 <- p4 +
+#   theme(legend.position = "bottom") +
+#   guides(
+#     fill = guide_legend(
+#       ncol = 5, nrow = 1,
+#       title.position = "top",
+#       title.hjust = 0
+#     )
+#   )
 
 
 # Combine in one plot.
@@ -62,7 +62,7 @@ row1 <- plot_grid(
   ncol = 3,
   rel_widths = c(0.4,0.2,0.6),
   labels = c("A","B","C"),
-  label_size = 30,
+  label_size = 15,
   label_fontface = "bold",
   label_x = 0, label_y = 1
 )
@@ -70,9 +70,9 @@ row1 <- plot_grid(
 row2 <- plot_grid(
   p3, p4,
   ncol = 2,
-  rel_widths = c(1.2,1.6),
+  rel_widths = c(1,1.2),
   labels = c("D","E"),
-  label_size = 30,
+  label_size = 15,
   label_fontface = "bold",
   label_x = 0, label_y = 1
 )
@@ -82,7 +82,7 @@ row3 <- plot_grid(
   ncol = 1,
   rel_widths = c(1),
   labels = c("F"),
-  label_size = 30,
+  label_size = 15,
   label_fontface = "bold",
   label_x = 0, label_y = 1
 )
@@ -94,11 +94,11 @@ final_plot <- plot_grid(
   row2,
   row3,
   ncol = 1,
-  rel_heights = c(0.6,0.8,2)
+  rel_heights = c(0.6,0.8,1.6)
 )
 
 final_plot
 
 # Save the combined plot as PDF
-ggsave("LotusSC_figure.pdf", final_plot, width=21, height=29.7)
+ggsave("LotusSC_figure.pdf", final_plot, width=21, height=27, units = "cm")
 

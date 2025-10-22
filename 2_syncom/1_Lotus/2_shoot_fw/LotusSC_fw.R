@@ -90,8 +90,8 @@ main_theme <- theme(
   axis.line.x=element_line(color="black"),
   axis.line.y=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text.x = element_text(size = 20, colour = "black"),
-  axis.text.y = element_text(size = 20, colour = "black"),
+  axis.text.x = element_text(size = 8, colour = "black"),
+  axis.text.y = element_text(size = 8, colour = "black"),
   legend.background=element_blank(),
   legend.key=element_blank(),
   text=element_text(family="sans")
@@ -102,9 +102,9 @@ main_theme <- theme(
 # -----------------------------
 p1 <- ggplot(weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   geom_boxplot(width=0.3, outlier.color=NA, alpha=0.7) +
-  geom_jitter(position=position_jitter(width=0), size=3, alpha=0.3) +
+  geom_jitter(position=position_jitter(width=0), size=0.5, alpha=0.3) +
   geom_text(data=weight_summary, aes(x=Genotype, y=y_pos*1.2, label=label), inherit.aes=FALSE, size=6) +
-  geom_text(data=anova_pvals, aes(x=3, y=y_position, label=asterisk), inherit.aes=FALSE, size=10) +
+  # geom_text(data=anova_pvals, aes(x=3, y=y_position, label=asterisk), inherit.aes=FALSE, size=10) +
   geom_blank(data=upper_limits, aes(y=Fresh_weight), inherit.aes=FALSE) +
   scale_fill_manual(values=colors) +
   facet_wrap(~Treatment, scales="fixed") +
@@ -112,9 +112,9 @@ p1 <- ggplot(weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   ylab("Shoot fresh weight/plant (g)") +
   theme(
     legend.position="none",
-    strip.text.x = element_text(size = 20),
+    strip.text.x = element_text(size = 8),
     axis.title.x = element_blank(),
-    axis.title.y = element_text(size = 20)
+    axis.title.y = element_text(size = 8)
   ) +
   scale_x_discrete(labels=c(
     "WT"="WT",
@@ -129,8 +129,9 @@ p1 <- ggplot(weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
 p1
 
 # Save plot
-ggsave("LotusSC_shootfw_incl_uninoc.pdf", p1, width=10, height=6)
+ggsave("LotusSC_shootfw_incl_uninoc.pdf", p1, width=10, height=6, units = "cm")
 saveRDS(p1, file = "LotusSC_shootfw_incl_uninoc.rds")
+saveRDS(p1, file = "../10_final_figures/LotusSC_shootfw_incl_uninoc.rds")
 
 # -----------------------------
 # Lj-SPHERE only (single plot)
@@ -142,18 +143,19 @@ upper_limits_Lj <- upper_limits %>% filter(Treatment=="Lj-SPHERE")
 
 p2 <- ggplot(weight_Lj, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   geom_boxplot(width=0.3, outlier.color=NA, alpha=0.7) +
-  geom_jitter(position=position_jitter(width=0), size=3, alpha=0.3) +
-  geom_text(data=weight_summary_Lj, aes(x=Genotype, y=y_pos*1.2, label=label), inherit.aes=FALSE, size=6) +
-  geom_text(data=anova_pvals_Lj, aes(x=3, y=y_position, label=asterisk), inherit.aes=FALSE, size=10) +
+  geom_jitter(position=position_jitter(width=0), size=0.5, alpha=0.3) +
+  geom_text(data=weight_summary_Lj, aes(x=Genotype, y=y_pos*1.2, label=label),
+            inherit.aes=FALSE, size=3) +
+  # geom_text(data=anova_pvals_Lj, aes(x=3, y=y_position, label=asterisk), inherit.aes=FALSE, size=10) +
   geom_blank(data=upper_limits_Lj, aes(y=Fresh_weight), inherit.aes=FALSE) +
   scale_fill_manual(values=colors) +
   main_theme +
   ylab("Shoot fresh weight/plant (g)") +
   theme(
     legend.position="none",
-    plot.title = element_text(size=20, face="bold", hjust=0.5),
+    plot.title = element_text(size=8, face="bold", hjust=0.5),
     axis.title.x=element_blank(),
-    axis.title.y=element_text(size=20)
+    axis.title.y=element_text(size=8)
   ) +
   scale_x_discrete(labels=c(
     "WT"="WT",
@@ -168,5 +170,6 @@ p2 <- ggplot(weight_Lj, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
 p2
 
 # Save Lj-SPHERE plot
-ggsave("LotusSC_shootfw_LjSC_only.pdf", p2, width=5, height=6)
+ggsave("LotusSC_shootfw_LjSC_only.pdf", p2, width=5, height=6, units = "cm")
 saveRDS(p2, "LotusSC_shootfw_LjSC_only.rds")
+saveRDS(p2, "../10_final_figures/LotusSC_shootfw_LjSC_only.rds")

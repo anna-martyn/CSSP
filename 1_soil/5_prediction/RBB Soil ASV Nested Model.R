@@ -18,10 +18,10 @@ order_colors <- data.frame(group=c("Burkholderiales","Caulobacterales",
                                    "Flavobacteriales", "Micrococcales",
                                    "Pseudomonadales", "Rhizobiales",
                                    "Streptomycetales", "Unknown"),
-                           colors=c("#645394", "#AA4488", 
-                                    "#ffeeef", "#44AAAA",
-                                    "#88CCAA", "#fdbb6b",
-                                    "#ffd7b5", "grey") )
+                           colors=c("#645394", "#8e3563", 
+                                    "#05294a", "#44AAAA",
+                                    "#95bb72", "#fdbb6b",
+                                    "#fed5a4", "grey") )
 
 # Loading the data -------------------------------------------------------------
 ASV_table_lotus <- fread("../1_data/1_Lotus/feature-table.tsv")

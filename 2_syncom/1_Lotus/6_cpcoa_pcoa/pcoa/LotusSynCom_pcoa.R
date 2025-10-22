@@ -16,6 +16,7 @@ library(tidyr)
 library(vegan)
 library(ggplot2)
 library(ggtext)
+library(cowplot)
 
 # Filter design file to only keep genotypes and compartments of interest, and match asv table file accordingly.
 design_filtered <- design %>%
@@ -43,15 +44,15 @@ main_theme <- theme(panel.background=element_blank(),
                     axis.line.x=element_line(color="black"),
                     axis.line.y=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
-                    axis.text = element_text(size = 20, color = "black"),
-                    legend.text = element_text(size=20, color = "black"),
+                    axis.text = element_text(size = 8, color = "black"),
+                    legend.text = element_text(size=8, color = "black"),
                     legend.key=element_blank(),
-                    axis.title.y = element_text(size = 20),
-                    text=element_text(size=20, color="black"),
+                    axis.title.y = element_text(size = 8),
+                    text=element_text(size=8, color="black"),
                     legend.position="right",
                     # legend.background=element_rect(colour="black", fill=NA),
                     legend.background=element_blank(),
-                    plot.title = element_text(size=20, hjust=0.9))
+                    plot.title = element_text(size=8, hjust=0.9))
 
 # Create function for pcoa analysis and plotting (separately for each compartment).
 plot_pcoa_by_compartment <- function(asv_data, design_df){
@@ -80,7 +81,7 @@ plot_pcoa_by_compartment <- function(asv_data, design_df){
     
     # Plot per compartment
     p <- ggplot(points, aes(x=x, y=y, color=Genotype)) +
-      geom_point(size=6, alpha=0.7) +
+      geom_point(size=1.5, alpha=0.7) +
       geom_segment(data=segments, aes(x=x, y=y, xend=seg_x, yend=seg_y, color=Genotype), alpha=0.5) +
       scale_color_manual(values=colors, labels=legend_labels) +
       guides(color = guide_legend(override.aes = list(size=5))) +
@@ -90,10 +91,13 @@ plot_pcoa_by_compartment <- function(asv_data, design_df){
         title=comp
       ) +
       main_theme +
+      guides(colour = guide_legend(override.aes = list(linetype = 0)))+
       theme(
-        plot.title = element_text(face="bold", size=20, hjust=0),
-        legend.text = element_markdown(size=20, color="black")
-      )
+        plot.title = element_text(face="bold", size=8, hjust=0),
+        legend.text = element_markdown(size=8, color="black"),
+        legend.key.size = unit(0.25, "cm")
+      )+
+      NULL
     
     plot_list[[comp]] <- p
   }
@@ -114,13 +118,17 @@ plot_pcoa_by_compartment <- function(asv_data, design_df){
 
 # Run function and make plot for all ASVs.
 p_allASVs <- plot_pcoa_by_compartment(asv_table_filt, design_filtered)
-ggsave("LotusSynCom_pcoa_allASVs_byCompartment.pdf", p_allASVs, width=12, height=5)
+ggsave("LotusSynCom_pcoa_allASVs_byCompartment.pdf",
+       p_allASVs, width=12, height=5, units = "cm")
 saveRDS(p_allASVs, "LotusSynCom_pcoa_allASVs_byCompartment.rds")
+saveRDS(p_allASVs, "../../10_final_figures/LotusSynCom_pcoa_allASVs_byCompartment.rds")
 
 # Plot matched ASVs only.
 asv_table_matched <- asv_table_filt[grepl("Lj", rownames(asv_table_filt)), ]
 p_matchedASVs <- plot_pcoa_by_compartment(asv_table_matched, design_filtered)
-ggsave("LotusSynCom_pcoa_matchedASVs_byCompartment.pdf", p_matchedASVs, width=12, height=5)
+ggsave("LotusSynCom_pcoa_matchedASVs_byCompartment.pdf",
+       p_matchedASVs, width=12, height=5, units = "cm")
 saveRDS(p_matchedASVs, "LotusSynCom_pcoa_matchedASVs_byCompartment.rds")
+saveRDS(p_matchedASVs, "../../10_final_figures/LotusSynCom_pcoa_matchedASVs_byCompartment.rds")
 
 
