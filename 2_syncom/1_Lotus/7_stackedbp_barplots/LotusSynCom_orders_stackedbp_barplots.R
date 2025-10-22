@@ -127,24 +127,24 @@ main_theme <- theme(
   text=element_text(family="sans", size=8, color="black")
 )
 
-p1 <- ggplot(df_summary, aes(x=Genotype, y=mean_RA, fill=order)) +
-  geom_bar(stat="identity", width=0.5) +
-  facet_wrap(~Compartment, scales="free_x", space = "free_x") +
-  scale_fill_manual(values=colors) +
-  scale_x_discrete(labels = genotype_labels) +
-  scale_y_continuous(expand=c(0,0)) +
-  main_theme +
-  ylab("Mean relative abundance") +
-  labs(fill="Bacterial order") +
-  theme(axis.text.x = element_markdown(size=8, color="black", angle=30, hjust=1),
-        strip.text.x=element_text(size=8, face="bold"),
-        legend.position = "bottom",
-        legend.title.position = "top",
-        legend.key.size = unit(0.25, "cm"),
-        legend.key.spacing.y = unit(0, 'cm'),
-        axis.title.x=element_blank()) +
-  guides(fill=guide_legend(nrow=3))+
-  NULL
+# p1 <- ggplot(df_summary, aes(x=Genotype, y=mean_RA, fill=order)) +
+#   geom_bar(stat="identity", width=0.5) +
+#   facet_wrap(~Compartment, scales="free_x", space = "free_x") +
+#   scale_fill_manual(values=colors) +
+#   scale_x_discrete(labels = genotype_labels) +
+#   scale_y_continuous(expand=c(0,0)) +
+#   main_theme +
+#   ylab("Mean relative abundance") +
+#   labs(fill="Bacterial order") +
+#   theme(axis.text.x = element_markdown(size=8, color="black", angle=30, hjust=1),
+#         strip.text.x=element_text(size=8, face="bold"),
+#         legend.position = "bottom",
+#         legend.title.position = "top",
+#         legend.key.size = unit(0.25, "cm"),
+#         legend.key.spacing.y = unit(0, 'cm'),
+#         axis.title.x=element_blank()) +
+#   guides(fill=guide_legend(nrow=3))+
+#   NULL
 
 p1 <- ggplot(df_summary, aes(y=Genotype, x=mean_RA, fill=order)) +
   geom_bar(stat="identity", width=0.5) +

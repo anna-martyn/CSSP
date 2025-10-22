@@ -84,14 +84,13 @@ plot_pcoa_by_compartment <- function(asv_data, design_df){
       geom_point(size=1.5, alpha=0.7) +
       geom_segment(data=segments, aes(x=x, y=y, xend=seg_x, yend=seg_y, color=Genotype), alpha=0.5) +
       scale_color_manual(values=colors, labels=legend_labels) +
-      guides(color = guide_legend(override.aes = list(size=5))) +
+      guides(color = guide_legend(override.aes = list(linetype = 0))) +
       labs(
         x=paste0("PCoA 1 (", format(100*pcoa$eig[1]/sum(pcoa$eig), digits=4), "%)"),
         y=paste0("PCoA 2 (", format(100*pcoa$eig[2]/sum(pcoa$eig), digits=4), "%)"),
         title=comp
       ) +
       main_theme +
-      guides(colour = guide_legend(override.aes = list(linetype = 0)))+
       theme(
         plot.title = element_text(face="bold", size=8, hjust=0),
         legend.text = element_markdown(size=8, color="black"),
