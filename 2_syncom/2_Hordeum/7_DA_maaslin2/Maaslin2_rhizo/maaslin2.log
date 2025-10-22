@@ -1,181 +1,183 @@
-2025-10-21 16:54:32.611027 INFO::Writing function arguments to log file
-2025-10-21 16:54:32.660789 DEBUG::Function arguments
-2025-10-21 16:54:32.698425 DEBUG::Output folder: Maaslin2_rhizo
-2025-10-21 16:54:32.733389 DEBUG::Min Abundance: 0.000000
-2025-10-21 16:54:32.767707 DEBUG::Min Prevalence: 0.100000
-2025-10-21 16:54:32.801613 DEBUG::Normalization: TSS
-2025-10-21 16:54:32.838677 DEBUG::Transform: LOG
-2025-10-21 16:54:32.868362 DEBUG::Analysis method: LM
-2025-10-21 16:54:32.901358 DEBUG::Max significance: 0.250000
-2025-10-21 16:54:32.943453 DEBUG::Random effects:
-2025-10-21 16:54:32.981192 DEBUG::Fixed effects: Genotype
-2025-10-21 16:54:33.023936 DEBUG::Correction method: BH
-2025-10-21 16:54:33.063502 DEBUG::Standardize: TRUE
-2025-10-21 16:54:33.148636 DEBUG::Cores: 1
-2025-10-21 16:54:33.201313 INFO::Verifying options selected are valid
-2025-10-21 16:54:33.288402 INFO::Determining format of input files
-2025-10-21 16:54:33.456447 INFO::Input format is data samples as columns and metadata samples as rows
-2025-10-21 16:54:33.492601 DEBUG::Transformed data so samples are rows
-2025-10-21 16:54:33.533504 DEBUG::A total of 30 samples were found in both the data and metadata
-2025-10-21 16:54:33.573123 DEBUG::Reordering data/metadata to use same sample ordering
-2025-10-21 16:54:33.605176 INFO::Formula for fixed effects: expr ~  Genotype
-2025-10-21 16:54:33.643426 INFO::Factor detected for categorial metadata 'Genotype'. Provide a reference argument or manually set factor ordering to change reference level.
-2025-10-21 16:54:33.674633 INFO::Filter data based on min abundance and min prevalence
-2025-10-21 16:54:33.755988 INFO::Total samples in data: 30
-2025-10-21 16:54:33.786387 INFO::Min samples required with min abundance for a feature not to be filtered: 3.000000
-2025-10-21 16:54:33.822108 INFO::Total filtered features: 28
-2025-10-21 16:54:33.858204 INFO::Filtered feature names from abundance and prevalence filtering: P2_H2, P2_E3, P4_E7, P2_D8, P5_A5, P2_F5, P5_D2, P5_D12, P1_D9, P2_H3, P4_D8, P4_A9, P1_C9, P4_A5, P4_H11, P4_F5, P4_G7, P4_A12, P4_B8, P3_C5, P5_A6, P5_A4, P5_C4, P2_E4, P5_F3, P4_D3, P2_B3, P4_E10
-2025-10-21 16:54:33.911879 INFO::Total filtered features with variance filtering: 0
-2025-10-21 16:54:33.971873 INFO::Filtered feature names from variance filtering:
-2025-10-21 16:54:34.000984 INFO::Running selected normalization method: TSS
-2025-10-21 16:54:34.034285 INFO::Applying z-score to standardize continuous metadata
-2025-10-21 16:54:34.077177 INFO::Running selected transform method: LOG
-2025-10-21 16:54:34.111838 INFO::Running selected analysis method: LM
-2025-10-21 16:54:34.146682 INFO::Fitting model to feature number 1, P2_H11
-2025-10-21 16:54:34.182045 INFO::Fitting model to feature number 2, P5_A1
-2025-10-21 16:54:34.211277 INFO::Fitting model to feature number 3, P4_H10
-2025-10-21 16:54:34.258982 INFO::Fitting model to feature number 4, P1_A1
-2025-10-21 16:54:34.294865 INFO::Fitting model to feature number 5, P1_A8
-2025-10-21 16:54:34.326062 INFO::Fitting model to feature number 6, P4_A8
-2025-10-21 16:54:34.357688 INFO::Fitting model to feature number 7, P4_B4
-2025-10-21 16:54:34.394467 INFO::Fitting model to feature number 8, P4_C7
-2025-10-21 16:54:34.425858 INFO::Fitting model to feature number 9, P1_F10
-2025-10-21 16:54:34.459418 INFO::Fitting model to feature number 10, P1_E1
-2025-10-21 16:54:34.495948 INFO::Fitting model to feature number 11, P5_B3.P4_C1
-2025-10-21 16:54:34.526002 INFO::Fitting model to feature number 12, P1_C1
-2025-10-21 16:54:34.559983 INFO::Fitting model to feature number 13, P2_D12
-2025-10-21 16:54:34.594095 INFO::Fitting model to feature number 14, P2_C12
-2025-10-21 16:54:34.623132 INFO::Fitting model to feature number 15, P1_E8
-2025-10-21 16:54:34.652791 INFO::Fitting model to feature number 16, P1_D3
-2025-10-21 16:54:34.681416 INFO::Fitting model to feature number 17, P5_A10
-2025-10-21 16:54:34.707102 INFO::Fitting model to feature number 18, P1_A6
-2025-10-21 16:54:34.744794 INFO::Fitting model to feature number 19, P4_C9
-2025-10-21 16:54:34.775191 INFO::Fitting model to feature number 20, P4_B10
-2025-10-21 16:54:34.878787 INFO::Fitting model to feature number 21, P4_E5
-2025-10-21 16:54:34.920522 INFO::Fitting model to feature number 22, P4_B2
-2025-10-21 16:54:34.955484 INFO::Fitting model to feature number 23, P4_F10
-2025-10-21 16:54:35.002894 INFO::Fitting model to feature number 24, P4_G1
-2025-10-21 16:54:35.103692 INFO::Fitting model to feature number 25, P4_D7
-2025-10-21 16:54:35.14923 INFO::Fitting model to feature number 26, P4_G3
-2025-10-21 16:54:35.180554 INFO::Fitting model to feature number 27, P2_B12
-2025-10-21 16:54:35.210877 INFO::Fitting model to feature number 28, P5_B10
-2025-10-21 16:54:35.24419 INFO::Fitting model to feature number 29, P4_E4
-2025-10-21 16:54:35.281245 INFO::Fitting model to feature number 30, P5_E7
-2025-10-21 16:54:35.316581 INFO::Fitting model to feature number 31, P1_B10
-2025-10-21 16:54:35.362108 INFO::Fitting model to feature number 32, P1_C2
-2025-10-21 16:54:35.390077 INFO::Fitting model to feature number 33, P4_B5
-2025-10-21 16:54:35.421966 INFO::Fitting model to feature number 34, P2_A1
-2025-10-21 16:54:35.455056 INFO::Fitting model to feature number 35, P2_B1
-2025-10-21 16:54:35.493016 INFO::Fitting model to feature number 36, P5_C1
-2025-10-21 16:54:35.584592 INFO::Fitting model to feature number 37, P2_C2.P4_E2
-2025-10-21 16:54:35.621881 INFO::Fitting model to feature number 38, P5_C5
-2025-10-21 16:54:35.652472 INFO::Fitting model to feature number 39, P1_A9
-2025-10-21 16:54:35.701332 INFO::Fitting model to feature number 40, P3_A2
-2025-10-21 16:54:35.745098 INFO::Fitting model to feature number 41, P2_H12
-2025-10-21 16:54:35.828645 INFO::Fitting model to feature number 42, P2_A8
-2025-10-21 16:54:35.863493 INFO::Fitting model to feature number 43, P5_D10
-2025-10-21 16:54:35.898316 INFO::Fitting model to feature number 44, P2_E10
-2025-10-21 16:54:35.929796 INFO::Fitting model to feature number 45, P2_G8
-2025-10-21 16:54:35.966534 INFO::Fitting model to feature number 46, P1_D2
-2025-10-21 16:54:36.004662 INFO::Fitting model to feature number 47, P2_D3
-2025-10-21 16:54:36.03714 INFO::Fitting model to feature number 48, P3_C6
-2025-10-21 16:54:36.070319 INFO::Fitting model to feature number 49, P5_D4.P4_F1
-2025-10-21 16:54:36.1042 INFO::Fitting model to feature number 50, P4_B11
-2025-10-21 16:54:36.139298 INFO::Fitting model to feature number 51, P4_H6
-2025-10-21 16:54:36.170391 INFO::Fitting model to feature number 52, P4_H7
-2025-10-21 16:54:36.204104 INFO::Fitting model to feature number 53, P4_G10
-2025-10-21 16:54:36.234471 INFO::Fitting model to feature number 54, P2_D9
-2025-10-21 16:54:36.265379 INFO::Fitting model to feature number 55, P2_H9
-2025-10-21 16:54:36.299409 INFO::Counting total values for each feature
-2025-10-21 16:54:36.340254 INFO::Writing filtered data to file Maaslin2_rhizo/features/filtered_data.tsv
-2025-10-21 16:54:36.434638 INFO::Writing filtered, normalized data to file Maaslin2_rhizo/features/filtered_data_norm.tsv
-2025-10-21 16:54:36.522841 INFO::Writing filtered, normalized, transformed data to file Maaslin2_rhizo/features/filtered_data_norm_transformed.tsv
-2025-10-21 16:54:36.606564 INFO::Writing residuals to file Maaslin2_rhizo/fits/residuals.rds
-2025-10-21 16:54:36.684751 INFO::Writing fitted values to file Maaslin2_rhizo/fits/fitted.rds
-2025-10-21 16:54:36.799929 INFO::Writing all results to file (ordered by increasing q-values): Maaslin2_rhizo/all_results.tsv
-2025-10-21 16:54:36.933869 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): Maaslin2_rhizo/significant_results.tsv
-2025-10-21 16:54:37.311604 INFO::Writing association plots (one for each significant association) to output folder: Maaslin2_rhizo
-2025-10-21 16:54:37.470133 INFO::Plotting associations from most to least significant, grouped by metadata
-2025-10-21 16:54:37.503667 INFO::Plotting data for metadata number 1, Genotype
-2025-10-21 16:54:37.572086 INFO::Creating boxplot for categorical data, Genotype vs P1_E8
-2025-10-21 16:54:37.770852 INFO::Creating boxplot for categorical data, Genotype vs P4_B10
-2025-10-21 16:54:37.904496 INFO::Creating boxplot for categorical data, Genotype vs P4_E5
-2025-10-21 16:54:38.093016 INFO::Creating boxplot for categorical data, Genotype vs P4_A8
-2025-10-21 16:54:38.236354 INFO::Creating boxplot for categorical data, Genotype vs P4_B10
-2025-10-21 16:54:38.392874 INFO::Creating boxplot for categorical data, Genotype vs P4_E5
-2025-10-21 16:54:38.531558 INFO::Creating boxplot for categorical data, Genotype vs P4_A8
-2025-10-21 16:54:38.673685 INFO::Creating boxplot for categorical data, Genotype vs P1_E8
-2025-10-21 16:54:38.841324 INFO::Creating boxplot for categorical data, Genotype vs P2_B1
-2025-10-21 16:54:38.997834 INFO::Creating boxplot for categorical data, Genotype vs P4_H7
-2025-10-21 16:54:39.163455 INFO::Creating boxplot for categorical data, Genotype vs P1_A1
-2025-10-21 16:54:39.304926 INFO::Creating boxplot for categorical data, Genotype vs P5_A10
-2025-10-21 16:54:39.442125 INFO::Creating boxplot for categorical data, Genotype vs P4_F10
-2025-10-21 16:54:39.580427 INFO::Creating boxplot for categorical data, Genotype vs P4_A8
-2025-10-21 16:54:39.716327 INFO::Creating boxplot for categorical data, Genotype vs P1_A1
-2025-10-21 16:54:39.861042 INFO::Creating boxplot for categorical data, Genotype vs P5_A1
-2025-10-21 16:54:40.002127 INFO::Creating boxplot for categorical data, Genotype vs P1_A1
-2025-10-21 16:54:40.171507 INFO::Creating boxplot for categorical data, Genotype vs P1_D2
-2025-10-21 16:54:40.317184 INFO::Creating boxplot for categorical data, Genotype vs P1_A8
-2025-10-21 16:54:40.507351 INFO::Creating boxplot for categorical data, Genotype vs P4_B10
-2025-10-21 16:54:40.667681 INFO::Creating boxplot for categorical data, Genotype vs P1_E8
-2025-10-21 16:54:40.80494 INFO::Creating boxplot for categorical data, Genotype vs P4_B10
-2025-10-21 16:54:40.940367 INFO::Creating boxplot for categorical data, Genotype vs P2_H11
-2025-10-21 16:54:41.083962 INFO::Creating boxplot for categorical data, Genotype vs P1_A8
-2025-10-21 16:54:41.220562 INFO::Creating boxplot for categorical data, Genotype vs P2_H11
-2025-10-21 16:54:41.367738 INFO::Creating boxplot for categorical data, Genotype vs P4_C7
-2025-10-21 16:54:41.57638 INFO::Creating boxplot for categorical data, Genotype vs P4_B2
-2025-10-21 16:54:41.712819 INFO::Creating boxplot for categorical data, Genotype vs P2_D12
-2025-10-21 16:54:41.902431 INFO::Creating boxplot for categorical data, Genotype vs P1_A8
-2025-10-21 16:54:42.040006 INFO::Creating boxplot for categorical data, Genotype vs P4_C7
-2025-10-21 16:54:42.180826 INFO::Creating boxplot for categorical data, Genotype vs P1_E1
-2025-10-21 16:54:42.341783 INFO::Creating boxplot for categorical data, Genotype vs P5_B10
-2025-10-21 16:54:42.477811 INFO::Creating boxplot for categorical data, Genotype vs P1_C1
-2025-10-21 16:54:42.623374 INFO::Creating boxplot for categorical data, Genotype vs P1_A1
-2025-10-21 16:54:42.755366 INFO::Creating boxplot for categorical data, Genotype vs P5_B3.P4_C1
-2025-10-21 16:54:42.976163 INFO::Creating boxplot for categorical data, Genotype vs P5_A10
-2025-10-21 16:54:43.114439 INFO::Creating boxplot for categorical data, Genotype vs P5_A10
-2025-10-21 16:54:43.242988 INFO::Creating boxplot for categorical data, Genotype vs P2_H9
-2025-10-21 16:54:43.382987 INFO::Creating boxplot for categorical data, Genotype vs P1_C1
-2025-10-21 16:54:43.550946 INFO::Creating boxplot for categorical data, Genotype vs P1_E8
-2025-10-21 16:54:43.696938 INFO::Creating boxplot for categorical data, Genotype vs P3_C6
-2025-10-21 16:54:44.392988 INFO::Creating boxplot for categorical data, Genotype vs P4_D7
-2025-10-21 16:54:44.526259 INFO::Creating boxplot for categorical data, Genotype vs P4_B4
-2025-10-21 16:54:44.701191 INFO::Creating boxplot for categorical data, Genotype vs P4_D7
-2025-10-21 16:54:44.847462 INFO::Creating boxplot for categorical data, Genotype vs P4_D7
-2025-10-21 16:54:44.997132 INFO::Creating boxplot for categorical data, Genotype vs P4_E4
-2025-10-21 16:54:45.14355 INFO::Creating boxplot for categorical data, Genotype vs P4_E4
-2025-10-21 16:54:45.285683 INFO::Creating boxplot for categorical data, Genotype vs P5_D10
-2025-10-21 16:54:45.455235 INFO::Creating boxplot for categorical data, Genotype vs P4_C9
-2025-10-21 16:54:45.598197 INFO::Creating boxplot for categorical data, Genotype vs P1_E1
-2025-10-21 16:54:45.802805 INFO::Creating boxplot for categorical data, Genotype vs P4_B2
-2025-10-21 16:54:45.944616 INFO::Creating boxplot for categorical data, Genotype vs P5_A1
-2025-10-21 16:54:46.086454 INFO::Creating boxplot for categorical data, Genotype vs P4_B2
-2025-10-21 16:54:46.264642 INFO::Creating boxplot for categorical data, Genotype vs P4_C9
-2025-10-21 16:54:46.475784 INFO::Creating boxplot for categorical data, Genotype vs P4_F10
-2025-10-21 16:54:46.63445 INFO::Creating boxplot for categorical data, Genotype vs P4_B2
-2025-10-21 16:54:46.769282 INFO::Creating boxplot for categorical data, Genotype vs P1_E1
-2025-10-21 16:54:46.910401 INFO::Creating boxplot for categorical data, Genotype vs P2_B1
-2025-10-21 16:54:47.048119 INFO::Creating boxplot for categorical data, Genotype vs P2_C2.P4_E2
-2025-10-21 16:54:47.208129 INFO::Creating boxplot for categorical data, Genotype vs P1_D3
-2025-10-21 16:54:47.426015 INFO::Creating boxplot for categorical data, Genotype vs P4_C7
-2025-10-21 16:54:47.557824 INFO::Creating boxplot for categorical data, Genotype vs P2_A1
-2025-10-21 16:54:47.713413 INFO::Creating boxplot for categorical data, Genotype vs P3_A2
-2025-10-21 16:54:47.871217 INFO::Creating boxplot for categorical data, Genotype vs P2_H12
-2025-10-21 16:54:48.016898 INFO::Creating boxplot for categorical data, Genotype vs P4_B5
-2025-10-21 16:54:48.16465 INFO::Creating boxplot for categorical data, Genotype vs P2_H9
-2025-10-21 16:54:48.336418 INFO::Creating boxplot for categorical data, Genotype vs P2_B1
-2025-10-21 16:54:48.501104 INFO::Creating boxplot for categorical data, Genotype vs P2_E10
-2025-10-21 16:54:48.634116 INFO::Creating boxplot for categorical data, Genotype vs P4_B11
-2025-10-21 16:54:48.775567 INFO::Creating boxplot for categorical data, Genotype vs P2_B12
-2025-10-21 16:54:48.943926 INFO::Creating boxplot for categorical data, Genotype vs P4_B5
-2025-10-21 16:54:49.076302 INFO::Creating boxplot for categorical data, Genotype vs P4_B4
-2025-10-21 16:54:49.219358 INFO::Creating boxplot for categorical data, Genotype vs P4_H10
-2025-10-21 16:54:49.374012 INFO::Creating boxplot for categorical data, Genotype vs P1_C2
-2025-10-21 16:54:49.51007 INFO::Creating boxplot for categorical data, Genotype vs P2_C2.P4_E2
-2025-10-21 16:54:49.659625 INFO::Creating boxplot for categorical data, Genotype vs P4_B5
-2025-10-21 16:54:49.790431 INFO::Creating boxplot for categorical data, Genotype vs P4_G10
-2025-10-21 16:54:49.937902 INFO::Creating boxplot for categorical data, Genotype vs P1_C1
-2025-10-21 16:54:50.079611 INFO::Creating boxplot for categorical data, Genotype vs P5_B10
-2025-10-21 16:54:50.21156 INFO::Creating boxplot for categorical data, Genotype vs P2_D12
-2025-10-21 16:54:50.380702 INFO::Creating boxplot for categorical data, Genotype vs P5_C5
-2025-10-21 16:54:50.524272 INFO::Creating boxplot for categorical data, Genotype vs P4_B4
+2025-10-22 15:20:55.500705 INFO::Writing function arguments to log file
+2025-10-22 15:20:55.501746 DEBUG::Function arguments
+2025-10-22 15:20:55.502016 DEBUG::Output folder: Maaslin2_rhizo
+2025-10-22 15:20:55.502225 DEBUG::Min Abundance: 0.000000
+2025-10-22 15:20:55.502431 DEBUG::Min Prevalence: 0.100000
+2025-10-22 15:20:55.50262 DEBUG::Normalization: TSS
+2025-10-22 15:20:55.502804 DEBUG::Transform: LOG
+2025-10-22 15:20:55.502974 DEBUG::Analysis method: LM
+2025-10-22 15:20:55.503143 DEBUG::Max significance: 0.250000
+2025-10-22 15:20:55.503315 DEBUG::Random effects:
+2025-10-22 15:20:55.503489 DEBUG::Fixed effects: Genotype
+2025-10-22 15:20:55.503642 DEBUG::Correction method: BH
+2025-10-22 15:20:55.5038 DEBUG::Standardize: TRUE
+2025-10-22 15:20:55.50396 DEBUG::Cores: 1
+2025-10-22 15:20:55.504113 INFO::Verifying options selected are valid
+2025-10-22 15:20:55.504847 INFO::Determining format of input files
+2025-10-22 15:20:55.505606 INFO::Input format is data samples as columns and metadata samples as rows
+2025-10-22 15:20:55.506696 DEBUG::Transformed data so samples are rows
+2025-10-22 15:20:55.507136 DEBUG::A total of 30 samples were found in both the data and metadata
+2025-10-22 15:20:55.507352 DEBUG::Reordering data/metadata to use same sample ordering
+2025-10-22 15:20:55.508322 INFO::Formula for fixed effects: expr ~  Genotype
+2025-10-22 15:20:55.509131 INFO::Factor detected for categorial metadata 'Genotype'. Provide a reference argument or manually set factor ordering to change reference level.
+2025-10-22 15:20:55.509763 INFO::Filter data based on min abundance and min prevalence
+2025-10-22 15:20:55.510361 INFO::Total samples in data: 30
+2025-10-22 15:20:55.510986 INFO::Min samples required with min abundance for a feature not to be filtered: 3.000000
+2025-10-22 15:20:55.512434 INFO::Total filtered features: 28
+2025-10-22 15:20:55.513151 INFO::Filtered feature names from abundance and prevalence filtering: P2_H2, P2_E3, P4_E7, P2_D8, P5_A5, P2_F5, P5_D2, P5_D12, P1_D9, P2_H3, P4_D8, P4_A9, P1_C9, P4_A5, P4_H11, P4_F5, P4_G7, P4_A12, P4_B8, P3_C5, P5_A6, P5_A4, P5_C4, P2_E4, P5_F3, P4_D3, P2_B3, P4_E10
+2025-10-22 15:20:55.514646 INFO::Total filtered features with variance filtering: 0
+2025-10-22 15:20:55.515277 INFO::Filtered feature names from variance filtering:
+2025-10-22 15:20:55.51587 INFO::Running selected normalization method: TSS
+2025-10-22 15:20:55.517049 INFO::Applying z-score to standardize continuous metadata
+2025-10-22 15:20:55.519881 INFO::Running selected transform method: LOG
+2025-10-22 15:20:55.522039 INFO::Running selected analysis method: LM
+2025-10-22 15:20:55.523276 INFO::Fitting model to feature number 1, P2_H11
+2025-10-22 15:20:55.526082 INFO::Fitting model to feature number 2, P5_A1
+2025-10-22 15:20:55.528563 INFO::Fitting model to feature number 3, P4_H10
+2025-10-22 15:20:55.531038 INFO::Fitting model to feature number 4, P1_A1
+2025-10-22 15:20:55.533518 INFO::Fitting model to feature number 5, P1_A8
+2025-10-22 15:20:55.535754 INFO::Fitting model to feature number 6, P4_A8
+2025-10-22 15:20:55.537901 INFO::Fitting model to feature number 7, P4_B4
+2025-10-22 15:20:55.539984 INFO::Fitting model to feature number 8, P4_C7
+2025-10-22 15:20:55.542044 INFO::Fitting model to feature number 9, P1_F10
+2025-10-22 15:20:55.544113 INFO::Fitting model to feature number 10, P1_E1
+2025-10-22 15:20:55.54618 INFO::Fitting model to feature number 11, P5_B3.P4_C1
+2025-10-22 15:20:55.548277 INFO::Fitting model to feature number 12, P1_C1
+2025-10-22 15:20:55.550521 INFO::Fitting model to feature number 13, P2_D12
+2025-10-22 15:20:55.552788 INFO::Fitting model to feature number 14, P2_C12
+2025-10-22 15:20:55.554856 INFO::Fitting model to feature number 15, P1_E8
+2025-10-22 15:20:55.556908 INFO::Fitting model to feature number 16, P1_D3
+2025-10-22 15:20:55.558959 INFO::Fitting model to feature number 17, P5_A10
+2025-10-22 15:20:55.560993 INFO::Fitting model to feature number 18, P1_A6
+2025-10-22 15:20:55.563065 INFO::Fitting model to feature number 19, P4_C9
+2025-10-22 15:20:55.565082 INFO::Fitting model to feature number 20, P4_B10
+2025-10-22 15:20:55.567126 INFO::Fitting model to feature number 21, P4_E5
+2025-10-22 15:20:55.569154 INFO::Fitting model to feature number 22, P4_B2
+2025-10-22 15:20:55.571184 INFO::Fitting model to feature number 23, P4_F10
+2025-10-22 15:20:55.573212 INFO::Fitting model to feature number 24, P4_G1
+2025-10-22 15:20:55.575355 INFO::Fitting model to feature number 25, P4_D7
+2025-10-22 15:20:55.577431 INFO::Fitting model to feature number 26, P4_G3
+2025-10-22 15:20:55.579461 INFO::Fitting model to feature number 27, P2_B12
+2025-10-22 15:20:55.581613 INFO::Fitting model to feature number 28, P5_B10
+2025-10-22 15:20:55.583988 INFO::Fitting model to feature number 29, P4_E4
+2025-10-22 15:20:55.586344 INFO::Fitting model to feature number 30, P5_E7
+2025-10-22 15:20:55.58852 INFO::Fitting model to feature number 31, P1_B10
+2025-10-22 15:20:55.590633 INFO::Fitting model to feature number 32, P1_C2
+2025-10-22 15:20:55.592768 INFO::Fitting model to feature number 33, P4_B5
+2025-10-22 15:20:55.594866 INFO::Fitting model to feature number 34, P2_A1
+2025-10-22 15:20:55.597057 INFO::Fitting model to feature number 35, P2_B1
+2025-10-22 15:20:55.599192 INFO::Fitting model to feature number 36, P5_C1
+2025-10-22 15:20:55.601641 INFO::Fitting model to feature number 37, P2_C2.P4_E2
+2025-10-22 15:20:55.603852 INFO::Fitting model to feature number 38, P5_C5
+2025-10-22 15:20:55.606035 INFO::Fitting model to feature number 39, P1_A9
+2025-10-22 15:20:55.608146 INFO::Fitting model to feature number 40, P3_A2
+2025-10-22 15:20:55.610337 INFO::Fitting model to feature number 41, P2_H12
+2025-10-22 15:20:55.612786 INFO::Fitting model to feature number 42, P2_A8
+2025-10-22 15:20:55.615017 INFO::Fitting model to feature number 43, P5_D10
+2025-10-22 15:20:55.617462 INFO::Fitting model to feature number 44, P2_E10
+2025-10-22 15:20:55.619871 INFO::Fitting model to feature number 45, P2_G8
+2025-10-22 15:20:55.622289 INFO::Fitting model to feature number 46, P1_D2
+2025-10-22 15:20:55.624429 INFO::Fitting model to feature number 47, P2_D3
+2025-10-22 15:20:55.626554 INFO::Fitting model to feature number 48, P3_C6
+2025-10-22 15:20:55.628618 INFO::Fitting model to feature number 49, P5_D4.P4_F1
+2025-10-22 15:20:55.630686 INFO::Fitting model to feature number 50, P4_B11
+2025-10-22 15:20:55.632739 INFO::Fitting model to feature number 51, P4_H6
+2025-10-22 15:20:55.634789 INFO::Fitting model to feature number 52, P4_H7
+2025-10-22 15:20:55.636918 INFO::Fitting model to feature number 53, P4_G10
+2025-10-22 15:20:55.639054 INFO::Fitting model to feature number 54, P2_D9
+2025-10-22 15:20:55.641348 INFO::Fitting model to feature number 55, P2_H9
+2025-10-22 15:20:55.653141 INFO::Counting total values for each feature
+2025-10-22 15:20:55.659641 INFO::Writing filtered data to file Maaslin2_rhizo/features/filtered_data.tsv
+2025-10-22 15:20:55.661876 INFO::Writing filtered, normalized data to file Maaslin2_rhizo/features/filtered_data_norm.tsv
+2025-10-22 15:20:55.66402 INFO::Writing filtered, normalized, transformed data to file Maaslin2_rhizo/features/filtered_data_norm_transformed.tsv
+2025-10-22 15:20:55.66648 WARNING::Deleting existing residuals file: Maaslin2_rhizo/fits/residuals.rds
+2025-10-22 15:20:55.667414 INFO::Writing residuals to file Maaslin2_rhizo/fits/residuals.rds
+2025-10-22 15:20:55.668416 WARNING::Deleting existing fitted file: Maaslin2_rhizo/fits/fitted.rds
+2025-10-22 15:20:55.669334 INFO::Writing fitted values to file Maaslin2_rhizo/fits/fitted.rds
+2025-10-22 15:20:55.670169 INFO::Writing all results to file (ordered by increasing q-values): Maaslin2_rhizo/all_results.tsv
+2025-10-22 15:20:55.672093 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): Maaslin2_rhizo/significant_results.tsv
+2025-10-22 15:20:55.673224 INFO::Writing association plots (one for each significant association) to output folder: Maaslin2_rhizo
+2025-10-22 15:20:55.675079 INFO::Plotting associations from most to least significant, grouped by metadata
+2025-10-22 15:20:55.67587 INFO::Plotting data for metadata number 1, Genotype
+2025-10-22 15:20:55.677055 INFO::Creating boxplot for categorical data, Genotype vs P1_E8
+2025-10-22 15:20:55.962088 INFO::Creating boxplot for categorical data, Genotype vs P4_B10
+2025-10-22 15:20:56.841099 INFO::Creating boxplot for categorical data, Genotype vs P4_E5
+2025-10-22 15:20:57.000813 INFO::Creating boxplot for categorical data, Genotype vs P4_A8
+2025-10-22 15:20:57.169807 INFO::Creating boxplot for categorical data, Genotype vs P4_B10
+2025-10-22 15:20:57.34295 INFO::Creating boxplot for categorical data, Genotype vs P4_E5
+2025-10-22 15:20:57.517113 INFO::Creating boxplot for categorical data, Genotype vs P4_A8
+2025-10-22 15:20:57.694206 INFO::Creating boxplot for categorical data, Genotype vs P1_E8
+2025-10-22 15:20:57.854929 INFO::Creating boxplot for categorical data, Genotype vs P2_B1
+2025-10-22 15:20:58.028344 INFO::Creating boxplot for categorical data, Genotype vs P4_H7
+2025-10-22 15:20:58.187413 INFO::Creating boxplot for categorical data, Genotype vs P1_A1
+2025-10-22 15:20:58.362575 INFO::Creating boxplot for categorical data, Genotype vs P5_A10
+2025-10-22 15:20:58.523351 INFO::Creating boxplot for categorical data, Genotype vs P4_F10
+2025-10-22 15:20:58.677308 INFO::Creating boxplot for categorical data, Genotype vs P4_A8
+2025-10-22 15:20:58.847366 INFO::Creating boxplot for categorical data, Genotype vs P1_A1
+2025-10-22 15:20:59.030662 INFO::Creating boxplot for categorical data, Genotype vs P5_A1
+2025-10-22 15:20:59.188463 INFO::Creating boxplot for categorical data, Genotype vs P1_A1
+2025-10-22 15:20:59.348089 INFO::Creating boxplot for categorical data, Genotype vs P1_D2
+2025-10-22 15:20:59.511714 INFO::Creating boxplot for categorical data, Genotype vs P1_A8
+2025-10-22 15:20:59.681916 INFO::Creating boxplot for categorical data, Genotype vs P4_B10
+2025-10-22 15:20:59.847931 INFO::Creating boxplot for categorical data, Genotype vs P1_E8
+2025-10-22 15:21:00.015616 INFO::Creating boxplot for categorical data, Genotype vs P4_B10
+2025-10-22 15:21:00.167634 INFO::Creating boxplot for categorical data, Genotype vs P2_H11
+2025-10-22 15:21:00.344032 INFO::Creating boxplot for categorical data, Genotype vs P1_A8
+2025-10-22 15:21:00.513438 INFO::Creating boxplot for categorical data, Genotype vs P2_H11
+2025-10-22 15:21:00.669468 INFO::Creating boxplot for categorical data, Genotype vs P4_C7
+2025-10-22 15:21:00.836632 INFO::Creating boxplot for categorical data, Genotype vs P4_B2
+2025-10-22 15:21:01.078708 INFO::Creating boxplot for categorical data, Genotype vs P2_D12
+2025-10-22 15:21:01.235994 INFO::Creating boxplot for categorical data, Genotype vs P1_A8
+2025-10-22 15:21:01.395138 INFO::Creating boxplot for categorical data, Genotype vs P4_C7
+2025-10-22 15:21:01.55242 INFO::Creating boxplot for categorical data, Genotype vs P1_E1
+2025-10-22 15:21:01.722186 INFO::Creating boxplot for categorical data, Genotype vs P5_B10
+2025-10-22 15:21:01.894063 INFO::Creating boxplot for categorical data, Genotype vs P1_C1
+2025-10-22 15:21:02.054502 INFO::Creating boxplot for categorical data, Genotype vs P1_A1
+2025-10-22 15:21:02.206484 INFO::Creating boxplot for categorical data, Genotype vs P5_B3.P4_C1
+2025-10-22 15:21:02.381021 INFO::Creating boxplot for categorical data, Genotype vs P5_A10
+2025-10-22 15:21:02.540858 INFO::Creating boxplot for categorical data, Genotype vs P5_A10
+2025-10-22 15:21:02.698336 INFO::Creating boxplot for categorical data, Genotype vs P2_H9
+2025-10-22 15:21:02.855365 INFO::Creating boxplot for categorical data, Genotype vs P1_C1
+2025-10-22 15:21:03.027762 INFO::Creating boxplot for categorical data, Genotype vs P1_E8
+2025-10-22 15:21:03.182353 INFO::Creating boxplot for categorical data, Genotype vs P3_C6
+2025-10-22 15:21:03.343537 INFO::Creating boxplot for categorical data, Genotype vs P4_D7
+2025-10-22 15:21:03.501352 INFO::Creating boxplot for categorical data, Genotype vs P4_B4
+2025-10-22 15:21:03.669661 INFO::Creating boxplot for categorical data, Genotype vs P4_D7
+2025-10-22 15:21:03.835224 INFO::Creating boxplot for categorical data, Genotype vs P4_D7
+2025-10-22 15:21:04.031115 INFO::Creating boxplot for categorical data, Genotype vs P4_E4
+2025-10-22 15:21:04.220937 INFO::Creating boxplot for categorical data, Genotype vs P4_E4
+2025-10-22 15:21:04.408557 INFO::Creating boxplot for categorical data, Genotype vs P5_D10
+2025-10-22 15:21:04.593257 INFO::Creating boxplot for categorical data, Genotype vs P4_C9
+2025-10-22 15:21:04.762177 INFO::Creating boxplot for categorical data, Genotype vs P1_E1
+2025-10-22 15:21:04.917195 INFO::Creating boxplot for categorical data, Genotype vs P4_B2
+2025-10-22 15:21:05.10668 INFO::Creating boxplot for categorical data, Genotype vs P5_A1
+2025-10-22 15:21:05.271115 INFO::Creating boxplot for categorical data, Genotype vs P4_B2
+2025-10-22 15:21:05.456818 INFO::Creating boxplot for categorical data, Genotype vs P4_C9
+2025-10-22 15:21:05.613023 INFO::Creating boxplot for categorical data, Genotype vs P4_F10
+2025-10-22 15:21:05.789984 INFO::Creating boxplot for categorical data, Genotype vs P4_B2
+2025-10-22 15:21:06.012063 INFO::Creating boxplot for categorical data, Genotype vs P1_E1
+2025-10-22 15:21:06.229071 INFO::Creating boxplot for categorical data, Genotype vs P2_B1
+2025-10-22 15:21:06.410723 INFO::Creating boxplot for categorical data, Genotype vs P2_C2.P4_E2
+2025-10-22 15:21:06.628243 INFO::Creating boxplot for categorical data, Genotype vs P1_D3
+2025-10-22 15:21:06.860049 INFO::Creating boxplot for categorical data, Genotype vs P4_C7
+2025-10-22 15:21:07.033236 INFO::Creating boxplot for categorical data, Genotype vs P2_A1
+2025-10-22 15:21:07.202804 INFO::Creating boxplot for categorical data, Genotype vs P3_A2
+2025-10-22 15:21:07.413929 INFO::Creating boxplot for categorical data, Genotype vs P2_H12
+2025-10-22 15:21:07.589589 INFO::Creating boxplot for categorical data, Genotype vs P4_B5
+2025-10-22 15:21:07.77264 INFO::Creating boxplot for categorical data, Genotype vs P2_H9
+2025-10-22 15:21:07.93578 INFO::Creating boxplot for categorical data, Genotype vs P2_B1
+2025-10-22 15:21:08.135312 INFO::Creating boxplot for categorical data, Genotype vs P2_E10
+2025-10-22 15:21:08.315591 INFO::Creating boxplot for categorical data, Genotype vs P4_B11
+2025-10-22 15:21:08.476426 INFO::Creating boxplot for categorical data, Genotype vs P2_B12
+2025-10-22 15:21:08.657194 INFO::Creating boxplot for categorical data, Genotype vs P4_B5
+2025-10-22 15:21:08.887317 INFO::Creating boxplot for categorical data, Genotype vs P4_B4
+2025-10-22 15:21:09.071333 INFO::Creating boxplot for categorical data, Genotype vs P4_H10
+2025-10-22 15:21:09.283382 INFO::Creating boxplot for categorical data, Genotype vs P1_C2
+2025-10-22 15:21:09.445206 INFO::Creating boxplot for categorical data, Genotype vs P2_C2.P4_E2
+2025-10-22 15:21:09.638907 INFO::Creating boxplot for categorical data, Genotype vs P4_B5
+2025-10-22 15:21:09.806926 INFO::Creating boxplot for categorical data, Genotype vs P4_G10
+2025-10-22 15:21:10.00777 INFO::Creating boxplot for categorical data, Genotype vs P1_C1
+2025-10-22 15:21:10.202599 INFO::Creating boxplot for categorical data, Genotype vs P5_B10
+2025-10-22 15:21:10.416256 INFO::Creating boxplot for categorical data, Genotype vs P2_D12
+2025-10-22 15:21:10.594775 INFO::Creating boxplot for categorical data, Genotype vs P5_C5
+2025-10-22 15:21:10.873745 INFO::Creating boxplot for categorical data, Genotype vs P4_B4

@@ -34,25 +34,25 @@ p4 <- Hordeum_order_RA_sign_orders
 p5 <- HordeumSynCom_DA
 
 # Adjust legends of p3 and p4.
-p3 <- p3 +
-  theme(legend.position = "bottom") +
-  guides(
-    fill = guide_legend(
-      ncol = 3, nrow = 5,
-      title.position = "top",
-      title.hjust = 0
-    )
-  )
+# p3 <- p3 +
+#   theme(legend.position = "bottom") +
+#   guides(
+#     fill = guide_legend(
+#       ncol = 3, nrow = 5,
+#       title.position = "top",
+#       title.hjust = 0
+#     )
+#   )
 
-p4 <- p4 +
-  theme(legend.position = "bottom") +
-  guides(
-    fill = guide_legend(
-      ncol = 8, nrow = 1,
-      title.position = "top",
-      title.hjust = 0
-    )
-  )
+# p4 <- p4 +
+#   theme(legend.position = "bottom") +
+#   guides(
+#     fill = guide_legend(
+#       ncol = 8, nrow = 1,
+#       title.position = "top",
+#       title.hjust = 0
+#     )
+#   )
 
 
 # Combine in one plot.
@@ -62,7 +62,7 @@ row1 <- plot_grid(
   ncol = 3,
   rel_widths = c(0.4,0.2,0.6),
   labels = c("A","B","C"),
-  label_size = 30,
+  label_size = 15,
   label_fontface = "bold",
   label_x = 0, label_y = 1
 )
@@ -70,9 +70,9 @@ row1 <- plot_grid(
 row2 <- plot_grid(
   p3, p4,
   ncol = 2,
-  rel_widths = c(1.2,1.6),
+  rel_widths = c(1,1.3),
   labels = c("D","E"),
-  label_size = 30,
+  label_size = 15,
   label_fontface = "bold",
   label_x = 0, label_y = 1
 )
@@ -80,9 +80,8 @@ row2 <- plot_grid(
 row3 <- plot_grid(
   p5,
   ncol = 1,
-  rel_widths = c(1),
-  labels = c("F"),
-  label_size = 30,
+  labels = "F",
+  label_size = 15,
   label_fontface = "bold",
   label_x = 0, label_y = 1
 )
@@ -94,11 +93,11 @@ final_plot <- plot_grid(
   row2,
   row3,
   ncol = 1,
-  rel_heights = c(0.6,0.8,2)
+  rel_heights = c(0.56,0.84,1.4)
 )
 
 final_plot
 
 # Save the combined plot as PDF
-ggsave("HordeumSC_figure.pdf", final_plot, width=21, height=29.7)
+ggsave("HordeumSC_figure.pdf", final_plot, width=21, height=27, units = "cm")
 

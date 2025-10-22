@@ -73,11 +73,11 @@ main_theme <- theme(
   axis.line.x=element_line(color="black"),
   axis.line.y=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text.x = element_text(size = 20, colour = "black"),
-  axis.text.y = element_text(size = 20, colour = "black"),
+  axis.text.x = element_text(size = 8, colour = "black"),
+  axis.text.y = element_text(size = 8, colour = "black"),
   legend.background=element_blank(),
   legend.key=element_blank(),
-  text=element_text(family="sans", size=20, colour="black")
+  text=element_text(family="sans", size=8, colour="black")
 )
 
 # Plot all genotypes including uninoculated WT.
@@ -123,9 +123,10 @@ weight_summary_subset <- weight_subset %>%
 
 p_subset <- ggplot(weight_subset, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   geom_boxplot(width=0.3, outlier.color=NA, alpha=0.7) +
-  geom_jitter(position=position_jitter(width=0), size=3, alpha=0.3) +
-  geom_text(data=weight_summary_subset, aes(x=Genotype, y=y_pos*1.2, label=label), inherit.aes=FALSE, size=6) +
-  geom_text(data=anova_subset, aes(x=3, y=y_position, label=asterisk), inherit.aes=FALSE, size=10) +
+  geom_jitter(position=position_jitter(width=0), size=0.5, alpha=0.3) +
+  geom_text(data=weight_summary_subset, aes(x=Genotype, y=y_pos*1.2, label=label),
+            inherit.aes=FALSE, size=3) +
+  # geom_text(data=anova_subset, aes(x=3, y=y_position, label=asterisk), inherit.aes=FALSE, size=10) +
   scale_fill_manual(values=colors) +
   main_theme +
   ylab("Shoot fresh weight/plant (g)") +
@@ -141,5 +142,7 @@ p_subset <- ggplot(weight_subset, aes(x=Genotype, y=Fresh_weight, fill=Genotype)
 
 p_subset
 
-ggsave("HordeumSC_Shootfw_no_uninoc.pdf", p_subset, width=8, height=6)
+ggsave("HordeumSC_Shootfw_no_uninoc.pdf", 
+       p_subset, width=8, height=6, units = "cm")
 saveRDS(p_subset, "HordeumSC_Shootfw_no_uninoc.rds")
+saveRDS(p_subset, "../8_final_figures/HordeumSC_Shootfw_no_uninoc.rds")

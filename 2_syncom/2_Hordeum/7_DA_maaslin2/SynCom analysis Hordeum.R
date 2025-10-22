@@ -6,7 +6,8 @@ rm(list=ls())
 
 # Load required packages.
 pkg <- c("data.table", "magrittr", "ggplot2", "vegan",
-         "RColorBrewer", "Maaslin2", "ComplexHeatmap", "colorRamp2","dplyr","tidyr","ggtext","patchwork","scales")
+         "RColorBrewer", "Maaslin2", "ComplexHeatmap", 
+         "colorRamp2","dplyr","tidyr","ggtext","patchwork","scales")
 for(pk in pkg) library(pk, character.only = TRUE)
 
 # Set working directory.
@@ -108,7 +109,7 @@ for(g in c("symrk","ccamk","nsp1","nsp2")){
   Results_root[res_g$feature, paste0("DA_", g)]  <- (res_g$qval < 0.05) * sign(res_g$coef)
 }
 
-   # Update results for structural zeros
+# Update results for structural zeros
 all_DA_root <- Reduce("union", S_root$struc_zero_DA)
 S_sign_root <- S_root$struc_zero_table[all_DA_root,1] - S_root$struc_zero_table[all_DA_root,-1]
 
@@ -192,13 +193,13 @@ colors <- c(
   "Propionibacteriales"= "#117744",   # forest green
   "Pseudomonadales"    = "#88CCAA",   # pastel green
   "Pseudonocardiales"  = "#95bb72",   # lime green (stays in the green cluster)
-  "Rhizobiales"        = "lightyellow",
+  "Rhizobiales"        = "#fdbb6b",
   "Rhodobacterales"    = "#C3834D",
   "Rhodospirillales"   = "#302018",
   "S085"               = "#774411",   # brown
   "Solibacterales"     = "#DDAA77",   # beige-brown
   "Sphingobacteriales" = "#8A6642",   
-  "Sphingomonadales"   = "#fdbb6b",
+  "Sphingomonadales"   = "lightyellow",
   "Streptomycetales"   = "#fed5a4",   
   "Subgroup_7"         = "#AA4455",   # dark red
   "TK10"               = "#DD7788",   # reddish-pink
@@ -216,8 +217,8 @@ p_tax <- ggplot(tax_bar, aes(x=ASVid, y=1, fill=Order)) +
   theme_void() +
   labs(fill = "Bacterial order") +
   theme(legend.position="right",
-        legend.text = element_text(color="black", size=20),
-        legend.title = element_text(color="black", size=20),
+        legend.text = element_text(color="black", size=8),
+        legend.title = element_text(color="black", size=8),
         )
 
 #----------------------------------------
@@ -250,7 +251,7 @@ da_all$DA <- factor(da_all$DA, levels = c(-1, 0, 1))
 da_colors <- c("-1" = "darkblue", "0" = "white", "1" = "red")
 
 p_bubble <- ggplot(da_all, aes(x = ASV_ID, y = Genotype, fill = DA)) +
-  geom_point(shape = 21, size = 5, color = "black") +
+  geom_point(shape = 21, size = 2, color = "black") +
   scale_fill_manual(
     values = da_colors,
     labels = c("-1" = "Depleted", "0" = "Non-significant", "1" = "Enriched")
@@ -260,40 +261,50 @@ p_bubble <- ggplot(da_all, aes(x = ASV_ID, y = Genotype, fill = DA)) +
   labs(y = "Differencial abundance\nin mutants") +
   theme_bw() +
   theme(
-    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 8, color = "black"),
+    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5,
+                               size = 6, color = "black"),
     axis.title.x = element_blank(),
-    axis.title.y=element_text(color="black", size=20),
+    axis.title.y=element_text(color="black", size=8),
     strip.placement = "outside",
-    strip.background = element_rect(fill = "grey80", color = "grey50"),
-    strip.text.y.left = element_text(color = "black", size = 20, hjust = 0.5),
-    axis.text.y = element_text(color = "black", size = 20),
-    legend.text = element_text(color = "black", size = 20),
-    legend.title = element_text(color = "black", size = 20),
+    legend.position = "bottom",
+    # strip.background = element_rect(fill = "grey80", color = "grey50"),
+    strip.text.y.left = element_text(color = "black", size = 8, hjust = 0.5,
+                                     face = "bold"),
+    axis.text.y = element_text(color = "black", size = 8),
+    legend.text = element_text(color = "black", size = 8),
+    legend.title = element_text(color = "black", size = 8),
+    strip.background = element_rect(colour = NA),
     panel.spacing = unit(0.4, "lines")
   )
 
-p_bubble <- p_bubble +
-  theme(
-    axis.text.y = ggtext::element_markdown()  # render x-axis text as markdown
-  ) +
-  scale_y_discrete(labels = function(x) paste0("*", x, "*"))  # wrap each label in italics
+# p_bubble <- p_bubble +
+#   theme(
+#     axis.text.y = ggtext::element_markdown()  # render x-axis text as markdown
+#   ) +
+#   scale_y_discrete(labels = function(x) paste0("*", x, "*"))  # wrap each label in italics
 
 #----------------------------------------
 # Mean RA bar plots
 #----------------------------------------
+asv_RA_WT$Compartment <- as.character(asv_RA_WT$Compartment)
+asv_RA_WT$Compartment[asv_RA_WT$Compartment == "Rhizosphere"] <- "Rhizo-\nsphere"
+asv_RA_WT$Compartment <- factor(asv_RA_WT$Compartment, 
+                                levels = c("Rhizo-\nsphere", "Root", "Nodules"))
 p_RA <- ggplot(asv_RA_WT, aes(x=ASVid, y=mean_RA)) +
   geom_bar(stat="identity", fill="grey50") +
   facet_wrap(~Compartment, ncol=1, scales="free", strip.position =  "left") +
   labs(y = "Mean relative\nabundance in WT") +
-  scale_y_continuous(expand = c(0, 0), limits = c(0,0.4)) +
+  # scale_y_continuous(expand = c(0, 0), limits = c(0,0.4)) +
+  scale_y_continuous(expand = c(0, 0)) +
   theme_bw() +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
         axis.title.x=element_blank(),
-        axis.text.y=element_text(color="black", size=20),
-        axis.title.y=element_text(color="black", size=20),
-        strip.text = element_text(color="black", size=20),
+        axis.text.y=element_text(color="black", size=8),
+        axis.title.y=element_text(color="black", size=8),
+        strip.text = element_text(color="black", size=8, face = "bold"),
         strip.placement = "outside",
+        strip.background = element_rect(colour = NA),
         panel.spacing = unit(0.4, "lines"))
 
 
@@ -304,45 +315,49 @@ p_RA <- ggplot(asv_RA_WT, aes(x=ASVid, y=mean_RA)) +
 # final_plot
 
 # Extract legends
-legend_tax <- cowplot::get_legend(
-  p_tax + theme(legend.position = "bottom") +
-    guides(
-      fill = guide_legend(
-        ncol = 5, nrow = 3, 
-        title.position = "top",
-        title.hjust = 0  # centers title above keys
-      )
-    )
-)
-
-legend_bubble <- cowplot::get_legend(
-  p_bubble + theme(legend.position = "bottom") +
-    guides(
-      fill = guide_legend(
-        ncol = 2, nrow = 4, 
-        title.position = "top",
-        title.hjust = 0  # centers title above keys
-      )
-    )
-)
+# legend_tax <- cowplot::get_legend(
+#   p_tax + theme(legend.position = "bottom") +
+#     guides(
+#       fill = guide_legend(
+#         ncol = 5, nrow = 3, 
+#         title.position = "top",
+#         title.hjust = 0  # centers title above keys
+#       )
+#     )
+# )
+# 
+# legend_bubble <- cowplot::get_legend(
+#   p_bubble + theme(legend.position = "bottom") +
+#     guides(
+#       fill = guide_legend(
+#         ncol = 2, nrow = 4, 
+#         title.position = "top",
+#         title.hjust = 0  # centers title above keys
+#       )
+#     )
+# )
 
 # Remove individual legends from plots
 p_tax_clean <- p_tax + theme(legend.position = "none")
-p_bubble_clean <- p_bubble + theme(legend.position = "none")
+# p_bubble_clean <- p_bubble + theme(legend.position = "none")
 
 # Combine plots vertically
-main_plot <- p_RA / p_tax_clean / p_bubble_clean + plot_layout(heights = c(0.6, 0.05, 0.6))
+main_plot <- p_RA / p_tax_clean / p_bubble + plot_layout(heights = c(0.3, 0.05, 0.6))
 
-# Combine the two legends side by side at the bottom
-combined_legend <- cowplot::plot_grid(legend_tax, legend_bubble, ncol = 2, rel_widths = c(0.7, 0.3))
+# # Combine the two legends side by side at the bottom
+# combined_legend <- cowplot::plot_grid(legend_tax, legend_bubble, ncol = 2, rel_widths = c(0.7, 0.3))
+# 
+# # Final figure: main plot + combined legends
+# final_plot <- cowplot::plot_grid(main_plot, combined_legend, ncol = 1, rel_heights = c(1, 0.1))
+# 
+# final_plot
 
-# Final figure: main plot + combined legends
-final_plot <- cowplot::plot_grid(main_plot, combined_legend, ncol = 1, rel_heights = c(1, 0.1))
-
+final_plot <- main_plot
 final_plot
 
 # Save final plot.
-ggsave("HordeumSynCom_DA.pdf", plot = final_plot, width = 21, height = 20)
-saveRDS(final_plot, file = "HordeumSynCom_DA.rds")
+ggsave("HordeumSynCom_DA.pdf", plot = final_plot, 
+       width = 21, height = 20, units = "cm")
+saveRDS(final_plot, file = "../8_final_figures/HordeumSynCom_DA.rds")
 
 

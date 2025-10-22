@@ -5,14 +5,16 @@ rm(list=ls())
 # Set working directory.
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load data.
+# Load data.# Clean up.
+options(warn=-1)
 design <- read.table("BarleyCSSP_SConly_metadata_NEW.txt", header=TRUE, sep="\t")
 asv_table <- read.table("feature-table_BarleyCSSP_CerealSConly.tsv", sep = "\t", header = TRUE, row.names = 1, check.names = FALSE, comment.char = "", skip = 1)
 taxonomy <- read.table("CerealSC_taxonomy_new_May23.txt", sep="\t", header=TRUE, fill=TRUE)
 
 # Load packages.
 library(dplyr)
-library(tidyr)
+library(tidyr)# Clean up.
+options(warn=-1)
 library(tibble)
 library(ggplot2)
 library(ggtext)
@@ -93,13 +95,13 @@ colors <- c(
   "Propionibacteriales"= "#117744",   # forest green
   "Pseudomonadales"    = "#88CCAA",   # pastel green
   "Pseudonocardiales"  = "#95bb72",   # lime green (stays in the green cluster)
-  "Rhizobiales"        = "lightyellow",
+  "Rhizobiales"        = "#fdbb6b",
   "Rhodobacterales"    = "#C3834D",
   "Rhodospirillales"   = "#302018",
   "S085"               = "#774411",   # brown
   "Solibacterales"     = "#DDAA77",   # beige-brown
   "Sphingobacteriales" = "#8A6642",   
-  "Sphingomonadales"   = "#fdbb6b",
+  "Sphingomonadales"   = "lightyellow",
   "Streptomycetales"   = "#fed5a4",   
   "Subgroup_7"         = "#AA4455",   # dark red
   "TK10"               = "#DD7788",   # reddish-pink
@@ -128,13 +130,13 @@ main_theme <- theme(
   axis.line.x=element_line(color="black"),
   axis.line.y=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text=element_text(size=20, color="black"),
-  legend.text=element_text(size=20, color="black"),
+  axis.text=element_text(size=8, color="black"),
+  legend.text=element_text(size=8, color="black"),
   legend.key=element_blank(),
-  axis.title.y=element_text(size=20),
+  axis.title.y=element_text(size=8),
   legend.position="right",
   legend.background=element_blank(),
-  text=element_text(family="sans", size=20, color="black")
+  text=element_text(family="sans", size=8, color="black")
 )
 
 p1 <- ggplot(df_summary, aes(x=Genotype, y=mean_RA, fill=Order)) +
@@ -147,15 +149,25 @@ p1 <- ggplot(df_summary, aes(x=Genotype, y=mean_RA, fill=Order)) +
   main_theme +
   ylab("Mean relative abundance") +
   labs(fill="Bacterial order") + 
-  theme(axis.text.x = element_markdown(size=20, color="black", angle=30, hjust=1),
-        strip.text.x=element_text(size=20, face="bold"),
-        axis.title.x=element_blank()) +
-  guides(fill=guide_legend(nrow=15))
+  theme(axis.text.x = element_markdown(size=8, color="black", angle=30, hjust=1),
+        strip.text.x=element_text(size=8, face="bold"),
+        axis.title.x=element_blank(),
+        legend.position = "bottom",
+        legend.title.position = "top",
+        legend.key.size = unit(0.25, "cm"),
+        legend.key.spacing.y = unit(0, 'cm'),
+        legend.text = element_text(margin = margin(l = 1)),
+        # legend.justification = "left",
+        legend.justification = c(0.75, 0),     # anchor at bottom left
+        legend.direction = "horizontal") +
+  guides(fill=guide_legend(ncol = 3))+
+  NULL
 
 p1
 
-ggsave("HordeumSC_order_RA_stackedbp.pdf", p1, width=12, height=6)
+ggsave("HordeumSC_order_RA_stackedbp.pdf", p1, width=12, height=6, units = "cm")
 saveRDS(p1, file="HordeumSC_order_RA_stackedbp.rds")
+saveRDS(p1, file="../8_final_figures/HordeumSC_order_RA_stackedbp.rds")
 
 # Next we want to plot the relative abundances of all orders in the different compartment-genotype combinations using barplots.
 
@@ -278,13 +290,13 @@ main_theme <- theme(
   panel.border=element_rect(colour="black", fill=NA, linewidth=1),
   axis.line=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text=element_text(size=20, color="black"),
-  legend.text=element_text(size=20),
+  axis.text=element_text(size=8, color="black"),
+  legend.text=element_text(size=8),
   legend.key=element_blank(),
-  axis.title.y=element_text(size=20),
+  axis.title.y=element_text(size=8),
   legend.position="right",
   legend.background=element_blank(),
-  text=element_text(family="sans", size=20, color="black")
+  text=element_text(family="sans", size=8, color="black")
 )
 
 # Now make plots.
@@ -355,9 +367,8 @@ p_all <- ggplot(df_order_summary, aes(x=Order, y=Mean_RA, fill=Genotype)) +
     axis.text.x = element_text(angle=45, hjust=1),
     legend.text = element_markdown(),   # italic genotypes
     strip.text = element_text(face="bold", size=rel(1)),  # italic facet labels
-    plot.title = element_text(size=20)
+    plot.title = element_text(size=8)
   )
-
 
 p_all
 
@@ -397,6 +408,19 @@ asterisk_df_sig <- df_order_summary_sig %>%
   ) %>%
   filter(!is.na(asterisk))
 
+# Removing non-significant orders
+df_order_summary_sig <- df_order_summary_sig %>%
+  filter(!(Compartment == "Rhizosphere" & Order == "Sphingomonadales")) %>%
+  filter(!(Compartment == "Root" & Order == "Enterobacterales")) %>%
+  filter(!(Compartment == "Root" & Order == "Pseudomonadales")) %>%
+  mutate(Order = as.character(Order))
+
+df_plot_letters_sig <- df_plot_letters_sig %>%
+  filter(!(Compartment == "Rhizosphere" & Order == "Sphingomonadales")) %>%
+  filter(!(Compartment == "Root" & Order == "Enterobacterales")) %>%
+  filter(!(Compartment == "Root" & Order == "Pseudomonadales")) %>%
+  mutate(Order = as.character(Order))
+
 ## Plot.
 p_sig <- ggplot(df_order_summary_sig, aes(x=Order, y=Mean_RA, fill=Genotype)) +
   geom_bar(stat="identity", position=dodge, width=0.8, alpha=0.9) +
@@ -404,17 +428,17 @@ p_sig <- ggplot(df_order_summary_sig, aes(x=Order, y=Mean_RA, fill=Genotype)) +
                 width=0.3, position=dodge) +
   geom_text(
     data=df_plot_letters_sig,
-    aes(x=Order, y=y_pos, label=Letter, fill=Genotype),
+    aes(x=Order, y=y_pos+0.05, label=Letter, fill=Genotype),
     position=dodge,
     inherit.aes=FALSE,
-    size=5
+    size=2
   ) +
-  geom_text(
-    data=asterisk_df_sig,
-    aes(x=Order, y=y_position, label=asterisk),
-    inherit.aes=FALSE,
-    size=6
-  ) +
+  # geom_text(
+  #   data=asterisk_df_sig,
+  #   aes(x=Order, y=y_position, label=asterisk),
+  #   inherit.aes=FALSE,
+  #   size=6
+  # ) +
   facet_wrap(~Compartment, scales="free_x") +
   scale_fill_manual(values=colors_geno, labels=genotype_labels_legend) +
   scale_y_continuous(expand=c(0,0), limits=c(0,0.7)) +
@@ -423,14 +447,17 @@ p_sig <- ggplot(df_order_summary_sig, aes(x=Order, y=Mean_RA, fill=Genotype)) +
   theme(
     axis.text.x = element_text(angle=45, hjust=1),
     legend.text = element_markdown(),
-    strip.text = element_text(face="bold", size=rel(1)),
-    plot.title = element_text(size=20)
+    plot.title = element_text(size=8),
+    strip.text = element_text(size=8, face="bold"),
+    legend.position = "none"
   )
 
 p_sig
 
-ggsave("Hordeum_order_RA_sign_orders.pdf", p_sig, width=12, height=6)
+ggsave("Hordeum_order_RA_sign_orders.pdf", p_sig, 
+       width=12, height=6, units = "cm")
 saveRDS(p_sig, file="Hordeum_order_RA_sign_orders.rds")
+saveRDS(p_sig, file="../8_final_figures/Hordeum_order_RA_sign_orders.rds")
 
 # Comment: Order Enterobacterales has letter 'a' for all genotypes, but shows asterisk '*'.
 # This is due to the fact that at pairwise comparison levels, the differences are not significant,

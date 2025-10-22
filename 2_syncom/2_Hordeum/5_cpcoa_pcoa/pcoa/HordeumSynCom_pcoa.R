@@ -44,15 +44,15 @@ main_theme <- theme(panel.background=element_blank(),
                     axis.line.x=element_line(color="black"),
                     axis.line.y=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
-                    axis.text = element_text(size = 20, color = "black"),
-                    legend.text = element_text(size=20, color = "black"),
+                    axis.text = element_text(size = 8, color = "black"),
+                    legend.text = element_text(size=8, color = "black"),
                     legend.key=element_blank(),
-                    axis.title.y = element_text(size = 20),
-                    text=element_text(size=20, color="black"),
+                    axis.title.y = element_text(size = 8),
+                    text=element_text(size=8, color="black"),
                     legend.position="right",
                     # legend.background=element_rect(colour="black", fill=NA),
                     legend.background=element_blank(),
-                    plot.title = element_text(size=20, hjust=0.9))
+                    plot.title = element_text(size=8, hjust=0.9))
 
 # Create function for pcoa analysis and plotting (separately for each compartment).
 plot_pcoa_by_compartment <- function(asv_data, design_df){
@@ -81,10 +81,10 @@ plot_pcoa_by_compartment <- function(asv_data, design_df){
     
     # Plot per compartment
     p <- ggplot(points, aes(x=x, y=y, color=Genotype)) +
-      geom_point(size=6, alpha=0.7) +
+      geom_point(size=1.5, alpha=0.7) +
       geom_segment(data=segments, aes(x=x, y=y, xend=seg_x, yend=seg_y, color=Genotype), alpha=0.5) +
       scale_color_manual(values=colors, labels=legend_labels) +
-      guides(color = guide_legend(override.aes = list(size=5))) +
+      guides(color = guide_legend(override.aes = list(linetype = 0))) +
       labs(
         x=paste0("PCoA 1 (", format(100*pcoa$eig[1]/sum(pcoa$eig), digits=4), "%)"),
         y=paste0("PCoA 2 (", format(100*pcoa$eig[2]/sum(pcoa$eig), digits=4), "%)"),
@@ -92,8 +92,9 @@ plot_pcoa_by_compartment <- function(asv_data, design_df){
       ) +
       main_theme +
       theme(
-        plot.title = element_text(face="bold", size=20, hjust=0),
-        legend.text = element_markdown(size=20, color="black")
+        plot.title = element_text(face="bold", size=8, hjust=0),
+        legend.text = element_markdown(size=8, color="black"),
+        legend.key.size = unit(0.25, "cm")
       )
     
     plot_list[[comp]] <- p
@@ -115,13 +116,16 @@ plot_pcoa_by_compartment <- function(asv_data, design_df){
 
 # Run function and make plot for all ASVs.
 p_allASVs <- plot_pcoa_by_compartment(asv_table_filt, design_filtered)
-ggsave("HordeumSynCom_pcoa_allASVs_byCompartment.pdf", p_allASVs, width=12, height=5)
+ggsave("HordeumSynCom_pcoa_allASVs_byCompartment.pdf",
+       p_allASVs, width=12, height=5, units = "cm")
 saveRDS(p_allASVs, "HordeumSynCom_pcoa_allASVs_byCompartment.rds")
 
 # Plot matched ASVs only.
 asv_table_matched <- asv_table_filt[grepl("_", rownames(asv_table_filt)), , drop = FALSE]
 p_matchedASVs <- plot_pcoa_by_compartment(asv_table_matched, design_filtered)
-ggsave("HordeumSynCom_pcoa_matchedASVs_byCompartment.pdf", p_matchedASVs, width=12, height=5)
+ggsave("HordeumSynCom_pcoa_matchedASVs_byCompartment.pdf",
+       p_matchedASVs, width=12, height=5, units = "cm")
 saveRDS(p_matchedASVs, "HordeumSynCom_pcoa_matchedASVs_byCompartment.rds")
+saveRDS(p_matchedASVs, "../../8_final_figures/HordeumSynCom_pcoa_matchedASVs_byCompartment.rds")
 
 
