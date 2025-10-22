@@ -138,8 +138,8 @@ colors <- c(
   "Corynebacteriales"="#f6cefc","Frankiales"="#114477","Gaiellales"="#4477AA",
   "Gemmatimonadales"="#77AADD","MB-A2-108"="#117777","Micrococcales"="#44AAAA",
   "Nitrospirales"="#daf0ee","Pedosphaerales"="#013220","Propionibacteriales"="#117744",
-  "Pseudomonadales"="#88CCAA","Rhizobiales"="lightyellow","S085"="#774411",
-  "Solibacterales"="#DDAA77","Sphingomonadales"="#fdbb6b","Subgroup_7"="#AA4455",
+  "Pseudomonadales"="#88CCAA","Rhizobiales"="#fdbb6b","S085"="#774411",
+  "Solibacterales"="#DDAA77","Sphingomonadales"="lightyellow","Subgroup_7"="#AA4455",
   "TK10"="#DD7788","Xanthomonadales"="#ffc0cb","Other"="lightgrey"
 )
 

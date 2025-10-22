@@ -88,10 +88,10 @@ colors <- c(
   "Propionibacteriales"= "#117744",   # forest green
   "Pseudomonadales"    = "#88CCAA",   # pastel green
   "Pseudonocardiales"  = "#95bb72",   # lime green (stays in the green cluster)
-  "Rhizobiales"        = "lightyellow",
+  "Rhizobiales"        = "#fdbb6b",
   "S085"               = "#774411",   # brown
   "Solibacterales"     = "#DDAA77",   # beige-brown
-  "Sphingomonadales"   = "#fdbb6b",
+  "Sphingomonadales"   = "lightyellow",
   "Streptomycetales"    = "#fed5a4",   # pink-magenta (to match other actinobacteria hues)
   "Subgroup_7"         = "#AA4455",   # dark red
   "TK10"               = "#DD7788",   # reddish-pink
