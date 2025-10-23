@@ -2,7 +2,7 @@
 # Loading pacakges -------------------------------------------------------------
 pkg <- c("data.table", "magrittr", "ggplot2", "ggfortify", "multcompView",
          "ggpubr","RColorBrewer", "ComplexHeatmap", "colorRamp2", "gridtext",
-         "cowplot")
+         "cowplot", "ggtext")
 for(pk in pkg){
   library(pk, character.only = T)
 }
@@ -249,6 +249,15 @@ feature_present_Hv <- rownames(metabolites_Hv)[
 metabolites_Hv <- metabolites_Hv[feature_present_Hv,]
 
 # PCA plots after filtering ----------------------------------------------------
+legend_labels <- c(
+  "WT"     = "WT",
+  "symrk"  = "*symrk*",
+  "ccamk"  = "*ccamk*",
+  "nsp1"   = "*nsp1*",
+  "nsp2"   = "*nsp2*",
+  "control" = "control"
+)
+
 pLj <- prcomp(t(metabolites_Lj), center = T, scale. = T)
 pHv <- prcomp(t(metabolites_Hv), center = T, scale. = T)
 
@@ -271,9 +280,8 @@ ggplot(data = dtLj, mapping = aes(x = PC1, y = PC2, colour = Genotype))+
   geom_segment(data = segments_Lj, aes(x = PC1, y = PC2, xend = PC1_cent,
                                        yend = PC2_cent, color = Genotype),
                alpha = 0.5, show.legend = FALSE)+
-  scale_colour_manual(name = "Genotype",
-                    breaks = names(cols),
-                    values = cols)+
+  scale_colour_manual(values = cols,
+                      labels = legend_labels)+
   theme_bw()+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -285,8 +293,8 @@ ggplot(data = dtLj, mapping = aes(x = PC1, y = PC2, colour = Genotype))+
         axis.title = element_text(size = 8),
         axis.text.x = element_text(size = 8, colour = "black"),
         axis.text.y = element_text(size = 8, colour = "black"),
-        legend.text = element_text(size = 8,
-                                   margin = margin(l = -0.1, unit = "pt")),
+        legend.text = element_markdown(size = 8,
+                                       margin = margin(l = -0.1, unit = "pt")),
         legend.title = element_text(size = 8),
         legend.margin = margin(t = 0, r = 5, l = 5),
         legend.key = element_rect(fill = NA),
@@ -336,7 +344,7 @@ ggplot(data = dtHv, mapping = aes(x = PC1, y = PC2, colour = Genotype))+
 
 PCA_legend <- get_plot_component(p1, 'guide-box', return_all = TRUE)
 PCA_legend <- PCA_legend[[3]]
-p1 <- p1 + guides(fill = "none")
+p1 <- p1 + guides(colour = "none")
 
 PCA_all <- ggarrange(p1, p2, nrow = 2)
 PCA_all + guides(colour = NULL)
@@ -532,11 +540,15 @@ plot_grid(volcano_legend)
 feat_set <- paste0( "Feature", c(269, 1067, 455, 882, 973,
                                  1047, 945, 1053, 976) )
 
-c("Feature269" = "Coumaric\nacid", "Feature1067" = "Chalcone",
-  "Feature455" = "Ferulic acid", "Feature882" = "Liqiritigenin",
-  "Feature973" = "Naringenin", "Feature1047" = "BiochaninA/\nOlmelin",
-  "Feature945" = "Formononetin", "Feature1053" = "Vestitione",
-  "Feature976" = "Vestitol") -> name_change
+c("Feature269" = "Coumaric\nacid (F269)", 
+  "Feature1067" = "Chalcone\n (F1067)",
+  "Feature455" = "Ferulic acid\n (F455)",
+  "Feature882" = "Liqiritigenin\n (F882)",
+  "Feature973" = "Naringenin\n (F973)", 
+  "Feature1047" = "BiochaninA/\nOlmelin (F1047)",
+  "Feature945" = "Formononetin\n (F945)",
+  "Feature1053" = "Vestitione\n (F1053)",
+  "Feature976" = "Vestitol\n (F976)") -> name_change
 
 feat_set <- factor(feat_set, levels = feat_set)
 
@@ -599,6 +611,8 @@ ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
         legend.text = element_text(size = 8),
         legend.title = element_text(size = 8),
         plot.title = element_text(size = 8, hjust = 0.5, face = "bold"),
+        plot.margin = margin(l = 0.1, r = 0.1, t = 0.5,
+                             b = 0.5, unit = "line"),
         legend.margin = margin(t = 20, unit = "pt"))+
   labs(x = NULL, title = "Lotus")+
   guides(fill = "none")+
@@ -608,11 +622,15 @@ ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
 feat_set <- paste0( "Feature", c(2546, 1548, 495, 2970, 3069,
                                  3095, 2306, 2308, 2309) )
 
-c("Feature2546" = "Gibberellin", "Feature1548" = "Abscisic \nacid",
-  "Feature495" = "Esculetin", "Feature2970" = "Flavonoid-like\nglycoside",
-  "Feature3069" = "Isoorientin", "Feature3095" = "Paeonin C",
-  "Feature2306" = "Oxylipin 1", "Feature2308" = "Oxylipin 2",
-  "Feature2309" = "Oxylipin 3") -> name_change
+c("Feature2546" = "Gibberellin\n (F2546)",
+  "Feature1548" = "Abscisic \nacid (F1548)",
+  "Feature495" = "Esculetin\n (F465)",
+  "Feature2970" = "Flavonoid-like\nglycoside (F2970)",
+  "Feature3069" = "Isoorientin\n (F3069)",
+  "Feature3095" = "Paeonin C\n (F3095)",
+  "Feature2306" = "Oxylipin (F2306)",
+  "Feature2308" = "Oxylipin (F2038)",
+  "Feature2309" = "Oxylipin (F2309)") -> name_change
 
 feat_set <- factor(feat_set, levels = feat_set)
 
@@ -689,6 +707,8 @@ ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
         legend.text = element_text(size = 8),
         legend.title = element_text(size = 8),
         plot.title = element_text(size = 8, hjust = 0.5, face = "bold"),
+        plot.margin = margin(l = 0.1, r = 0.1, t = 0.5,
+                             b = 0.5, unit = "line"),
         legend.margin = margin(t = 20, unit = "pt"))+
   labs(x = NULL)+
   guides(fill = "none")+
@@ -792,7 +812,7 @@ sum_tab[,Host:=factor(Host, levels = c("Lotus", "Hordeum"))]
 ggplot(data = sum_tab, mapping = aes(x = Genotype, y = Class, size = Amount,
                                      fill = pos_prob))+
   geom_label(data = Text, mapping = aes(x = Genotype, y = Class, label = N), 
-             size = 3, fill = "white", label.size = NA)+
+             size = 8/.pt, fill = NA, label.size = NA)+
   geom_point(shape = 21)+
   facet_wrap(~factor(Host, levels = c("Lotus", "Hordeum")))+
   scale_fill_gradient2(midpoint = 0.5, low = "darkblue",
@@ -831,13 +851,12 @@ ggplot(data = sum_tab, mapping = aes(x = Genotype, y = Class, size = Amount,
   NULL -> Bubble
 
 #  Collect plots ---------------------------------------------------------------
-Blank <- ggplot() + theme_void()
-
-combined_legend <- ggarrange(PCA_legend, volcano_legend,
-                             )
-gg <- ggarrange(PCA_all, volcanoes, widths = c(0.2, 0.8))
+combined_legend <- ggarrange(PCA_legend, volcano_legend)
+gg <- plot_grid(PCA_all, volcanoes, rel_widths = c(0.2, 0.8),
+                labels = c("A", "B"), label_size = 15, label_fontface = "bold")
 gg2 <- plot_grid(gg, combined_legend, nrow = 2, rel_heights = c(0.95, 0.05))
-gg3 <- plot_grid(Bubble, feature_box, rel_widths = c(0.54, 0.46))
+gg3 <- plot_grid(Bubble, feature_box, rel_widths = c(0.5, 0.5),
+                 labels = c("C", "D"), label_size = 15, label_fontface = "bold")
 gg4 <- plot_grid(gg2, gg3, nrow = 2, rel_heights = c(0.35, 0.65))
 
 ggsave("../3_figures/Lotus_barley_metabolites.pdf", gg4,

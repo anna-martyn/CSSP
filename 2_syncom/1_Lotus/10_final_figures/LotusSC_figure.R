@@ -30,7 +30,8 @@ p1_aligned <- p1 + labs(title = " ") +
         axis.text.x = element_text(angle=45, hjust=1))
 p2 <- LotusSynCom_pcoa_matchedASVs_byCompartment
 p3 <- LotusSC_order_RA_stackedbp
-p4 <- Lotus_order_RA_sign_orders
+# p4 <- Lotus_order_RA_sign_orders
+p4 <- Lotus_order_RA_sign_orders_asterisks
 p5 <- LotusSynCom_DA
 
 # Adjust legends of p3 and p4.
