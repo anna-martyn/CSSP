@@ -41,3 +41,70 @@ General:
 - ⁠later: consider rerunning preprocessing only containing genotypes of interest, or alternatively rename non-needed genotypes in manifest file
 - ⁠for stacked barplots/bacterial order legends: consider removing black boxes around them for consistency
 - ⁠fit font size and font type everywhere
+
+23.10.25 to do:
+Soil bulk:
+- fit workflow in A
+- consider removing p=0.913, and only add letters;
+  > so when combining plots C was previosuly algined by making an "invisible title"
+  > can be removed to align B and C (or added for both)
+- row 1 shorter (move B over to make space for A)
+- change pcoa to not have circle around dots, and to have connecting lines in respective soil colour (as in WT figure)
+- row 2 > consider making D wider
+- row 3: increase height, remove titles (Unique vs shared ASVs and Taxonomic..)
+  combine F and G (zoom in), try to then align upper title of Pie charts and Order 
+- smaller line width of Venn diagram
+
+Soil WT:
+- in E > try to reduce space figure and legend to make Rhizosphere facet fit text better
+- check letter placement in F > are all letters shown? or only significant ones (that would be best)
+; but why in Root Pseudomonadales aaa shown?
+- (if time and mood for it: align individual cpcoas to respective plot next to it (upper D and E, lower D and F).
+- move the heatmap legend central to plot, remove x axis title (Bacterial order)
+- make cpcoa legend rows closer
+
+Soil prediction:
+- in D : first Rhizosphere, then root
+- in legend B: make mutant names italic
+
+Soil CSSP:
+- try to move cpcoa and pcoa, as well as order heatmap to supplementary
+- make heatmap better
+- keep rest in main figure
+
+Lotus SynCom:
+- B: letter font size > adjust to make same as for other plots;
+remove individual points and only show error bars
+- D: use reverse order for genotypes (WT top, nsp2 bottom)
+; move facet titles to left and genotype (y axis) to right
+- bottom where legend is is quite blank, if time try to decrease height
+and rather give more space to row 1/2
+- also could try to reduced height of bubble plot in bottom plot, to give more space to A/B
+-F : y axis limits RA barplots > try to show whole bar (increase limits)
+
+Barley SynCom:
+- see comments above
+- make D horizontal for consistency
+- align plot B with C plots
+
+For both SynCom plots:
+- make additional figure where pairwise tests  with WT as reference are used and
+only asterisks displayed
+
+Root exudate:
+- change dimension to A4
+- change font size
+- fonts in boxes bold
+- add letters for panels
+- remove boxes around legends
+- check if you can add FeatureIDs (numbers sufficient)
+- Anna check metabolites chosen for display
+- if enough space made available: consider displaying all metabolite classes in bubble plot
+- font sizes same everywhere (check also in last figure, "big title" > bold and also 8?)
+
+
+General:
+- check consistent line width in all plots (outside box)
+- check throughout whole figures that order colours are consistent
+(barley input was modified slighlty, but only for some missing orders and not existing ones)
+
