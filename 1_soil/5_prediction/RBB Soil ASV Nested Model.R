@@ -410,6 +410,7 @@ ggplot(data = Barplot_data, aes(x = Soil, y = Abundance, fill = Order))+
         strip.background = element_rect(colour = NA),
         legend.key.size = unit(0.25, 'cm'),
         legend.key.spacing.y = unit(0, 'cm'),
+        legend.justification = c(0.75, 0),
         # panel.background = element_rect(fill = "white"),
         axis.title.y = element_text(size = 8, family = "Helvetica"),
         axis.text.y = element_text(size = 8, family = "Helvetica",

@@ -13,8 +13,7 @@ taxonomy <- read.table("CerealSC_taxonomy_new_May23.txt", sep="\t", header=TRUE,
 
 # Load packages.
 library(dplyr)
-library(tidyr)# Clean up.
-options(warn=-1)
+library(tidyr)
 library(tibble)
 library(ggplot2)
 library(ggtext)
