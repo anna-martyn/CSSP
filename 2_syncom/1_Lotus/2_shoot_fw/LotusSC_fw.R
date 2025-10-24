@@ -102,7 +102,7 @@ main_theme <- theme(
 # -----------------------------
 p1 <- ggplot(weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   geom_boxplot(width=0.3, outlier.color=NA, alpha=0.7) +
-  geom_jitter(position=position_jitter(width=0), size=0.5, alpha=0.3) +
+  # geom_jitter(position=position_jitter(width=0), size=0.5, alpha=0.3) +
   geom_text(data=weight_summary, aes(x=Genotype, y=y_pos*1.2, label=label), inherit.aes=FALSE, size=6) +
   # geom_text(data=anova_pvals, aes(x=3, y=y_position, label=asterisk), inherit.aes=FALSE, size=10) +
   geom_blank(data=upper_limits, aes(y=Fresh_weight), inherit.aes=FALSE) +
@@ -141,11 +141,13 @@ weight_summary_Lj <- weight_summary %>% filter(Treatment=="Lj-SPHERE")
 anova_pvals_Lj <- anova_pvals %>% filter(Treatment=="Lj-SPHERE")
 upper_limits_Lj <- upper_limits %>% filter(Treatment=="Lj-SPHERE")
 
+weight_summary_Lj$y_pos[2] <- weight_summary_Lj$y_pos[2] - 0.015
+
 p2 <- ggplot(weight_Lj, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   geom_boxplot(width=0.3, outlier.color=NA, alpha=0.7) +
-  geom_jitter(position=position_jitter(width=0), size=0.5, alpha=0.3) +
+  # geom_jitter(position=position_jitter(width=0), size=0.5, alpha=0.3) +
   geom_text(data=weight_summary_Lj, aes(x=Genotype, y=y_pos*1.2, label=label),
-            inherit.aes=FALSE, size=3) +
+            inherit.aes=FALSE, size=8/.pt) +
   # geom_text(data=anova_pvals_Lj, aes(x=3, y=y_position, label=asterisk), inherit.aes=FALSE, size=10) +
   geom_blank(data=upper_limits_Lj, aes(y=Fresh_weight), inherit.aes=FALSE) +
   scale_fill_manual(values=colors) +

@@ -5,8 +5,8 @@ options(warn=-1)
 rm(list=ls())
 
 # Load required packages.
-pkg <- c("data.table", "magrittr", "ggplot2", "vegan",
-         "RColorBrewer", "Maaslin2", "ComplexHeatmap",
+pkg <- c("data.table", "magrittr", "ggplot2", "vegan", "tibble",
+         "RColorBrewer", "Maaslin2", "ComplexHeatmap", "ggh4x",
          "colorRamp2","dplyr","tidyr","ggtext","patchwork","scales")
 for(pk in pkg) library(pk, character.only = TRUE)
 
@@ -271,14 +271,15 @@ p_bubble
 #----------------------------------------
 asv_RA_WT$Compartment <- as.character(asv_RA_WT$Compartment)
 asv_RA_WT$Compartment[asv_RA_WT$Compartment == "Rhizosphere"] <- "Rhizo-\nsphere"
+asv_RA_WT$Compartment[asv_RA_WT$Compartment == "Nodules"] <- "Nod-\nules"
 asv_RA_WT$Compartment <- factor(asv_RA_WT$Compartment, 
-                                levels = c("Rhizo-\nsphere", "Root", "Nodules"))
+                                levels = c("Rhizo-\nsphere", "Root", "Nod-\nules"))
 p_RA <- ggplot(asv_RA_WT, aes(x=ASVid, y=mean_RA)) +
   geom_bar(stat="identity", fill="grey50") +
-  facet_wrap(~Compartment, ncol=1, scales="free_y", strip.position = "left") +
+  facet_wrap(~Compartment, ncol=1, scales="free_y",
+             strip.position = "left", space = "free_y") +
   labs(y = "Mean relative\nabundance in WT") +
-  scale_y_continuous(expand = c(0, 0)) +
-  # scale_y_continuous(expand = c(0, 0), limits = c(0,0.6)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   theme_bw() +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
@@ -289,8 +290,15 @@ p_RA <- ggplot(asv_RA_WT, aes(x=ASVid, y=mean_RA)) +
         strip.placement = "outside",
         strip.background = element_rect(colour = NA),
         panel.spacing = unit(0.4, "lines"))+
+  force_panelsizes(cols = c(1, 1, 1), rows = c(1, 1, 0.55))+
+  facetted_pos_scales(
+    y = list(
+      Compartment == "Nod-\nules" ~ scale_y_continuous(breaks = c(0, 0.25, 0.5))
+    )
+  )+
   NULL
 
+p_RA
 
 #----------------------------------------
 # Combine plots
