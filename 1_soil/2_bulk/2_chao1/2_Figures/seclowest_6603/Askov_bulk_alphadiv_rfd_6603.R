@@ -100,11 +100,13 @@ p1 <- ggplot(index_bulk, aes(x=Soil, y=value, fill=Soil)) +
   geom_jitter(position=position_jitter(width=0, height=0.17),
               size=1, alpha=1) +
   scale_fill_manual(values=as.character(colors$color)) +
-  labs(x="", y="Chao1 index",
-       title = paste0("p = ", signif(anova_p, 3))) +  
-  # geom_text(data=label_df, aes(x=Soil, y=y_position, label=Letters),
-  #           inherit.aes=FALSE, size=6) +
-  main_theme
+  # labs(x="", y="Chao1 index",
+  #      title = paste0("p = ", signif(anova_p, 3))) +  
+  labs(x="", y="Chao1 index") + 
+  geom_text(data=label_df, aes(x=Soil, y=y_position, label=Letters),
+            inherit.aes=FALSE, size=8/.pt) +
+  main_theme+
+  NULL
 
 
 p1

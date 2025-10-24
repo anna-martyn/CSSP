@@ -135,16 +135,17 @@ main_theme <- theme(panel.background=element_blank(),
 #        y=paste("PCoA 2 (", format(100 * eig[2] / sum(eig), digits=4), "%)", sep="")) +
 #   main_theme
 
-p <- ggplot(points, aes(x=x, y=y, fill=Soil)) +
-  geom_point(alpha=0.7, size=3, shape = 21) +
+p <- ggplot(points, aes(x=x, y=y, colour=Soil)) +
+  geom_point(alpha=0.7, size=3) +
   geom_segment(data=segments,
-               mapping=aes(x=x, y=y, xend=seg_x, yend=seg_y, fill=Soil),
-               alpha=0.5) +
-  scale_fill_manual(values=as.character(colors$colors)) +
+               mapping=aes(x=x, y=y, xend=seg_x, yend=seg_y, colour=Soil,),
+               alpha=0.5, show.legend=FALSE) +
+  scale_colour_manual(values=as.character(colors$colors)) +
   # scale_shape_manual(values=shapes$shape) +
   labs(x=paste("PCoA 1 (", format(100 * eig[1] / sum(eig), digits=4), "%)", sep=""),
        y=paste("PCoA 2 (", format(100 * eig[2] / sum(eig), digits=4), "%)", sep="")) +
-  main_theme
+  main_theme+
+  NULL
 
 p
 

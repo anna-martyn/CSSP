@@ -27,7 +27,7 @@ p1 <- placeholder <- ggplot() +
 
 p2 <- Askov_barley_bulk_chao1_rfd_6603
 p3 <- Barley_bulk_PCoA
-p3_aligned <- p3 + labs(title = " ") + theme(plot.title = element_text(size = 6, color = NA))
+# p3_aligned <- p3 + labs(title = " ") + theme(plot.title = element_text(size = 6, color = NA))
 p4 <- Barley_bulk_order_top20_RA_mean_stackedbp
 p4_aligned <- p4 + labs(title = " ") + theme(plot.title = element_text(size = 6, color = NA))
 p4_nolegend <- p4_aligned + theme(legend.position="none")
@@ -50,14 +50,15 @@ legend_p7 <- get_legend(
 
 # Assemble rows.
 row1 <- plot_grid(
-  p1, p2, p3_aligned,
+  p1, p2, p3,
   ncol = 3,
-  rel_widths = c(1.5, 0.8, 1),
+  rel_widths = c(0.55, 0.15, 0.3),
   labels = c("A","B","C"),
   label_size = 15,
   label_fontface = "bold",
   label_x = 0, label_y = 1,
-  align = "v", axis = "b"
+  # align = "v",
+  axis = "b"
 )
 
 row2 <- plot_grid(

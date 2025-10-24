@@ -63,12 +63,18 @@ p <- ggVennDiagram(
   venn_data,
   label = "count",
   label_alpha = 0,
-  label_size = 3,
-  set_size = 3
+  label_size = 8/.pt,
+  set_size = 8/.pt,
+  edge_size = 0.5
 ) +
   scale_fill_gradient(low = "white", high = "white") +
-  labs(title = "Unique <i>vs</i>. Shared ASVs") +
-  theme(plot.title = element_markdown(size = 12, hjust = 0.5), legend.position = "none")
+  # labs(title = "Unique <i>vs</i>. Shared ASVs") +
+  # theme(plot.title = element_markdown(size = 12, hjust = 0.5), legend.position = "none")+
+  theme(legend.position = "none",
+        plot.margin = margin(t = 0.5, b = 0.5, l = 0.5, r = 2, unit = "lines"))+
+  # geom_segment(aes(x = 9, xend = 11, y = 1, yend = 3))+
+  # geom_segment(aes(x = 9, xend = 11, y = -5, yend = -7))+
+  NULL
 
 p
 
@@ -179,9 +185,14 @@ for(name in ASV_names) {
 
 # Now combine all pie charts in one figure. 
 
+# plot_titles <- c(
+#   "NPK only", "PK only", "UF only",
+#   "NPK & PK", "NPK & UF", "PK & UF", "NPK, PK & UF"
+# )
+
 plot_titles <- c(
   "NPK only", "PK only", "UF only",
-  "NPK & PK", "NPK & UF", "PK & UF", "NPK, PK & UF"
+  "NPK & PK", "NPK & UF", "PK & UF", "All soils"
 )
 
 plot_list <- list()
@@ -237,7 +248,7 @@ final_plot <- final_plot &
 
 # Add overall title
 final_plot <- final_plot + plot_annotation(
-  title = "Taxonomic information of unique and shared ASVs",
+  # title = "Taxonomic information of unique and shared ASVs",
   theme = theme(plot.title = element_text(size = 12, hjust = 0.5))
 )
 
