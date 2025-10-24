@@ -1,6 +1,6 @@
 # Load packages and set colours ------------------------------------------------
 pkg <- c("data.table", "magrittr", "ggplot2", "RColorBrewer", "ggh4x",
-         "codacore", "tensorflow", "ggpubr", "gridExtra", "cowplot")
+         "codacore", "tensorflow", "ggpubr", "gridExtra", "cowplot", "ggtext")
 for(pk in pkg){
   library(pk, character.only = T)
 }
@@ -25,6 +25,7 @@ order_colors <- data.frame(group=c("Burkholderiales","Caulobacterales",
 
 # Loading the data -------------------------------------------------------------
 ASV_table_lotus <- fread("../1_data/1_Lotus/feature-table.tsv")
+ASV_table_lotus <- ASV_table_lotus[-1]
 colnames(ASV_table_lotus)[1] <- "ASV_ID"
 meta_data_dir <- paste("..", "1_data", "1_Lotus", 
                        "Lotus_CSSP_AskovSoils_metadata_excl_new_bulkUF.txt",
@@ -97,7 +98,6 @@ SLR_dt <- data.table(Soil = NA,
                      Pred_type = NA,
                      Plant = NA,
                      Compartment = NA)[-1]
-
 # Functions for the nested classification model --------------------------------
 Nested_model_three_categories <- function(OTU_table, y, highest_order,
                                           seed, lambda, overlap = T){
@@ -225,16 +225,21 @@ for(i in 1:nrow(Opt)){
   r1 <- length(num_NPK)
   r2 <- length(num_PK)
   
-  Ratio_information1 <- data.table("Ratio for NPK prediction" = c( rbind(paste0("Numerator", 1:r1),
-                                                   paste0("Denominator", 1:r1)) ),
-                                  ASV = c( rbind(unlist(num_NPK), unlist(denom_NPK)) ))
+  data.table(
+    "Ratio for NPK prediction" = c( rbind(paste0("Numerator", 1:r1),
+                                          paste0("Denominator", 1:r1)) ),
+    ASV = c( rbind(unlist(num_NPK), unlist(denom_NPK)) )
+  ) -> Ratio_information1
   
-  Ratio_information2 <- data.table("Ratio for NPK prediction" = c( rbind(paste0("Numerator", 1:r2),
-                                                    paste0("Denominator", 1:r2)) ),
-                                   ASV = c( rbind(unlist(num_PK), unlist(denom_PK)) ))
+  data.table(
+    "Ratio for NPK prediction" = c( rbind(paste0("Numerator", 1:r2),
+                                          paste0("Denominator", 1:r2)) ),
+    ASV = c( rbind(unlist(num_PK), unlist(denom_PK)) )
+  ) -> Ratio_information2
   
   Ratio_information2 <- rbind(
-    data.table("Ratio for NPK prediction" = "Ratio for PK prediction", ASV = ""),
+    data.table("Ratio for NPK prediction" = "Ratio for PK prediction",
+               ASV = ""),
     Ratio_information2
   )
   
@@ -258,14 +263,20 @@ for(i in 1:nrow(Opt)){
                                             c("Sample_ID", "Soil"), with = F]
   Sample_info <- Sample_info[match(rownames(full_data), Sample_ID)]
   
-  Used_ASV_info <- cbind(Sample_info[,-1], full_data[all_pred_ASV]/rowSums(full_data))
+  Used_ASV_info <- cbind(
+    Sample_info[,-1], full_data[all_pred_ASV]/rowSums(full_data)
+  )
   
-  num1 <- rowSums(as.data.frame(full_data[,num_vec_NPK[[1]]])); num1[num1 == 0] <- 1 
-  denom1 <- rowSums(as.data.frame(full_data[,denom_vec_NPK[[1]]])); denom1[denom1 == 0] <- 1
+  num1 <- rowSums(as.data.frame(full_data[,num_vec_NPK[[1]]]))
+  num1[num1 == 0] <- 1 
+  denom1 <- rowSums(as.data.frame(full_data[,denom_vec_NPK[[1]]]))
+  denom1[denom1 == 0] <- 1
   SLR <- log(num1/denom1)
   
-  num1 <- rowSums(as.data.frame(full_data[,num_vec_PK[[1]]])); num1[num1 == 0] <- 1 
-  denom1 <- rowSums(as.data.frame(full_data[,denom_vec_PK[[1]]])); denom1[denom1 == 0] <- 1
+  num1 <- rowSums(as.data.frame(full_data[,num_vec_PK[[1]]]))
+  num1[num1 == 0] <- 1 
+  denom1 <- rowSums(as.data.frame(full_data[,denom_vec_PK[[1]]]))
+  denom1[denom1 == 0] <- 1
   SLR_PK <- log(num1/denom1)
   
   SLR_dt_temp <- data.table(Soil = rep(Sample_info$Soil, 2),
@@ -276,16 +287,22 @@ for(i in 1:nrow(Opt)){
   
   SLR_dt <- rbind(SLR_dt, SLR_dt_temp)
   
-  Used_ASV_info2 <- melt(Used_ASV_info, value.name = "Abundance", variable.name = "ASV")
+  Used_ASV_info2 <- melt(Used_ASV_info,
+                         value.name = "Abundance",
+                         variable.name = "ASV")
   
-  rbind(Used_ASV_info2[Soil == "NPK",.(Abundance = mean(Abundance)), .(Soil, ASV)],
-        Used_ASV_info2[Soil == "PK",.(Abundance = mean(Abundance)), .(Soil, ASV)],
-        Used_ASV_info2[Soil == "UF",.(Abundance = mean(Abundance)), .(Soil,ASV)]) -> Used_ASV_info2
+  rbind(
+    Used_ASV_info2[Soil == "NPK",.(Abundance = mean(Abundance)), .(Soil, ASV)],
+    Used_ASV_info2[Soil == "PK",.(Abundance = mean(Abundance)), .(Soil, ASV)],
+    Used_ASV_info2[Soil == "UF",.(Abundance = mean(Abundance)), .(Soil,ASV)]
+  ) -> Used_ASV_info2
   
   Used_ASV_info2[,Order:=Taxonomy_df[ASV,]$Order]
-  rbind(Used_ASV_info2[Soil == "NPK",.(Abundance = sum(Abundance)), .(Soil, Order)],
-        Used_ASV_info2[Soil == "PK",.(Abundance = sum(Abundance)), .(Soil, Order)],
-        Used_ASV_info2[Soil == "UF",.(Abundance = sum(Abundance)), .(Soil,Order)]) -> Used_ASV_info2
+  rbind(
+    Used_ASV_info2[Soil == "NPK",.(Abundance = sum(Abundance)), .(Soil, Order)],
+    Used_ASV_info2[Soil == "PK",.(Abundance = sum(Abundance)), .(Soil, Order)],
+    Used_ASV_info2[Soil == "UF",.(Abundance = sum(Abundance)), .(Soil,Order)]
+  ) -> Used_ASV_info2
   
   Used_ASV_info2[,":="(Plant = Opt$Host[i], Compartment = Opt$Compartment[i])]
   
@@ -293,11 +310,15 @@ for(i in 1:nrow(Opt)){
   
   acc_RA <- mean(rowSums(full_data[,all_pred_ASV])/rowSums(full_data))
   
-  max11 <- lapply(cc$Highest$ensemble, function(x) sum(x$hard$denominator)) %>% unlist() %>% max()
-  max12 <- lapply(cc$Lowest$ensemble, function(x) sum(x$hard$denominator)) %>% unlist() %>% max()
+  max11 <- lapply(cc$Highest$ensemble, function(x) sum(x$hard$denominator)) %>%
+    unlist() %>% max()
+  max12 <- lapply(cc$Lowest$ensemble, function(x) sum(x$hard$denominator)) %>% 
+    unlist() %>% max()
   max1 <- max(c(max11, max12))
-  max21 <- lapply(cc$Highest$ensemble, function(x) sum(x$hard$numerator)) %>% unlist() %>% max()
-  max22 <- lapply(cc$Lowest$ensemble, function(x) sum(x$hard$numerator)) %>% unlist() %>% max()
+  max21 <- lapply(cc$Highest$ensemble, function(x) sum(x$hard$numerator)) %>%
+    unlist() %>% max()
+  max22 <- lapply(cc$Lowest$ensemble, function(x) sum(x$hard$numerator)) %>% 
+    unlist() %>% max()
   max2 <- max(c(max21, max22))
   
   N_ratios_PK <- length(num_PK)
@@ -338,6 +359,18 @@ res2[,":="(Host = factor(Host, levels = c("Lotus", "Hordeum")),
            Pred = factor(Pred, levels = c("UF", "PK", "NPK")))]
 
 res2[,Prediction := Obs == Pred]
+
+genotype_labels_legend <- c(
+  "WT"     = "WT",
+  "symrk"  = "*symrk*",
+  "ccamk"  = "*ccamk*",
+  "nsp1"   = "*nsp1*",
+  "nsp2"   = "*nsp2*"
+)
+
+res2[,Genotype:=factor(Genotype, 
+                       levels = c("WT", "symrk", "ccamk", "nsp1","nsp2"))]
+
 ggplot(data = res2) +
   geom_count(aes(x = Obs, y = Pred), color = "lightgrey")+
   scale_size_continuous(range=c(1.5,15)) +
@@ -355,7 +388,7 @@ ggplot(data = res2) +
   guides(size = "none", fill = guide_legend(override.aes = list(size=3))) +
   # guides(fill = guide_legend(nrow = 2))+
   facet_grid(Host ~ Compartment) +
-  scale_fill_manual(values = cols, breaks = names(cols)) +
+  scale_fill_manual(values = cols, labels = genotype_labels_legend) +
   theme(legend.position = "bottom",
         legend.margin = margin(t = -8),
         strip.background = element_rect(colour = NA),
@@ -365,8 +398,10 @@ ggplot(data = res2) +
                                    colour = "black"),
         axis.text.x = element_text(size = 8, family = "Helvetica",
                                    colour = "black"),
-        legend.text = element_text(size = 8, family = "Helvetica"),
-        legend.title = element_text(size = 8, family = "Helvetica"),
+        legend.text = element_markdown(size = 8, family = "Helvetica",
+                                       colour = "black"),
+        legend.title = element_text(size = 8, family = "Helvetica",
+                                    colour = "black"),
         strip.text = element_text(size = 8, family = "Helvetica",
                                   face = "bold"),
         legend.key.size = unit(5, "mm"))+
@@ -381,16 +416,14 @@ Barplot_data[,m:=factor(m, levels = c("Lotus \nRhizosphere",
 SLR_dt[,m:=paste(Plant, Compartment)]
 SLR_dt[Pred_type == "NPK", Pred_type:="NPK vs non-NPK"]
 SLR_dt[Pred_type == "PK", Pred_type:="PK vs UF"]
-# SLR_dt[,Pred_type:=paste(Pred_type, "Prediction")]
 
-# Barplot_data$Order <- factor(Barplot_data$Order,
-#                              levels = )
-# Barplot_data <- Barplot_data[order(Order)]
 reorder <- c("Burkholderiales", "Caulobacterales",
              "Flavobacteriales", "Pseudomonadales",
              "Rhizobiales", "Streptomycetales",
              "Micrococcales", "Unknown")
 order_colors <- order_colors[match(reorder, order_colors$group),]
+Barplot_data[,Compartment:=factor(Compartment, 
+                                  levels = c("Rhizosphere", "Root"))]
 ggplot(data = Barplot_data, aes(x = Soil, y = Abundance, fill = Order))+
   geom_bar(stat = "identity", position = "stack", linewidth = 0.1) +
   # facet_wrap(~Plant+Compartment, nrow = 1)+
@@ -423,15 +456,6 @@ ggplot(data = Barplot_data, aes(x = Soil, y = Abundance, fill = Order))+
                                   face = "bold"))+
   NULL -> g2; g2
 
-# ggplot(data = SLR_dt, aes(x = Soil, y = SLR, fill = Soil))+
-#   geom_boxplot()+
-#   geom_jitter(shape=16, position=position_jitter(0.2))+
-#   facet_grid(Pred_type~m)+
-#   guides(fill = "none")+
-#   scale_fill_manual(values = colors, breaks = names(colors)) +
-#   labs(x = NULL, y = "Most informative log-ratio")+
-#   NULL -> g3
-
 ggplot() + theme_void() -> blank
 
 R <- Res[,c(1,2,6,5,3)]
@@ -439,16 +463,7 @@ R[,Accuracy:=paste0(Accuracy, "%")]
 R[Host == "Barley", Host:="Hordeum"]
 colnames(R) <- gsub("_", " ", colnames(R))
 R <- R[c(3:4,1:2)]
-# setcolorder(R, c("Host", "Compartment", "PK ratios", "NPK ratios", "Accuracy"))
-
-# gg1 <- ggarrange(g1, g2, labels = c("A", "B"))
-# gg2 <- ggarrange(g3, blank, widths = c(0.6, 0.4), labels = c("C", "D"))
-# gg1 <- ggarrange(blank, g1, labels = c("A", "B"), widths = c(0.4, 0.6))
-# gg2 <- ggarrange(g2, tableGrob(R), labels = c("C", "D"))
-# gg <- ggarrange(gg1, gg2, nrow = 2)
-
-# source("Flowchart.R")
-# fc <- readRDS("Flowchart.rds")
+# R <- R[c(3,1,4,2)]
 
 # IMPORTANT! 
 # Run Flowchart.R to produce the correct figure!
