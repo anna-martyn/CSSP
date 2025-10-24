@@ -71,6 +71,7 @@ Soil CSSP:
 - try to move cpcoa and pcoa, as well as order heatmap to supplementary
 - make heatmap better
 - keep rest in main figure
+- Remeber to adjust rhizobiales colours
 
 Lotus SynCom:
 - B: letter font size > adjust to make same as for other plots;
@@ -101,10 +102,13 @@ Root exudate:
 - Anna check metabolites chosen for display
 - if enough space made available: consider displaying all metabolite classes in bubble plot
 - font sizes same everywhere (check also in last figure, "big title" > bold and also 8?)
+- Check why numbers in B and C don't match
 
 
 General:
 - check consistent line width in all plots (outside box)
 - check throughout whole figures that order colours are consistent
 (barley input was modified slighlty, but only for some missing orders and not existing ones)
+- Make sure error bars are calculated the same way everywhere
+- Make sure the correct code is used for stacked barplots
 
