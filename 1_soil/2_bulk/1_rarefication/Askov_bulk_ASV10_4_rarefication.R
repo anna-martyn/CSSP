@@ -1,4 +1,4 @@
-# Clean up
+# Clean up.
 options(warn=-1)
 rm(list=ls())
 
@@ -6,8 +6,7 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load the ASV table.
-asv_table.file <- paste("BarleyCSSP_Askov_reseq_ASVtable_10_4.txt", sep="")
-asv_table <- read.table(asv_table.file, sep="\t", header=T, row.names=1, check.names=F)
+asv_table <- read.table("HordeumCSSP_AskovSoils_ASVtable_10_4.tsv", sep="\t", header=TRUE, row.names=1, check.names=FALSE, comment.char = "", skip = 1)
 
 # Install required packages.
 library(BiocManager)
@@ -27,49 +26,32 @@ sorted_depths <- sort(depths)
 second_smallest <- sorted_depths[2]
 cat("Second smallest sequencing depth:", second_smallest, "\n")
 
-# We will rarefy in two ways, once using the lowest depth as threshold (86), and once the second lowest (~6603).
+# We will rarefy removing the low-depth sample.
 
-## 1) Rarefy based on lowest value.
-# Rarefy the ASV table using phyloseq.
+## Remove low-depth sample.
+keep_samples <- names(depths[depths >= 1000])
+cat("Removing", ncol(asv_table) - length(keep_samples), "samples with <1000 reads\n")
+
+asv_table_filtered <- asv_table[, keep_samples]
+
+## Rarefy the ASV table using phyloseq.
+phs_filt <- phyloseq(otu_table(asv_table_filtered, taxa_are_rows = TRUE))
+
 set.seed(1673967505)
-RR <- rarefy_even_depth(phs)
+RR_filt <- rarefy_even_depth(phs_filt)
 
-# Convert rarefied ASV table to a dataframe.
-M <- as.matrix(otu_table(RR))
+## Convert rarefied ASV table to a dataframe.
+M <- as.matrix(otu_table(RR_filt))
 ASVtable_rarefied <- as.data.frame(M)
 
-# Add ASVid column from row names.
+## Add ASVid column from row names.
 ASVtable_rarefied$ASVid <- rownames(ASVtable_rarefied)
 ASVtable_rarefied <- ASVtable_rarefied[, c("ASVid", setdiff(names(ASVtable_rarefied), "ASVid"))]
 
 # Save the rarefied ASV table as csv and txt files.
-write.csv(ASVtable_rarefied, file =  "Askov_ASVtable10_4_rarefied_84.csv")
+write.csv(ASVtable_rarefied, file = "HordeumCSSP_AskovSoils_ASVtable_10_4_rfd_min1000reads.csv")
 write.table(ASVtable_rarefied, 
-            file = "Askov_ASVtable10_4_rarefied_84.txt", 
-            sep = "\t",
-            row.names = FALSE,
-            col.names = TRUE, 
-            quote = FALSE)
-
-## 2) Rarefy based on the second lowest value.
-# Rarefy the ASV table using phyloseq.
-set.seed(1673967505)
-RR2 <- rarefy_even_depth(phs, sample.size = second_smallest)
-
-# Comment: sample AM_S_3 was now removed due to low reads (86).
-
-# Convert rarefied ASV table to a dataframe.
-M2 <- as.matrix(otu_table(RR2))
-ASVtable_rarefied2 <- as.data.frame(M2)
-
-# Add ASVid column from row names.
-ASVtable_rarefied2$ASVid <- rownames(ASVtable_rarefied2)
-ASVtable_rarefied2 <- ASVtable_rarefied2[, c("ASVid", setdiff(names(ASVtable_rarefied2), "ASVid"))]
-
-# Save the rarefied ASV table as csv and txt files.
-write.csv(ASVtable_rarefied2, file = "Askov_ASVtable10_4_rarefied_6603.csv")
-write.table(ASVtable_rarefied2, 
-            file = "Askov_ASVtable10_4_rarefied_6603.txt", 
+            file = "HordeumCSSP_AskovSoils_ASVtable_10_4_rfd_min1000reads.txt", 
             sep = "\t",
             row.names = FALSE,
             col.names = TRUE, 
