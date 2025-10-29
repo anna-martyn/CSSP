@@ -7,11 +7,11 @@
 
 qiime tools import \
   --type 'SampleData[PairedEndSequencesWithQuality]' \
-  --input-path LotusSYM_LjSC_manifest.txt \
-  --output-path LotusSYM_LjSC_paired-end-demux.qza \
+  --input-path LotusSC_manifest.txt \
+  --output-path LotusSC_paired-end-demux.qza \
   --input-format PairedEndFastqManifestPhred33V2 \
 
 qiime demux summarize \
-  --i-data ./LotusSYM_LjSC_paired-end-demux.qza \
-  --o-visualization ./LotusSYM_LjSC_paired-end-demux.qzv
+  --i-data ./LotusSC_paired-end-demux.qza \
+  --o-visualization ./LotusSC_paired-end-demux.qzv
 

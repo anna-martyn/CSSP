@@ -6,14 +6,14 @@
 #SBATCH --account InRoot
 
 qiime metadata tabulate \
- --m-input-file ./LotusSYM_LjSC_220200e2_stats.qza \
- --o-visualization  ./LotusSYM_LjSC_220200e2_stats.qzv \
+ --m-input-file ./LotusSC_stats.qza \
+ --o-visualization  ./LotusSC_stats.qzv \
 
 qiime feature-table summarize \
-  --i-table ./LotusSYM_LjSC_220200e2_ASVtable.qza \
-  --m-sample-metadata-file ./LotusSYM_LjSC_metadata.txt \
-  --o-visualization ./LotusSYM_LjSC_220200e2_ASVtable.qzv
+  --i-table ./LotusSC_ASVtable.qza \
+  --m-sample-metadata-file ./LotusSC_metadata.txt \
+  --o-visualization ./LotusSC_ASVtable.qzv
 
 qiime feature-table tabulate-seqs \
- --i-data ./LotusSYM_LjSC_220200e2_repseqs.qza \
- --o-visualization ./LotusSYM_LjSC_220200e2_repseqs.qzv
+ --i-data ./LotusSC_repseqs.qza \
+ --o-visualization ./LotusSC_repseqs.qzv

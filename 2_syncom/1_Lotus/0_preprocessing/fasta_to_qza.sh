@@ -6,6 +6,6 @@
 #SBATCH --account InRoot
 
 qiime tools import \
-  --input-path Sha_LotusSCv5v7.fasta \
-  --output-path Sha_LotusSCv5v7.qza \
+  --input-path LotusSCv5v7.fasta \
+  --output-path LotusSCv5v7.qza \
   --type 'FeatureData[Sequence]'
