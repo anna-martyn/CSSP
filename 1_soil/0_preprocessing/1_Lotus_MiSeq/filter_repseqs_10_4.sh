@@ -7,7 +7,7 @@
 
 
 qiime feature-table filter-seqs \
-  --i-data ./LotusSep_exclUFnew_repseqs.qza \
-  --i-table ./LotusSep_exclUFnew_ASVtable_10_4.qza \
-  --o-filtered-data ./LotusSep_exclUFnew_repseqs_10_4.qza
+  --i-data ./LotusCSSP_AskovSoils_repseqs.qza \
+  --i-table ./LotusCSSP_AskovSoils_ASVtable_10_4.qza \
+  --o-filtered-data ./LotusCSSP_AskovSoils_repseqs_10_4.qza
 

@@ -7,13 +7,13 @@
 
 
 qiime dada2 denoise-paired \
-  --i-demultiplexed-seqs LotusSep_exclUFnew_paired-end-demux.qza \
+  --i-demultiplexed-seqs LotusCSSP_AskovSoils_paired-end-demux.qza \
   --p-trunc-len-f 260 \
   --p-trunc-len-r 240 \
   --p-max-ee-f 2 \
   --p-max-ee-r 2 \
   --p-n-threads 30 \
-  --o-table ./LotusSep_exclUFnew_ASVtable.qza \
-  --o-representative-sequences ./LotusSep_exclUFnew_repseqs.qza \
-  --o-denoising-stats ./LotusSep_exclUFnew_stats.qza
+  --o-table ./LotusCSSP_AskovSoils_ASVtable.qza \
+  --o-representative-sequences ./LotusCSSP_AskovSoils_repseqs.qza \
+  --o-denoising-stats ./LotusCSSP_AskovSoils_stats.qza
 

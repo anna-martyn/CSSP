@@ -7,11 +7,11 @@
 
 qiime tools import \
   --type 'SampleData[PairedEndSequencesWithQuality]' \
-  --input-path Lotus_CSSP_AskovSoils_manifest_excl_new_bulkUF.txt \
-  --output-path LotusSep_exclUFnew_paired-end-demux.qza \
+  --input-path LotusCSSP_AskovSoils_manifest.txt \
+  --output-path LotusCSSP_AskovSoils_paired-end-demux.qza \
   --input-format PairedEndFastqManifestPhred33V2 \
 
 qiime demux summarize \
-  --i-data ./LotusSep_exclUFnew_paired-end-demux.qza \
-  --o-visualization ./LotusSep_exclUFnew_paired-end-demux.qzv
+  --i-data ./LotusCSSP_AskovSoils_paired-end-demux.qza \
+  --o-visualization ./LotusCSSP_AskovSoils_paired-end-demux.qzv
 

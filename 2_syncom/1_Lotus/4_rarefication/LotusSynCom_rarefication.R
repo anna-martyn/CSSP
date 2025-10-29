@@ -7,14 +7,13 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load the ASV table.
 asv_table <- read.table(
-  "LotusSC_ASVtable.tsv",
+  "LotusSC_ASVtable_nospike.tsv",
   sep = "\t",
   header = TRUE,
   row.names = 1,
-  check.names = FALSE,
-  comment.char = "",
-  skip = 1     
+  check.names = FALSE
 )
+
 # Load required packages.
 library(BiocManager)
 library(phyloseq)
@@ -37,6 +36,9 @@ sorted_depths <- sort(depths)
 # For this we will make a second filtered dataframe, which we also load as phyloseq file.
 asv_table_filt <- asv_table[grepl("Lj", rownames(asv_table)), ]
 phs_filt <- phyloseq(otu_table(asv_table_filt, taxa_are_rows = T))
+
+min_depth <- min(sample_sums(phs_filt))
+cat("Lowest sequencing depth in the dataset:", min_depth, "\n")
 
 # Then we will rarefy both ASV tables using phyloseq.
 set.seed(1673967505)
@@ -73,3 +75,4 @@ write.table(ASVtable_rarefied_filt,
             row.names = FALSE,
             col.names = TRUE, 
             quote = FALSE)
+
