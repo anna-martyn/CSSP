@@ -64,19 +64,20 @@ row1 <- plot_grid(
 row2 <- plot_grid(
   p4_nolegend, p5_aligned,
   ncol = 2,
-  rel_widths = c(0.6,2),
+  rel_widths = c(0.2, 0.8),
   labels = c("D","E"),
   label_size = 15,
   label_fontface = "bold",
   label_x = 0, label_y = 1,
-  align = "v", axis = "b"
+  # align = "v",
+  axis = "b"
 )
 
 row3 <- plot_grid(
   p6_aligned, p7_nolegend, legend_p7,
   ncol = 3,
-  rel_widths = c(1,2.3,0.7),
-  labels = c("F","G",""),
+  rel_widths = c(0.325,0.5,0.175),
+  labels = c("F","",""),
   label_size = 15,
   label_fontface = "bold",
   label_x = 0, label_y = 1
@@ -93,12 +94,27 @@ combined <- plot_grid(
   # row4,
   ncol = 1,
   # rel_heights = c(1.5, 2, 2, 1.5),
-  rel_heights = c(1.5, 2, 1.2)
+  rel_heights = c(0.3, 0.35, 0.35)
 )
 
 # combined
 
 # Save plot.
-ggsave("Bulk_figure_combined_final_3.pdf", 
-       combined, width=21, height=25, units = "cm")
+# ggsave("Bulk_figure_combined_final_3.pdf", 
+#        combined, width=21, height=25, units = "cm")
 
+pdf("Bulk_figure_combined_final_3.pdf", width = 21/2.54, height = 25/2.54)
+combined
+grid.draw(linesGrob(x = unit(c(0.28, 0.34), "npc"),
+                    y = unit(c(0.25, 0.34), "npc")))
+grid.draw(linesGrob(x = unit(c(0.28, 0.34), "npc"),
+                    y = unit(c(0.12, 0.02), "npc")))
+grid.draw(linesGrob(x = unit(c(0.34, 0.81), "npc"),
+                    y = unit(c(0.02, 0.02), "npc")))
+grid.draw(linesGrob(x = unit(c(0.34, 0.81), "npc"),
+                    y = unit(c(0.34, 0.34), "npc")))
+grid.draw(linesGrob(x = unit(c(0.81, 0.81), "npc"),
+                    y = unit(c(0.02, 0.34), "npc")))
+grid.draw(linesGrob(x = unit(c(0.34, 0.34), "npc"),
+                    y = unit(c(0.02, 0.34), "npc")))
+dev.off()
