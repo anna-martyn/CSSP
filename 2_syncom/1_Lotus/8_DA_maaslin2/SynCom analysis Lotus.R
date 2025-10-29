@@ -16,55 +16,60 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 # Load structural zero file.
 source("Structural_zeros.R")
 
-# Load metadata, ASV table, and taxonomy file.
-design <- read.table("LotusCSSP_LjSC_metadata.txt", header=TRUE, sep="\t")
-asv_table <- read.table("feature-table_LotusSYM_LjSC.tsv", sep = "\t", header = TRUE, row.names = 1, check.names = FALSE, comment.char = "", skip = 1)
-taxonomy <- read.table("LjSC_taxonomy.txt", sep="\t", header=TRUE, fill=TRUE)
+# Load data.
+design <- read.table("../1_data/LotusSC_metadata.txt", header=TRUE, sep = "\t")
+asv_table <- read.table("../1_data/LotusSC_ASVtable.tsv", sep = "\t",
+                        header = TRUE, row.names = 1, check.names = FALSE,
+                        comment.char = "", skip = 1)
+taxonomy <- read.table("../1_data/LjSC_taxonomy.txt", sep="\t", header=TRUE,
+                       fill = TRUE)
 
 # Subset for genotypes of interest and only keep matched ASVs in asv table.
-design_filtered <- design %>%
-  filter(Genotype %in% c("WT","symrk","ccamk","nsp1","nsp2")) %>%
-  mutate(Compartment = recode(Compartment, "rhizo"="Rhizosphere", "endo"="Root", "nod"="Nodules"))
-
-samples_keep <- design_filtered$SampleID
-asv_table_filtered <- asv_table[, colnames(asv_table) %in% samples_keep]
+asv_table_filtered <- asv_table[, colnames(asv_table) %in% design$SampleID]
 asv_table_matched <- asv_table_filtered[grepl("Lj", rownames(asv_table_filtered)), ]
 
 # Calculate library size for each sample (needed for Structural_zeros3)
-design_filtered$library_size <- colSums(asv_table_matched[, samples_keep])
+design$library_size <- colSums(asv_table_matched[, design$SampleID])
 
 # Split data by compartment.
-samples_rhizo <- design_filtered$SampleID[design_filtered$Compartment == "Rhizosphere"]
-samples_root  <- design_filtered$SampleID[design_filtered$Compartment == "Root"]
+samples_rhizo <- design$SampleID[design$Compartment == "Rhizosphere"]
+samples_root  <- design$SampleID[design$Compartment == "Root"]
 
 asv_table_rhizo <- asv_table_matched[, samples_rhizo, drop=FALSE]
 asv_table_root  <- asv_table_matched[, samples_root, drop=FALSE]
 
-meta_rhizo <- design_filtered %>%
+meta_rhizo <- design %>%
   filter(SampleID %in% samples_rhizo) %>%
   column_to_rownames("SampleID")
 
-meta_root <- design_filtered %>%
+meta_root <- design %>%
   filter(SampleID %in% samples_root) %>%
   column_to_rownames("SampleID")
 
 # Set genotype factor levels.
-meta_rhizo$Genotype <- factor(meta_rhizo$Genotype, levels=c("WT","symrk","ccamk","nsp1","nsp2"))
-meta_root$Genotype  <- factor(meta_root$Genotype, levels=c("WT","symrk","ccamk","nsp1","nsp2"))
+meta_rhizo$Genotype <- factor(
+  meta_rhizo$Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2")
+)
+meta_root$Genotype  <- factor(
+  meta_root$Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2")
+)
 
 # Initialise a results table.
-Results_rhizo <- data.frame(matrix(NA, nrow=nrow(asv_table_matched), ncol=8))
+Results_rhizo <- data.frame(matrix(NA, nrow = nrow(asv_table_matched),
+                                   ncol = 8))
 rownames(Results_rhizo) <- rownames(asv_table_matched)
-colnames(Results_rhizo) <- c(paste("Lfc", c("symrk","ccamk","nsp1","nsp2"), sep="_"),
-                             paste("DA", c("symrk","ccamk","nsp1","nsp2"), sep="_"))
+colnames(Results_rhizo) <- c(
+  paste("Lfc", c("symrk", "ccamk", "nsp1", "nsp2"), sep = "_"),
+  paste("DA", c("symrk", "ccamk", "nsp1", "nsp2"), sep = "_")
+)
 Results_root <- Results_rhizo
 
 # Structural zero analysis.
-S_rhizo <- Structural_zeros3(asv_table_rhizo, meta_rhizo, group="Genotype",
-                             ref="WT", min_reads=20, min_present_reps=2)
+S_rhizo <- Structural_zeros3(asv_table_rhizo, meta_rhizo, group = "Genotype",
+                             ref = "WT", min_reads = 20, min_present_reps = 2)
 
-S_root <- Structural_zeros3(asv_table_root, meta_root, group="Genotype",
-                            ref="WT", min_reads=20, min_present_reps=2)
+S_root <- Structural_zeros3(asv_table_root, meta_root, group = "Genotype",
+                            ref = "WT", min_reads = 20, min_present_reps = 2)
 
 # Differential abundance analysis using Maaslin2.
 ## Rhizosphere
@@ -83,7 +88,7 @@ for(g in c("symrk","ccamk","nsp1","nsp2")){
   Results_rhizo[res_g$feature, paste0("DA_", g)]  <- (res_g$qval < 0.05) * sign(res_g$coef)
 }
 
-   # Update results for structural zeros
+# Update results for structural zeros
 all_DA_rhizo <- Reduce("union", S_rhizo$struc_zero_DA)
 S_sign_rhizo <- S_rhizo$struc_zero_table[all_DA_rhizo,1] - S_rhizo$struc_zero_table[all_DA_rhizo,-1]
 
@@ -102,6 +107,7 @@ M_root <- Maaslin2(input_data = asv_table_root,
                    min_prevalence = 0.1)
 
 res_dt <- data.table(M_root$results)
+res_dt[,.(b = any(qval < 0.05)), feature]
 
 for(g in c("symrk","ccamk","nsp1","nsp2")){
   res_g <- res_dt[value == g]
@@ -109,9 +115,9 @@ for(g in c("symrk","ccamk","nsp1","nsp2")){
   Results_root[res_g$feature, paste0("DA_", g)]  <- (res_g$qval < 0.05) * sign(res_g$coef)
 }
 
-   # Update results for structural zeros
+# Update results for structural zeros
 all_DA_root <- Reduce("union", S_root$struc_zero_DA)
-S_sign_root <- S_root$struc_zero_table[all_DA_root,1] - S_root$struc_zero_table[all_DA_root,-1]
+S_sign_root <- S_root$struc_zero_table[all_DA_root, 1] - S_root$struc_zero_table[all_DA_root, -1]
 
 for(g in c("symrk","ccamk","nsp1","nsp2")){
   idx <- S_root$struc_zero_DA[[g]]
@@ -131,6 +137,13 @@ Results_root2 <- data.table(ASV_ID = rownames(Results_root), Results_root)
 Results_root2 <- merge(Results_root2, taxonomy, by.x="ASV_ID", by.y="ASVid")
 Results_root2 <- merge(Results_root2, data.table(ASV_ID = rownames(RA_root), RA_root), by="ASV_ID")
 
+# ASVs to keep in visulisation
+rhizo_any <- apply(Results_rhizo2[,6:9], 1, any)
+root_any <- apply(Results_root2[,6:9], 1, any)
+rhizo_any[is.na(rhizo_any)] <- F
+root_any[is.na(root_any)] <- F
+isolate_keep <- Results_rhizo2$ASV_ID[rhizo_any|root_any]
+
 # Save output.
 fwrite(Results_rhizo2, file="DA_SynCom_Lotus_rhizo.csv")
 fwrite(Results_root2, file="DA_SynCom_Lotus_root.csv")
@@ -144,7 +157,7 @@ asv_table_RA <- sweep(asv_table_matched, 2, colSums(asv_table_matched), "/")
 asv_RA_long <- as.data.frame(asv_table_RA) %>%
   rownames_to_column("ASVid") %>%
   pivot_longer(cols=-ASVid, names_to="SampleID", values_to="RA") %>%
-  left_join(design_filtered %>% select(SampleID, Compartment, Genotype), by="SampleID")
+  left_join(design %>% select(SampleID, Compartment, Genotype), by="SampleID")
 
 # Filter for WT
 asv_RA_WT <- asv_RA_long %>%
@@ -190,7 +203,8 @@ colors <- c(
 )
 
 tax_bar <- asv_RA_WT %>%
-  distinct(ASVid, order)
+  distinct(ASVid, order) %>% 
+  filter(ASVid %in% isolate_keep)
 
 p_tax <- ggplot(tax_bar, aes(x=ASVid, y=1, fill=order)) +
   geom_tile() +
@@ -200,6 +214,7 @@ p_tax <- ggplot(tax_bar, aes(x=ASVid, y=1, fill=order)) +
   theme(legend.position="right",
         legend.text = element_text(color="black", size=20),
         legend.title = element_text(color="black", size=20),
+        plot.margin = margin(c(0.5, 0, 0.5, 0), unit = "lines")
         )
 
 #----------------------------------------
@@ -231,6 +246,10 @@ da_all <- da_all %>%
 da_all$DA <- factor(da_all$DA, levels = c(-1, 0, 1))
 da_colors <- c("-1" = "darkblue", "0" = "white", "1" = "red")
 
+da_all$Compartment[da_all$Compartment == "Rhizosphere"] <- "Rhizo-\nsphere"
+da_all$Compartment <- factor(da_all$Compartment,
+                             levels = c("Rhizo-\nsphere", "Root"))
+da_all <- da_all %>% filter(ASV_ID %in% isolate_keep)
 p_bubble <- ggplot(da_all, aes(x = ASV_ID, y = Genotype, fill = DA)) +
   geom_point(shape = 21, size = 2, color = "black") +
   scale_fill_manual(
@@ -255,16 +274,11 @@ p_bubble <- ggplot(da_all, aes(x = ASV_ID, y = Genotype, fill = DA)) +
     legend.title = element_text(color = "black", size = 8),
     legend.position = "bottom",
     strip.background = element_rect(colour = NA),
+    plot.margin = margin(c(0.5, 0, 0.5, 0), unit = "lines"),
     panel.spacing = unit(0.4, "lines")
   )
 
 p_bubble
-
-# p_bubble <- p_bubble +
-#   theme(
-#     axis.text.y = ggtext::element_markdown()  # render x-axis text as markdown
-#   ) +
-#   scale_y_discrete(labels = function(x) paste0("*", x, "*"))  # wrap each label in italics
 
 #----------------------------------------
 # Mean RA bar plots
@@ -274,14 +288,18 @@ asv_RA_WT$Compartment[asv_RA_WT$Compartment == "Rhizosphere"] <- "Rhizo-\nsphere
 asv_RA_WT$Compartment[asv_RA_WT$Compartment == "Nodules"] <- "Nod-\nules"
 asv_RA_WT$Compartment <- factor(asv_RA_WT$Compartment, 
                                 levels = c("Rhizo-\nsphere", "Root", "Nod-\nules"))
+asv_RA_WT <- asv_RA_WT %>% filter(ASVid %in% isolate_keep)
 p_RA <- ggplot(asv_RA_WT, aes(x=ASVid, y=mean_RA)) +
   geom_bar(stat="identity", fill="grey50") +
   facet_wrap(~Compartment, ncol=1, scales="free_y",
              strip.position = "left", space = "free_y") +
   labs(y = "Mean relative\nabundance in WT") +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  # scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  scale_y_continuous(expand = c(0, 0)) +
   theme_bw() +
+  ggtitle("Lotus") +
   theme(axis.text.x=element_blank(),
+        plot.title = element_text(color="black", size=8, face = "bold"),
         axis.ticks.x=element_blank(),
         axis.title.x=element_blank(),
         axis.text.y=element_text(color="black", size=8),
@@ -289,11 +307,23 @@ p_RA <- ggplot(asv_RA_WT, aes(x=ASVid, y=mean_RA)) +
         strip.text = element_text(color="black", size=8, face = "bold"),
         strip.placement = "outside",
         strip.background = element_rect(colour = NA),
+        plot.margin = margin(c(0.5, 0, 0.5, 0), unit = "lines"),
         panel.spacing = unit(0.4, "lines"))+
-  force_panelsizes(cols = c(1, 1, 1), rows = c(1, 1, 0.55))+
+  force_panelsizes(cols = c(1, 1, 1), rows = c(1, 1, 0.7))+
+  # facetted_pos_scales(
+  #   y = list(
+  #     Compartment == "Nod-\nules" ~ scale_y_continuous(breaks = c(0, 0.25, 0.5))
+  #   )
+  # )+
   facetted_pos_scales(
     y = list(
-      Compartment == "Nod-\nules" ~ scale_y_continuous(breaks = c(0, 0.25, 0.5))
+      Compartment == "Nod-\nules" ~ scale_y_continuous(breaks = c(0, 0.25, 0.5),
+                                                       limits = c(0, 0.6),
+                                                       expand = c(0, 0)),
+      Compartment == "Rhizo-\nsphere" ~ scale_y_continuous(limits = c(0, 0.33),
+                                                           expand = c(0, 0)),
+      Compartment == "Root" ~ scale_y_continuous(limits = c(0, 0.33),
+                                                 expand = c(0, 0))
     )
   )+
   NULL
@@ -303,45 +333,13 @@ p_RA
 #----------------------------------------
 # Combine plots
 #----------------------------------------
-# final_plot <- p_RA / p_tax / p_bubble + plot_layout(heights=c(2,0.2,2))
-# final_plot
-
-# Extract legends
-# legend_tax <- cowplot::get_legend(
-#   p_tax + theme(legend.position = "bottom") +
-#     guides(
-#       fill = guide_legend(
-#         ncol = 3, nrow = 3, 
-#         title.position = "top",
-#         title.hjust = 0  # centers title above keys
-#       )
-#     )
-# )
-# 
-# legend_bubble <- cowplot::get_legend(
-#   p_bubble + theme(legend.position = "bottom") +
-#     guides(
-#       fill = guide_legend(
-#         ncol = 2, nrow = 4, 
-#         title.position = "top",
-#         title.hjust = 0  # centers title above keys
-#       )
-#     )
-# )
-
 # Remove individual legends from plots
 p_tax_clean <- p_tax + theme(legend.position = "none")
 # p_bubble_clean <- p_bubble + theme(legend.position = "none")
 
 # Combine plots vertically
-# main_plot <- p_RA / p_tax_clean / p_bubble_clean + plot_layout(heights = c(0.6, 0.05, 0.6))
-main_plot <- p_RA / p_tax_clean / p_bubble + plot_layout(heights = c(0.45, 0.05, 0.6))
-
-# # Combine the two legends side by side at the bottom
-# combined_legend <- cowplot::plot_grid(legend_tax, legend_bubble, ncol = 2, rel_widths = c(0.6, 0.4))
-# 
-# # Final figure: main plot + combined legends
-# final_plot <- cowplot::plot_grid(main_plot, combined_legend, ncol = 1, rel_heights = c(1, 0.1))
+main_plot <- p_RA / p_tax_clean / p_bubble + 
+  plot_layout(heights = c(0.54, 0.04, 0.42))
 
 final_plot <- main_plot
 final_plot
@@ -351,3 +349,7 @@ ggsave("LotusSynCom_DA.pdf", plot = final_plot,
        width = 21, height = 20, units = "cm")
 saveRDS(final_plot, file = "LotusSynCom_DA.rds")
 saveRDS(final_plot, file = "../10_final_figures/LotusSynCom_DA.rds")
+
+saveRDS(p_RA, file = "../10_final_figures/p_RA_Lj.rds")
+saveRDS(p_tax_clean, file = "../10_final_figures/p_tax_clean_Lj.rds")
+saveRDS(p_bubble, file = "../10_final_figures/p_bubble_Lj.rds")

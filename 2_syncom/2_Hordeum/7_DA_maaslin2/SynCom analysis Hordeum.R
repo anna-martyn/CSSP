@@ -6,7 +6,7 @@ rm(list=ls())
 
 # Load required packages.
 pkg <- c("data.table", "magrittr", "ggplot2", "vegan",
-         "RColorBrewer", "Maaslin2", "ComplexHeatmap", 
+         "RColorBrewer", "Maaslin2", "ComplexHeatmap", "ggh4x",
          "colorRamp2","dplyr","tidyr","ggtext","patchwork","scales")
 for(pk in pkg) library(pk, character.only = TRUE)
 
@@ -17,34 +17,32 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 source("Structural_zeros.R")
 
 # Load metadata, ASV table, and taxonomy file.
-design <- read.table("BarleyCSSP_SConly_metadata_NEW.txt", header=TRUE, sep="\t")
-asv_table <- read.table("feature-table_BarleyCSSP_CerealSConly.tsv", sep = "\t", header = TRUE, row.names = 1, check.names = FALSE, comment.char = "", skip = 1)
-taxonomy <- read.table("CerealSC_taxonomy_new_May23.txt", sep="\t", header=TRUE, fill=TRUE)
+design <- read.table("../1_data/without_input/HordeumSC_metadata.txt",
+                     header=TRUE, sep="\t")
+asv_table <- read.table("../1_data/without_input/HordeumSC_ASVtable.tsv",
+                        sep = "\t", header = TRUE, row.names = 1,
+                        check.names = FALSE, comment.char = "", skip = 1)
+taxonomy <- read.table("../1_data/without_input/CerealSC_taxonomy_May23.txt",
+                       sep="\t", header=TRUE, fill=TRUE)
 
 # Subset for genotypes of interest and only keep matched ASVs in asv table.
-design_filtered <- design %>%
-  filter(Genotype %in% c("WT","symrk","ccamk","nsp1","nsp2")) %>%
-  mutate(Compartment = recode(Compartment, "rhizo"="Rhizosphere", "endo"="Root"))
-
-samples_keep <- design_filtered$SampleID
-asv_table_filtered <- asv_table[, colnames(asv_table) %in% samples_keep]
-asv_table_matched <- asv_table_filtered[grepl("_", rownames(asv_table_filtered)), , drop = FALSE]
+asv_table_matched <- asv_table[grepl("_", rownames(asv_table)), , drop = FALSE]
 
 # Calculate library size for each sample (needed for Structural_zeros3)
-design_filtered$library_size <- colSums(asv_table_matched[, samples_keep])
+design$library_size <- colSums(asv_table_matched[, design$SampleID])
 
 # Split data by compartment.
-samples_rhizo <- design_filtered$SampleID[design_filtered$Compartment == "Rhizosphere"]
-samples_root  <- design_filtered$SampleID[design_filtered$Compartment == "Root"]
+samples_rhizo <- design$SampleID[design$Compartment == "Rhizosphere"]
+samples_root  <- design$SampleID[design$Compartment == "Root"]
 
 asv_table_rhizo <- asv_table_matched[, samples_rhizo, drop=FALSE]
 asv_table_root  <- asv_table_matched[, samples_root, drop=FALSE]
 
-meta_rhizo <- design_filtered %>%
+meta_rhizo <- design %>%
   filter(SampleID %in% samples_rhizo) %>%
   column_to_rownames("SampleID")
 
-meta_root <- design_filtered %>%
+meta_root <- design %>%
   filter(SampleID %in% samples_root) %>%
   column_to_rownames("SampleID")
 
@@ -83,7 +81,7 @@ for(g in c("symrk","ccamk","nsp1","nsp2")){
   Results_rhizo[res_g$feature, paste0("DA_", g)]  <- (res_g$qval < 0.05) * sign(res_g$coef)
 }
 
-   # Update results for structural zeros
+# Update results for structural zeros
 all_DA_rhizo <- Reduce("union", S_rhizo$struc_zero_DA)
 S_sign_rhizo <- S_rhizo$struc_zero_table[all_DA_rhizo,1] - S_rhizo$struc_zero_table[all_DA_rhizo,-1]
 
@@ -131,6 +129,13 @@ Results_root2 <- data.table(ASV_ID = rownames(Results_root), Results_root)
 Results_root2 <- merge(Results_root2, taxonomy, by.x="ASV_ID", by.y="ASVid")
 Results_root2 <- merge(Results_root2, data.table(ASV_ID = rownames(RA_root), RA_root), by="ASV_ID")
 
+# ASVs to keep in visulisation
+rhizo_any <- apply(Results_rhizo2[,6:9], 1, any)
+root_any <- apply(Results_root2[,6:9], 1, any)
+rhizo_any[is.na(rhizo_any)] <- F
+root_any[is.na(root_any)] <- F
+isolate_keep <- Results_rhizo2$ASV_ID[rhizo_any|root_any]
+
 # Save output.
 fwrite(Results_rhizo2, file="DA_SynCom_Hordeum_rhizo.csv")
 fwrite(Results_root2, file="DA_SynCom_Hordeum_root.csv")
@@ -144,7 +149,7 @@ asv_table_RA <- sweep(asv_table_matched, 2, colSums(asv_table_matched), "/")
 asv_RA_long <- as.data.frame(asv_table_RA) %>%
   rownames_to_column("ASVid") %>%
   pivot_longer(cols=-ASVid, names_to="SampleID", values_to="RA") %>%
-  left_join(design_filtered %>% select(SampleID, Compartment, Genotype), by="SampleID")
+  left_join(design %>% select(SampleID, Compartment, Genotype), by="SampleID")
 
 # Filter for WT
 asv_RA_WT <- asv_RA_long %>%
@@ -209,7 +214,8 @@ colors <- c(
 )
 
 tax_bar <- asv_RA_WT %>%
-  distinct(ASVid, Order)
+  distinct(ASVid, Order) %>% 
+  filter(ASVid %in% isolate_keep)
 
 p_tax <- ggplot(tax_bar, aes(x=ASVid, y=1, fill=Order)) +
   geom_tile() +
@@ -219,6 +225,7 @@ p_tax <- ggplot(tax_bar, aes(x=ASVid, y=1, fill=Order)) +
   theme(legend.position="right",
         legend.text = element_text(color="black", size=8),
         legend.title = element_text(color="black", size=8),
+        plot.margin = margin(c(0.5, 0, 0.5, 0), unit = "lines")
         )
 
 #----------------------------------------
@@ -250,6 +257,7 @@ da_all <- da_all %>%
 da_all$DA <- factor(da_all$DA, levels = c(-1, 0, 1))
 da_colors <- c("-1" = "darkblue", "0" = "white", "1" = "red")
 
+da_all <- da_all %>% filter(ASV_ID %in% isolate_keep)
 p_bubble <- ggplot(da_all, aes(x = ASV_ID, y = Genotype, fill = DA)) +
   geom_point(shape = 21, size = 2, color = "black") +
   scale_fill_manual(
@@ -264,16 +272,21 @@ p_bubble <- ggplot(da_all, aes(x = ASV_ID, y = Genotype, fill = DA)) +
     axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5,
                                size = 6, color = "black"),
     axis.title.x = element_blank(),
-    axis.title.y=element_text(color="black", size=8),
+    # axis.title.y=element_text(color="black", size=8),
+    axis.title.y=element_blank(),
     strip.placement = "outside",
     legend.position = "bottom",
     # strip.background = element_rect(fill = "grey80", color = "grey50"),
-    strip.text.y.left = element_text(color = "black", size = 8, hjust = 0.5,
-                                     face = "bold"),
-    axis.text.y = element_text(color = "black", size = 8),
+    # strip.text.y.left = element_text(color = "black", size = 8, hjust = 0.5,
+    #                                  face = "bold"),
+    # axis.text.y = element_text(color = "black", size = 8),
+    axis.text.y = element_blank(),
     legend.text = element_text(color = "black", size = 8),
     legend.title = element_text(color = "black", size = 8),
-    strip.background = element_rect(colour = NA),
+    # strip.background = element_rect(colour = NA),
+    strip.text = element_blank(),
+    strip.background = element_blank(),
+    plot.margin = margin(c(0.5, 0, 0.5, 0), unit = "lines"),
     panel.spacing = unit(0.4, "lines")
   )
 
@@ -288,69 +301,92 @@ p_bubble <- ggplot(da_all, aes(x = ASV_ID, y = Genotype, fill = DA)) +
 #----------------------------------------
 asv_RA_WT$Compartment <- as.character(asv_RA_WT$Compartment)
 asv_RA_WT$Compartment[asv_RA_WT$Compartment == "Rhizosphere"] <- "Rhizo-\nsphere"
+asv_RA_WT_nod <- asv_RA_WT %>% 
+  filter(Compartment == "Root") %>% 
+  mutate(Compartment = "Nod-\nules") %>% 
+  mutate(mean_RA = 0)
+asv_RA_WT <- rbind(asv_RA_WT, asv_RA_WT_nod)
 asv_RA_WT$Compartment <- factor(asv_RA_WT$Compartment, 
-                                levels = c("Rhizo-\nsphere", "Root", "Nodules"))
-p_RA <- ggplot(asv_RA_WT, aes(x=ASVid, y=mean_RA)) +
+                                levels = c("Rhizo-\nsphere", "Root", "Nod-\nules"))
+asv_RA_WT <- asv_RA_WT %>% filter(ASVid %in% isolate_keep)
+# p_RA <- ggplot(asv_RA_WT, aes(x=ASVid, y=mean_RA)) +
+#   geom_bar(stat="identity", fill="grey50") +
+#   facet_wrap(~Compartment, ncol=1, strip.position = "left") +
+#   labs(y = "Mean relative\nabundance in WT") +
+#   # scale_y_continuous(expand = c(0, 0), limits = c(0,0.4)) +
+#   scale_y_continuous(expand = c(0, 0), limits = c(0, 0.3)) +
+#   theme_bw() +
+#   theme(axis.text.x=element_blank(),
+#         axis.ticks.x=element_blank(),
+#         axis.title.x=element_blank(),
+#         axis.text.y=element_text(color="black", size=8),
+#         # axis.title.y=element_text(color="black", size=8),
+#         axis.title.y=element_blank(),
+#         # strip.text = element_text(color="black", size=8, face = "bold"),
+#         strip.placement = "outside",
+#         strip.text = element_blank(),
+#         strip.background = element_blank(),
+#         panel.spacing = unit(0.4, "lines"))+
+#   force_panelsizes(cols = c(1, 1, 1), rows = c(1, 1, 0.7))+
+#   # facetted_pos_scales(
+#   #   y = list(
+#   #     Compartment == "Nod-\nules" ~ scale_y_continuous(breaks = c(0, 0.1, 0.2))
+#   #   )
+#   # )+
+#   NULL
+
+# asv_RA_WT <- asv_RA_WT %>% filter(Compartment != "Nod-\nules")
+p_RA <- ggplot(asv_RA_WT, aes(x = ASVid, y = mean_RA)) +
   geom_bar(stat="identity", fill="grey50") +
-  facet_wrap(~Compartment, ncol=1, scales="free", strip.position =  "left") +
+  facet_wrap(~Compartment, ncol=1, scales="free_y",
+             strip.position = "left", space = "free_y") +
   labs(y = "Mean relative\nabundance in WT") +
-  # scale_y_continuous(expand = c(0, 0), limits = c(0,0.4)) +
+  # scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   scale_y_continuous(expand = c(0, 0)) +
   theme_bw() +
+  ggtitle("Hordeum")+
   theme(axis.text.x=element_blank(),
+        plot.title = element_text(color="black", size=8, face = "bold"),
         axis.ticks.x=element_blank(),
         axis.title.x=element_blank(),
-        axis.text.y=element_text(color="black", size=8),
-        axis.title.y=element_text(color="black", size=8),
-        strip.text = element_text(color="black", size=8, face = "bold"),
+        # axis.text.y=element_text(color="black", size=8),
+        axis.text.y=element_blank(),
+        # axis.title.y=element_text(color="black", size=8),
+        axis.title.y=element_blank(),
+        # strip.text = element_text(color="black", size=8, face = "bold"),
         strip.placement = "outside",
-        strip.background = element_rect(colour = NA),
-        panel.spacing = unit(0.4, "lines"))
-
+        # strip.background = element_rect(colour = NA),
+        strip.text = element_blank(),
+        strip.background = element_blank(),
+        plot.margin = margin(c(0.5, 0, 0.5, 0), unit = "lines"),
+        panel.spacing = unit(0.4, "lines"))+
+  force_panelsizes(cols = c(1, 1, 1), rows = c(1, 1, 0.7))+
+  facetted_pos_scales(
+    y = list(
+      Compartment == "Nod-\nules" ~ scale_y_continuous(breaks = c(),
+                                                       limits = c(0, 0.6),
+                                                       expand = c(0, 0)),
+      Compartment == "Rhizo-\nsphere" ~ scale_y_continuous(limits = c(0, 0.33),
+                                                           expand = c(0, 0)),
+      Compartment == "Root" ~ scale_y_continuous(limits = c(0, 0.33),
+                                                 expand = c(0, 0))
+    )
+  )+
+  NULL
 
 #----------------------------------------
 # Combine plots
 #----------------------------------------
-# final_plot <- p_RA / p_tax / p_bubble + plot_layout(heights=c(2,0.2,2))
-# final_plot
-
-# Extract legends
-# legend_tax <- cowplot::get_legend(
-#   p_tax + theme(legend.position = "bottom") +
-#     guides(
-#       fill = guide_legend(
-#         ncol = 5, nrow = 3, 
-#         title.position = "top",
-#         title.hjust = 0  # centers title above keys
-#       )
-#     )
-# )
-# 
-# legend_bubble <- cowplot::get_legend(
-#   p_bubble + theme(legend.position = "bottom") +
-#     guides(
-#       fill = guide_legend(
-#         ncol = 2, nrow = 4, 
-#         title.position = "top",
-#         title.hjust = 0  # centers title above keys
-#       )
-#     )
-# )
-
 # Remove individual legends from plots
 p_tax_clean <- p_tax + theme(legend.position = "none")
-# p_bubble_clean <- p_bubble + theme(legend.position = "none")
 
 # Combine plots vertically
-main_plot <- p_RA / p_tax_clean / p_bubble + plot_layout(heights = c(0.3, 0.05, 0.6))
+main_plot <- p_RA / p_tax_clean / p_bubble + 
+  plot_layout(heights = c(0.54, 0.04, 0.42))
 
-# # Combine the two legends side by side at the bottom
-# combined_legend <- cowplot::plot_grid(legend_tax, legend_bubble, ncol = 2, rel_widths = c(0.7, 0.3))
-# 
-# # Final figure: main plot + combined legends
-# final_plot <- cowplot::plot_grid(main_plot, combined_legend, ncol = 1, rel_heights = c(1, 0.1))
-# 
-# final_plot
+main_plot <- main_plot +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "cm"),
+        panel.spacing = unit(0, "cm"))
 
 final_plot <- main_plot
 final_plot
@@ -360,4 +396,7 @@ ggsave("HordeumSynCom_DA.pdf", plot = final_plot,
        width = 21, height = 20, units = "cm")
 saveRDS(final_plot, file = "../8_final_figures/HordeumSynCom_DA.rds")
 
+saveRDS(p_RA, file = "../8_final_figures/p_RA_Hv.rds")
+saveRDS(p_tax_clean, file = "../8_final_figures/p_tax_clean_Hv.rds")
+saveRDS(p_bubble, file = "../8_final_figures/p_bubble_Hv.rds")
 

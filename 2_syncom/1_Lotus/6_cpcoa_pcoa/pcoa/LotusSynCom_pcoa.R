@@ -6,8 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load data.
-design <- read.table("../LotusCSSP_LjSC_metadata.txt", header=T, sep="\t")
-asv_table <- read.table("../feature-table_LotusSYM_LjSC.tsv", sep = "\t", header = TRUE, row.names = 1, check.names = FALSE, comment.char = "", skip = 1)
+design <- read.table("../../1_data/LotusSC_metadata.txt", header=T, sep="\t")
+asv_table <- read.table("../../1_data/LotusSC_ASVtable.tsv", sep = "\t",
+                        header = TRUE, row.names = 1, check.names = FALSE,
+                        comment.char = "", skip = 1)
 
 # Load required packages.
 library(data.table)
@@ -20,15 +22,14 @@ library(cowplot)
 
 # Filter design file to only keep genotypes and compartments of interest, and match asv table file accordingly.
 design_filtered <- design %>%
-  filter(Genotype %in% c("WT","symrk","ccamk","nsp1","nsp2"),
-         Compartment %in% c("rhizo","endo")) %>%
-  mutate(Compartment = recode(Compartment, "rhizo"="Rhizosphere", "endo"="Root"))
+  filter(Compartment %in% c("Rhizosphere", "Root"))
 
 samples_keep <- design_filtered$SampleID
 asv_table_filt <- asv_table[, colnames(asv_table) %in% samples_keep]
 
 ## Define colours for later graph as well as main theme. Also, indicate that mutant names shall be italic in legend.
-colors <- c("WT"="#A9C289","symrk"="#FEDA8B","ccamk"="#FDB366","nsp1"="#C0E4EF","nsp2"="#6EA6CD")
+colors <- c("WT" = "#A9C289", "symrk"="#FEDA8B", "ccamk" = "#FDB366",
+            "nsp1" = "#C0E4EF", "nsp2" = "#6EA6CD")
 
 legend_labels <- c(
   "WT"     = "WT",
@@ -40,7 +41,8 @@ legend_labels <- c(
 
 main_theme <- theme(panel.background=element_blank(),
                     panel.grid.major = element_line(color = "gray90"),
-                    panel.border = element_rect(colour = "black", fill=NA, linewidth=1),
+                    panel.border = element_rect(colour = "black", fill=NA,
+                                                linewidth=1),
                     axis.line.x=element_line(color="black"),
                     axis.line.y=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
@@ -54,7 +56,8 @@ main_theme <- theme(panel.background=element_blank(),
                     legend.background=element_blank(),
                     plot.title = element_text(size=8, hjust=0.9))
 
-# Create function for pcoa analysis and plotting (separately for each compartment).
+# Create function for pcoa analysis and plotting 
+# (separately for each compartment).
 plot_pcoa_by_compartment <- function(asv_data, design_df){
   compartments <- unique(design_df$Compartment)
   plot_list <- list()
@@ -86,8 +89,8 @@ plot_pcoa_by_compartment <- function(asv_data, design_df){
       scale_color_manual(values=colors, labels=legend_labels) +
       guides(color = guide_legend(override.aes = list(linetype = 0))) +
       labs(
-        x=paste0("PCoA 1 (", format(100*pcoa$eig[1]/sum(pcoa$eig), digits=4), "%)"),
-        y=paste0("PCoA 2 (", format(100*pcoa$eig[2]/sum(pcoa$eig), digits=4), "%)"),
+        x=paste0("PCo 1 (", format(100*pcoa$eig[1]/sum(pcoa$eig), digits=4), "%)"),
+        y=paste0("PCo 2 (", format(100*pcoa$eig[2]/sum(pcoa$eig), digits=4), "%)"),
         title=comp
       ) +
       main_theme +

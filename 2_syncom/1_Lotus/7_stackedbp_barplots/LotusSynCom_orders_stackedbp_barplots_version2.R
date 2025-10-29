@@ -6,9 +6,12 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load data.
-design <- read.table("LotusCSSP_LjSC_metadata.txt", header=TRUE, sep="\t")
-asv_table <- read.table("feature-table_LotusSYM_LjSC.tsv", sep = "\t", header = TRUE, row.names = 1, check.names = FALSE, comment.char = "", skip = 1)
-taxonomy <- read.table("LjSC_taxonomy.txt", sep="\t", header=TRUE, fill=TRUE)
+design <- read.table("../1_data/LotusSC_metadata.txt", header=TRUE, sep = "\t")
+asv_table <- read.table("../1_data/LotusSC_ASVtable.tsv", sep = "\t",
+                        header = TRUE, row.names = 1, check.names = FALSE,
+                        comment.char = "", skip = 1)
+taxonomy <- read.table("../1_data/LjSC_taxonomy.txt", sep="\t", header=TRUE,
+                       fill = TRUE)
 
 # Load packages.
 library(dplyr)
@@ -23,13 +26,9 @@ library(multcompView)
 library(scales)
 library(Maaslin2)
 
-# Modify design and asv table file to only keep genotypes of interest, and to only keep matched ASVs.
-design_filtered <- design %>%
-  filter(Genotype %in% c("WT","symrk","ccamk","nsp1","nsp2")) %>%
-  mutate(Compartment = recode(Compartment, "rhizo"="Rhizosphere", "endo"="Root", "nod"="Nodules"))
-samples_keep <- design_filtered$SampleID
-asv_table_filtered <- asv_table[, colnames(asv_table) %in% samples_keep]
-
+# Modify design and asv table file to only keep genotypes of interest, and to 
+# nly keep matched ASVs.
+asv_table_filtered <- asv_table[, colnames(asv_table) %in% design$SampleID]
 asv_table_matched <- asv_table_filtered[grepl("Lj", rownames(asv_table_filtered)), ]
 
 # Check whether all matched ASVs are present in taxonomy file.
@@ -41,7 +40,8 @@ if(length(missing_asvs) == 0){
   print(missing_asvs)
 }
 
-# Convert ASV reads to relative abundances and add taxonomic info at order level.
+# Convert ASV reads to relative abundances and add taxonomic info at order 
+# level.
 asv_table_norm <- sweep(asv_table_matched, 2, colSums(asv_table_matched), "/")
 df <- as.data.frame(asv_table_norm) %>%
   rownames_to_column(var="ASVid") %>%
@@ -49,17 +49,9 @@ df <- as.data.frame(asv_table_norm) %>%
 
 # Reshape to long format and add design info.
 df_long <- df %>%
-  pivot_longer(cols=-c(ASVid, order), names_to="SampleID", values_to="RA") %>%
-  left_join(design_filtered %>% select(SampleID, Compartment, Genotype), by="SampleID")
-
-# Summarize mean relative abundance per genotype-compartment combination.
-# df_summary <- df_long %>%
-#   group_by(order, Genotype, Compartment) %>%
-#   summarise(mean_RA = mean(RA, na.rm = TRUE), .groups = "drop") %>%
-#   mutate(order = ifelse(is.na(order), "Unclassified", order)) %>%
-#   group_by(Genotype, Compartment) %>%
-#   mutate(mean_RA = mean_RA / sum(mean_RA)) %>%
-#   ungroup()
+  pivot_longer(cols=-c(ASVid, order), names_to="SampleID", values_to = "RA") %>%
+  left_join(design %>% select(SampleID, Compartment, Genotype),
+            by = "SampleID")
 
 df_summary <- df_long %>% 
   group_by(SampleID, order, Genotype, Compartment) %>%
@@ -110,8 +102,9 @@ colors <- c(
 )
 
 # Set genotype order and make mutant names italic.
-df_summary$Genotype <- factor(df_summary$Genotype,
-                              levels = rev(c("WT", "symrk", "ccamk", "nsp1", "nsp2")))
+df_summary$Genotype <- factor(
+  df_summary$Genotype, levels = rev(c("WT", "symrk", "ccamk", "nsp1", "nsp2"))
+)
 
 genotype_labels <- c(
   "WT"     = "WT",
@@ -163,13 +156,15 @@ p1 <- ggplot(df_summary, aes(y=Genotype, x=mean_RA, fill=order)) +
              strip.position = "right") +
   scale_fill_manual(values=colors) +
   scale_x_continuous(expand=c(0,0)) +
+  # scale_y_discrete(labels = genotype_labels, position = "right") +
   scale_y_discrete(labels = genotype_labels) +
   main_theme +
   ylab("Mean relative abundance") +
   labs(fill="Bacterial order") +
   theme(axis.text.x = element_markdown(size=8, color="black"),
         # strip.text.x=element_text(size=8, face="bold"),
-        strip.text.y = element_text(angle = 0, size=8, face="bold"),
+        # strip.text.y.left = element_text(angle = 0, size = 8, face = "bold"),
+        strip.text.y = element_text(angle = 0, size = 8, face = "bold"),
         legend.position = "bottom",
         legend.title.position = "top",
         legend.key.size = unit(0.25, "cm"),
@@ -187,8 +182,9 @@ saveRDS(p1, file="LotusSC_order_RA_stackedbp.rds")
 saveRDS(p1, file="../10_final_figures/LotusSC_order_RA_stackedbp.rds")
 
 # Order level comparisons with Maaslin2 ----
-df_summary$Genotype <- factor(df_summary$Genotype,
-                              levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2"))
+df_summary$Genotype <- factor(
+  df_summary$Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2")
+)
 
 
 asv_table_df <- as.data.frame(asv_table_matched)
@@ -197,10 +193,8 @@ taxonomy2 <- data.frame(taxonomy[,-1], row.names = taxonomy$ASVid)
 Orders <- taxonomy2[rownames(asv_table_df),"order"]
 
 order_table <- rowsum(asv_table_df, Orders)
-rhiz_smp <- rownames(design_df)[design_df$Compartment == "rhizo" & 
-                                design_df$Genotype != "f6h1"]
-root_smp <- rownames(design_df)[design_df$Compartment == "endo" &
-                                design_df$Genotype != "f6h1"]
+rhiz_smp <- rownames(design_df)[design_df$Compartment == "Rhizosphere"]
+root_smp <- rownames(design_df)[design_df$Compartment == "Root"]
 order_table_rhiz <- order_table[,rhiz_smp]
 order_table_root <- order_table[,root_smp]
 design_rhiz <- design_df[colnames(order_table_rhiz),]
@@ -223,7 +217,7 @@ order_test_root <- Maaslin2(input_data = order_table_root,
                             output = "Maslin_output")
 
 res_rhiz <- order_test_rhiz$results
-res_rhiz <- res_rhiz[res_rhiz$qval<0.05,c("feature", "value")]
+res_rhiz <- res_rhiz[res_rhiz$qval<0.05, c("feature", "value")]
 colnames(res_rhiz) <- c("order", "Genotype")
 res_rhiz$Sig <- "*"
 res_rhiz$Compartment <- "Rhizosphere"
@@ -276,7 +270,7 @@ p_sig <- ggplot(df_ord, aes(x = order, y = mean_RA, fill = Genotype)) +
                 width = 0.3, position = dodge) +
   geom_text(
     data = df_ord,
-    aes(x = order, y=mean_RA+1.96*se+0.005, label=Sig, fill=Genotype),
+    aes(x = order, y=mean_RA+1.96*se+0.015, label=Sig, fill=Genotype),
     position=dodge,
     inherit.aes=FALSE,
     size=4

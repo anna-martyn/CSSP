@@ -1,74 +1,74 @@
-2025-10-23 18:27:57.10702 INFO::Writing function arguments to log file
-2025-10-23 18:27:57.107806 DEBUG::Function arguments
-2025-10-23 18:27:57.108002 DEBUG::Output folder: Maslin_output
-2025-10-23 18:27:57.108212 DEBUG::Min Abundance: 0.000000
-2025-10-23 18:27:57.108485 DEBUG::Min Prevalence: 0.100000
-2025-10-23 18:27:57.108667 DEBUG::Normalization: TSS
-2025-10-23 18:27:57.108908 DEBUG::Transform: LOG
-2025-10-23 18:27:57.10908 DEBUG::Analysis method: LM
-2025-10-23 18:27:57.10924 DEBUG::Max significance: 0.250000
-2025-10-23 18:27:57.1094 DEBUG::Random effects:
-2025-10-23 18:27:57.109551 DEBUG::Fixed effects: Genotype
-2025-10-23 18:27:57.109701 DEBUG::Correction method: BH
-2025-10-23 18:27:57.109875 DEBUG::Standardize: TRUE
-2025-10-23 18:27:57.110045 DEBUG::Cores: 1
-2025-10-23 18:27:57.110204 INFO::Verifying options selected are valid
-2025-10-23 18:27:57.110952 INFO::Determining format of input files
-2025-10-23 18:27:57.111712 INFO::Input format is data samples as columns and metadata samples as rows
-2025-10-23 18:27:57.112562 DEBUG::Transformed data so samples are rows
-2025-10-23 18:27:57.112982 DEBUG::A total of 20 samples were found in both the data and metadata
-2025-10-23 18:27:57.113217 DEBUG::Reordering data/metadata to use same sample ordering
-2025-10-23 18:27:57.113667 INFO::Formula for fixed effects: expr ~  Genotype
-2025-10-23 18:27:57.11432 INFO::Factor detected for categorial metadata 'Genotype'. Provide a reference argument or manually set factor ordering to change reference level.
-2025-10-23 18:27:57.114873 INFO::Filter data based on min abundance and min prevalence
-2025-10-23 18:27:57.115332 INFO::Total samples in data: 20
-2025-10-23 18:27:57.115801 INFO::Min samples required with min abundance for a feature not to be filtered: 2.000000
-2025-10-23 18:27:57.116406 INFO::Total filtered features: 1
-2025-10-23 18:27:57.117334 INFO::Filtered feature names from abundance and prevalence filtering: Bacillales
-2025-10-23 18:27:57.118097 INFO::Total filtered features with variance filtering: 0
-2025-10-23 18:27:57.118578 INFO::Filtered feature names from variance filtering:
-2025-10-23 18:27:57.119028 INFO::Running selected normalization method: TSS
-2025-10-23 18:27:57.119958 INFO::Applying z-score to standardize continuous metadata
-2025-10-23 18:27:57.122069 INFO::Running selected transform method: LOG
-2025-10-23 18:27:57.12279 INFO::Running selected analysis method: LM
-2025-10-23 18:27:57.123495 INFO::Fitting model to feature number 1, Actinomycetales
-2025-10-23 18:27:57.125399 INFO::Fitting model to feature number 2, Burkholderiales
-2025-10-23 18:27:57.127239 INFO::Fitting model to feature number 3, Caulobacterales
-2025-10-23 18:27:57.129009 INFO::Fitting model to feature number 4, Flavobacteriales
-2025-10-23 18:27:57.13073 INFO::Fitting model to feature number 5, Pseudomonadales
-2025-10-23 18:27:57.132467 INFO::Fitting model to feature number 6, Rhizobiales
-2025-10-23 18:27:57.134184 INFO::Fitting model to feature number 7, Sphingomonadales
-2025-10-23 18:27:57.135905 INFO::Fitting model to feature number 8, Xanthomonadales
-2025-10-23 18:27:57.139828 INFO::Counting total values for each feature
-2025-10-23 18:27:57.141356 INFO::Writing filtered data to file Maslin_output/features/filtered_data.tsv
-2025-10-23 18:27:57.142358 INFO::Writing filtered, normalized data to file Maslin_output/features/filtered_data_norm.tsv
-2025-10-23 18:27:57.143286 INFO::Writing filtered, normalized, transformed data to file Maslin_output/features/filtered_data_norm_transformed.tsv
-2025-10-23 18:27:57.144191 WARNING::Deleting existing residuals file: Maslin_output/fits/residuals.rds
-2025-10-23 18:27:57.144947 INFO::Writing residuals to file Maslin_output/fits/residuals.rds
-2025-10-23 18:27:57.145543 WARNING::Deleting existing fitted file: Maslin_output/fits/fitted.rds
-2025-10-23 18:27:57.146271 INFO::Writing fitted values to file Maslin_output/fits/fitted.rds
-2025-10-23 18:27:57.146814 INFO::Writing all results to file (ordered by increasing q-values): Maslin_output/all_results.tsv
-2025-10-23 18:27:57.147859 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): Maslin_output/significant_results.tsv
-2025-10-23 18:27:57.148595 INFO::Writing heatmap of significant results to file: Maslin_output/heatmap.pdf
-2025-10-23 18:27:57.182557 INFO::Writing association plots (one for each significant association) to output folder: Maslin_output
-2025-10-23 18:27:57.183967 INFO::Plotting associations from most to least significant, grouped by metadata
-2025-10-23 18:27:57.184613 INFO::Plotting data for metadata number 1, Genotype
-2025-10-23 18:27:57.185512 INFO::Creating boxplot for categorical data, Genotype vs Pseudomonadales
-2025-10-23 18:27:57.341399 INFO::Creating boxplot for categorical data, Genotype vs Rhizobiales
-2025-10-23 18:27:57.516463 INFO::Creating boxplot for categorical data, Genotype vs Rhizobiales
-2025-10-23 18:27:57.674192 INFO::Creating boxplot for categorical data, Genotype vs Rhizobiales
-2025-10-23 18:27:57.891428 INFO::Creating boxplot for categorical data, Genotype vs Rhizobiales
-2025-10-23 18:27:58.060655 INFO::Creating boxplot for categorical data, Genotype vs Pseudomonadales
-2025-10-23 18:27:58.275736 INFO::Creating boxplot for categorical data, Genotype vs Pseudomonadales
-2025-10-23 18:27:58.440548 INFO::Creating boxplot for categorical data, Genotype vs Flavobacteriales
-2025-10-23 18:27:58.635089 INFO::Creating boxplot for categorical data, Genotype vs Burkholderiales
-2025-10-23 18:27:58.793031 INFO::Creating boxplot for categorical data, Genotype vs Flavobacteriales
-2025-10-23 18:27:58.965011 INFO::Creating boxplot for categorical data, Genotype vs Pseudomonadales
-2025-10-23 18:27:59.124081 INFO::Creating boxplot for categorical data, Genotype vs Burkholderiales
-2025-10-23 18:27:59.346408 INFO::Creating boxplot for categorical data, Genotype vs Xanthomonadales
-2025-10-23 18:27:59.504099 INFO::Creating boxplot for categorical data, Genotype vs Burkholderiales
-2025-10-23 18:27:59.69727 INFO::Creating boxplot for categorical data, Genotype vs Caulobacterales
-2025-10-23 18:27:59.854144 INFO::Creating boxplot for categorical data, Genotype vs Burkholderiales
-2025-10-23 18:28:00.04572 INFO::Creating boxplot for categorical data, Genotype vs Actinomycetales
-2025-10-23 18:28:00.202862 INFO::Creating boxplot for categorical data, Genotype vs Actinomycetales
-2025-10-23 18:28:00.394743 INFO::Creating boxplot for categorical data, Genotype vs Sphingomonadales
+2025-10-29 13:55:03.671366 INFO::Writing function arguments to log file
+2025-10-29 13:55:03.672009 DEBUG::Function arguments
+2025-10-29 13:55:03.672198 DEBUG::Output folder: Maslin_output
+2025-10-29 13:55:03.672341 DEBUG::Min Abundance: 0.000000
+2025-10-29 13:55:03.672478 DEBUG::Min Prevalence: 0.100000
+2025-10-29 13:55:03.6726 DEBUG::Normalization: TSS
+2025-10-29 13:55:03.672714 DEBUG::Transform: LOG
+2025-10-29 13:55:03.672828 DEBUG::Analysis method: LM
+2025-10-29 13:55:03.672959 DEBUG::Max significance: 0.250000
+2025-10-29 13:55:03.673087 DEBUG::Random effects:
+2025-10-29 13:55:03.673227 DEBUG::Fixed effects: Genotype
+2025-10-29 13:55:03.673347 DEBUG::Correction method: BH
+2025-10-29 13:55:03.673457 DEBUG::Standardize: TRUE
+2025-10-29 13:55:03.673568 DEBUG::Cores: 1
+2025-10-29 13:55:03.673675 INFO::Verifying options selected are valid
+2025-10-29 13:55:03.674252 INFO::Determining format of input files
+2025-10-29 13:55:03.674794 INFO::Input format is data samples as columns and metadata samples as rows
+2025-10-29 13:55:03.675405 DEBUG::Transformed data so samples are rows
+2025-10-29 13:55:03.675693 DEBUG::A total of 20 samples were found in both the data and metadata
+2025-10-29 13:55:03.675845 DEBUG::Reordering data/metadata to use same sample ordering
+2025-10-29 13:55:03.676262 INFO::Formula for fixed effects: expr ~  Genotype
+2025-10-29 13:55:03.67685 INFO::Factor detected for categorial metadata 'Genotype'. Provide a reference argument or manually set factor ordering to change reference level.
+2025-10-29 13:55:03.677323 INFO::Filter data based on min abundance and min prevalence
+2025-10-29 13:55:03.677747 INFO::Total samples in data: 20
+2025-10-29 13:55:03.678164 INFO::Min samples required with min abundance for a feature not to be filtered: 2.000000
+2025-10-29 13:55:03.678802 INFO::Total filtered features: 1
+2025-10-29 13:55:03.679312 INFO::Filtered feature names from abundance and prevalence filtering: Bacillales
+2025-10-29 13:55:03.68002 INFO::Total filtered features with variance filtering: 0
+2025-10-29 13:55:03.680524 INFO::Filtered feature names from variance filtering:
+2025-10-29 13:55:03.680957 INFO::Running selected normalization method: TSS
+2025-10-29 13:55:03.681615 INFO::Applying z-score to standardize continuous metadata
+2025-10-29 13:55:03.683736 INFO::Running selected transform method: LOG
+2025-10-29 13:55:03.684412 INFO::Running selected analysis method: LM
+2025-10-29 13:55:03.685083 INFO::Fitting model to feature number 1, Actinomycetales
+2025-10-29 13:55:03.686928 INFO::Fitting model to feature number 2, Burkholderiales
+2025-10-29 13:55:03.688698 INFO::Fitting model to feature number 3, Caulobacterales
+2025-10-29 13:55:03.690465 INFO::Fitting model to feature number 4, Flavobacteriales
+2025-10-29 13:55:03.692206 INFO::Fitting model to feature number 5, Pseudomonadales
+2025-10-29 13:55:03.693912 INFO::Fitting model to feature number 6, Rhizobiales
+2025-10-29 13:55:03.695646 INFO::Fitting model to feature number 7, Sphingomonadales
+2025-10-29 13:55:03.697346 INFO::Fitting model to feature number 8, Xanthomonadales
+2025-10-29 13:55:03.701264 INFO::Counting total values for each feature
+2025-10-29 13:55:03.702747 INFO::Writing filtered data to file Maslin_output/features/filtered_data.tsv
+2025-10-29 13:55:03.70375 INFO::Writing filtered, normalized data to file Maslin_output/features/filtered_data_norm.tsv
+2025-10-29 13:55:03.704694 INFO::Writing filtered, normalized, transformed data to file Maslin_output/features/filtered_data_norm_transformed.tsv
+2025-10-29 13:55:03.705592 WARNING::Deleting existing residuals file: Maslin_output/fits/residuals.rds
+2025-10-29 13:55:03.706384 INFO::Writing residuals to file Maslin_output/fits/residuals.rds
+2025-10-29 13:55:03.706995 WARNING::Deleting existing fitted file: Maslin_output/fits/fitted.rds
+2025-10-29 13:55:03.707694 INFO::Writing fitted values to file Maslin_output/fits/fitted.rds
+2025-10-29 13:55:03.708238 INFO::Writing all results to file (ordered by increasing q-values): Maslin_output/all_results.tsv
+2025-10-29 13:55:03.709286 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): Maslin_output/significant_results.tsv
+2025-10-29 13:55:03.710031 INFO::Writing heatmap of significant results to file: Maslin_output/heatmap.pdf
+2025-10-29 13:55:03.743644 INFO::Writing association plots (one for each significant association) to output folder: Maslin_output
+2025-10-29 13:55:03.745039 INFO::Plotting associations from most to least significant, grouped by metadata
+2025-10-29 13:55:03.745714 INFO::Plotting data for metadata number 1, Genotype
+2025-10-29 13:55:03.746606 INFO::Creating boxplot for categorical data, Genotype vs Pseudomonadales
+2025-10-29 13:55:03.934893 INFO::Creating boxplot for categorical data, Genotype vs Rhizobiales
+2025-10-29 13:55:04.091298 INFO::Creating boxplot for categorical data, Genotype vs Rhizobiales
+2025-10-29 13:55:04.288329 INFO::Creating boxplot for categorical data, Genotype vs Rhizobiales
+2025-10-29 13:55:04.477974 INFO::Creating boxplot for categorical data, Genotype vs Rhizobiales
+2025-10-29 13:55:04.634811 INFO::Creating boxplot for categorical data, Genotype vs Pseudomonadales
+2025-10-29 13:55:04.82174 INFO::Creating boxplot for categorical data, Genotype vs Pseudomonadales
+2025-10-29 13:55:04.992972 INFO::Creating boxplot for categorical data, Genotype vs Flavobacteriales
+2025-10-29 13:55:05.20355 INFO::Creating boxplot for categorical data, Genotype vs Burkholderiales
+2025-10-29 13:55:05.35733 INFO::Creating boxplot for categorical data, Genotype vs Flavobacteriales
+2025-10-29 13:55:05.567306 INFO::Creating boxplot for categorical data, Genotype vs Pseudomonadales
+2025-10-29 13:55:05.73678 INFO::Creating boxplot for categorical data, Genotype vs Burkholderiales
+2025-10-29 13:55:05.914752 INFO::Creating boxplot for categorical data, Genotype vs Xanthomonadales
+2025-10-29 13:55:06.08476 INFO::Creating boxplot for categorical data, Genotype vs Burkholderiales
+2025-10-29 13:55:06.259657 INFO::Creating boxplot for categorical data, Genotype vs Caulobacterales
+2025-10-29 13:55:06.439822 INFO::Creating boxplot for categorical data, Genotype vs Burkholderiales
+2025-10-29 13:55:06.641408 INFO::Creating boxplot for categorical data, Genotype vs Actinomycetales
+2025-10-29 13:55:06.824237 INFO::Creating boxplot for categorical data, Genotype vs Actinomycetales
+2025-10-29 13:55:07.082249 INFO::Creating boxplot for categorical data, Genotype vs Sphingomonadales
