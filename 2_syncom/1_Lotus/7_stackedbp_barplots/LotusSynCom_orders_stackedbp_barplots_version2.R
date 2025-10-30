@@ -7,9 +7,9 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load data.
 design <- read.table("../1_data/LotusSC_metadata.txt", header=TRUE, sep = "\t")
-asv_table <- read.table("../1_data/LotusSC_ASVtable.tsv", sep = "\t",
+asv_table <- read.table("../1_data/LotusSC_ASVtable_nospike.tsv", sep = "\t",
                         header = TRUE, row.names = 1, check.names = FALSE,
-                        comment.char = "", skip = 1)
+                        comment.char = "")
 taxonomy <- read.table("../1_data/LjSC_taxonomy.txt", sep="\t", header=TRUE,
                        fill = TRUE)
 
@@ -289,6 +289,10 @@ p_sig <- ggplot(df_ord, aes(x = order, y = mean_RA, fill = Genotype)) +
   )
 
 p_sig
+
+colnames(df_ord)[1] <- "Order"
+df_ord$Host <- "Lotus"
+write.csv(df_ord, "df_ord_Lj.csv")
 
 ggsave("Lotus_order_RA_sign_orders_asterisks.pdf", 
        p_sig, width=12, height=6, unit = "cm")

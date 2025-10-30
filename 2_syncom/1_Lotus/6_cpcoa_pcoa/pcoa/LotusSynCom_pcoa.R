@@ -7,9 +7,9 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load data.
 design <- read.table("../../1_data/LotusSC_metadata.txt", header=T, sep="\t")
-asv_table <- read.table("../../1_data/LotusSC_ASVtable.tsv", sep = "\t",
-                        header = TRUE, row.names = 1, check.names = FALSE,
-                        comment.char = "", skip = 1)
+asv_table <- read.table("../../1_data/LotusSC_ASVtable_nospike.tsv",
+                        sep = "\t", header = TRUE, row.names = 1, 
+                        check.names = FALSE, comment.char = "")
 
 # Load required packages.
 library(data.table)

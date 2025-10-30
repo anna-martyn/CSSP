@@ -7,9 +7,13 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load data.# Clean up.
 options(warn=-1)
-design <- read.table("BarleyCSSP_SConly_metadata_NEW.txt", header=TRUE, sep="\t")
-asv_table <- read.table("feature-table_BarleyCSSP_CerealSConly.tsv", sep = "\t", header = TRUE, row.names = 1, check.names = FALSE, comment.char = "", skip = 1)
-taxonomy <- read.table("CerealSC_taxonomy_new_May23.txt", sep="\t", header=TRUE, fill=TRUE)
+design <- read.table("../1_data/without_input/HordeumSC_metadata.txt",
+                     header = TRUE, sep = "\t")
+asv_table <- read.table("../1_data/without_input/HordeumSC_ASVtable.tsv",
+                        sep = "\t", header = TRUE, row.names = 1,
+                        check.names = FALSE, comment.char = "", skip = 1)
+taxonomy <- read.table("../1_data/without_input/CerealSC_taxonomy_May23.txt",
+                       sep = "\t", header = TRUE, fill = TRUE)
 
 # Load packages.
 library(dplyr)
@@ -23,14 +27,8 @@ library(FSA)
 library(multcompView)
 library(scales)
 
-# Modify design and asv table file to only keep genotypes of interest, and to only keep matched ASVs.
-design_filtered <- design %>%
-  filter(Genotype %in% c("WT","symrk","ccamk","nsp1","nsp2")) %>%
-  mutate(Compartment = recode(Compartment, "rhizo"="Rhizosphere", "endo"="Root"))
-samples_keep <- design_filtered$SampleID
-asv_table_filtered <- asv_table[, colnames(asv_table) %in% samples_keep]
-
-asv_table_matched <- asv_table_filtered[grepl("_", rownames(asv_table_filtered)), , drop = FALSE]
+# Modify asv table file to only keep matched ASVs.
+asv_table_matched <- asv_table[grepl("_", rownames(asv_table)), , drop = FALSE]
 
 # Check whether all matched ASVs are present in taxonomy file.
 missing_asvs <- setdiff(rownames(asv_table_matched), taxonomy$ASVid)
@@ -50,7 +48,7 @@ df <- as.data.frame(asv_table_norm) %>%
 # Reshape to long format and add design info.
 df_long <- df %>%
   pivot_longer(cols=-c(ASVid, Order), names_to="SampleID", values_to="RA") %>%
-  left_join(design_filtered %>% select(SampleID, Compartment, Genotype), by="SampleID")
+  left_join(design %>% select(SampleID, Compartment, Genotype), by="SampleID")
 
 # Summarise mean relative abundance for wach order per genotype-compartment combination.
 df_summary <- df_long %>%
@@ -110,8 +108,9 @@ colors <- c(
 )
 
 # Set genotype order and make mutant names italic.
-df_summary$Genotype <- factor(df_summary$Genotype,
-                              levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2"))
+df_summary$Genotype <- factor(
+  df_summary$Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2")
+)
 
 genotype_labels <- c(
   "WT"     = "WT",
@@ -187,8 +186,9 @@ df_order_sample <- df_order_sample %>%
   filter(Order %in% orders_nonzero)
 
 # Set the genotype factor levels.
-df_order_sample$Genotype <- factor(df_order_sample$Genotype,
-                                   levels = c("WT","symrk","ccamk","nsp1","nsp2"))
+df_order_sample$Genotype <- factor(
+  df_order_sample$Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2")
+)
 
 # Perform significance analysis (ANOVA and Tukey HSD) to look at differences in RA of orders among genotypes in each compartment.
 
@@ -303,9 +303,15 @@ main_theme <- theme(
 # 1) Plotting all orders (with non-significant and significant differences).
 
 ## Make sure factor levels match
-df_order_summary$Order <- factor(df_order_summary$Order, levels = unique(df_order_summary$Order))
-df_plot_letters$Order <- factor(df_plot_letters$Order, levels = levels(df_order_summary$Order))
-df_plot_letters$Genotype <- factor(df_plot_letters$Genotype, levels = levels(df_order_summary$Genotype))
+df_order_summary$Order <- factor(
+  df_order_summary$Order, levels = unique(df_order_summary$Order)
+)
+df_plot_letters$Order <- factor(
+  df_plot_letters$Order, levels = levels(df_order_summary$Order)
+)
+df_plot_letters$Genotype <- factor(
+  df_plot_letters$Genotype, levels = levels(df_order_summary$Genotype)
+)
 
 ## Define italic labels for legend.
 genotype_labels_legend <- c(
@@ -371,7 +377,8 @@ p_all <- ggplot(df_order_summary, aes(x=Order, y=Mean_RA, fill=Genotype)) +
 
 p_all
 
-ggsave("Hordeum_order_RA_all_orders.pdf", p_all, width=14, height=6)
+ggsave("Hordeum_order_RA_all_orders.pdf", 
+       p_all, width = 14, height = 6, units = "cm")
 saveRDS(p_all, file="Hordeum_order_RA_all_orders.rds")
 
 # Now only plot significant orders.

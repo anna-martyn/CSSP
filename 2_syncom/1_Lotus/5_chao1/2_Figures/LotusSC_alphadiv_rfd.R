@@ -11,10 +11,13 @@ library(dplyr)
 library(multcompView)
 library(forcats)
 
-# Load chao1 and metadata files (note: we have one alpha diversity file where all ASVs were taken into account, and one where only matched ASVs were used (filt)).
-alpha <- read.table("../1_Scripts/allASVs/LotusSC_allASVs_chao1.txt", sep="\t", header=TRUE, row.names=1, check.names=FALSE)
- alpha_filt <- read.table("../1_Scripts/matchedASVsonly/LotusSC_matchedASVsonly_chao1.txt", sep="\t", header=TRUE, row.names=1, check.names=FALSE)
-design <- read.table("LotusSC_metadata.txt", sep="\t", header=TRUE, row.names=1, check.names=FALSE)
+# Load chao1 and metadata files (note: we have one alpha diversity
+# file where all ASVs were taken into account, and one where only 
+# matched ASVs were used (filt)).
+alpha <- read.table("../1_Scripts/no_spike/allASVs/LotusSC_allASVs_chao1.txt",
+                    sep="\t", header=TRUE, row.names=1, check.names=FALSE)
+alpha_filt <- read.table("../1_Scripts/no_spike/matchedASVsonly/LotusSC_matchedASVsonly_chao1.txt", sep="\t", header=TRUE, row.names=1, check.names=FALSE)
+design <- read.table("NEW INPUT AND ANNA's SCRIPTS (use no_spike one for figure)/no_spike/LotusSC_metadata.txt", sep="\t", header=TRUE, row.names=1, check.names=FALSE)
 
 # For both dataframes:
 # 1. add metadata info

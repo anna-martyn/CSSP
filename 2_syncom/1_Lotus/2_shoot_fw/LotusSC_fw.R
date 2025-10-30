@@ -11,7 +11,7 @@ library(multcompView)
 library(dplyr)
 
 # Load data.
-weight <- read.table("LotusSC_shootwf_input.txt", header=T, sep="\t")
+weight <- read.table("LotusSC_shootfw_input.txt", header=T, sep="\t")
 weight$Fresh_weight <- as.numeric(gsub(",", ".", weight$Fresh_weight))
 
 # Set genotype factors.
@@ -95,6 +95,10 @@ p1 <- ggplot(weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
 p1
 
 # Save Lj-SPHERE plot
+weight$Host <- "Lotus"
+weight_summary$Host <- "Lotus"
+write.csv(weight, "shoot_fw_boxplot_Lj.csv")
+write.csv(weight_summary, "shoot_fw_boxplot_letters_Lj.csv")
 ggsave("LotusSC_shootfw_LjSC_only.pdf", p1, width=5, height=6, units = "cm")
 saveRDS(p1, "LotusSC_shootfw_LjSC_only.rds")
 saveRDS(p1, "../10_final_figures/LotusSC_shootfw_LjSC_only.rds")
