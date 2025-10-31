@@ -112,3 +112,19 @@ General:
 - Make sure error bars are calculated the same way everywhere
 - Make sure the correct code is used for stacked barplots
 
+Comments Simona:
+- in workflow pictures > use sketches of younger Lotus and barley plants (no flowering)
+- Soil WT: only show heatmap and move stacked bp to supplementary
+- Soil CSSP: only show root compartment, and then zoom into root - UF; also remove ellipses from plots (highlights lack of symbiosis condition)
+- Lotus SynCom:
+  > only show isolates where DA was observed in bubble plot
+  > move D to supplementary
+  > consider fusing with Barley SynCom figure
+  > remove uninoculated ctrls
+
+- overall: check all scripts for stacked bp as calculation mean RA is off!
+
+- experiment wise: prepare Lotus and Barley no microbe control experiment on low and high nutrients
+
+- for writing: consider changing structure from soil > syncom > root ex to soil > root ex > syncom
+
