@@ -701,10 +701,10 @@ for(pl in plants){
     df_sub <- df.heatmap %>% filter(Plant==pl, Compartment==comp)
     for(ord in unique(df_sub$Order)){
       df_ord <- df_sub %>% filter(Order==ord)
-      # Only test if at least 2 soils have >1 sample in original df.sample_order
       df_samples <- df.sample_order %>% 
         filter(Plant==pl, Compartment==comp, Order==ord)
       soil_counts <- table(df_samples$Soil)
+      # Only test if at least 2 soils have >1 sample in original df.sample_order
       if(length(soil_counts) > 1 & all(soil_counts >= 2)){
         kw <- kruskal.test(RA ~ Soil, data=df_samples)
         if(!is.na(kw$p.value) & kw$p.value < 0.05){
@@ -760,6 +760,10 @@ colors <- c("#1F78B4", "#A6CEE3", "white","#FFFF99",
 # Rescale breaks to 0-1 for gradientn
 values <- rescale(breaks, to = c(0,1))
 
+df.plot$letter[
+  df.plot$Plant == "Hordeum" & df.plot$Compartment == "Root" &
+  df.plot$Order == "Pseudomonadales"
+] <- NA
 # Then in ggplot:
 p_heatmap <- ggplot(df.plot, aes(x=Soil, y=Order, fill=RA)) +
   geom_tile(color="grey50") +
@@ -785,15 +789,17 @@ p_heatmap <- ggplot(df.plot, aes(x=Soil, y=Order, fill=RA)) +
   xlab(NULL) +
   ylab("Bacterial order") +
   theme(
-    axis.text.x = element_text(size=8, angle=0, vjust=1, hjust=0.5),
-    axis.text.y = element_text(size=8, color="black"),
-    axis.title = element_text(size=8),
+    axis.text.x = element_text(size=8, angle=0, vjust=1, hjust=0.5, 
+                               colour = "black"),
+    # axis.text.y = element_text(size=8, color="black"),
+    axis.title.y = element_blank(),
+    axis.title.x = element_text(size=8, colour = "black"),
     panel.grid = element_blank(),
     panel.background = element_blank(),
     strip.background = element_rect(fill="grey90", color=NA),
     strip.text = element_text(size=8, face="bold"),
-    legend.text = element_text(size=8),
-    legend.title = element_text(size=8),
+    legend.text = element_text(size=8, colour = "black"),
+    legend.title = element_text(size=8, colour = "black"),
     legend.position = "bottom",
     plot.margin = margin(r = 10, l = 20)
   )
