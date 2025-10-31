@@ -24,32 +24,33 @@ order_colors <- data.frame(group=c("Burkholderiales","Caulobacterales",
                                     "#fed5a4", "grey") )
 
 # Loading the data -------------------------------------------------------------
-ASV_table_lotus <- fread("../1_data/1_Lotus/feature-table.tsv")
-ASV_table_lotus <- ASV_table_lotus[-1]
+ASV_table_lotus <- fread(
+  "../1_data/1_Lotus/LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv"
+)
 colnames(ASV_table_lotus)[1] <- "ASV_ID"
 meta_data_dir <- paste("..", "1_data", "1_Lotus", 
                        "Lotus_CSSP_AskovSoils_metadata_excl_new_bulkUF.txt",
                        sep = "/")
-meta_data_lotus <- fread(meta_data_dir, drop = c(5,7:10))
-taxonomy_lotus <- fread("../1_data/1_Lotus/taxonomy_clean.csv")
+meta_data_lotus <- fread(
+  "../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt", drop = c(5,7,8)
+)
+taxonomy_lotus <- fread("../1_data/1_Lotus/taxonomy_clean.tsv")
 
 meta_data_lotus <- meta_data_lotus[Plant != "Soil"]
 meta_data_lotus <- meta_data_lotus[Compartment != "Nodules"]
-meta_data_lotus[Compartment == "Endosphere/Rhizoplane", Compartment:="Root"]
-colnames(meta_data_lotus)[1] <- "Sample_ID"
+# colnames(meta_data_lotus)[1] <- "SampleID"
 
-ASV_tab_dir <- paste("..", "1_data", "2_Barley",
-                     "BarleyCSSP_Askov_reseq_ASVtable_10_4.tsv", sep = "/")
-ASV_table_barley <- fread(ASV_tab_dir)
+ASV_table_barley <- fread(
+  "../1_data/2_Barley/HordeumCSSP_AskovSoils_ASVtable_10_4.tsv"
+)
 colnames(ASV_table_barley)[1] <- "ASV_ID"
-meta_data_dir <- paste("..", "1_data", "2_Barley", 
-                       "BarleyCSSP_Askov_reseq_metadata.txt",
-                       sep = "/")
-meta_data_barley <- fread(meta_data_dir, drop = c(2:3,8))
-taxonomy_barley <- fread("../1_data/2_Barley/taxonomy_clean.csv")
+
+meta_data_barley <- fread(
+  "../1_data/2_Barley/HordeumCSSP_AskovSoils_metadata.txt", drop = c(2,3,8)
+)
 meta_data_barley <- meta_data_barley[Plant != "Soil"]
-meta_data_barley[,Compartment:=fcase(Compartment == "rhizo", "Rhizosphere",
-                                     Compartment == "endo", "Root")]
+
+taxonomy_barley <- fread("../1_data/2_Barley/taxonomy_clean.tsv")
 
 ASV_table <- list(Lotus = ASV_table_lotus,
                   Barley = ASV_table_barley)
@@ -62,14 +63,14 @@ taxonomy <- list(Lotus = taxonomy_lotus,
 
 ASV_table_t <- lapply(ASV_table,
                       function(x) transpose(x,
-                                            keep.names = "Sample_ID",
+                                            keep.names = "SampleID",
                                             make.names = "ASV_ID")
                       )
 
 Full_data <- lapply(1:2,
                     function(i) merge(meta_data[[i]],
                                       ASV_table_t[[i]],
-                                      by = "Sample_ID")
+                                      by = "SampleID")
                     )
 names(Full_data) <- c("Lotus", "Barley")
 
@@ -84,7 +85,7 @@ Res <- data.table(Host = NA,
                   PK_ratios = NA,
                   NPK_ratios = NA)[-1]
 
-res2 <- data.table(Sample_ID = NA, Obs = NA, Pred = NA,
+res2 <- data.table(SampleID = NA, Obs = NA, Pred = NA,
                    Host = NA, Compartment = NA)[-1]
 
 Barplot_data <- data.table(Soil = NA,
@@ -98,6 +99,15 @@ SLR_dt <- data.table(Soil = NA,
                      Pred_type = NA,
                      Plant = NA,
                      Compartment = NA)[-1]
+
+ratio_summary <- data.table(
+  ASV_ID = NA,
+  Role = NA,
+  Prediction = NA,
+  Compartment = NA,
+  Host = NA
+)
+
 # Functions for the nested classification model --------------------------------
 Nested_model_three_categories <- function(OTU_table, y, highest_order,
                                           seed, lambda, overlap = T){
@@ -157,18 +167,21 @@ for(i in 1:nrow(Opt)){
   OTU_keep <- colnames(data_subset)[-(1:5)][OTU_present]
   
   set.seed(1700294030)
-  temp <- setDT(data_subset)[,sample(Sample_ID, 2, replace = FALSE),
+  temp <- setDT(data_subset)[,sample(SampleID, 2, replace = FALSE),
                              by = .(Genotype, Soil)]
   test_data_samples <- temp$V1
-  train_data_samples <- data_subset[!(Sample_ID %in% temp$V1 ), Sample_ID]
+  train_data_samples <- data_subset[!(SampleID %in% temp$V1 ), SampleID]
   
-  train_data <- data_subset[Sample_ID %in% train_data_samples]
-  test_data <- data_subset[Sample_ID %in% test_data_samples]
+  train_data <- data_subset[SampleID %in% train_data_samples]
+  test_data <- data_subset[SampleID %in% test_data_samples]
   
   x_train <- data.frame(train_data[,..OTU_keep],
-                        row.names = train_data$Sample_ID)
+                        row.names = train_data$SampleID)
   x_test <- data.frame(test_data[,..OTU_keep],
-                       row.names = test_data$Sample_ID)
+                       row.names = test_data$SampleID)
+  
+  colnames(x_train) <- gsub("X", "", colnames(x_train))
+  colnames(x_test) <- gsub("X", "", colnames(x_test))
   
   y_train <- train_data$Soil
   y_test <- test_data$Soil
@@ -183,7 +196,7 @@ for(i in 1:nrow(Opt)){
   pred <- Nested_model_three_categories_predict(cc, x_test)
   eval <- mean(y_test == pred)
   
-  dt <- data.table(Sample_ID = names(pred), Obs = y_test, Pred = pred)
+  dt <- data.table(SampleID = names(pred), Obs = y_test, Pred = pred)
   dt <- dt[order(Obs)]
   dt[,":="(Host = Opt$Host[i], Compartment = Opt$Compartment[i])]
   res2 <- rbind(res2, dt)
@@ -192,6 +205,28 @@ for(i in 1:nrow(Opt)){
                         function(x) colnames(x_train)[x$hard$numerator])
   denom_vec_NPK <- lapply(cc$Highest$ensemble,
                           function(x) colnames(x_train)[x$hard$denominator])
+  
+  num_NPK_dt <- data.table(
+    ASV_ID = unlist(num_vec_NPK),
+    Role = paste0(
+      "Numerator",
+      rep(1:length(num_vec_NPK), lapply(num_vec_NPK, length))
+    ),
+    Prediction = "NPK vs. non-NPK",
+    Compartment = as.character(Opt$Compartment[i]),
+    Host = as.character(Opt$Host[i])
+  )
+  
+  denom_NPK_dt <- data.table(
+    ASV_ID = unlist(denom_vec_NPK),
+    Role = paste0(
+      "Denominator",
+      rep(1:length(denom_vec_NPK), lapply(denom_vec_NPK, length))
+    ),
+    Prediction = "NPK vs. non-NPK",
+    Compartment = as.character(Opt$Compartment[i]),
+    Host = as.character(Opt$Host[i])
+  )
   
   num_NPK <- lapply(num_vec_NPK, function(x) paste(x, collapse = "+"))
   denom_NPK <- lapply(denom_vec_NPK, function(x) paste(x, collapse = "+"))
@@ -210,6 +245,32 @@ for(i in 1:nrow(Opt)){
   denom_vec_PK <- lapply(cc$Lowest$ensemble,
                          function(x) colnames(x_train)[x$hard$denominator])
   
+  num_PK_dt <- data.table(
+    ASV_ID = unlist(num_vec_PK),
+    Role = paste0(
+      "Numerator",
+      rep(1:length(num_vec_PK), lapply(num_vec_PK, length))
+    ),
+    Prediction = "PK vs. UF",
+    Compartment = as.character(Opt$Compartment[i]),
+    Host = as.character(Opt$Host[i])
+  )
+  
+  denom_PK_dt <- data.table(
+    ASV_ID = unlist(denom_vec_PK),
+    Role = paste0(
+      "Denominator",
+      rep(1:length(denom_vec_PK), lapply(denom_vec_PK, length))
+    ),
+    Prediction = "PK vs. UF",
+    Compartment = as.character(Opt$Compartment[i]),
+    Host = as.character(Opt$Host[i])
+  )
+  
+  ratio_summary <- rbind(
+    ratio_summary, num_NPK_dt, denom_NPK_dt, num_PK_dt, denom_PK_dt
+  )
+  
   num_PK <- lapply(num_vec_PK, function(x) paste(x, collapse = "+"))
   denom_PK <- lapply(denom_vec_PK, function(x) paste(x, collapse = "+"))
   
@@ -225,43 +286,17 @@ for(i in 1:nrow(Opt)){
   r1 <- length(num_NPK)
   r2 <- length(num_PK)
   
-  data.table(
-    "Ratio for NPK prediction" = c( rbind(paste0("Numerator", 1:r1),
-                                          paste0("Denominator", 1:r1)) ),
-    ASV = c( rbind(unlist(num_NPK), unlist(denom_NPK)) )
-  ) -> Ratio_information1
-  
-  data.table(
-    "Ratio for NPK prediction" = c( rbind(paste0("Numerator", 1:r2),
-                                          paste0("Denominator", 1:r2)) ),
-    ASV = c( rbind(unlist(num_PK), unlist(denom_PK)) )
-  ) -> Ratio_information2
-  
-  Ratio_information2 <- rbind(
-    data.table("Ratio for NPK prediction" = "Ratio for PK prediction",
-               ASV = ""),
-    Ratio_information2
-  )
-  
-  Ratio_information <- rbind(Ratio_information1, Ratio_information2)
-  
-  dir <- paste("Ratios/Ratio_information_", run, ".csv", sep = "")
-  fwrite(Ratio_information, dir)
-  
   all_pred_ASV <- unique(c(unlist(num_vec_NPK), unlist(denom_vec_NPK),
                            unlist(num_vec_PK), unlist(denom_vec_PK)))
   pred_ASV_tax <- taxonomy[[Current_plant]][Feature %in% all_pred_ASV]
-  
-  dir2 <- paste("Taxonomy/Pred_ASV_", run, ".csv", sep = "")
-  fwrite(pred_ASV_tax, dir2)
   
   Taxonomy_df <- data.frame(as.data.frame(taxonomy[[Current_plant]][,-1]),
                             row.names = taxonomy[[Current_plant]]$ASV)
   
   full_data <- rbind(x_train, x_test)
-  Sample_info <- meta_data[[Current_plant]][Sample_ID %in% rownames(full_data),
-                                            c("Sample_ID", "Soil"), with = F]
-  Sample_info <- Sample_info[match(rownames(full_data), Sample_ID)]
+  Sample_info <- meta_data[[Current_plant]][SampleID %in% rownames(full_data),
+                                            c("SampleID", "Soil"), with = F]
+  Sample_info <- Sample_info[match(rownames(full_data), SampleID)]
   
   Used_ASV_info <- cbind(
     Sample_info[,-1], full_data[all_pred_ASV]/rowSums(full_data)
@@ -346,11 +381,20 @@ for(i in 1:nrow(Opt)){
   Res <- rbind(Res, dt)
 }
 
+full_taxonomy <- rbind(taxonomy_barley, taxonomy_lotus)
+colnames(full_taxonomy)[1] <- "ASV_ID"
+ratio_summary <- merge(
+  ratio_summary, full_taxonomy, by = "ASV_ID", all.x = T
+)
+ratio_summary <- ratio_summary[-1]
+
+fwrite(ratio_summary, "Ratios_summary.csv")
+
 # Visualizing results ----------------------------------------------------------
 meta_data_full <- rbind(meta_data_barley, meta_data_lotus)
 meta_data_full <- data.frame(meta_data_full[,-1],
-                             row.names = meta_data_full$Sample_ID)
-res2[,Genotype:=meta_data_full[res2$Sample_ID,"Genotype"]]
+                             row.names = meta_data_full$SampleID)
+res2[,Genotype:=meta_data_full[res2$SampleID,"Genotype"]]
 
 res2[Host == "Barley", Host:="Hordeum"]
 res2[,":="(Host = factor(Host, levels = c("Lotus", "Hordeum")),
