@@ -86,6 +86,8 @@ p <- ggplot(points, aes(x=x, y=y, color=Genotype)) +
     legend.text = element_markdown(size=8, color="black"),
     strip.text = element_text(size = 8, colour = "black", face = "bold"),
     strip.placement = "outside",
+    axis.title.x=element_text(size = 8, colour = "black"),
+    axis.title.y=element_text(size = 8, colour = "black"),
     legend.key.size = unit(0.25, "cm")
   )+
   NULL

@@ -1,242 +1,242 @@
-2025-10-29 17:39:19.228394 INFO::Writing function arguments to log file
-2025-10-29 17:39:19.229659 DEBUG::Function arguments
-2025-10-29 17:39:19.230052 DEBUG::Output folder: Maaslin2_rhizo
-2025-10-29 17:39:19.230483 DEBUG::Min Abundance: 0.000000
-2025-10-29 17:39:19.230858 DEBUG::Min Prevalence: 0.100000
-2025-10-29 17:39:19.231274 DEBUG::Normalization: TSS
-2025-10-29 17:39:19.231759 DEBUG::Transform: LOG
-2025-10-29 17:39:19.232199 DEBUG::Analysis method: LM
-2025-10-29 17:39:19.232723 DEBUG::Max significance: 0.250000
-2025-10-29 17:39:19.233211 DEBUG::Random effects:
-2025-10-29 17:39:19.233672 DEBUG::Fixed effects: Genotype
-2025-10-29 17:39:19.234263 DEBUG::Correction method: BH
-2025-10-29 17:39:19.234866 DEBUG::Standardize: TRUE
-2025-10-29 17:39:19.235221 DEBUG::Cores: 1
-2025-10-29 17:39:19.235531 INFO::Verifying options selected are valid
-2025-10-29 17:39:19.236727 INFO::Determining format of input files
-2025-10-29 17:39:19.237459 INFO::Input format is data samples as columns and metadata samples as rows
-2025-10-29 17:39:19.238366 DEBUG::Transformed data so samples are rows
-2025-10-29 17:39:19.238904 DEBUG::A total of 20 samples were found in both the data and metadata
-2025-10-29 17:39:19.239136 DEBUG::Reordering data/metadata to use same sample ordering
-2025-10-29 17:39:19.239878 INFO::Formula for fixed effects: expr ~  Genotype
-2025-10-29 17:39:19.240523 INFO::Factor detected for categorial metadata 'Genotype'. Provide a reference argument or manually set factor ordering to change reference level.
-2025-10-29 17:39:19.241025 INFO::Filter data based on min abundance and min prevalence
-2025-10-29 17:39:19.241525 INFO::Total samples in data: 20
-2025-10-29 17:39:19.241999 INFO::Min samples required with min abundance for a feature not to be filtered: 2.000000
-2025-10-29 17:39:19.243011 INFO::Total filtered features: 4
-2025-10-29 17:39:19.243561 INFO::Filtered feature names from abundance and prevalence filtering: LjRoot224, LjRoot246, LjRoot153, LjRoot231
-2025-10-29 17:39:19.244781 INFO::Total filtered features with variance filtering: 0
-2025-10-29 17:39:19.245329 INFO::Filtered feature names from variance filtering:
-2025-10-29 17:39:19.245773 INFO::Running selected normalization method: TSS
-2025-10-29 17:39:19.246862 INFO::Applying z-score to standardize continuous metadata
-2025-10-29 17:39:19.251554 INFO::Running selected transform method: LOG
-2025-10-29 17:39:19.254227 INFO::Running selected analysis method: LM
-2025-10-29 17:39:19.255703 INFO::Fitting model to feature number 1, LjRoot221
-2025-10-29 17:39:19.259385 INFO::Fitting model to feature number 2, LjRoot149
-2025-10-29 17:39:19.261875 INFO::Fitting model to feature number 3, LjRoot223
-2025-10-29 17:39:19.263996 INFO::Fitting model to feature number 4, G37_LjNodule209
-2025-10-29 17:39:19.266075 INFO::Fitting model to feature number 5, G21_LjRoot111
-2025-10-29 17:39:19.268026 INFO::Fitting model to feature number 6, LjRoot228
-2025-10-29 17:39:19.269886 INFO::Fitting model to feature number 7, G3_LjRoot129
-2025-10-29 17:39:19.271749 INFO::Fitting model to feature number 8, LjRoot196
-2025-10-29 17:39:19.274005 INFO::Fitting model to feature number 9, G32_LjRoot291
-2025-10-29 17:39:19.276469 INFO::Fitting model to feature number 10, LjRoot259
-2025-10-29 17:39:19.278751 INFO::Fitting model to feature number 11, G11_LjRoot25
-2025-10-29 17:39:19.280975 INFO::Fitting model to feature number 12, G8_LjRoot126
-2025-10-29 17:39:19.28414 INFO::Fitting model to feature number 13, LjRoot17
-2025-10-29 17:39:19.286652 INFO::Fitting model to feature number 14, G2_LjRoot102
-2025-10-29 17:39:19.288952 INFO::Fitting model to feature number 15, G16_LjRoot125
-2025-10-29 17:39:19.291302 INFO::Fitting model to feature number 16, LjRoot82
-2025-10-29 17:39:19.29336 INFO::Fitting model to feature number 17, G20_LjRoot162
-2025-10-29 17:39:19.295227 INFO::Fitting model to feature number 18, LjRoot183
-2025-10-29 17:39:19.297065 INFO::Fitting model to feature number 19, G1_LjRoot134
-2025-10-29 17:39:19.300609 INFO::Fitting model to feature number 20, LjRoot71
-2025-10-29 17:39:19.304547 INFO::Fitting model to feature number 21, LjRoot289
-2025-10-29 17:39:19.30691 INFO::Fitting model to feature number 22, LjRoot3
-2025-10-29 17:39:19.308966 INFO::Fitting model to feature number 23, G4_LjRoot26
-2025-10-29 17:39:19.310897 INFO::Fitting model to feature number 24, LjRoot18
-2025-10-29 17:39:19.312709 INFO::Fitting model to feature number 25, G6_LjRoot130
-2025-10-29 17:39:19.314473 INFO::Fitting model to feature number 26, G17_LjRoot232
-2025-10-29 17:39:19.316582 INFO::Fitting model to feature number 27, LjRoot227
-2025-10-29 17:39:19.318654 INFO::Fitting model to feature number 28, LjRoot219
-2025-10-29 17:39:19.320542 INFO::Fitting model to feature number 29, LjRoot122
-2025-10-29 17:39:19.322359 INFO::Fitting model to feature number 30, LjRoot243
-2025-10-29 17:39:19.324177 INFO::Fitting model to feature number 31, G12_LjRoot70
-2025-10-29 17:39:19.325907 INFO::Fitting model to feature number 32, G29_LjRoot226
-2025-10-29 17:39:19.327633 INFO::Fitting model to feature number 33, G22_LjRoot238
-2025-10-29 17:39:19.329324 INFO::Fitting model to feature number 34, LjRoot237
-2025-10-29 17:39:19.33104 INFO::Fitting model to feature number 35, G7_LjRoot117
-2025-10-29 17:39:19.335993 INFO::Fitting model to feature number 36, LjRoot10
-2025-10-29 17:39:19.339823 INFO::Fitting model to feature number 37, LjRoot229
-2025-10-29 17:39:19.343372 INFO::Fitting model to feature number 38, G5_LjRoot105
-2025-10-29 17:39:19.346071 INFO::Fitting model to feature number 39, LjRoot11
-2025-10-29 17:39:19.348298 INFO::Fitting model to feature number 40, G36_LjRoot142
-2025-10-29 17:39:19.352682 INFO::Fitting model to feature number 41, G14_LjRoot22
-2025-10-29 17:39:19.356727 INFO::Fitting model to feature number 42, LjRoot285
-2025-10-29 17:39:19.360371 INFO::Fitting model to feature number 43, LjRoot240
-2025-10-29 17:39:19.363589 INFO::Fitting model to feature number 44, LjRoot248
-2025-10-29 17:39:19.367869 INFO::Fitting model to feature number 45, G35_LjRoot145
-2025-10-29 17:39:19.370547 INFO::Fitting model to feature number 46, LjRoot89
-2025-10-29 17:39:19.37256 INFO::Fitting model to feature number 47, LjRoot1
-2025-10-29 17:39:19.374423 INFO::Fitting model to feature number 48, G30_LjRoot2
-2025-10-29 17:39:19.376219 INFO::Fitting model to feature number 49, LjRoot277
-2025-10-29 17:39:19.377971 INFO::Fitting model to feature number 50, LjRoot152
-2025-10-29 17:39:19.379751 INFO::Fitting model to feature number 51, G33_LjRoot104
-2025-10-29 17:39:19.381572 INFO::Fitting model to feature number 52, G27_LjRoot78
-2025-10-29 17:39:19.383674 INFO::Fitting model to feature number 53, LjRoot30
-2025-10-29 17:39:19.385624 INFO::Fitting model to feature number 54, LjRoot295
-2025-10-29 17:39:19.387488 INFO::Fitting model to feature number 55, LjRoot296
-2025-10-29 17:39:19.418435 INFO::Fitting model to feature number 56, LjRoot257
-2025-10-29 17:39:19.421893 INFO::Fitting model to feature number 57, G9_LjRoot131
-2025-10-29 17:39:19.42485 INFO::Fitting model to feature number 58, G24_LjRoot12
-2025-10-29 17:39:19.427728 INFO::Fitting model to feature number 59, LjRoot244
-2025-10-29 17:39:19.430251 INFO::Fitting model to feature number 60, G15_LjRoot29
-2025-10-29 17:39:19.434697 INFO::Fitting model to feature number 61, LjRoot230
-2025-10-29 17:39:19.439408 INFO::Fitting model to feature number 62, LjRoot258
-2025-10-29 17:39:19.443622 INFO::Fitting model to feature number 63, LjRoot8
-2025-10-29 17:39:19.446485 INFO::Fitting model to feature number 64, LjRoot220
-2025-10-29 17:39:19.448969 INFO::Fitting model to feature number 65, G34_LjRoot233
-2025-10-29 17:39:19.451537 INFO::Fitting model to feature number 66, LjRoot80
-2025-10-29 17:39:19.453887 INFO::Fitting model to feature number 67, LjRoot247
-2025-10-29 17:39:19.456085 INFO::Fitting model to feature number 68, LjRoot58
-2025-10-29 17:39:19.458127 INFO::Fitting model to feature number 69, LjRoot261
-2025-10-29 17:39:19.460039 INFO::Fitting model to feature number 70, G31_LjRoot101
-2025-10-29 17:39:19.461953 INFO::Fitting model to feature number 71, LjRoot28
-2025-10-29 17:39:19.463846 INFO::Fitting model to feature number 72, G25_LjRoot27
-2025-10-29 17:39:19.468017 INFO::Fitting model to feature number 73, LjRoot288
-2025-10-29 17:39:19.472259 INFO::Fitting model to feature number 74, LjRoot100
-2025-10-29 17:39:19.495436 INFO::Counting total values for each feature
-2025-10-29 17:39:19.509395 INFO::Writing filtered data to file Maaslin2_rhizo/features/filtered_data.tsv
-2025-10-29 17:39:19.51234 INFO::Writing filtered, normalized data to file Maaslin2_rhizo/features/filtered_data_norm.tsv
-2025-10-29 17:39:19.51458 INFO::Writing filtered, normalized, transformed data to file Maaslin2_rhizo/features/filtered_data_norm_transformed.tsv
-2025-10-29 17:39:19.517305 WARNING::Deleting existing residuals file: Maaslin2_rhizo/fits/residuals.rds
-2025-10-29 17:39:19.518298 INFO::Writing residuals to file Maaslin2_rhizo/fits/residuals.rds
-2025-10-29 17:39:19.519249 WARNING::Deleting existing fitted file: Maaslin2_rhizo/fits/fitted.rds
-2025-10-29 17:39:19.520164 INFO::Writing fitted values to file Maaslin2_rhizo/fits/fitted.rds
-2025-10-29 17:39:19.520923 INFO::Writing all results to file (ordered by increasing q-values): Maaslin2_rhizo/all_results.tsv
-2025-10-29 17:39:19.523068 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): Maaslin2_rhizo/significant_results.tsv
-2025-10-29 17:39:19.524264 INFO::Writing association plots (one for each significant association) to output folder: Maaslin2_rhizo
-2025-10-29 17:39:19.525946 INFO::Plotting associations from most to least significant, grouped by metadata
-2025-10-29 17:39:19.526613 INFO::Plotting data for metadata number 1, Genotype
-2025-10-29 17:39:19.527601 INFO::Creating boxplot for categorical data, Genotype vs LjRoot58
-2025-10-29 17:39:19.710968 INFO::Creating boxplot for categorical data, Genotype vs LjRoot58
-2025-10-29 17:39:19.939468 INFO::Creating boxplot for categorical data, Genotype vs LjRoot58
-2025-10-29 17:39:20.121455 INFO::Creating boxplot for categorical data, Genotype vs LjRoot58
-2025-10-29 17:39:20.336165 INFO::Creating boxplot for categorical data, Genotype vs LjRoot237
-2025-10-29 17:39:20.528698 INFO::Creating boxplot for categorical data, Genotype vs G8_LjRoot126
-2025-10-29 17:39:20.71156 INFO::Creating boxplot for categorical data, Genotype vs G3_LjRoot129
-2025-10-29 17:39:20.883139 INFO::Creating boxplot for categorical data, Genotype vs G3_LjRoot129
-2025-10-29 17:39:21.117768 INFO::Creating boxplot for categorical data, Genotype vs G8_LjRoot126
-2025-10-29 17:39:21.335601 INFO::Creating boxplot for categorical data, Genotype vs G7_LjRoot117
-2025-10-29 17:39:21.54141 INFO::Creating boxplot for categorical data, Genotype vs G3_LjRoot129
-2025-10-29 17:39:21.82857 INFO::Creating boxplot for categorical data, Genotype vs G2_LjRoot102
-2025-10-29 17:39:22.065687 INFO::Creating boxplot for categorical data, Genotype vs LjRoot237
-2025-10-29 17:39:22.269617 INFO::Creating boxplot for categorical data, Genotype vs G2_LjRoot102
-2025-10-29 17:39:22.450345 INFO::Creating boxplot for categorical data, Genotype vs LjRoot89
-2025-10-29 17:39:22.642092 INFO::Creating boxplot for categorical data, Genotype vs G21_LjRoot111
-2025-10-29 17:39:22.859802 INFO::Creating boxplot for categorical data, Genotype vs LjRoot237
-2025-10-29 17:39:23.092666 INFO::Creating boxplot for categorical data, Genotype vs G20_LjRoot162
-2025-10-29 17:39:23.318516 INFO::Creating boxplot for categorical data, Genotype vs G3_LjRoot129
-2025-10-29 17:39:23.527382 INFO::Creating boxplot for categorical data, Genotype vs G2_LjRoot102
-2025-10-29 17:39:23.785909 INFO::Creating boxplot for categorical data, Genotype vs G8_LjRoot126
-2025-10-29 17:39:23.99808 INFO::Creating boxplot for categorical data, Genotype vs LjRoot82
-2025-10-29 17:39:24.168501 INFO::Creating boxplot for categorical data, Genotype vs LjRoot221
-2025-10-29 17:39:24.39483 INFO::Creating boxplot for categorical data, Genotype vs G6_LjRoot130
-2025-10-29 17:39:24.599576 INFO::Creating boxplot for categorical data, Genotype vs LjRoot259
-2025-10-29 17:39:24.817399 INFO::Creating boxplot for categorical data, Genotype vs G21_LjRoot111
-2025-10-29 17:39:24.990494 INFO::Creating boxplot for categorical data, Genotype vs LjRoot122
-2025-10-29 17:39:25.312393 INFO::Creating boxplot for categorical data, Genotype vs G2_LjRoot102
-2025-10-29 17:39:25.500842 INFO::Creating boxplot for categorical data, Genotype vs LjRoot3
-2025-10-29 17:39:25.719959 INFO::Creating boxplot for categorical data, Genotype vs LjRoot237
-2025-10-29 17:39:25.960552 INFO::Creating boxplot for categorical data, Genotype vs G7_LjRoot117
-2025-10-29 17:39:26.180744 INFO::Creating boxplot for categorical data, Genotype vs G15_LjRoot29
-2025-10-29 17:39:26.420964 INFO::Creating boxplot for categorical data, Genotype vs G5_LjRoot105
-2025-10-29 17:39:26.61296 INFO::Creating boxplot for categorical data, Genotype vs G15_LjRoot29
-2025-10-29 17:39:26.815833 INFO::Creating boxplot for categorical data, Genotype vs LjRoot221
-2025-10-29 17:39:27.090364 INFO::Creating boxplot for categorical data, Genotype vs G17_LjRoot232
-2025-10-29 17:39:27.286733 INFO::Creating boxplot for categorical data, Genotype vs LjRoot28
-2025-10-29 17:39:27.463728 INFO::Creating boxplot for categorical data, Genotype vs LjRoot248
-2025-10-29 17:39:27.764519 INFO::Creating boxplot for categorical data, Genotype vs G32_LjRoot291
-2025-10-29 17:39:27.961179 INFO::Creating boxplot for categorical data, Genotype vs LjRoot228
-2025-10-29 17:39:28.154671 INFO::Creating boxplot for categorical data, Genotype vs G32_LjRoot291
-2025-10-29 17:39:28.349224 INFO::Creating boxplot for categorical data, Genotype vs G21_LjRoot111
-2025-10-29 17:39:28.573449 INFO::Creating boxplot for categorical data, Genotype vs G35_LjRoot145
-2025-10-29 17:39:28.775923 INFO::Creating boxplot for categorical data, Genotype vs LjRoot228
-2025-10-29 17:39:29.002043 INFO::Creating boxplot for categorical data, Genotype vs G7_LjRoot117
-2025-10-29 17:39:29.229872 INFO::Creating boxplot for categorical data, Genotype vs G11_LjRoot25
-2025-10-29 17:39:29.466198 INFO::Creating boxplot for categorical data, Genotype vs LjRoot89
-2025-10-29 17:39:29.646181 INFO::Creating boxplot for categorical data, Genotype vs LjRoot240
-2025-10-29 17:39:29.858477 INFO::Creating boxplot for categorical data, Genotype vs LjRoot277
-2025-10-29 17:39:30.136199 INFO::Creating boxplot for categorical data, Genotype vs LjRoot247
-2025-10-29 17:39:30.380367 INFO::Creating boxplot for categorical data, Genotype vs LjRoot228
-2025-10-29 17:39:30.564226 INFO::Creating boxplot for categorical data, Genotype vs G37_LjNodule209
-2025-10-29 17:39:30.737673 INFO::Creating boxplot for categorical data, Genotype vs G1_LjRoot134
-2025-10-29 17:39:30.980555 INFO::Creating boxplot for categorical data, Genotype vs G16_LjRoot125
-2025-10-29 17:39:31.166237 INFO::Creating boxplot for categorical data, Genotype vs G20_LjRoot162
-2025-10-29 17:39:31.379114 INFO::Creating boxplot for categorical data, Genotype vs LjRoot223
-2025-10-29 17:39:31.571275 INFO::Creating boxplot for categorical data, Genotype vs G35_LjRoot145
-2025-10-29 17:39:31.813392 INFO::Creating boxplot for categorical data, Genotype vs G17_LjRoot232
-2025-10-29 17:39:32.034674 INFO::Creating boxplot for categorical data, Genotype vs LjRoot248
-2025-10-29 17:39:32.25181 INFO::Creating boxplot for categorical data, Genotype vs G37_LjNodule209
-2025-10-29 17:39:32.48514 INFO::Creating boxplot for categorical data, Genotype vs G6_LjRoot130
-2025-10-29 17:39:32.753893 INFO::Creating boxplot for categorical data, Genotype vs LjRoot228
-2025-10-29 17:39:32.951102 INFO::Creating boxplot for categorical data, Genotype vs G11_LjRoot25
-2025-10-29 17:39:33.171253 INFO::Creating boxplot for categorical data, Genotype vs G20_LjRoot162
-2025-10-29 17:39:33.349993 INFO::Creating boxplot for categorical data, Genotype vs LjRoot3
-2025-10-29 17:39:33.565732 INFO::Creating boxplot for categorical data, Genotype vs G7_LjRoot117
-2025-10-29 17:39:33.767368 INFO::Creating boxplot for categorical data, Genotype vs G15_LjRoot29
-2025-10-29 17:39:33.949408 INFO::Creating boxplot for categorical data, Genotype vs LjRoot221
-2025-10-29 17:39:34.147048 INFO::Creating boxplot for categorical data, Genotype vs LjRoot221
-2025-10-29 17:39:34.385557 INFO::Creating boxplot for categorical data, Genotype vs LjRoot82
-2025-10-29 17:39:34.570549 INFO::Creating boxplot for categorical data, Genotype vs G27_LjRoot78
-2025-10-29 17:39:34.745973 INFO::Creating boxplot for categorical data, Genotype vs G6_LjRoot130
-2025-10-29 17:39:34.982102 INFO::Creating boxplot for categorical data, Genotype vs G21_LjRoot111
-2025-10-29 17:39:35.222028 INFO::Creating boxplot for categorical data, Genotype vs LjRoot243
-2025-10-29 17:39:35.439457 INFO::Creating boxplot for categorical data, Genotype vs G14_LjRoot22
-2025-10-29 17:39:35.695454 INFO::Creating boxplot for categorical data, Genotype vs G37_LjNodule209
-2025-10-29 17:39:36.015132 INFO::Creating boxplot for categorical data, Genotype vs LjRoot289
-2025-10-29 17:39:36.28975 INFO::Creating boxplot for categorical data, Genotype vs LjRoot295
-2025-10-29 17:39:36.55095 INFO::Creating boxplot for categorical data, Genotype vs LjRoot71
-2025-10-29 17:39:36.807523 INFO::Creating boxplot for categorical data, Genotype vs G5_LjRoot105
-2025-10-29 17:39:37.153611 INFO::Creating boxplot for categorical data, Genotype vs G35_LjRoot145
-2025-10-29 17:39:37.407602 INFO::Creating boxplot for categorical data, Genotype vs LjRoot18
-2025-10-29 17:39:37.672563 INFO::Creating boxplot for categorical data, Genotype vs G12_LjRoot70
-2025-10-29 17:39:37.971236 INFO::Creating boxplot for categorical data, Genotype vs LjRoot11
-2025-10-29 17:39:38.29574 INFO::Creating boxplot for categorical data, Genotype vs LjRoot288
-2025-10-29 17:39:38.652183 INFO::Creating boxplot for categorical data, Genotype vs G8_LjRoot126
-2025-10-29 17:39:38.960918 INFO::Creating boxplot for categorical data, Genotype vs G5_LjRoot105
-2025-10-29 17:39:39.360238 INFO::Creating boxplot for categorical data, Genotype vs G15_LjRoot29
-2025-10-29 17:39:39.712198 INFO::Creating boxplot for categorical data, Genotype vs G17_LjRoot232
-2025-10-29 17:39:40.003372 INFO::Creating boxplot for categorical data, Genotype vs LjRoot227
-2025-10-29 17:39:40.235988 INFO::Creating boxplot for categorical data, Genotype vs LjRoot10
-2025-10-29 17:39:40.539088 INFO::Creating boxplot for categorical data, Genotype vs LjRoot257
-2025-10-29 17:39:40.775607 INFO::Creating boxplot for categorical data, Genotype vs LjRoot17
-2025-10-29 17:39:41.047278 INFO::Creating boxplot for categorical data, Genotype vs LjRoot11
-2025-10-29 17:39:41.319658 INFO::Creating boxplot for categorical data, Genotype vs LjRoot230
-2025-10-29 17:39:41.595913 INFO::Creating boxplot for categorical data, Genotype vs LjRoot80
-2025-10-29 17:39:41.848017 INFO::Creating boxplot for categorical data, Genotype vs G20_LjRoot162
-2025-10-29 17:39:42.142643 INFO::Creating boxplot for categorical data, Genotype vs LjRoot229
-2025-10-29 17:39:42.438224 INFO::Creating boxplot for categorical data, Genotype vs G35_LjRoot145
-2025-10-29 17:39:42.735415 INFO::Creating boxplot for categorical data, Genotype vs LjRoot149
-2025-10-29 17:39:43.06854 INFO::Creating boxplot for categorical data, Genotype vs LjRoot82
-2025-10-29 17:39:43.314236 INFO::Creating boxplot for categorical data, Genotype vs LjRoot18
-2025-10-29 17:39:43.567421 INFO::Creating boxplot for categorical data, Genotype vs LjRoot295
-2025-10-29 17:39:43.849343 INFO::Creating boxplot for categorical data, Genotype vs LjRoot240
-2025-10-29 17:39:44.104973 INFO::Creating boxplot for categorical data, Genotype vs G30_LjRoot2
-2025-10-29 17:39:44.33189 INFO::Creating boxplot for categorical data, Genotype vs LjRoot89
-2025-10-29 17:39:44.618563 INFO::Creating boxplot for categorical data, Genotype vs G36_LjRoot142
-2025-10-29 17:39:44.89541 INFO::Creating boxplot for categorical data, Genotype vs LjRoot28
-2025-10-29 17:39:45.151634 INFO::Creating boxplot for categorical data, Genotype vs LjRoot30
-2025-10-29 17:39:45.415331 INFO::Creating boxplot for categorical data, Genotype vs G4_LjRoot26
-2025-10-29 17:39:45.789294 INFO::Creating boxplot for categorical data, Genotype vs G1_LjRoot134
-2025-10-29 17:39:46.021137 INFO::Creating boxplot for categorical data, Genotype vs LjRoot149
-2025-10-29 17:39:46.261754 INFO::Creating boxplot for categorical data, Genotype vs LjRoot3
-2025-10-29 17:39:46.53662 INFO::Creating boxplot for categorical data, Genotype vs LjRoot243
-2025-10-29 17:39:46.824431 INFO::Creating boxplot for categorical data, Genotype vs LjRoot11
-2025-10-29 17:39:47.042551 INFO::Creating boxplot for categorical data, Genotype vs LjRoot295
-2025-10-29 17:39:47.310111 INFO::Creating boxplot for categorical data, Genotype vs LjRoot296
-2025-10-29 17:39:47.609024 INFO::Creating boxplot for categorical data, Genotype vs G37_LjNodule209
-2025-10-29 17:39:47.890961 INFO::Creating boxplot for categorical data, Genotype vs G36_LjRoot142
-2025-10-29 17:39:48.143313 INFO::Creating boxplot for categorical data, Genotype vs LjRoot1
-2025-10-29 17:39:48.376805 INFO::Creating boxplot for categorical data, Genotype vs G34_LjRoot233
-2025-10-29 17:39:48.689217 INFO::Creating boxplot for categorical data, Genotype vs G14_LjRoot22
+2025-10-31 07:59:49.534317 INFO::Writing function arguments to log file
+2025-10-31 07:59:49.535015 DEBUG::Function arguments
+2025-10-31 07:59:49.53521 DEBUG::Output folder: Maaslin2_rhizo
+2025-10-31 07:59:49.535356 DEBUG::Min Abundance: 0.000000
+2025-10-31 07:59:49.535488 DEBUG::Min Prevalence: 0.100000
+2025-10-31 07:59:49.53561 DEBUG::Normalization: TSS
+2025-10-31 07:59:49.535727 DEBUG::Transform: LOG
+2025-10-31 07:59:49.535851 DEBUG::Analysis method: LM
+2025-10-31 07:59:49.535986 DEBUG::Max significance: 0.250000
+2025-10-31 07:59:49.536105 DEBUG::Random effects:
+2025-10-31 07:59:49.536215 DEBUG::Fixed effects: Genotype
+2025-10-31 07:59:49.536322 DEBUG::Correction method: BH
+2025-10-31 07:59:49.536429 DEBUG::Standardize: TRUE
+2025-10-31 07:59:49.536536 DEBUG::Cores: 1
+2025-10-31 07:59:49.536643 INFO::Verifying options selected are valid
+2025-10-31 07:59:49.537205 INFO::Determining format of input files
+2025-10-31 07:59:49.537735 INFO::Input format is data samples as columns and metadata samples as rows
+2025-10-31 07:59:49.538477 DEBUG::Transformed data so samples are rows
+2025-10-31 07:59:49.538803 DEBUG::A total of 20 samples were found in both the data and metadata
+2025-10-31 07:59:49.538957 DEBUG::Reordering data/metadata to use same sample ordering
+2025-10-31 07:59:49.539565 INFO::Formula for fixed effects: expr ~  Genotype
+2025-10-31 07:59:49.540155 INFO::Factor detected for categorial metadata 'Genotype'. Provide a reference argument or manually set factor ordering to change reference level.
+2025-10-31 07:59:49.54058 INFO::Filter data based on min abundance and min prevalence
+2025-10-31 07:59:49.541027 INFO::Total samples in data: 20
+2025-10-31 07:59:49.541432 INFO::Min samples required with min abundance for a feature not to be filtered: 2.000000
+2025-10-31 07:59:49.54233 INFO::Total filtered features: 4
+2025-10-31 07:59:49.542843 INFO::Filtered feature names from abundance and prevalence filtering: LjRoot224, LjRoot246, LjRoot153, LjRoot231
+2025-10-31 07:59:49.543947 INFO::Total filtered features with variance filtering: 0
+2025-10-31 07:59:49.54445 INFO::Filtered feature names from variance filtering:
+2025-10-31 07:59:49.544874 INFO::Running selected normalization method: TSS
+2025-10-31 07:59:49.545812 INFO::Applying z-score to standardize continuous metadata
+2025-10-31 07:59:49.547912 INFO::Running selected transform method: LOG
+2025-10-31 07:59:49.548984 INFO::Running selected analysis method: LM
+2025-10-31 07:59:49.54968 INFO::Fitting model to feature number 1, LjRoot221
+2025-10-31 07:59:49.551495 INFO::Fitting model to feature number 2, LjRoot149
+2025-10-31 07:59:49.55326 INFO::Fitting model to feature number 3, LjRoot223
+2025-10-31 07:59:49.554941 INFO::Fitting model to feature number 4, G37_LjNodule209
+2025-10-31 07:59:49.556608 INFO::Fitting model to feature number 5, G21_LjRoot111
+2025-10-31 07:59:49.558261 INFO::Fitting model to feature number 6, LjRoot228
+2025-10-31 07:59:49.559909 INFO::Fitting model to feature number 7, G3_LjRoot129
+2025-10-31 07:59:49.561536 INFO::Fitting model to feature number 8, LjRoot196
+2025-10-31 07:59:49.563267 INFO::Fitting model to feature number 9, G32_LjRoot291
+2025-10-31 07:59:49.56501 INFO::Fitting model to feature number 10, LjRoot259
+2025-10-31 07:59:49.566769 INFO::Fitting model to feature number 11, G11_LjRoot25
+2025-10-31 07:59:49.568527 INFO::Fitting model to feature number 12, G8_LjRoot126
+2025-10-31 07:59:49.571972 INFO::Fitting model to feature number 13, LjRoot17
+2025-10-31 07:59:49.576444 INFO::Fitting model to feature number 14, G2_LjRoot102
+2025-10-31 07:59:49.580614 INFO::Fitting model to feature number 15, G16_LjRoot125
+2025-10-31 07:59:49.584673 INFO::Fitting model to feature number 16, LjRoot82
+2025-10-31 07:59:49.588593 INFO::Fitting model to feature number 17, G20_LjRoot162
+2025-10-31 07:59:49.59264 INFO::Fitting model to feature number 18, LjRoot183
+2025-10-31 07:59:49.596498 INFO::Fitting model to feature number 19, G1_LjRoot134
+2025-10-31 07:59:49.599879 INFO::Fitting model to feature number 20, LjRoot71
+2025-10-31 07:59:49.602982 INFO::Fitting model to feature number 21, LjRoot289
+2025-10-31 07:59:49.606046 INFO::Fitting model to feature number 22, LjRoot3
+2025-10-31 07:59:49.608549 INFO::Fitting model to feature number 23, G4_LjRoot26
+2025-10-31 07:59:49.610411 INFO::Fitting model to feature number 24, LjRoot18
+2025-10-31 07:59:49.61217 INFO::Fitting model to feature number 25, G6_LjRoot130
+2025-10-31 07:59:49.613866 INFO::Fitting model to feature number 26, G17_LjRoot232
+2025-10-31 07:59:49.615544 INFO::Fitting model to feature number 27, LjRoot227
+2025-10-31 07:59:49.617213 INFO::Fitting model to feature number 28, LjRoot219
+2025-10-31 07:59:49.618861 INFO::Fitting model to feature number 29, LjRoot122
+2025-10-31 07:59:49.620523 INFO::Fitting model to feature number 30, LjRoot243
+2025-10-31 07:59:49.622168 INFO::Fitting model to feature number 31, G12_LjRoot70
+2025-10-31 07:59:49.62382 INFO::Fitting model to feature number 32, G29_LjRoot226
+2025-10-31 07:59:49.625491 INFO::Fitting model to feature number 33, G22_LjRoot238
+2025-10-31 07:59:49.627168 INFO::Fitting model to feature number 34, LjRoot237
+2025-10-31 07:59:49.628825 INFO::Fitting model to feature number 35, G7_LjRoot117
+2025-10-31 07:59:49.630473 INFO::Fitting model to feature number 36, LjRoot10
+2025-10-31 07:59:49.63213 INFO::Fitting model to feature number 37, LjRoot229
+2025-10-31 07:59:49.633767 INFO::Fitting model to feature number 38, G5_LjRoot105
+2025-10-31 07:59:49.635544 INFO::Fitting model to feature number 39, LjRoot11
+2025-10-31 07:59:49.637347 INFO::Fitting model to feature number 40, G36_LjRoot142
+2025-10-31 07:59:49.639132 INFO::Fitting model to feature number 41, G14_LjRoot22
+2025-10-31 07:59:49.640874 INFO::Fitting model to feature number 42, LjRoot285
+2025-10-31 07:59:49.642536 INFO::Fitting model to feature number 43, LjRoot240
+2025-10-31 07:59:49.644171 INFO::Fitting model to feature number 44, LjRoot248
+2025-10-31 07:59:49.645797 INFO::Fitting model to feature number 45, G35_LjRoot145
+2025-10-31 07:59:49.648152 INFO::Fitting model to feature number 46, LjRoot89
+2025-10-31 07:59:49.649854 INFO::Fitting model to feature number 47, LjRoot1
+2025-10-31 07:59:49.651523 INFO::Fitting model to feature number 48, G30_LjRoot2
+2025-10-31 07:59:49.653154 INFO::Fitting model to feature number 49, LjRoot277
+2025-10-31 07:59:49.65479 INFO::Fitting model to feature number 50, LjRoot152
+2025-10-31 07:59:49.656453 INFO::Fitting model to feature number 51, G33_LjRoot104
+2025-10-31 07:59:49.658085 INFO::Fitting model to feature number 52, G27_LjRoot78
+2025-10-31 07:59:49.65971 INFO::Fitting model to feature number 53, LjRoot30
+2025-10-31 07:59:49.661335 INFO::Fitting model to feature number 54, LjRoot295
+2025-10-31 07:59:49.662946 INFO::Fitting model to feature number 55, LjRoot296
+2025-10-31 07:59:49.664557 INFO::Fitting model to feature number 56, LjRoot257
+2025-10-31 07:59:49.666182 INFO::Fitting model to feature number 57, G9_LjRoot131
+2025-10-31 07:59:49.667794 INFO::Fitting model to feature number 58, G24_LjRoot12
+2025-10-31 07:59:49.669415 INFO::Fitting model to feature number 59, LjRoot244
+2025-10-31 07:59:49.671034 INFO::Fitting model to feature number 60, G15_LjRoot29
+2025-10-31 07:59:49.672686 INFO::Fitting model to feature number 61, LjRoot230
+2025-10-31 07:59:49.674313 INFO::Fitting model to feature number 62, LjRoot258
+2025-10-31 07:59:49.675953 INFO::Fitting model to feature number 63, LjRoot8
+2025-10-31 07:59:49.677575 INFO::Fitting model to feature number 64, LjRoot220
+2025-10-31 07:59:49.679203 INFO::Fitting model to feature number 65, G34_LjRoot233
+2025-10-31 07:59:49.680812 INFO::Fitting model to feature number 66, LjRoot80
+2025-10-31 07:59:49.682428 INFO::Fitting model to feature number 67, LjRoot247
+2025-10-31 07:59:49.684044 INFO::Fitting model to feature number 68, LjRoot58
+2025-10-31 07:59:49.685656 INFO::Fitting model to feature number 69, LjRoot261
+2025-10-31 07:59:49.687274 INFO::Fitting model to feature number 70, G31_LjRoot101
+2025-10-31 07:59:49.688879 INFO::Fitting model to feature number 71, LjRoot28
+2025-10-31 07:59:49.690507 INFO::Fitting model to feature number 72, G25_LjRoot27
+2025-10-31 07:59:49.692141 INFO::Fitting model to feature number 73, LjRoot288
+2025-10-31 07:59:49.693749 INFO::Fitting model to feature number 74, LjRoot100
+2025-10-31 07:59:49.722688 INFO::Counting total values for each feature
+2025-10-31 07:59:49.729894 INFO::Writing filtered data to file Maaslin2_rhizo/features/filtered_data.tsv
+2025-10-31 07:59:49.73241 INFO::Writing filtered, normalized data to file Maaslin2_rhizo/features/filtered_data_norm.tsv
+2025-10-31 07:59:49.734622 INFO::Writing filtered, normalized, transformed data to file Maaslin2_rhizo/features/filtered_data_norm_transformed.tsv
+2025-10-31 07:59:49.736943 WARNING::Deleting existing residuals file: Maaslin2_rhizo/fits/residuals.rds
+2025-10-31 07:59:49.737958 INFO::Writing residuals to file Maaslin2_rhizo/fits/residuals.rds
+2025-10-31 07:59:49.73897 WARNING::Deleting existing fitted file: Maaslin2_rhizo/fits/fitted.rds
+2025-10-31 07:59:49.739812 INFO::Writing fitted values to file Maaslin2_rhizo/fits/fitted.rds
+2025-10-31 07:59:49.740555 INFO::Writing all results to file (ordered by increasing q-values): Maaslin2_rhizo/all_results.tsv
+2025-10-31 07:59:49.74265 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): Maaslin2_rhizo/significant_results.tsv
+2025-10-31 07:59:49.743823 INFO::Writing association plots (one for each significant association) to output folder: Maaslin2_rhizo
+2025-10-31 07:59:49.745423 INFO::Plotting associations from most to least significant, grouped by metadata
+2025-10-31 07:59:49.746009 INFO::Plotting data for metadata number 1, Genotype
+2025-10-31 07:59:49.746972 INFO::Creating boxplot for categorical data, Genotype vs LjRoot58
+2025-10-31 07:59:49.905604 INFO::Creating boxplot for categorical data, Genotype vs LjRoot58
+2025-10-31 07:59:50.061342 INFO::Creating boxplot for categorical data, Genotype vs LjRoot58
+2025-10-31 07:59:50.240867 INFO::Creating boxplot for categorical data, Genotype vs LjRoot58
+2025-10-31 07:59:50.396983 INFO::Creating boxplot for categorical data, Genotype vs LjRoot237
+2025-10-31 07:59:50.574517 INFO::Creating boxplot for categorical data, Genotype vs G8_LjRoot126
+2025-10-31 07:59:50.731747 INFO::Creating boxplot for categorical data, Genotype vs G3_LjRoot129
+2025-10-31 07:59:50.915175 INFO::Creating boxplot for categorical data, Genotype vs G3_LjRoot129
+2025-10-31 07:59:51.077207 INFO::Creating boxplot for categorical data, Genotype vs G8_LjRoot126
+2025-10-31 07:59:51.270845 INFO::Creating boxplot for categorical data, Genotype vs G7_LjRoot117
+2025-10-31 07:59:51.431437 INFO::Creating boxplot for categorical data, Genotype vs G3_LjRoot129
+2025-10-31 07:59:52.013155 INFO::Creating boxplot for categorical data, Genotype vs G2_LjRoot102
+2025-10-31 07:59:52.18436 INFO::Creating boxplot for categorical data, Genotype vs LjRoot237
+2025-10-31 07:59:52.368967 INFO::Creating boxplot for categorical data, Genotype vs G2_LjRoot102
+2025-10-31 07:59:52.532668 INFO::Creating boxplot for categorical data, Genotype vs LjRoot89
+2025-10-31 07:59:52.715061 INFO::Creating boxplot for categorical data, Genotype vs G21_LjRoot111
+2025-10-31 07:59:52.881279 INFO::Creating boxplot for categorical data, Genotype vs LjRoot237
+2025-10-31 07:59:53.060489 INFO::Creating boxplot for categorical data, Genotype vs G20_LjRoot162
+2025-10-31 07:59:53.255505 INFO::Creating boxplot for categorical data, Genotype vs G3_LjRoot129
+2025-10-31 07:59:53.453207 INFO::Creating boxplot for categorical data, Genotype vs G2_LjRoot102
+2025-10-31 07:59:53.624398 INFO::Creating boxplot for categorical data, Genotype vs G8_LjRoot126
+2025-10-31 07:59:53.79185 INFO::Creating boxplot for categorical data, Genotype vs LjRoot82
+2025-10-31 07:59:53.953943 INFO::Creating boxplot for categorical data, Genotype vs LjRoot221
+2025-10-31 07:59:54.129735 INFO::Creating boxplot for categorical data, Genotype vs G6_LjRoot130
+2025-10-31 07:59:54.31485 INFO::Creating boxplot for categorical data, Genotype vs LjRoot259
+2025-10-31 07:59:54.505129 INFO::Creating boxplot for categorical data, Genotype vs G21_LjRoot111
+2025-10-31 07:59:54.679278 INFO::Creating boxplot for categorical data, Genotype vs LjRoot122
+2025-10-31 07:59:54.871385 INFO::Creating boxplot for categorical data, Genotype vs G2_LjRoot102
+2025-10-31 07:59:55.031182 INFO::Creating boxplot for categorical data, Genotype vs LjRoot3
+2025-10-31 07:59:55.202035 INFO::Creating boxplot for categorical data, Genotype vs LjRoot237
+2025-10-31 07:59:55.357598 INFO::Creating boxplot for categorical data, Genotype vs G7_LjRoot117
+2025-10-31 07:59:55.558657 INFO::Creating boxplot for categorical data, Genotype vs G15_LjRoot29
+2025-10-31 07:59:55.727182 INFO::Creating boxplot for categorical data, Genotype vs G5_LjRoot105
+2025-10-31 07:59:55.916002 INFO::Creating boxplot for categorical data, Genotype vs G15_LjRoot29
+2025-10-31 07:59:56.073496 INFO::Creating boxplot for categorical data, Genotype vs LjRoot221
+2025-10-31 07:59:56.270197 INFO::Creating boxplot for categorical data, Genotype vs G17_LjRoot232
+2025-10-31 07:59:56.427719 INFO::Creating boxplot for categorical data, Genotype vs LjRoot28
+2025-10-31 07:59:56.632475 INFO::Creating boxplot for categorical data, Genotype vs LjRoot248
+2025-10-31 07:59:56.802174 INFO::Creating boxplot for categorical data, Genotype vs G32_LjRoot291
+2025-10-31 07:59:56.989764 INFO::Creating boxplot for categorical data, Genotype vs LjRoot228
+2025-10-31 07:59:57.159067 INFO::Creating boxplot for categorical data, Genotype vs G32_LjRoot291
+2025-10-31 07:59:57.33682 INFO::Creating boxplot for categorical data, Genotype vs G21_LjRoot111
+2025-10-31 07:59:57.492597 INFO::Creating boxplot for categorical data, Genotype vs G35_LjRoot145
+2025-10-31 07:59:57.691061 INFO::Creating boxplot for categorical data, Genotype vs LjRoot228
+2025-10-31 07:59:57.8755 INFO::Creating boxplot for categorical data, Genotype vs G7_LjRoot117
+2025-10-31 07:59:58.06286 INFO::Creating boxplot for categorical data, Genotype vs G11_LjRoot25
+2025-10-31 07:59:58.231718 INFO::Creating boxplot for categorical data, Genotype vs LjRoot89
+2025-10-31 07:59:58.421407 INFO::Creating boxplot for categorical data, Genotype vs LjRoot240
+2025-10-31 07:59:58.574337 INFO::Creating boxplot for categorical data, Genotype vs LjRoot277
+2025-10-31 07:59:58.748035 INFO::Creating boxplot for categorical data, Genotype vs LjRoot247
+2025-10-31 07:59:58.901987 INFO::Creating boxplot for categorical data, Genotype vs LjRoot228
+2025-10-31 07:59:59.112126 INFO::Creating boxplot for categorical data, Genotype vs G37_LjNodule209
+2025-10-31 07:59:59.280426 INFO::Creating boxplot for categorical data, Genotype vs G1_LjRoot134
+2025-10-31 07:59:59.475016 INFO::Creating boxplot for categorical data, Genotype vs G16_LjRoot125
+2025-10-31 07:59:59.627787 INFO::Creating boxplot for categorical data, Genotype vs G20_LjRoot162
+2025-10-31 07:59:59.830207 INFO::Creating boxplot for categorical data, Genotype vs LjRoot223
+2025-10-31 07:59:59.982476 INFO::Creating boxplot for categorical data, Genotype vs G35_LjRoot145
+2025-10-31 08:00:00.21749 INFO::Creating boxplot for categorical data, Genotype vs G17_LjRoot232
+2025-10-31 08:00:00.384404 INFO::Creating boxplot for categorical data, Genotype vs LjRoot248
+2025-10-31 08:00:00.574428 INFO::Creating boxplot for categorical data, Genotype vs G37_LjNodule209
+2025-10-31 08:00:00.735893 INFO::Creating boxplot for categorical data, Genotype vs G6_LjRoot130
+2025-10-31 08:00:00.925156 INFO::Creating boxplot for categorical data, Genotype vs LjRoot228
+2025-10-31 08:00:01.07826 INFO::Creating boxplot for categorical data, Genotype vs G11_LjRoot25
+2025-10-31 08:00:01.248224 INFO::Creating boxplot for categorical data, Genotype vs G20_LjRoot162
+2025-10-31 08:00:01.438628 INFO::Creating boxplot for categorical data, Genotype vs LjRoot3
+2025-10-31 08:00:01.620826 INFO::Creating boxplot for categorical data, Genotype vs G7_LjRoot117
+2025-10-31 08:00:01.794113 INFO::Creating boxplot for categorical data, Genotype vs G15_LjRoot29
+2025-10-31 08:00:01.95828 INFO::Creating boxplot for categorical data, Genotype vs LjRoot221
+2025-10-31 08:00:02.115577 INFO::Creating boxplot for categorical data, Genotype vs LjRoot221
+2025-10-31 08:00:02.282275 INFO::Creating boxplot for categorical data, Genotype vs LjRoot82
+2025-10-31 08:00:02.464667 INFO::Creating boxplot for categorical data, Genotype vs G27_LjRoot78
+2025-10-31 08:00:02.646291 INFO::Creating boxplot for categorical data, Genotype vs G6_LjRoot130
+2025-10-31 08:00:02.816739 INFO::Creating boxplot for categorical data, Genotype vs G21_LjRoot111
+2025-10-31 08:00:03.008019 INFO::Creating boxplot for categorical data, Genotype vs LjRoot243
+2025-10-31 08:00:03.161568 INFO::Creating boxplot for categorical data, Genotype vs G14_LjRoot22
+2025-10-31 08:00:03.344917 INFO::Creating boxplot for categorical data, Genotype vs G37_LjNodule209
+2025-10-31 08:00:03.500745 INFO::Creating boxplot for categorical data, Genotype vs LjRoot289
+2025-10-31 08:00:03.719477 INFO::Creating boxplot for categorical data, Genotype vs LjRoot295
+2025-10-31 08:00:03.885033 INFO::Creating boxplot for categorical data, Genotype vs LjRoot71
+2025-10-31 08:00:04.070512 INFO::Creating boxplot for categorical data, Genotype vs G5_LjRoot105
+2025-10-31 08:00:04.224256 INFO::Creating boxplot for categorical data, Genotype vs G35_LjRoot145
+2025-10-31 08:00:04.388994 INFO::Creating boxplot for categorical data, Genotype vs LjRoot18
+2025-10-31 08:00:04.54447 INFO::Creating boxplot for categorical data, Genotype vs G12_LjRoot70
+2025-10-31 08:00:04.748888 INFO::Creating boxplot for categorical data, Genotype vs LjRoot11
+2025-10-31 08:00:04.91804 INFO::Creating boxplot for categorical data, Genotype vs LjRoot288
+2025-10-31 08:00:05.110519 INFO::Creating boxplot for categorical data, Genotype vs G8_LjRoot126
+2025-10-31 08:00:05.274291 INFO::Creating boxplot for categorical data, Genotype vs G5_LjRoot105
+2025-10-31 08:00:05.438958 INFO::Creating boxplot for categorical data, Genotype vs G15_LjRoot29
+2025-10-31 08:00:05.598377 INFO::Creating boxplot for categorical data, Genotype vs G17_LjRoot232
+2025-10-31 08:00:05.7888 INFO::Creating boxplot for categorical data, Genotype vs LjRoot227
+2025-10-31 08:00:05.977395 INFO::Creating boxplot for categorical data, Genotype vs LjRoot10
+2025-10-31 08:00:06.167711 INFO::Creating boxplot for categorical data, Genotype vs LjRoot257
+2025-10-31 08:00:06.343204 INFO::Creating boxplot for categorical data, Genotype vs LjRoot17
+2025-10-31 08:00:06.505877 INFO::Creating boxplot for categorical data, Genotype vs LjRoot11
+2025-10-31 08:00:06.66869 INFO::Creating boxplot for categorical data, Genotype vs LjRoot230
+2025-10-31 08:00:06.845537 INFO::Creating boxplot for categorical data, Genotype vs LjRoot80
+2025-10-31 08:00:07.030101 INFO::Creating boxplot for categorical data, Genotype vs G20_LjRoot162
+2025-10-31 08:00:07.235764 INFO::Creating boxplot for categorical data, Genotype vs LjRoot229
+2025-10-31 08:00:07.406376 INFO::Creating boxplot for categorical data, Genotype vs G35_LjRoot145
+2025-10-31 08:00:07.582244 INFO::Creating boxplot for categorical data, Genotype vs LjRoot149
+2025-10-31 08:00:07.738414 INFO::Creating boxplot for categorical data, Genotype vs LjRoot82
+2025-10-31 08:00:07.923656 INFO::Creating boxplot for categorical data, Genotype vs LjRoot18
+2025-10-31 08:00:08.080554 INFO::Creating boxplot for categorical data, Genotype vs LjRoot295
+2025-10-31 08:00:08.300691 INFO::Creating boxplot for categorical data, Genotype vs LjRoot240
+2025-10-31 08:00:08.46798 INFO::Creating boxplot for categorical data, Genotype vs G30_LjRoot2
+2025-10-31 08:00:08.685126 INFO::Creating boxplot for categorical data, Genotype vs LjRoot89
+2025-10-31 08:00:08.839983 INFO::Creating boxplot for categorical data, Genotype vs G36_LjRoot142
+2025-10-31 08:00:09.00284 INFO::Creating boxplot for categorical data, Genotype vs LjRoot28
+2025-10-31 08:00:09.160334 INFO::Creating boxplot for categorical data, Genotype vs LjRoot30
+2025-10-31 08:00:09.371978 INFO::Creating boxplot for categorical data, Genotype vs G4_LjRoot26
+2025-10-31 08:00:09.542134 INFO::Creating boxplot for categorical data, Genotype vs G1_LjRoot134
+2025-10-31 08:00:09.755699 INFO::Creating boxplot for categorical data, Genotype vs LjRoot149
+2025-10-31 08:00:09.914997 INFO::Creating boxplot for categorical data, Genotype vs LjRoot3
+2025-10-31 08:00:10.086768 INFO::Creating boxplot for categorical data, Genotype vs LjRoot243
+2025-10-31 08:00:10.239254 INFO::Creating boxplot for categorical data, Genotype vs LjRoot11
+2025-10-31 08:00:10.426541 INFO::Creating boxplot for categorical data, Genotype vs LjRoot295
+2025-10-31 08:00:10.616921 INFO::Creating boxplot for categorical data, Genotype vs LjRoot296
+2025-10-31 08:00:10.815011 INFO::Creating boxplot for categorical data, Genotype vs G37_LjNodule209
+2025-10-31 08:00:10.983605 INFO::Creating boxplot for categorical data, Genotype vs G36_LjRoot142
+2025-10-31 08:00:11.183701 INFO::Creating boxplot for categorical data, Genotype vs LjRoot1
+2025-10-31 08:00:11.337067 INFO::Creating boxplot for categorical data, Genotype vs G34_LjRoot233
+2025-10-31 08:00:11.520861 INFO::Creating boxplot for categorical data, Genotype vs G14_LjRoot22

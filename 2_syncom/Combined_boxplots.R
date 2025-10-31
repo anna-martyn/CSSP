@@ -51,6 +51,9 @@ weight_summary[,":="(
 
 # Visualisation ----------------------------------------------------------------
 weight_summary$y_pos[c(6, 7, 10)] <- c(0.4, 0.38, 0.3)
+weight_summary$y_pos[3:5] <- c(0.041, 0.038, 0.042)
+weight$dummy <- "Hack"
+weight_summary$dummy <- "Hack"
 p1 <- ggplot(weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   geom_boxplot(width=0.3, outlier.color=NA, alpha=0.7) +
   # geom_jitter(position=position_jitter(width=0), size=0.5, alpha=0.3) +
@@ -58,14 +61,20 @@ p1 <- ggplot(weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
             inherit.aes=FALSE, size=8/.pt) +
   # geom_blank(data=upper_limits_Lj, aes(y=Fresh_weight), inherit.aes=FALSE) +
   scale_fill_manual(values=colors) +
-  facet_wrap(~Host, ncol = 1, scales = "free_y", strip.position = "left")+
+  facet_grid(Host~dummy, scales = "free_y", switch = "y")+
   main_theme +
   ylab("Shoot fresh weight/plant (g)") +
   theme(
     legend.position="none",
     plot.title = element_text(size=8, face="bold", hjust=0.5),
+    strip.text.y = element_text(size=8, face="bold"),
+    strip.text.x = element_text(size=8, color = "white"),
+    strip.background.x = element_rect(fill = "white"),
     strip.placement = "outside",
     axis.title.x=element_blank(),
+    legend.text = element_text(size=8, colour = "black"),
+    legend.title = element_text(size=8, colour = "black"),
+    axis.text.x = element_text(angle = 90, hjust=1, size=8),
     axis.title.y=element_text(size=8)
   ) +
   scale_x_discrete(labels=c(
@@ -81,7 +90,7 @@ p1 <- ggplot(weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
     y = list(
       Host == "Lotus" ~ scale_y_continuous(limits = c(0, 0.05), 
                                            expand = c(0, 0)),
-      Host == "Hordeum" ~ scale_y_continuous(limits = c(0, 0.5),
+      Host == "Hordeum" ~ scale_y_continuous(limits = c(0, 0.49),
                                              expand = c(0, 0))
     )
   )+

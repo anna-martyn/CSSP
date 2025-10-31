@@ -5,7 +5,7 @@ options(warn=-1)
 rm(list=ls())
 
 # Load required packages.
-pkg <- c("data.table", "magrittr", "ggplot2", "vegan",
+pkg <- c("data.table", "magrittr", "ggplot2", "vegan", "tibble", "cowplot",
          "RColorBrewer", "Maaslin2", "ComplexHeatmap", "ggh4x",
          "colorRamp2","dplyr","tidyr","ggtext","patchwork","scales")
 for(pk in pkg) library(pk, character.only = TRUE)
@@ -222,11 +222,15 @@ p_tax <- ggplot(tax_bar, aes(x=ASVid, y=1, fill=Order)) +
   scale_fill_manual(values=colors) +
   theme_void() +
   labs(fill = "Bacterial order") +
-  theme(legend.position="right",
+  theme(legend.position="bottom",
         legend.text = element_text(color="black", size=8),
         legend.title = element_text(color="black", size=8),
-        plot.margin = margin(c(0.5, 0, 0.5, 0), unit = "lines")
-        )
+        legend.key.size = unit(0.25, 'cm'),
+        legend.key.spacing.y = unit(0, 'cm'),
+        plot.margin = margin(0.25, 0, 0.25, 0, unit = "lines")
+        )+
+  # guides(fill = guide_legend(title.position = "top", title.hjust = 0.5))+
+  NULL
 
 #----------------------------------------
 # Bubble plot preparation
@@ -286,9 +290,11 @@ p_bubble <- ggplot(da_all, aes(x = ASV_ID, y = Genotype, fill = DA)) +
     # strip.background = element_rect(colour = NA),
     strip.text = element_blank(),
     strip.background = element_blank(),
-    plot.margin = margin(c(0.5, 0, 0.5, 0), unit = "lines"),
+    plot.margin = margin(0, 0, 0, 0, unit = "lines"),
     panel.spacing = unit(0.4, "lines")
-  )
+  ) +
+  # guides(fill = guide_legend(title.position = "top", title.hjust = 0.5))+
+  NULL
 
 # p_bubble <- p_bubble +
 #   theme(
@@ -358,7 +364,7 @@ p_RA <- ggplot(asv_RA_WT, aes(x = ASVid, y = mean_RA)) +
         # strip.background = element_rect(colour = NA),
         strip.text = element_blank(),
         strip.background = element_blank(),
-        plot.margin = margin(c(0.5, 0, 0.5, 0), unit = "lines"),
+        plot.margin = margin(c(0, 0, 0, 0), unit = "lines"),
         panel.spacing = unit(0.4, "lines"))+
   force_panelsizes(cols = c(1, 1, 1), rows = c(1, 1, 0.7))+
   facetted_pos_scales(
@@ -381,7 +387,7 @@ p_RA <- ggplot(asv_RA_WT, aes(x = ASVid, y = mean_RA)) +
 p_tax_clean <- p_tax + theme(legend.position = "none")
 
 # Combine plots vertically
-main_plot <- p_RA / p_tax_clean / p_bubble + 
+main_plot <- p_RA / p_tax_clean / (p_bubble + theme(legend.position = "none")) + 
   plot_layout(heights = c(0.54, 0.04, 0.42))
 
 main_plot <- main_plot +
@@ -391,6 +397,12 @@ main_plot <- main_plot +
 final_plot <- main_plot
 final_plot
 
+lgd_bubble <- ggpubr::get_legend(p_bubble, position = "bottom")
+lgd_tax <- ggpubr::get_legend(p_tax, position = "bottom")
+lgd <- plot_grid(lgd_bubble, lgd_tax, ncol = 1)
+
+# plot_grid(final_plot, lgd, rel_heights = c(0.9, 0.1), ncol = 1)
+
 # Save final plot.
 ggsave("HordeumSynCom_DA.pdf", plot = final_plot, 
        width = 21, height = 20, units = "cm")
@@ -399,4 +411,5 @@ saveRDS(final_plot, file = "../8_final_figures/HordeumSynCom_DA.rds")
 saveRDS(p_RA, file = "../8_final_figures/p_RA_Hv.rds")
 saveRDS(p_tax_clean, file = "../8_final_figures/p_tax_clean_Hv.rds")
 saveRDS(p_bubble, file = "../8_final_figures/p_bubble_Hv.rds")
+saveRDS(lgd, file = "../8_final_figures/legend.rds")
 

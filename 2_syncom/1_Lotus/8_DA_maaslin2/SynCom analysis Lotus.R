@@ -1,12 +1,13 @@
-## Original script by Ib Thorsgaard Jensen (Aalborg University), modified and extended by Anna Martyn (amartyn@mpipz.mpg.de)
+## Original script by Ib Thorsgaard Jensen (Aalborg University), 
+# modified and extended by Anna Martyn (amartyn@mpipz.mpg.de)
 
 # Clean up.
 options(warn=-1)
 rm(list=ls())
 
 # Load required packages.
-pkg <- c("data.table", "magrittr", "ggplot2", "vegan", "tibble",
-         "RColorBrewer", "Maaslin2", "ComplexHeatmap", "ggh4x",
+pkg <- c("data.table", "magrittr", "ggplot2", "vegan", "tibble", "ggpubr",
+         "RColorBrewer", "Maaslin2", "ComplexHeatmap", "ggh4x", "cowplot",
          "colorRamp2","dplyr","tidyr","ggtext","patchwork","scales")
 for(pk in pkg) library(pk, character.only = TRUE)
 
@@ -211,11 +212,16 @@ p_tax <- ggplot(tax_bar, aes(x=ASVid, y=1, fill=order)) +
   scale_fill_manual(values=colors) +
   theme_void() +
   labs(fill = "Bacterial order") +
-  theme(legend.position="right",
-        legend.text = element_text(color="black", size=20),
-        legend.title = element_text(color="black", size=20),
-        plot.margin = margin(c(0.5, 0, 0.5, 0), unit = "lines")
-        )
+  theme(legend.position="bottom",
+        legend.text = element_text(color="black", size=8),
+        legend.title = element_text(color="black", size=8),
+        legend.key.size = unit(0.25, 'cm'),
+        legend.key.spacing.y = unit(0, 'cm'),
+        plot.margin = margin(c(0.25, 0, 0.25, 0), unit = "lines")
+        )+
+  guides(fill = guide_legend(title.position = "top", title.hjust = 0.5))+
+  NULL
+p_tax
 
 #----------------------------------------
 # Bubble plot preparation
@@ -274,9 +280,17 @@ p_bubble <- ggplot(da_all, aes(x = ASV_ID, y = Genotype, fill = DA)) +
     legend.title = element_text(color = "black", size = 8),
     legend.position = "bottom",
     strip.background = element_rect(colour = NA),
-    plot.margin = margin(c(0.5, 0, 0.5, 0), unit = "lines"),
+    plot.margin = margin(c(0, 0, 0, 0), unit = "lines"),
     panel.spacing = unit(0.4, "lines")
-  )
+  )+
+  scale_y_discrete(labels=c(
+    "symrk"=expression(italic("symrk")),
+    "ccamk"=expression(italic("ccamk")),
+    "nsp1"=expression(italic("nsp1")),
+    "nsp2"=expression(italic("nsp2"))
+  )) +
+  guides(fill = guide_legend(title.position = "top", title.hjust = 0.5))+
+  NULL
 
 p_bubble
 
@@ -307,7 +321,7 @@ p_RA <- ggplot(asv_RA_WT, aes(x=ASVid, y=mean_RA)) +
         strip.text = element_text(color="black", size=8, face = "bold"),
         strip.placement = "outside",
         strip.background = element_rect(colour = NA),
-        plot.margin = margin(c(0.5, 0, 0.5, 0), unit = "lines"),
+        plot.margin = margin(c(0, 0, 0, 0), unit = "lines"),
         panel.spacing = unit(0.4, "lines"))+
   force_panelsizes(cols = c(1, 1, 1), rows = c(1, 1, 0.7))+
   # facetted_pos_scales(
@@ -338,11 +352,17 @@ p_tax_clean <- p_tax + theme(legend.position = "none")
 # p_bubble_clean <- p_bubble + theme(legend.position = "none")
 
 # Combine plots vertically
-main_plot <- p_RA / p_tax_clean / p_bubble + 
+main_plot <- p_RA / p_tax_clean / (p_bubble + theme(legend.position = "none")) + 
   plot_layout(heights = c(0.54, 0.04, 0.42))
 
 final_plot <- main_plot
 final_plot
+
+# lgd_bubble <- ggpubr::get_legend(p_bubble, position = "bottom")
+# lgd_tax <- ggpubr::get_legend(p_tax, position = "bottom")
+# lgd <- plot_grid(lgd_bubble, lgd_tax, ncol = 2)
+# 
+# plot_grid(final_plot, lgd, rel_heights = c(0.9, 0.1), ncol = 1)
 
 # Save final plot.
 ggsave("LotusSynCom_DA.pdf", plot = final_plot, 

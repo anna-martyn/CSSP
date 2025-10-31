@@ -72,7 +72,7 @@ p_sig <- ggplot(df_ord, aes(x = Order, y = mean_RA, fill = Genotype)) +
   main_theme +
   force_panelsizes(cols = c(5, 4, 8, 5), rows = 1)+
   theme(
-    axis.text.x = element_text(angle = 30, hjust=1),
+    axis.text.x = element_text(angle = 45, hjust=1),
     legend.text = element_markdown(),
     strip.text = element_text(face="bold", size=rel(1)),
     legend.position = "none",
