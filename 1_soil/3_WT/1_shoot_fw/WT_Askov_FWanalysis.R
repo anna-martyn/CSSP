@@ -15,17 +15,12 @@ library(multcompView)
 library(dplyr)
 
 # Load shoot fresh weight file and fix decimals
-weight <- read.table("Input_OX&SYM_mutant_harvest_2.txt",
+weight <- read.table("LotusHordeum_AskovSoils_shootfw.txt",
                      header = TRUE, sep = "\t")
 weight$Fresh_weight <- as.numeric(gsub(",", ".", weight$Fresh_weight))
 
-# Subset to only WT samples of Lotus and Barley CSSP experiment
-weight <- weight %>%
-  filter(Genotype == "WT", Experiment %in% c("Lotus_CSSP", "Barley_CSSP"))
-
 # Set factor levels and rename Barley to Hordeum
 weight$Soil_type <- factor(weight$Soil_type, levels=c("NPK","PK","UF"))
-weight$Plant_species <- dplyr::recode(weight$Plant_species, "Barley" = "Hordeum")
 weight$Plant_species <- factor(weight$Plant_species, levels=c("Lotus","Hordeum"))
 
 # Set colours for the graph
@@ -116,13 +111,14 @@ main_theme <- theme(panel.background=element_blank(),
                     text=element_text(family="sans"))
 
 # Generate plot
+weight_summary$y_pos[5:6] <- c(0.9, 0.6)
 p <- ggplot(weight, aes(x=Soil_type, y=Fresh_weight, fill=Soil_type)) +
   geom_boxplot(width=0.3, outlier.color=NA, alpha=0.7) +
   geom_jitter(position=position_jitter(width=0), size=1.5, alpha=0.3) +
 
   # Letters above boxes
   geom_text(data=weight_summary, aes(x=Soil_type, y=y_pos * 1.2, label=label),
-            inherit.aes=FALSE, size=4) +
+            inherit.aes=FALSE, size=8/.pt) +
 
   # Overall ANOVA significance per species
   # geom_text(data=anova_pvals, aes(x=2, y=y_position, label=asterisk), # x=2 centers above middle box

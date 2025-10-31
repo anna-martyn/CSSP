@@ -13,20 +13,32 @@ library("vegan")
 source("cpcoa.func.R")
 
 # Load Lotus files.
-Lotus_design <- read.table("./Lotus_input/Lotus_CSSP_AskovSoils_metadata_excl_new_bulkUF.txt", header=T, sep="\t")
-Lotus_asv_table <- read.table("./Lotus_input/feature-table.tsv", sep = "\t", header = TRUE, row.names = 1, check.names = FALSE, comment.char = "", skip = 1)
+Lotus_design <- read.table(
+  "../../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt", header=T, sep="\t"
+)
+Lotus_asv_table <- read.table(
+  "../../1_data/1_Lotus/LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv",
+  sep = "\t", header = TRUE, row.names = 1, 
+  check.names = FALSE, comment.char = ""
+)
 
 # Load Hordeum files.
-Hordeum_design <- read.table("./Hordeum_input/BarleyCSSP_Askov_reseq_metadata.txt", header=T, sep="\t")
-Hordeum_asv_table <- read.table("./Hordeum_input/BarleyCSSP_Askov_reseq_ASVtable_10_4.txt", sep="\t", header=T, row.names =1, check.names=F)
+Hordeum_design <- read.table(
+  "../../1_data/2_Barley/HordeumCSSP_AskovSoils_metadata.txt", header=T, sep="\t"
+)
+Hordeum_asv_table <- read.table(
+  "../../1_data/2_Barley/HordeumCSSP_AskovSoils_ASVtable_10_4.tsv",
+  sep = "\t", header = TRUE, row.names = 1, 
+  check.names = FALSE, comment.char = "", skip = 1
+)
 
 # Keep samples that are present in design and ASV table files for each dataset.
 idx<- intersect(Lotus_design$SampleID, colnames(Lotus_asv_table))
 Lotus_design <- Lotus_design[match(idx, Lotus_design$SampleID), ]
 Lotus_asv_table <- Lotus_asv_table[, idx]
 
-idx<- intersect(Hordeum_design$Sample_ID, colnames(Hordeum_asv_table))
-Hordeum_design <- Hordeum_design[match(idx, Hordeum_design$Sample_ID), ]
+idx<- intersect(Hordeum_design$SampleID, colnames(Hordeum_asv_table))
+Hordeum_design <- Hordeum_design[match(idx, Hordeum_design$SampleID), ]
 Hordeum_asv_table <- Hordeum_asv_table[, idx]
 
 # Subset datasets to only keep samples with genotype WT.
@@ -34,14 +46,9 @@ Lotus_wt_samples <- Lotus_design$SampleID[Lotus_design$Genotype == "WT"]
 Lotus_design <- Lotus_design[Lotus_design$SampleID %in% Lotus_wt_samples, ]
 Lotus_asv_table <- Lotus_asv_table[, Lotus_wt_samples]
 
-Hordeum_wt_samples <- Hordeum_design$Sample_ID[Hordeum_design$Genotype == "WT"]
-Hordeum_design <- Hordeum_design[Hordeum_design$Sample_ID %in% Hordeum_wt_samples, ]
+Hordeum_wt_samples <- Hordeum_design$SampleID[Hordeum_design$Genotype == "WT"]
+Hordeum_design <- Hordeum_design[Hordeum_design$SampleID %in% Hordeum_wt_samples, ]
 Hordeum_asv_table <- Hordeum_asv_table[, Hordeum_wt_samples]
-
-# Change compartment names in design files.
-Lotus_design$Compartment[Lotus_design$Compartment == "Endosphere/Rhizoplane"] <- "Root"
-Hordeum_design$Compartment[Hordeum_design$Compartment == "rhizo"] <- "Rhizosphere"
-Hordeum_design$Compartment[Hordeum_design$Compartment == "endo"] <- "Root"
 
 # Calculate Bray-Curtis distances.
 Lotus_asv_table_norm <- apply(Lotus_asv_table, 2, function(x) x / sum(x))
@@ -151,7 +158,7 @@ points <- as.data.frame(points)
 
 colnames(points) <- c("x", "y")
 
-points <- cbind(points, Hordeum_design[match(rownames(points), Hordeum_design$Sample_ID), ])
+points <- cbind(points, Hordeum_design[match(rownames(points), Hordeum_design$SampleID), ])
 
 points$Soil <- factor(points$Soil, levels=colors$group)
 points$Compartment <- factor(points$Compartment, levels=shapes$group)

@@ -16,7 +16,6 @@ options(warn=-1)
 library(multcompView)
 library(scales)
 
-
 # Load Lotus and Hordeum files.# Clean up.
 options(warn=-1)
 rm(list=ls())
@@ -37,20 +36,35 @@ library(scales)
 
 
 # Load Lotus and Hordeum files.
-Lotus_design <- read.table("./Lotus_data/Lotus_CSSP_AskovSoils_metadata_excl_new_bulkUF.txt", header=TRUE, sep="\t")
-Lotus_asv_table <- read.table("./Lotus_data/feature-table.tsv", sep="\t", header=TRUE, row.names=1, check.names=FALSE, comment.char = "", skip = 1)
-Lotus_taxonomy <- read.table("./Lotus_data/taxonomy.tsv", sep="\t", header=TRUE, fill=TRUE)
+Lotus_design <- read.table(
+  "../../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt", header=T, sep="\t"
+)
+Lotus_asv_table <- read.table(
+  "../../1_data/1_Lotus/LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv",
+  sep = "\t", header = TRUE, row.names = 1, 
+  check.names = FALSE, comment.char = ""
+)
+Lotus_taxonomy <- read.table(
+  "../../1_data/1_Lotus/LotusCSSP_AskovSoils_taxonomy_10_4.tsv",
+  sep="\t", header=TRUE, fill=TRUE
+)
 
-Hordeum_design <- read.table("./Hordeum_data/BarleyCSSP_Askov_reseq_metadata.txt", header=TRUE, sep="\t")
-Hordeum_asv_table <- read.table("./Hordeum_data/BarleyCSSP_Askov_reseq_ASVtable_10_4.tsv", sep="\t", header=TRUE, row.names=1, check.names=FALSE, comment.char = "", skip = 1)
-Hordeum_taxonomy <- read.table("./Hordeum_data/Barley_Askov_Rep_10_4_taxonomy.tsv", sep="\t", header=TRUE, fill=TRUE)
+Hordeum_design <- read.table(
+  "../../1_data/2_Barley/HordeumCSSP_AskovSoils_metadata.txt", header=T, sep="\t"
+)
+Hordeum_asv_table <- read.table(
+  "../../1_data/2_Barley/HordeumCSSP_AskovSoils_ASVtable_10_4.tsv",
+  sep = "\t", header = TRUE, row.names = 1, 
+  check.names = FALSE, comment.char = "", skip = 1
+)
+Hordeum_taxonomy <- read.table(
+  "../../1_data/2_Barley/HordeumCSSP_AskovSoils_taxonomy_10_4.tsv",
+  sep="\t", header=TRUE, fill=TRUE
+)
 
 # Rename columns Feature.ID to ASVid.
 colnames(Lotus_taxonomy)[colnames(Lotus_taxonomy) == "Feature.ID"] <- "ASVid"
 colnames(Hordeum_taxonomy)[colnames(Hordeum_taxonomy) == "Feature.ID"] <- "ASVid"
-
-# Spike-in was used in Lotus library, this sequence/ASV will be removed from the Lotus dataset. It is not present in the Barley dataset.
-Lotus_asv_table <- Lotus_asv_table[row.names(Lotus_asv_table) != "85fa8bb918a926d97659d9b64ca6fedd", ]
 
 # Clean-up layout of taxonomy files.
 Lotus_taxonomy <- Lotus_taxonomy %>%
@@ -76,10 +90,10 @@ Lotus_asv_table <- Lotus_asv_table %>% ## Subset and reorder the ASV table to ma
   filter(rownames(.) %in% Lotus_taxonomy$ASVid)
 
 Hordeum_design <- Hordeum_design %>%
-  filter(Sample_ID %in% colnames(Hordeum_asv_table)) 
+  filter(SampleID %in% colnames(Hordeum_asv_table)) 
 
 Hordeum_asv_table <- Hordeum_asv_table %>%
-  select(all_of(Hordeum_design$Sample_ID)) %>%
+  select(all_of(Hordeum_design$SampleID)) %>%
   filter(rownames(.) %in% Hordeum_taxonomy$ASVid)
 
 # Convert ASV reads to relative abundances and save as new dataframe.
@@ -101,20 +115,8 @@ Lotus_df.long <- Lotus_df %>%
 
 Hordeum_df.long <- Hordeum_df %>%
   pivot_longer(cols=-c(ASVid, Order), names_to="sampleID", values_to="RA") %>%
-  left_join(Hordeum_design %>% select(Sample_ID, Plant, Soil, Genotype, Compartment), by=c("sampleID"="Sample_ID")) %>%
+  left_join(Hordeum_design %>% select(SampleID, Plant, Soil, Genotype, Compartment), by=c("sampleID"="SampleID")) %>%
   filter(Genotype=="WT")
-
-# Change compartment labels to be uniform in both datasets.
-Lotus_df.long <- Lotus_df.long %>%
-  mutate(Compartment = case_match(Compartment,
-                                  "Endosphere/Rhizoplane" ~ "Root",
-                                  "Rhizosphere" ~ "Rhizosphere",
-                                  "Nodules" ~ "Nodules"))
-
-Hordeum_df.long <- Hordeum_df.long %>%
-  mutate(Compartment = case_match(Compartment,
-                                  "rhizo" ~ "Rhizosphere",
-                                  "endo"  ~ "Root"))
 
 # Next we want to choose which bacterial orders to use for representation of the bacterial community structure in a stacked barplot.
 
@@ -353,6 +355,8 @@ ggsave("Soil_WT_stackedbp_meanRA.pdf", p1, width = 10, height = 6, unit = "cm")
 saveRDS(p1, file = "Soil_WT_stackedbp_meanRA.rds")
 saveRDS(p1, file = "../7_final_figures/Soil_WT_stackedbp_meanRA.rds")
 
+# Unclear what remainder is for, may not work!!!
+
 Lotus_design <- read.table("./Lotus_data/Lotus_CSSP_AskovSoils_metadata_excl_new_bulkUF.txt", header=TRUE, sep="\t")
 Lotus_asv_table <- read.table("./Lotus_data/feature-table.tsv", sep="\t", header=TRUE, row.names=1, check.names=FALSE, comment.char = "", skip = 1)
 Lotus_taxonomy <- read.table("./Lotus_data/taxonomy.tsv", sep="\t", header=TRUE, fill=TRUE)
@@ -392,10 +396,10 @@ Lotus_asv_table <- Lotus_asv_table %>% ## Subset and reorder the ASV table to ma
   filter(rownames(.) %in% Lotus_taxonomy$ASVid)
 
 Hordeum_design <- Hordeum_design %>%
-  filter(Sample_ID %in% colnames(Hordeum_asv_table)) 
+  filter(SampleID %in% colnames(Hordeum_asv_table)) 
 
 Hordeum_asv_table <- Hordeum_asv_table %>%
-  select(all_of(Hordeum_design$Sample_ID)) %>%
+  select(all_of(Hordeum_design$SampleID)) %>%
   filter(rownames(.) %in% Hordeum_taxonomy$ASVid)
 
 # Convert ASV reads to relative abundances and save as new dataframe.
@@ -417,7 +421,7 @@ Lotus_df.long <- Lotus_df %>%
 
 Hordeum_df.long <- Hordeum_df %>%
   pivot_longer(cols=-c(ASVid, Order), names_to="sampleID", values_to="RA") %>%
-  left_join(Hordeum_design %>% select(Sample_ID, Plant, Soil, Genotype, Compartment), by=c("sampleID"="Sample_ID")) %>%
+  left_join(Hordeum_design %>% select(SampleID, Plant, Soil, Genotype, Compartment), by=c("sampleID"="SampleID")) %>%
   filter(Genotype=="WT")
 
 # Change compartment labels to be uniform in both datasets.

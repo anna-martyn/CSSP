@@ -12,7 +12,7 @@ library(multcompView)
 library(dplyr)
 
 # Load nodule count data.
-nod <- read.table("Anna_SYM_nodule.txt", header=T, sep="\t")
+nod <- read.table("LotusCSSP_AskovSoils_nodule_cts.txt", header=T, sep="\t")
 
 # Set factor order for plot.
 nod$Soil_type <- factor(nod$Soil_type, levels = c("NPK","PK","UF"))
@@ -70,13 +70,14 @@ main_theme <- theme(panel.background=element_blank(),
                     legend.key=element_blank(),
                     text=element_text(family="sans"))
 
+letters_df$y_pos[c(1,3)] <- c(9.5, 10.5)
 p1 <- ggplot(nod, aes(x=Soil_type, y=pink, fill=Soil_type)) +
   geom_boxplot(width=0.3, outlier.color = NA, alpha=0.7)+
   geom_jitter(aes(), position=position_jitterdodge(jitter.width = 0.15),
               size=1.5, alpha=0.3)+
   scale_fill_manual(values=as.character(colors$color)) +
   geom_text(data=letters_df, aes(x=Soil_type, y=y_pos*1.1, label=label),
-            inherit.aes=FALSE, size=4) +
+            inherit.aes=FALSE, size=8/.pt) +
   # annotate("text", x=2, y=max(nod$pink, na.rm=TRUE)*1.2, label=asterisk, size=10) +
   main_theme +
   ylab("Pink nodule counts/plant")+
