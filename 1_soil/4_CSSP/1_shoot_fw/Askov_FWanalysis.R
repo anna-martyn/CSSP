@@ -1,6 +1,6 @@
 # Load data and packages -------------------------------------------------------
 pkg <- c("data.table", "ggplot2", "scales", "grid", "RColorBrewer",
-         "car", "multcompView")
+         "car", "multcompView", "ggh4x")
 
 for(pk in pkg){
   library(pk, character.only = T)
@@ -83,11 +83,12 @@ p1 <- ggplot(Lotus_weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   geom_text(data=Labels_dt[Plant_species == "Lotus"], 
             aes(x=Genotype, y = y_pos, label = Letter),
             inherit.aes=FALSE, size=8/.pt) +
-  geom_boxplot(width=0.5,position = dodge,outlier.color = NA)+
-  geom_jitter(position=position_jitterdodge(jitter.width = 0.3),
-              size=0.5, alpha=0.3)+
+  # geom_boxplot(width=0.5,position = dodge,outlier.color = NA)+
+  geom_boxplot(width = 0.5, position = dodge, outlier.size = 0.5)+
+  # geom_jitter(position=position_jitterdodge(jitter.width = 0.3),
+  #             size=0.25, alpha=0.3)+
   scale_fill_manual(values=as.character(colors$color)) +
-  facet_wrap(~Soil_type, scales = "free_x", nrow=1)+
+  facet_wrap(~Soil_type, nrow=1)+
   main_theme +
   ylab("Shoot fresh weight/plant [g]")+
   scale_y_continuous(limits = c(0, 0.15))+
@@ -104,26 +105,35 @@ p1 <- ggplot(Lotus_weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
     axis.text.x = element_text(size = 8, angle = 45, vjust = 1,
                                hjust=1, colour = "black"),
     legend.key.size = unit(0.5,"cm")
-  )
+  )+
+  scale_x_discrete(labels=c(
+    "WT"="WT",
+    "symrk"=expression(italic("symrk")),
+    "ccamk"=expression(italic("ccamk")),
+    "nsp1"=expression(italic("nsp1")),
+    "nsp2"=expression(italic("nsp2"))
+  ))
 p1
 
-ggsave(paste("Lotus_CSSP_fw_BOX_v2.png", sep=""), 
+ggsave(paste0("Lotus_CSSP_fw_BOX_v2.png"), 
        p1, width=6, height=5, units = "cm")
+saveRDS(p1, "Lotus_CSSP_fw_BOX_Lj.rds")
 
 p2 <- ggplot(Barley_weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   #geom_violin(trim=FALSE,position = dodge,scale = "width",alpha=0.3,color=NA) +
   geom_text(data=Labels_dt[Plant_species == "Hordeum"], 
             aes(x=Genotype, y = y_pos, label = Letter),
             inherit.aes=FALSE, size=8/.pt) +
-  geom_boxplot(width=0.5,position = dodge,outlier.color = NA)+
-  geom_jitter(position=position_jitterdodge(jitter.width = 0.3),
-              size=2, alpha=0.3)+
+  # geom_boxplot(width=0.25,position = dodge,outlier.color = NA)+
+  geom_boxplot(width=0.5, position = dodge, outlier.size = 0.5)+
+  # geom_jitter(position=position_jitterdodge(jitter.width = 0.3),
+  #             size=0.5, alpha=0.3)+
   scale_fill_manual(values=as.character(colors$color)) +
   facet_wrap(~Soil_type, scales = "free_x", nrow=1)+
   main_theme +
   ylab("Shoot fresh weight/plant [g]")+
   scale_y_continuous()+
-  ggtitle("Barley")+
+  ggtitle("Hordeum")+
   theme(
     legend.position="none", 
     plot.title = element_text(size = 8, face = "bold"),
@@ -131,13 +141,21 @@ p2 <- ggplot(Barley_weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
     strip.text = element_text(size = 8, colour = "black", face = "bold"),
     legend.text = element_text(size = 8, colour = "black"),
     axis.title.x = element_blank(),
-    axis.title.y = element_text(size = 8, colour = "black"),
+    axis.title.y = element_blank(),
     axis.text.y = element_text(size = 8, colour = "black"),
     axis.text.x = element_text(size = 8, angle = 45, vjust = 1,
                                hjust=1, colour = "black"),
     legend.key.size = unit(0.5,"cm")
-  )
+  )+
+  scale_x_discrete(labels=c(
+    "WT"="WT",
+    "symrk"=expression(italic("symrk")),
+    "ccamk"=expression(italic("ccamk")),
+    "nsp1"=expression(italic("nsp1")),
+    "nsp2"=expression(italic("nsp2"))
+  ))
 p2
 
 ggsave(paste("Barley_CSSP_fw_BOX_v2.png", sep=""), p2,
        width=6, height=5, units = "cm")
+saveRDS(p2, "Lotus_CSSP_fw_BOX_Hv.rds")
