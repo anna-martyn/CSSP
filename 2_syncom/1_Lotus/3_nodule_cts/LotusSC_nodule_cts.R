@@ -23,41 +23,41 @@ counts <- counts %>%
   )
 
 # ANOVA and Tukey HSD.
-# get_tukey_letters <- function(df){
-#   if(length(unique(df$Number)) == 1){  # all identical
-#     letters <- rep("a", length(unique(df$Genotype)))
-#     return(data.frame(Genotype=levels(df$Genotype), label=letters, stringsAsFactors=FALSE))
-#   } else {
-#     aov_res <- aov(Number ~ Genotype, data=df)
-#     tukey <- TukeyHSD(aov_res)
-#     tukey_pvals <- tukey$Genotype[, "p adj"]
-#     names(tukey_pvals) <- rownames(tukey$Genotype)
-#     letters <- multcompLetters(tukey_pvals)$Letters
-#     letters <- letters[levels(df$Genotype)]
-#     return(data.frame(Genotype=levels(df$Genotype), label=letters, stringsAsFactors=FALSE))
-#   }
-# }
-# 
-# letters_df <- get_tukey_letters(counts)
-# 
-# # Determine overall ANOVA p-values.
-# if(length(unique(counts$Number)) == 1){
-#   asterisk <- NA
-# } else {
-#   aov_res <- aov(Number ~ Genotype, data=counts)
-#   p_val <- summary(aov_res)[[1]][["Pr(>F)"]][1]
-#   asterisk <- if(p_val < 0.001) "***" else if(p_val < 0.01) "**" else if(p_val < 0.05) "*" else NA
-# }
-# 
-# # Set y_position for asterisks.
-# y_max <- max(counts$Number, na.rm=TRUE)
-# y_pos_asterisk <- y_max * 1.05
-# 
-# # Make summary for plotting letters.
-# letters_df$y_pos <- counts %>%
-#   group_by(Genotype) %>%
-#   summarise(y_pos = max(Number, na.rm=TRUE)) %>%
-#   pull(y_pos)
+get_tukey_letters <- function(df){
+  if(length(unique(df$Number)) == 1){  # all identical
+    letters <- rep("a", length(unique(df$Genotype)))
+    return(data.frame(Genotype=levels(df$Genotype), label=letters, stringsAsFactors=FALSE))
+  } else {
+    aov_res <- aov(Number ~ Genotype, data=df)
+    tukey <- TukeyHSD(aov_res)
+    tukey_pvals <- tukey$Genotype[, "p adj"]
+    names(tukey_pvals) <- rownames(tukey$Genotype)
+    letters <- multcompLetters(tukey_pvals)$Letters
+    letters <- letters[levels(df$Genotype)]
+    return(data.frame(Genotype=levels(df$Genotype), label=letters, stringsAsFactors=FALSE))
+  }
+}
+
+letters_df <- get_tukey_letters(counts)
+
+# Determine overall ANOVA p-values.
+if(length(unique(counts$Number)) == 1){
+  asterisk <- NA
+} else {
+  aov_res <- aov(Number ~ Genotype, data=counts)
+  p_val <- summary(aov_res)[[1]][["Pr(>F)"]][1]
+  asterisk <- if(p_val < 0.001) "***" else if(p_val < 0.01) "**" else if(p_val < 0.05) "*" else NA
+}
+
+# Set y_position for asterisks.
+y_max <- max(counts$Number, na.rm=TRUE)
+y_pos_asterisk <- y_max * 1.05
+
+# Make summary for plotting letters.
+letters_df$y_pos <- counts %>%
+  group_by(Genotype) %>%
+  summarise(y_pos = max(Number, na.rm=TRUE)) %>%
+  pull(y_pos)
 
 # Set main theme for plotting.
 main_theme <- theme(

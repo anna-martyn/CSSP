@@ -115,7 +115,7 @@ col1 <- ggarrange(
 bottom_rows <- plot_grid(
   col1, p7,
   ncol = 2,
-  labels = c("", "F"),
+  labels = c("", "E"),
   label_size = 15,
   rel_widths = c(1/3, 2/3)
 )

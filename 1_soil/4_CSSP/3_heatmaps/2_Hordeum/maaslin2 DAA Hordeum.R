@@ -230,19 +230,21 @@ heatmap_data[
 ]
 
 ## Removing low-abundance ASVs from heatmap ------------------------------------
-k <- ncol(ASV_table_with_metadata)
-RA_table <- ASV_table_with_metadata[,6:k]/rowSums(ASV_table_with_metadata[,6:k])
-ASV_table_with_metadata[,6:k:=RA_table]
-Mean_RA_by_condition <- ASV_table_with_metadata[
-  ,lapply(.SD, mean), 
-  by = list(Compartment),
-  .SDcols = colnames(RA_table)
-]
-Mean_RA_by_condition <- Mean_RA_by_condition[Compartment != "Nodules"]
-High_abn <- apply(Mean_RA_by_condition[,-(1:3)], 2, function(x) any(x > 0.001))
-High_abn_ASV <- colnames(RA_table)[High_abn]
-
-htmp_hiabn <- heatmap_data[ASV_ID %in% High_abn_ASV]
+# k <- ncol(ASV_table_with_metadata)
+# RA_table <- ASV_table_with_metadata[,6:k]/rowSums(ASV_table_with_metadata[,6:k])
+# ASV_table_with_metadata[,6:k:=RA_table]
+# Mean_RA_by_condition <- ASV_table_with_metadata[
+#   ,lapply(.SD, mean), 
+#   by = list(Compartment),
+#   .SDcols = colnames(RA_table)
+# ]
+# Mean_RA_by_condition <- Mean_RA_by_condition[Compartment != "Nodules"]
+# High_abn <- apply(Mean_RA_by_condition[,-(1:3)], 2, function(x) any(x > 0.001))
+# High_abn_ASV <- colnames(RA_table)[High_abn]
+# 
+# htmp_hiabn <- heatmap_data[ASV_ID %in% High_abn_ASV]
+DA_ASVs <- unique(heatmap_data[DAA != "NS"]$ASV_ID)
+htmp_hiabn <- heatmap_data[ASV_ID %in% DA_ASVs]
 
 # Taxonomy annotation ----------------------------------------------------------
 ## Taxonomy ----
@@ -374,7 +376,7 @@ bar_plot <- ggplot(data = mean_RA_res, mapping = aes(x = mean_RAs, y = Genotype)
     legend.text = element_text(size = 8, family = "Helvetica"),
     legend.title = element_text(size = 8, family = "Helvetica"),
     strip.text = element_blank(),
-    plot.margin = margin(t = 0, r = 0, b = 0.5, l = 0, unit = "lines")
+    plot.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "lines")
   )+
   NULL; bar_plot
 

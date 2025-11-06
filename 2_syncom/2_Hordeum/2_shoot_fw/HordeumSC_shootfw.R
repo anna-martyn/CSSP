@@ -94,5 +94,5 @@ weight_summary$Host <- "Hordeum"
 write.csv(weight, "shoot_fw_boxplot_Hv.csv")
 write.csv(weight_summary, "shoot_fw_boxplot_letters_Hv.csv")
 # Save the plot.
-ggsave("HordeumSC_shootfw.pdf", p1, width=5, height=6)
+# ggsave("HordeumSC_shootfw.pdf", p1, width=5, height=6)
 saveRDS(p1, "HordeumSC_shootfw.rds")

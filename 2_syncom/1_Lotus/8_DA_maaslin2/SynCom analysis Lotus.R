@@ -77,9 +77,10 @@ S_root <- Structural_zeros3(asv_table_root, meta_root, group = "Genotype",
 M_rhizo <- Maaslin2(input_data = asv_table_rhizo,
                     input_metadata = meta_rhizo,
                     output = "Maaslin2_rhizo",
-                    plot_heatmap = FALSE,
                     fixed_effects = "Genotype",
-                    min_prevalence = 0.1)
+                    min_prevalence = 0.1,
+                    plot_heatmap = F,
+                    plot_scatter = F)
 
 res_dt <- data.table(M_rhizo$results)
 
@@ -103,9 +104,10 @@ for(g in c("symrk","ccamk","nsp1","nsp2")){
 M_root <- Maaslin2(input_data = asv_table_root,
                    input_metadata = meta_root,
                    output = "Maaslin2_root",
-                   plot_heatmap = FALSE,
                    fixed_effects = "Genotype",
-                   min_prevalence = 0.1)
+                   min_prevalence = 0.1,
+                   plot_heatmap = F,
+                   plot_scatter = F)
 
 res_dt <- data.table(M_root$results)
 res_dt[,.(b = any(qval < 0.05)), feature]
@@ -370,6 +372,6 @@ ggsave("LotusSynCom_DA.pdf", plot = final_plot,
 saveRDS(final_plot, file = "LotusSynCom_DA.rds")
 saveRDS(final_plot, file = "../10_final_figures/LotusSynCom_DA.rds")
 
-saveRDS(p_RA, file = "../10_final_figures/p_RA_Lj.rds")
-saveRDS(p_tax_clean, file = "../10_final_figures/p_tax_clean_Lj.rds")
-saveRDS(p_bubble, file = "../10_final_figures/p_bubble_Lj.rds")
+saveRDS(p_RA, file = "p_RA_Lj.rds")
+saveRDS(p_tax_clean, file = "p_tax_clean_Lj.rds")
+saveRDS(p_bubble, file = "p_bubble_Lj.rds")

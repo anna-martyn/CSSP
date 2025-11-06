@@ -1,6 +1,6 @@
 # Load packages and export data ------------------------------------------------
 pkg <- c("data.table", "magrittr", "ggplot2", "vegan", "ggtext", "ggpubr", 
-         "grid")
+         "grid", "patchwork")
 
 for(pk in pkg){
   library(pk, character.only = T)
@@ -73,7 +73,7 @@ for(i in 1:length(cond)){
   
   # Segments
   CPCo_points[,":="(
-    Soil = factor(Soil, levels = c("UF", "PK", "NPK")),
+    Soil = factor(Soil, levels = c("NPK", "PK", "UF")),
     Genotype = factor(Genotype, levels = names(color))
   )]
   
@@ -91,6 +91,7 @@ for(i in 1:length(cond)){
       aes(x = CAP1, y = CAP2, xend = seg_x, yend = seg_y, color = Genotype)
     ) +
     scale_color_manual(values = color, labels = genotype_labels_legend)+
+    scale_shape_manual(values = c(15, 17, 16), breaks = c("NPK", "PK", "UF"))+
     theme_bw()+
     main_theme+
     theme(legend.key.size = unit(0.25, 'cm'),

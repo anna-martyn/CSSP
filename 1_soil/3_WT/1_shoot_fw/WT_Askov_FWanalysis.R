@@ -113,8 +113,9 @@ main_theme <- theme(panel.background=element_blank(),
 # Generate plot
 weight_summary$y_pos[5:6] <- c(0.9, 0.6)
 p <- ggplot(weight, aes(x=Soil_type, y=Fresh_weight, fill=Soil_type)) +
-  geom_boxplot(width=0.3, outlier.color=NA, alpha=0.7) +
-  geom_jitter(position=position_jitter(width=0), size=1.5, alpha=0.3) +
+  # geom_boxplot(width=0.3, outlier.color=NA, alpha=0.7) +
+  geom_boxplot(width=0.3, alpha=0.7, outlier.size = 1.5) +
+  # geom_jitter(position=position_jitter(width=0), size=1.5, alpha=0.3) +
 
   # Letters above boxes
   geom_text(data=weight_summary, aes(x=Soil_type, y=y_pos * 1.2, label=label),

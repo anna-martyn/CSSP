@@ -396,7 +396,7 @@ Lotus_asv_table <- Lotus_asv_table %>% ## Subset and reorder the ASV table to ma
   filter(rownames(.) %in% Lotus_taxonomy$ASVid)
 
 Hordeum_design <- Hordeum_design %>%
-  filter(SampleID %in% colnames(Hordeum_asv_table)) 
+  filter(Sample_ID %in% colnames(Hordeum_asv_table)) 
 
 Hordeum_asv_table <- Hordeum_asv_table %>%
   select(all_of(Hordeum_design$SampleID)) %>%
@@ -760,10 +760,36 @@ colors <- c("#1F78B4", "#A6CEE3", "white","#FFFF99",
 # Rescale breaks to 0-1 for gradientn
 values <- rescale(breaks, to = c(0,1))
 
-df.plot$letter[
-  df.plot$Plant == "Hordeum" & df.plot$Compartment == "Root" &
-  df.plot$Order == "Pseudomonadales"
-] <- NA
+letter_keep <- df.plot %>% 
+  group_by(Plant, Compartment, Order) %>% 
+  summarise(remove = all(letter == "a")) %>%
+  ungroup()
+
+letter_keep$remove[is.na(letter_keep$remove)] <- F
+Opt <- expand.grid(Plant = c("Lotus", "Hordeum"), 
+                   Compartment = c("Root", "Rhizosphere"))
+
+for(i in 1:nrow(Opt)){
+  letter_keep_sub <- letter_keep[
+    letter_keep$Plant == Opt$Plant[i] & 
+    letter_keep$Compartment == Opt$Compartment[i],
+  ]
+  orders_remove_letters <- as.character(letter_keep_sub$Order[letter_keep_sub$remove])
+  df.plot$letter[
+    df.plot$Plant == Opt$Plant[i] & 
+    df.plot$Compartment == Opt$Compartment[i] &
+    df.plot$Order %in% orders_remove_letters
+  ] <- NA
+}
+
+df.plot <- df.plot %>% 
+  filter(!(Order %in% c("Other", "Unknown"))) %>% 
+  mutate(Order = droplevels(Order))
+
+# df.plot$letter[
+#   df.plot$Plant == "Hordeum" & df.plot$Compartment == "Root" &
+#   df.plot$Order == "Pseudomonadales"
+# ] <- NA
 # Then in ggplot:
 p_heatmap <- ggplot(df.plot, aes(x=Soil, y=Order, fill=RA)) +
   geom_tile(color="grey50") +

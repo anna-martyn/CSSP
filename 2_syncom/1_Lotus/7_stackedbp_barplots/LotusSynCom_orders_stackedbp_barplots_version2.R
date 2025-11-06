@@ -179,7 +179,7 @@ p1
 # Save plot.
 ggsave("LotusSC_order_RA_stackedbp.pdf", p1, width=12, height=6, unit = "cm")
 saveRDS(p1, file="LotusSC_order_RA_stackedbp.rds")
-saveRDS(p1, file="../10_final_figures/LotusSC_order_RA_stackedbp.rds")
+# saveRDS(p1, file="../10_final_figures/LotusSC_order_RA_stackedbp.rds")
 
 # Order level comparisons with Maaslin2 ----
 df_summary$Genotype <- factor(
@@ -209,12 +209,16 @@ design_root$Genotype <- factor(
 order_test_rhiz <- Maaslin2(input_data = order_table_rhiz,
                             input_metadata = design_rhiz,
                             fixed_effects = "Genotype",
-                            output = "Maslin_output")
+                            output = "Maslin_output",
+                            plot_heatmap = F,
+                            plot_scatter = F)
 
 order_test_root <- Maaslin2(input_data = order_table_root,
                             input_metadata = design_root,
                             fixed_effects = "Genotype",
-                            output = "Maslin_output")
+                            output = "Maslin_output",
+                            plot_heatmap = F,
+                            plot_scatter = F)
 
 res_rhiz <- order_test_rhiz$results
 res_rhiz <- res_rhiz[res_rhiz$qval<0.05, c("feature", "value")]
@@ -297,6 +301,6 @@ write.csv(df_ord, "df_ord_Lj.csv")
 ggsave("Lotus_order_RA_sign_orders_asterisks.pdf", 
        p_sig, width=12, height=6, unit = "cm")
 saveRDS(p_sig, file="Lotus_order_RA_sign_orders_asterisks.rds")
-saveRDS(p_sig, 
-        file="../10_final_figures/Lotus_order_RA_sign_orders_asterisks.rds")
+# saveRDS(p_sig, 
+#         file="../10_final_figures/Lotus_order_RA_sign_orders_asterisks.rds")
 

@@ -69,9 +69,10 @@ S_root <- Structural_zeros3(asv_table_root, meta_root, group="Genotype",
 M_rhizo <- Maaslin2(input_data = asv_table_rhizo,
                     input_metadata = meta_rhizo,
                     output = "Maaslin2_rhizo",
-                    plot_heatmap = FALSE,
                     fixed_effects = "Genotype",
-                    min_prevalence = 0.1)
+                    min_prevalence = 0.1,
+                    plot_heatmap = F,
+                    plot_scatter = F)
 
 res_dt <- data.table(M_rhizo$results)
 
@@ -95,9 +96,10 @@ for(g in c("symrk","ccamk","nsp1","nsp2")){
 M_root <- Maaslin2(input_data = asv_table_root,
                    input_metadata = meta_root,
                    output = "Maaslin2_root",
-                   plot_heatmap = FALSE,
                    fixed_effects = "Genotype",
-                   min_prevalence = 0.1)
+                   min_prevalence = 0.1,
+                   plot_heatmap = F,
+                   plot_scatter = F)
 
 res_dt <- data.table(M_root$results)
 
@@ -406,10 +408,10 @@ lgd <- plot_grid(lgd_bubble, lgd_tax, ncol = 1)
 # Save final plot.
 ggsave("HordeumSynCom_DA.pdf", plot = final_plot, 
        width = 21, height = 20, units = "cm")
-saveRDS(final_plot, file = "../8_final_figures/HordeumSynCom_DA.rds")
+saveRDS(final_plot, file = "HordeumSynCom_DA.rds")
 
-saveRDS(p_RA, file = "../8_final_figures/p_RA_Hv.rds")
-saveRDS(p_tax_clean, file = "../8_final_figures/p_tax_clean_Hv.rds")
-saveRDS(p_bubble, file = "../8_final_figures/p_bubble_Hv.rds")
-saveRDS(lgd, file = "../8_final_figures/legend.rds")
+saveRDS(p_RA, file = "p_RA_Hv.rds")
+saveRDS(p_tax_clean, file = "p_tax_clean_Hv.rds")
+saveRDS(p_bubble, file = "p_bubble_Hv.rds")
+saveRDS(lgd, file = "legend.rds")
 

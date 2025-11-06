@@ -72,9 +72,10 @@ main_theme <- theme(panel.background=element_blank(),
 
 letters_df$y_pos[c(1,3)] <- c(9.5, 10.5)
 p1 <- ggplot(nod, aes(x=Soil_type, y=pink, fill=Soil_type)) +
-  geom_boxplot(width=0.3, outlier.color = NA, alpha=0.7)+
-  geom_jitter(aes(), position=position_jitterdodge(jitter.width = 0.15),
-              size=1.5, alpha=0.3)+
+  # geom_boxplot(width=0.3, outlier.color = NA, alpha=0.7)+
+  geom_boxplot(width=0.3, alpha=0.7, outlier.size = 1.5)+
+  # geom_jitter(aes(), position=position_jitterdodge(jitter.width = 0.15),
+  #             size=1.5, alpha=0.3)+
   scale_fill_manual(values=as.character(colors$color)) +
   geom_text(data=letters_df, aes(x=Soil_type, y=y_pos*1.1, label=label),
             inherit.aes=FALSE, size=8/.pt) +
