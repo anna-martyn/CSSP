@@ -18,7 +18,7 @@ names(cols) <- c(gt, "control")
 # Loading data -----------------------------------------------------------------
 ## Lotus ----
 metabolite_data_Lj <- fread(
-  "../1_data/1_Lotus/241129_CSSP_mutants_neg_GNPS_quant.csv",
+  "../1_data/1_Lotus/LotusCSSP_rootex_neg_GNPS_quant.csv",
   header = T, drop = 2:13
 )
 metabolite_data_Lj[,V73:=NULL]
@@ -29,7 +29,7 @@ colnames(metabolite_data_Lj)[-1] <- sample_numbers
 
 meta_data_Lj <- fread("../1_data/1_Lotus/LotusCSSP_rootex_metadata.txt")
 annotation_Lj <- fread(
-  "../1_data/1_Lotus/Lotus_Dec24_canopus_structure_summary.tsv"
+  "../1_data/1_Lotus/LotusCSSP_rootex_canopus_structure_summary.tsv"
 )
 
 ### Changing data format ----
@@ -55,21 +55,22 @@ setcolorder(annotation_Lj, "Feature")
 annotation_Lj[,Feature:= paste0("Feature", Feature)]
 
 ## Barley ----------------------------------------------------------------------
-metabolite_data_Hv <- fread("../1_data/2_Barley/01042025_Barley_neg_quant.csv",
-                            header = T, drop = 2:13)
+metabolite_data_Hv <- fread(
+  "../1_data/2_Barley/HordeumCSSP_rootex_neg_quant.csv", header = T, drop = 2:13
+)
 metabolite_data_Hv[,V38:=NULL]
 sample_numbers <- unlist(
   lapply(strsplit(colnames(metabolite_data_Hv)[-1], "_"), function(x) x[4])
 )
 colnames(metabolite_data_Hv)[-1] <- sample_numbers
 
-meta_data_Hv <- fread("../1_data/2_Barley/BarleyCSSP_3diaz_metadata.txt")
+meta_data_Hv <- fread("../1_data/2_Barley/HordeumCSSP_rootex_metadata.txt")
 annotation_Hv <- fread(
-  "../1_data/2_Barley/Barley_Apr25_canopus_structure_summary.tsv"
+  "../1_data/2_Barley/HordeumCSSP_rootex_canopus_structure_summary.tsv"
 )
 
-meta_data_Hv <- meta_data_Hv[Sample_ID %in% sample_numbers]
-meta_data_Hv[Genotype == "sand", Genotype := "control"]
+# meta_data_Hv <- meta_data_Hv[Sample_ID %in% sample_numbers]
+# meta_data_Hv[Genotype == "sand", Genotype := "control"]
 
 ### Changing data format ----
 #### Metabolite data ----
@@ -81,7 +82,7 @@ colnames(metabolite_data_Hv)[-1] <- paste0(
 
 #### Metadata ----
 meta_data_Hv[,Sample_ID:=paste0("Sample", Sample_ID)]
-meta_data_Hv <- meta_data_Hv[Sample_ID %in% colnames(metabolite_data_Hv)]
+# meta_data_Hv <- meta_data_Hv[Sample_ID %in% colnames(metabolite_data_Hv)]
 
 #### Annotations ----
 w <- which(colnames(annotation_Hv) == "mappingFeatureId")
@@ -96,9 +97,9 @@ sample_keep <- meta_data_Lj[Inoculum == "none", Sample_ID]
 meta_data_Lj <- meta_data_Lj[Sample_ID %in% sample_keep]
 metabolite_data_Lj <- metabolite_data_Lj[,c("Feature", sample_keep), with = F]
 
-sample_keep <- meta_data_Hv[Inoculum == "none", Sample_ID]
-meta_data_Hv <- meta_data_Hv[Sample_ID %in% sample_keep]
-metabolite_data_Hv <- metabolite_data_Hv[,c("Feature", sample_keep), with = F]
+# sample_keep <- meta_data_Hv[Inoculum == "none", Sample_ID]
+# meta_data_Hv <- meta_data_Hv[Sample_ID %in% sample_keep]
+# metabolite_data_Hv <- metabolite_data_Hv[,c("Feature", sample_keep), with = F]
 
 # Remove features present in too few replicates
 is_feature_present <- rowMeans(metabolite_data_Lj[,-1] == 0) <= 0.9
@@ -106,7 +107,7 @@ feature_present <- metabolite_data_Lj$Feature[is_feature_present]
 metabolite_data_Lj <- metabolite_data_Lj[Feature %in% feature_present]
 metabolite_data_Lj <- metabolite_data_Lj[Feature %in% annotation_Lj$Feature]
 
-is_feature_present <- rowMeans(meta_data_Hv[,-1] == 0) <= 0.9
+is_feature_present <- rowMeans(metabolite_data_Hv[,-1] == 0) <= 0.9
 feature_present <- metabolite_data_Hv$Feature[is_feature_present]
 metabolite_data_Hv <- metabolite_data_Hv[Feature %in% feature_present]
 metabolite_data_Hv <- metabolite_data_Hv[Feature %in% annotation_Hv$Feature]
@@ -190,15 +191,29 @@ test_ccamk <- Tobit_LRT(sand_filter, var = "Genotypeccamk", p_adjust = "fdr")
 test_nsp1 <- Tobit_LRT(sand_filter, var = "Genotypensp1", p_adjust = "fdr")
 test_nsp2 <- Tobit_LRT(sand_filter, var = "Genotypensp2", p_adjust = "fdr")
 
-p_vals_mat_Lj <- matrix(NA, nrow = nrow(metabolites_Lj), ncol = 5)
-colnames(p_vals_mat_Lj) <- names(cols)[-6]
-p_vals_mat_Lj[,"WT"] <- test_WT$p_adj
-p_vals_mat_Lj[,"symrk"] <- test_symrk$p_adj
-p_vals_mat_Lj[,"ccamk"] <- test_ccamk$p_adj
-p_vals_mat_Lj[,"nsp1"] <- test_nsp1$p_adj
-p_vals_mat_Lj[,"nsp2"] <- test_nsp2$p_adj
+# p_vals_mat_Lj <- matrix(NA, nrow = nrow(metabolites_Lj), ncol = 5)
+# colnames(p_vals_mat_Lj) <- names(cols)[-6]
+# p_vals_mat_Lj[,"WT"] <- test_WT$p_adj
+# p_vals_mat_Lj[,"symrk"] <- test_symrk$p_adj
+# p_vals_mat_Lj[,"ccamk"] <- test_ccamk$p_adj
+# p_vals_mat_Lj[,"nsp1"] <- test_nsp1$p_adj
+# p_vals_mat_Lj[,"nsp2"] <- test_nsp2$p_adj
+# 
+# feature_keep_Lj <- rownames(test_nsp2)[apply(p_vals_mat_Lj<0.05, 1, any)]
 
-feature_keep_Lj <- rownames(test_nsp2)[apply(p_vals_mat_Lj<0.05, 1, any)]
+feature_keep_mat_Lj <- matrix(NA, nrow = nrow(metabolites_Lj), ncol = 5)
+colnames(feature_keep_mat_Lj) <- names(cols)[-6]
+feature_keep_mat_Lj[,"WT"] <- (test_WT$p_adj < 0.05) & (test_WT$GenotypeWT > 0)
+feature_keep_mat_Lj[,"symrk"] <- (test_symrk$p_adj < 0.05) & 
+                                 (test_symrk$Genotypesymrk > 0)
+feature_keep_mat_Lj[,"ccamk"] <- (test_ccamk$p_adj < 0.05) & 
+                                 (test_ccamk$Genotypeccamk > 0)
+feature_keep_mat_Lj[,"nsp1"] <- (test_nsp1$p_adj < 0.05) & 
+                                (test_nsp1$Genotypensp1 > 0)
+feature_keep_mat_Lj[,"nsp2"] <- (test_nsp2$p_adj < 0.05) & 
+                                (test_nsp2$Genotypensp2 > 0)
+
+feature_keep_Lj <- rownames(test_nsp2)[apply(feature_keep_mat_Lj, 1, any)]
 
 ## Barley ----
 metabolites_Hv <- data.frame(metabolite_data_Hv[,-1],
@@ -206,7 +221,7 @@ metabolites_Hv <- data.frame(metabolite_data_Hv[,-1],
 meta_data_Hv_df <- data.frame(meta_data_Hv[,-1], 
                               row.names = meta_data_Hv$Sample_ID)
 meta_data_Hv_df$Genotype <- factor(meta_data_Hv_df$Genotype,
-                                   levels = c("control", "WT", "symrk",
+                                   levels = c("sand", "WT", "symrk",
                                               "ccamk", "nsp1", "nsp2"))
 
 sand_filter <- Tobit_model(metabolites_Hv, meta_data_Hv_df,
@@ -217,15 +232,31 @@ test_ccamk <- Tobit_LRT(sand_filter, var = "Genotypeccamk", p_adjust = "fdr")
 test_nsp1 <- Tobit_LRT(sand_filter, var = "Genotypensp1", p_adjust = "fdr")
 test_nsp2 <- Tobit_LRT(sand_filter, var = "Genotypensp2", p_adjust = "fdr")
 
-p_vals_mat_Hv <- matrix(NA, nrow = nrow(metabolites_Hv), ncol = 5)
-colnames(p_vals_mat_Hv) <- names(cols)[-6]
-p_vals_mat_Hv[,"WT"] <- test_WT$p_adj
-p_vals_mat_Hv[,"symrk"] <- test_symrk$p_adj
-p_vals_mat_Hv[,"ccamk"] <- test_ccamk$p_adj
-p_vals_mat_Hv[,"nsp1"] <- test_nsp1$p_adj
-p_vals_mat_Hv[,"nsp2"] <- test_nsp2$p_adj
+# p_vals_mat_Hv <- matrix(NA, nrow = nrow(metabolites_Hv), ncol = 5)
+# colnames(p_vals_mat_Hv) <- names(cols)[-6]
+# p_vals_mat_Hv[,"WT"] <- test_WT$p_adj
+# p_vals_mat_Hv[,"symrk"] <- test_symrk$p_adj
+# p_vals_mat_Hv[,"ccamk"] <- test_ccamk$p_adj
+# p_vals_mat_Hv[,"nsp1"] <- test_nsp1$p_adj
+# p_vals_mat_Hv[,"nsp2"] <- test_nsp2$p_adj
 
-feature_keep_Hv <- rownames(test_nsp2)[apply(p_vals_mat_Hv<0.05, 1, any)]
+# feature_keep_Hv <- rownames(test_nsp2)[apply(p_vals_mat_Hv<0.05, 1, any)]
+
+# Keep only features that are significantly enriched in at least one
+# genotype compared to the sand samples.
+feature_keep_mat_Hv <- matrix(NA, nrow = nrow(metabolites_Hv), ncol = 5)
+colnames(feature_keep_mat_Hv) <- names(cols)[-6]
+feature_keep_mat_Hv[,"WT"] <- (test_WT$p_adj < 0.05) & (test_WT$GenotypeWT > 0)
+feature_keep_mat_Hv[,"symrk"] <- (test_symrk$p_adj < 0.05) & 
+                                 (test_symrk$Genotypesymrk > 0)
+feature_keep_mat_Hv[,"ccamk"] <- (test_ccamk$p_adj < 0.05) & 
+                                 (test_ccamk$Genotypeccamk > 0)
+feature_keep_mat_Hv[,"nsp1"] <- (test_nsp1$p_adj < 0.05) & 
+                                (test_nsp1$Genotypensp1 > 0)
+feature_keep_mat_Hv[,"nsp2"] <- (test_nsp2$p_adj < 0.05) & 
+                                (test_nsp2$Genotypensp2 > 0)
+
+feature_keep_Hv <- rownames(test_nsp2)[apply(feature_keep_mat_Hv, 1, any)]
 
 # Removing non-present features
 # Lotus
@@ -239,7 +270,7 @@ feature_present_Lj <- rownames(metabolites_Lj)[
 metabolites_Lj <- metabolites_Lj[feature_present_Lj,]
 
 # Barley
-samples_keep <- meta_data_Hv[Genotype != "control", Sample_ID]
+samples_keep <- meta_data_Hv[Genotype != "sand", Sample_ID]
 meta_data_Hv_df <- meta_data_Hv_df[samples_keep,]
 metabolites_Hv <- metabolites_Hv[feature_keep_Hv, samples_keep]
 
@@ -343,7 +374,7 @@ ggplot(data = dtHv, mapping = aes(x = PC1, y = PC2, colour = Genotype))+
   NULL -> p2
 
 PCA_legend <- get_plot_component(p1, 'guide-box', return_all = TRUE)
-PCA_legend <- PCA_legend[[3]]
+# PCA_legend <- PCA_legend[[3]]
 p1 <- p1 + guides(colour = "none")
 
 PCA_all <- ggarrange(p1, p2, nrow = 2)
@@ -400,6 +431,13 @@ Feat_tab_Lj <- data.table(Feature = rownames(Feat_tab_Lj), Feat_tab_Lj)
 res_Lj <- merge(res_Lj, Feat_tab_Lj, by = "Feature")
 res_Lj <- merge(res_Lj, annotation_Lj, by = "Feature", all.x = T)
 
+# Removing duplicates
+res_Lj[Feature %in% paste0("Feature", c(1896, 1913, 1914, 1917))]
+feature_rep <- table(res_Lj$Feature)
+feature_rep[feature_rep > 1] # Features with repeated entries in annotation file
+# Removing duplicates
+res_Lj <- res_Lj[-c(291,292,294,295, 297,298, 300, 303,305)]
+
 fwrite(res_Lj, "../4_tables/Metabolite_test_results_tobit_Lj.csv")
 
 ## Barley ----
@@ -425,6 +463,11 @@ p_adj_mat_Hv[,"symrk"] <- test_symrk_Hv$p_adj
 p_adj_mat_Hv[,"ccamk"] <- test_ccamk_Hv$p_adj
 p_adj_mat_Hv[,"nsp1"] <- test_nsp1_Hv$p_adj
 p_adj_mat_Hv[,"nsp2"] <- test_nsp2_Hv$p_adj
+
+test_overall_Hv <- Tobit_LRT(DA_metabolites_Hv,
+                             var = c("Genotypesymrk", "Genotypeccamk",
+                                     "Genotypensp1", "Genotypensp2"),
+                             p_adjust = "fdr")
 
 ### Savings results ----
 DA_Hv <- matrix(NA, nrow = nrow(metabolites_Hv), ncol = 4)
@@ -532,23 +575,40 @@ ggplot(data = res_table, aes(x = logFC, y = -log10(p_adj), colour = DA))+
   NULL -> volcanoes
 
 volcano_legend <- get_plot_component(volcanoes, 'guide-box', return_all = TRUE)
-volcano_legend <- volcano_legend[[3]]
+# volcano_legend <- volcano_legend[[3]]
 volcanoes <- volcanoes + guides(colour = "none")
 plot_grid(volcano_legend)
 # Boxplots ---------------------------------------------------------------------
 ## Lotus ----
-feat_set <- paste0( "Feature", c(269, 1067, 455, 882, 973,
-                                 1047, 945, 1053, 976) )
+# feat_set <- paste0( "Feature", c(269, 1067, 455, 882, 973,
+#                                  1047, 945, 1053, 976) )
+
+feat_set <- paste0( "Feature", c(269, 455, 285, 973, 1053,
+                                 1047, 945, 976, 1177, 1182,
+                                 1046, 1320) )
+
+# c("Feature269" = "Coumaric\nacid (F269)", 
+#   "Feature1067" = "Chalcone\n (F1067)",
+#   "Feature455" = "Ferulic acid\n (F455)",
+#   "Feature882" = "Liqiritigenin\n (F882)",
+#   "Feature973" = "Naringenin\n (F973)", 
+#   "Feature1047" = "BiochaninA/\nOlmelin (F1047)",
+#   "Feature945" = "Formononetin\n (F945)",
+#   "Feature1053" = "Vestitione\n (F1053)",
+#   "Feature976" = "Vestitol\n (F976)") -> name_change
 
 c("Feature269" = "Coumaric\nacid (F269)", 
-  "Feature1067" = "Chalcone\n (F1067)",
   "Feature455" = "Ferulic acid\n (F455)",
-  "Feature882" = "Liqiritigenin\n (F882)",
+  "Feature285" = "Vanillic acid\n (F285)",
   "Feature973" = "Naringenin\n (F973)", 
+  "Feature1053" = "Vestitone\n (F1053)",
   "Feature1047" = "BiochaninA/\nOlmelin (F1047)",
   "Feature945" = "Formononetin\n (F945)",
-  "Feature1053" = "Vestitione\n (F1053)",
-  "Feature976" = "Vestitol\n (F976)") -> name_change
+  "Feature976" = "Vestitol\n (F976)",
+  "Feature1177" = "Dehydro-\nquercetin (F1177)",
+  "Feature1182" = "Diosmetin\n (F1182)",
+  "Feature1046" = "Wogonin\n (F1046)",
+  "Feature1320" = "Velutin\n (F1320)") -> name_change
 
 feat_set <- factor(feat_set, levels = feat_set)
 
@@ -582,20 +642,21 @@ feat_set_dt2 <- feat_set_dt[,max(Intensity), list(Feature, Genotype)]
 rr2 <- merge(rr, feat_set_dt2, by = c("Feature", "Genotype"))
 
 # Manually adjusting position of aserisks
-rr2[2, V1:=1000]
-rr2[3, V1:=2000]
-rr2[21, V1:=14000]
-rr2[27, V1:=2000]
-rr2[34, V1:=125000]
+# rr2[2, V1:=1000]
+# rr2[3, V1:=2000]
+# rr2[21, V1:=14000]
+# rr2[27, V1:=2000]
+# rr2[34, V1:=125000]
 
 feat_set_dt[,Feature:=name_change[as.character(Feature)]]
 feat_set_dt[,Feature:=factor(Feature, levels = name_change)]
 rr2[,Feature:=name_change[as.character(Feature)]]
 rr2[,Feature:=factor(Feature, levels = name_change)]
+rr2[,V1:=V1*1.05]
 
 ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
   geom_boxplot(linewidth = 0.3, outlier.size = 0.5, outlier.color = "red") +
-  facet_wrap(~Feature, scales = "free")+
+  facet_wrap(~Feature, scales = "free", ncol = 3)+
   geom_label(data = rr2, aes(y = V1, label = text), label.size = NA,
              alpha = 0, size = 20/.pt)+
   scale_fill_manual(values = cols, breaks = names(cols))+
@@ -616,21 +677,38 @@ ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
         legend.margin = margin(t = 20, unit = "pt"))+
   labs(x = NULL, title = "Lotus")+
   guides(fill = "none")+
+  ggh4x::facetted_pos_scales(
+    y = list(
+      Feature == "BiochaninA/\nOlmelin (F1047)" ~ 
+        scale_y_continuous(limits = c(0, 25000))
+    )
+  )+
   NULL -> feature_box_Lj
 
 ## Barley ----
-feat_set <- paste0( "Feature", c(2546, 1548, 495, 2970, 3069,
-                                 3095, 2306, 2308, 2309) )
+# feat_set <- paste0( "Feature", c(2546, 1548, 495, 2970, 3069,
+#                                  3095, 2306, 2308, 2309) )
+
+# feat_set <- paste0( "Feature", c(2546, 394, 495, 3095, 3069, 3288) )
+feat_set <- paste0( "Feature", c(2546, 2889, 495, 3095, 3069, 3288) )
+
+# c("Feature2546" = "Gibberellin\n (F2546)",
+#   "Feature1548" = "Abscisic \nacid (F1548)",
+#   "Feature495" = "Esculetin\n (F495)",
+#   "Feature2970" = "Flavonoid-like\nglycoside (F2970)",
+#   "Feature3069" = "Isoorientin\n (F3069)",
+#   "Feature3095" = "Paeonin C\n (F3095)",
+#   "Feature2306" = "Oxylipin (F2306)",
+#   "Feature2308" = "Oxylipin (F2038)",
+#   "Feature2309" = "Oxylipin (F2309)") -> name_change
 
 c("Feature2546" = "Gibberellin\n (F2546)",
-  "Feature1548" = "Abscisic \nacid (F1548)",
-  "Feature495" = "Esculetin\n (F465)",
-  "Feature2970" = "Flavonoid-like\nglycoside (F2970)",
-  "Feature3069" = "Isoorientin\n (F3069)",
+  # "Feature394" = "Phenyllactic\n acid (F394)",
+  "Feature2889" = "Absisic acid and\n derivatives (F2889)",
+  "Feature495" = "Esculetin\n (F495)",
   "Feature3095" = "Paeonin C\n (F3095)",
-  "Feature2306" = "Oxylipin (F2306)",
-  "Feature2308" = "Oxylipin (F2038)",
-  "Feature2309" = "Oxylipin (F2309)") -> name_change
+  "Feature3069" = "Isoorientin\n (F3069)",
+  "Feature3288" = "Sapopharin\n (F3288)") -> name_change
 
 feat_set <- factor(feat_set, levels = feat_set)
 
@@ -642,7 +720,7 @@ feat_set_dt <- melt(feat_set_dt,
                     value.name = "Intensity",
                     id.vars = length(feat_set)+1)
 
-test_symrk_Hv[as.character(feat_set),]
+# test_symrk_Hv[as.character(feat_set),]
 
 r1 <- data.table(Feature = feat_set,
                  test_symrk_Hv[as.character(feat_set), c("p_vals", "p_adj")],
@@ -662,41 +740,43 @@ rr[,text:=ifelse(p_adj < 0.05, "*", NA)]
 
 feat_set_dt2 <- feat_set_dt[,max(Intensity), list(Feature, Genotype)]
 rr2 <- merge(rr, feat_set_dt2, by = c("Feature", "Genotype"))
-rr2[Feature == "Feature3329",V1:=V1-1000]
-rr2[Feature == "Feature387",V1:=V1-40]
-rr2[V1<0, V1:=0]
+# rr2[Feature == "Feature3329",V1:=V1-1000]
+# rr2[Feature == "Feature387",V1:=V1-40]
+# rr2[V1<0, V1:=0]
 
 # Manually adjusting position of aserisks
-rr2[3, V1:=100]
-rr2[6, V1:=80]
-rr2[7, V1:=60]
-rr2[21, V1:=950]
-rr2[27,V1:=3100]
-rr2[31,V1:=7400]
-rr2[35,V1:=6400]
+# rr2[3, V1:=100]
+# rr2[6, V1:=80]
+# rr2[7, V1:=60]
+# rr2[21, V1:=950]
+# rr2[27,V1:=3100]
+# rr2[31,V1:=7400]
+# rr2[35,V1:=6400]
 
-data.table(Feature = paste0("Feature", c(2306, 2308, 2309)),
-           Genotype = c("nsp1", "nsp2", "nsp2"),
-           p_vals = rep(NA, 3),
-           p_adj = rep(NA, 3),
-           text = rep("", 3),
-           V1 = c(4000, 12800, 8100)) -> extend_limits
-
-rr2 <- rbind(rr2, extend_limits)
+# data.table(Feature = paste0("Feature", c(2306, 2308, 2309)),
+#            Genotype = c("nsp1", "nsp2", "nsp2"),
+#            p_vals = rep(NA, 3),
+#            p_adj = rep(NA, 3),
+#            text = rep("", 3),
+#            V1 = c(4000, 12800, 8100)) -> extend_limits
+# 
+# rr2 <- rbind(rr2, extend_limits)
 
 feat_set_dt[,Feature:=name_change[as.character(Feature)]]
 feat_set_dt[,Feature:=factor(Feature, levels = name_change)]
 rr2[,Feature:=name_change[as.character(Feature)]]
 rr2[,Feature:=factor(Feature, levels = name_change)]
+rr2[,V1:=V1*1.05]
 
 ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
   geom_boxplot(linewidth = 0.3, outlier.size = 0.5, outlier.color = "red") +
-  facet_wrap(~Feature, scales = "free")+
+  facet_wrap(~Feature, scales = "free", ncol = 3)+
   geom_label(data = rr2, aes(y = V1, label = text), label.size = NA,
              alpha = 0, size = 20/.pt)+
   scale_fill_manual(values = cols, breaks = names(cols))+
   theme_bw()+
   ggtitle("Hordeum")+
+  # scale_y_continuous(expand = c(0, 0))+
   theme(legend.position = "right",
         strip.background = element_rect(colour = NA),
         axis.title.y=element_blank(),
@@ -712,9 +792,16 @@ ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
         legend.margin = margin(t = 20, unit = "pt"))+
   labs(x = NULL)+
   guides(fill = "none")+
+  ggh4x::facetted_pos_scales(
+    y = list(
+      Feature == "Absisic acid and\n derivatives (F2889)" ~ 
+        scale_y_continuous(limits = c(0, 2500))
+    )
+  )+
   NULL -> feature_box_Hv
 
-feature_box <- ggarrange(feature_box_Lj, feature_box_Hv, ncol = 1)
+feature_box <- ggarrange(feature_box_Lj, feature_box_Hv, ncol = 1, 
+                         heights = c(2/3, 1/3))
 
 # Bubble plot ------------------------------------------------------------------
 ## Sum tables ----
@@ -784,12 +871,6 @@ sum_tab[,Direction:=fcase(
 )]
 sum_tab <- sum_tab[Amount != 0]
 
-# 'Cheating' by shortening class names. Remove if not desired.
-# sum_tab[,Class:=gsub(" and derivatives", "", Class)]
-# sum_tab[,Class:=gsub(" and substituted derivatives", "", Class)]
-# sum_tab <- sum_tab[!(Class %in% "Allyl-type 1,3-dipolar organic compounds")]
-# End of 'cheating'
-
 avg_sum <- sum_tab[,.(avg = mean(Amount)),Class]
 avg_sum <- avg_sum[order(avg)]
 sum_tab[,Class:=factor(Class, levels = avg_sum$Class)]
@@ -846,8 +927,14 @@ ggplot(data = sum_tab, mapping = aes(x = Genotype, y = Class, size = Amount,
         legend.key.spacing.x = unit(5, "pt"),
         plot.title = element_text(size = 8, hjust = 0.5),
         legend.margin = margin(t = 2, r = 8, l = 5, unit = "pt"))+
+  scale_x_discrete(labels=c(
+    "symrk"=expression(italic("symrk")),
+    "ccamk"=expression(italic("ccamk")),
+    "nsp1"=expression(italic("nsp1")),
+    "nsp2"=expression(italic("nsp2"))
+  )) +
   # guides(size = "none", fill = "none")+
-  # guides(fill = guide_colourbar(barheight = 0.5, label.position = "bottom"))+
+  guides(fill = guide_colourbar(barheight = 0.5, label.position = "bottom"))+
   NULL -> Bubble
 
 #  Collect plots ---------------------------------------------------------------

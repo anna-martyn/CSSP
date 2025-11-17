@@ -115,7 +115,9 @@ Tobit_LRT <- function(TT, var, p_adjust = "fdr"){
   p_vals <- 1-pchisq(LR_stat, df = ncol(TT$X)-ncol(X))
   p_vals[is.na(p_vals)] <- 1
   
-  res <- cbind(TT$res, p_vals = p_vals, p_adj = p.adjust(p_vals, method = p_adjust))
+  res <- cbind(
+    TT$res, p_vals = p_vals, p_adj = p.adjust(p_vals, method = p_adjust)
+  )
   
   return(res)
 }
