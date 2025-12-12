@@ -16,8 +16,8 @@ asv_table <- read.table(
   skip = 1    
 )
 
-# For the Lotus CSSP Askov Soils samples, spike-in DNA was added during library preparation.
-# As we are not using the spike-in info in our analysis, we want to remove the spike-in ASV from the ASV table for further aanalysis.
+# For the Lotus CSSP Askov soil samples, spike-in DNA was added during library preparation.
+# As we are not using the spike-in info in our analysis, we want to remove the spike-in ASV from the ASV table for further analysis.
 # The id of the spike-in ASV is "85fa8bb918a926d97659d9b64ca6fedd"
 asv_table <- asv_table[!rownames(asv_table) %in% "85fa8bb918a926d97659d9b64ca6fedd", ]
 
@@ -29,4 +29,3 @@ write.table(
   quote = FALSE,
   col.names = NA
 )
-

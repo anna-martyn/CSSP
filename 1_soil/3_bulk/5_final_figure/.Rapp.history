@@ -1,0 +1,2 @@
+load("/Users/amartyn/MPIPZ/biodata-3/dep_psl/grp_rgo/Anna/Aarhus/CSSP_paper/CSSP_FINAL/1_soil_exp/2_bulk/6_Final_figure/Bulk_workflow.rds")
+load("/Users/amartyn/MPIPZ/biodata-3/dep_psl/grp_rgo/Anna/Aarhus/CSSP_paper/CSSP_FINAL/1_soil_exp/2_bulk/6_Final_figure/Barley_bulk_PCoA.rds")
