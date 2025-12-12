@@ -2,10 +2,10 @@
 options(warn=-1)
 rm(list=ls())
 
-# Load packages and data. ------------------------------------------------------
+# Load packages and data -------------------------------------------------------
 ## Load required packages.
 pkg <- c("data.table", "magrittr", "ggplot2", "vegan", "Maaslin2", "patchwork",
-         "RColorBrewer", "ComplexHeatmap", "colorRamp2", "ggh4x", "ggtext","tidyr")
+         "RColorBrewer", "colorRamp2", "ggh4x", "ggtext", "tidyr", "dplyr")
 
 for(pk in pkg){
   library(pk, character.only = T)
@@ -18,26 +18,33 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 source("../0_files/Structural_zeros.R")
 
 ## Read and convert input data.
-ASV_table <- fread("../../../1_data/1_Lotus/LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv")
+ASV_table <- fread(
+  "../../../1_data/1_Lotus/LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv"
+)
 colnames(ASV_table)[1] <- "ASVid"
 ASV_table_full <- data.table(ASV_table)
 
-meta_data <- fread("../../../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt")
-meta_data_full <- data.table(meta_data)
+meta_data <- fread("../../../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt",
+                   drop = c(5, 7, 8))
 
-taxonomy <- fread("../../../1_data/1_Lotus/LotusCSSP_AskovSoils_taxonomy_10_4.tsv")
+taxonomy <- fread(
+  "../../../1_data/1_Lotus/LotusCSSP_AskovSoils_taxonomy_10_4.tsv"
+)
 rename_tax <- function(tax_table){
   colnames(tax_table)[colnames(tax_table) == "Feature ID"] <- "ASVid"
   tax_table %>%
-    separate(Taxon, into = c("Kingdom","Phylum","Class","Order","Family","Genus","Species"),
+    separate(Taxon, into = c("Kingdom","Phylum","Class","Order",
+                             "Family","Genus","Species"),
              sep = "; ", fill = "right") %>%
     mutate(across(Kingdom:Species, ~sub("^[a-z]__", "", .))) %>%
     replace(is.na(.), "Unknown") %>%
-    select(ASVid, Kingdom, Phylum, Class, Order, Family, Genus, Species, Confidence)
+    select(ASVid, Kingdom, Phylum, Class, Order, Family, Genus,
+           Species, Confidence)
 }
 taxonomy <- rename_tax(taxonomy)
+taxonomy <- as.data.table(taxonomy)
 
-
+# Merging ASV tables and metadata into a single object 
 ASV_table_with_metadata <- transpose(ASV_table,
                                      make.names = "ASVid",
                                      keep.names = "SampleID")
@@ -205,20 +212,20 @@ lapply(ASV_tables_subsets,
        }) -> DAA_results
 
 DA_ASV_amounts <- DAA_results %>% lapply(function(x) x$Amount) %>% rbindlist()
-# fwrite(DA_ASV_amounts, "ASV_DA_Overview_Lotus.csv")
+fwrite(DA_ASV_amounts, "ASV_DA_Overview_Lotus.csv")
 
 DA_ASV_results <- DAA_results %>% lapply(function(x) x$res_dt) %>% rbindlist()
 setcolorder(DA_ASV_results, c("ASV", "Soil", "Compartment", "Genotype"))
 DA_ASV_results[,Genotype:=factor(Genotype, levels = c("WT", "symrk", "ccamk",
                                                       "nsp1", "nsp2"))]
 DA_ASV_results <- DA_ASV_results[order(Soil, Compartment, Genotype, ASV)]
-# fwrite(DA_ASV_results, "DA_results_Lotus.csv")
+fwrite(DA_ASV_results, "DA_results_Lotus.csv")
 
 mean_RA_res <- DAA_results %>% 
   lapply(function(x) x$mean_RA_res) %>% 
   rbindlist()
 
-# Heatmap ----------------------------------------------------------------------
+# Preparing data for the heatmap -----------------------------------------------
 res_mat_full <- t(Reduce("cbind", lapply(DAA_results, function(x) x$res_mat)))
 res_mat_full <- data.table(Genotype = rownames(res_mat_full),
                            res_mat_full)
@@ -236,36 +243,18 @@ heatmap_data <- lapply(
 
 heatmap_data <- rbindlist(heatmap_data)
 
-# heatmap_data <- melt(res_mat_full, id.vars = 1, variable.name = "ASVid",
-#                      value.name = "DAA")
-
 heatmap_data[
   ,DAA:=fcase(DAA == 0, "NS",
               DAA == 1, "Enriched",
               DAA == -1, "Depleted")
 ]
 
-## Removing low-abundance ASVs from heatmap ------------------------------------
-# k <- ncol(ASV_table_with_metadata)
-# RA_table <- ASV_table_with_metadata[,6:k]/rowSums(ASV_table_with_metadata[,6:k])
-# ASV_table_with_metadata[,6:k:=RA_table]
-# Mean_RA_by_condition <- ASV_table_with_metadata[
-#   ,lapply(.SD, mean), 
-#   by = list(Compartment),
-#   .SDcols = colnames(RA_table)
-# ]
-# Mean_RA_by_condition <- Mean_RA_by_condition[Compartment != "Nodules"]
-# High_abn <- apply(Mean_RA_by_condition[,-(1:3)], 2, function(x) any(x > 0.001))
-# High_abn_ASV <- colnames(RA_table)[High_abn]
-# 
-# htmp_hiabn <- heatmap_data[ASVid %in% High_abn_ASV]
+## Retaining only DA ASVs in heatmap
 DA_ASVs <- unique(heatmap_data[DAA != "NS"]$ASVid)
 htmp_hiabn <- heatmap_data[ASVid %in% DA_ASVs]
 
 # Taxonomy annotation ----------------------------------------------------------
-## Taxonomy ----
 tax_bar <- taxonomy[ASVid %in% unique(htmp_hiabn$ASVid)]
-# tax_bar <- tax_bar[match(unique(htmp_hiabn$ASVid), ASVid), c("ASVid", "Order")]
 
 # Taxa to be included in figure
 colors_orders <- c(
@@ -289,6 +278,7 @@ colors_orders <- c(
   "Other" = "lightgrey"
 )
 
+# Orders without assigned colours set to Other
 tax_bar[!(Order %in% names(colors_orders)), Order:="Other"]
 tax_bar[,Order:=factor(Order, levels = names(colors_orders))]
 tax_bar <- tax_bar[order(Order)]
@@ -334,7 +324,6 @@ heatmap <- ggplot(data = htmp_hiabn,
   geom_tile()+
   facet_wrap2(vars(Compartment, Soil), strip = strip_nested(), ncol = 1,
               strip.position = "left", scales = "free_y")+
-  # facet_wrap(~Soil + Compartment, strip.position = "left", ncol = 1)+
   scale_fill_manual(values = c("darkblue", "#902121", "white"),
                     breaks = c("Depleted", "Enriched", "NS"))+
   labs(y = "Lotus")+
@@ -359,12 +348,12 @@ heatmap <- ggplot(data = htmp_hiabn,
   )+
   NULL; heatmap
 
-# Annotations ------------------------------------------------------------------
-## Barplot ----
+# Barplot of relative abundance in WT ------------------------------------------
 mean_RA_res[
   ,Genotype:=factor(Genotype, levels = c("nsp2", "nsp1", "ccamk", "symrk"))
 ]
-bar_plot <- ggplot(data = mean_RA_res, mapping = aes(x = mean_RAs, y = Genotype))+
+bar_plot <- ggplot(data = mean_RA_res, 
+                   mapping = aes(x = mean_RAs, y = Genotype))+
   geom_bar(stat = "identity")+
   facet_wrap2(vars(Compartment, Soil), strip = strip_nested(), ncol = 1,
               strip.position = "left")+
@@ -393,6 +382,7 @@ p_axis_title <- ggplot() +
             fontface = "bold", size = 8/.pt) +
   xlab(NULL) + ylab(NULL)
 
+# Save output files
 saveRDS(heatmap, "LotusCSSP_Askov_heatmap.rds")
 saveRDS(bar_plot, "LotusCSSP_Askov_RA_barplot.rds")
 saveRDS(p_tax, "LotusCSSP_Askov_taxonomy.rds")
