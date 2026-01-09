@@ -87,44 +87,6 @@ for(comp in levels(index$Compartment)) {
   label_df <- rbind(label_df, tmp)
 }
 
-# # Initialize empty data frame for Tukey letters and ANOVA p-values
-# label_df <- data.frame()
-# 
-# # Minimum offset above points
-# min_offset <- 60  # adjust as needed for visibility
-# 
-# for(comp in levels(index$Compartment)) {
-#   sub_df <- index %>% filter(Compartment == comp)
-#   
-#   # Compartment y-range
-#   y_range_comp <- max(sub_df$value) - min(sub_df$value)
-#   
-#   # One-way ANOVA
-#   ano <- aov(value ~ Soil, data=sub_df)
-#   anova_p <- summary(ano)[[1]][["Pr(>F)"]][1]
-#   sig <- if(anova_p <= 0.001) "***" else if(anova_p <= 0.01) "**" else if(anova_p <= 0.05) "*" else ""
-#   
-#   # Tukey letters
-#   pairwise <- TukeyHSD(ano)
-#   tukey_letters <- multcompLetters(pairwise$Soil[,4])$Letters
-#   letters_df <- data.frame(Soil = names(tukey_letters),
-#                            Letters = tukey_letters)
-#   
-#   # Letter positions: Max + 3% of compartment range
-#   summary_sub <- sub_df %>%
-#     group_by(Soil) %>%
-#     summarise(MaxValue = max(value), .groups="drop") %>%
-#     left_join(letters_df, by="Soil") %>%
-#     # mutate(y_position = pmin(MaxValue + 0.03 * y_range_comp, 2000),
-#     #        Compartment = comp,
-#     #        ANOVA_sig = sig)
-#     mutate(y_position = pmin(MaxValue + pmax(0.03 * y_range_comp, min_offset), 2000),
-#            Compartment = comp,
-#            ANOVA_sig = sig)
-#   
-#   label_df <- bind_rows(label_df, summary_sub)
-# }
-
 # Set the main theme for the plot and make the plot.
 main_theme <- theme(panel.background=element_blank(),
                     panel.grid.major = element_line(color = "gray90"),
@@ -140,15 +102,6 @@ main_theme <- theme(panel.background=element_blank(),
                     strip.text = element_text(size = 8, color = "black"),
                     legend.background=element_blank(),
                     plot.title = element_text(size=8, hjust=1))
-
-# # ANOVA star positions per compartment
-# anova_positions <- label_df %>%
-#   group_by(Compartment) %>%
-#   summarise(y_position = pmin(max(y_position) + 0.02 * (max(MaxValue)-min(MaxValue)), 2000), .groups="drop") %>%
-#   left_join(label_df %>% select(Compartment, ANOVA_sig) %>% distinct(), by="Compartment") %>%
-#   mutate(x=2)
-# 
-# 
 
 # Make the plot.
 p1 <- ggplot(index, aes(x=Soil, y=value, fill=Soil)) +

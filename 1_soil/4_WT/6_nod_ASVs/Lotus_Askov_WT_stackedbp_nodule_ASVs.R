@@ -150,7 +150,9 @@ p <- ggplot(df_long, aes(x = Soil_type, y = RA, fill = Isolate)) +
   main_theme +
   theme(
     plot.title = element_text(size = 8, face = "bold", hjust = 0),
-    legend.title = element_text(size = 8)
+    legend.title = element_text(size = 8),
+    legend.key.size = unit(0.25, 'cm'),
+    legend.margin = margin(l = -8)
   )
 
 p

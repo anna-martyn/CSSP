@@ -113,9 +113,9 @@ p1 <- ggplot(Lotus_weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   ))
 p1
 
-ggsave(paste0("LotusCSSP_AskovSoils_shootfw.png"), p1, width=6, height=5, units = "cm")
+ggsave(paste0("LotusCSSP_AskovSoils_shootfw.pdf"), p1, width=6, height=5, units = "cm")
 saveRDS(p1, "LotusCSSP_AskovSoils_shootfw.rds")
-saveRDS(p1, "../6_final_figures/LotusCSSP_AskovSoils_shootfw.rds")
+saveRDS(p1, "../8_final_figures/LotusCSSP_AskovSoils_shootfw.rds")
 
 ## Hordeum.
 p2 <- ggplot(Hordeum_weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
@@ -151,6 +151,6 @@ p2 <- ggplot(Hordeum_weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   ))
 p2
 
-ggsave(paste("HordeumCSSP_AskovSoils_shootfw.png", sep=""), p2,width=6, height=5, units = "cm")
+ggsave(paste("HordeumCSSP_AskovSoils_shootfw.pdf", sep=""), p2,width=6, height=5, units = "cm")
 saveRDS(p2, "HordeumCSSP_AskovSoils_shootfw.rds")
-saveRDS(p2, "../6_final_figures/HordeumCSSP_AskovSoils_shootfw.rds")
+saveRDS(p2, "../8_final_figures/HordeumCSSP_AskovSoils_shootfw.rds")

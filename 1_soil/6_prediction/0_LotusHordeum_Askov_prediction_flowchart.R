@@ -111,5 +111,5 @@ No; Yes
 
 grob <- grid.grab()
 
-# Now save the flowchart.
+# Save the flowchart.
 saveRDS(grob, file = "LotusHordeum_Askov_prediction_flowchart.rds")

@@ -150,7 +150,6 @@ main_theme <- theme(panel.background=element_blank(),
                     axis.title.y=element_text(size=8),
                     legend.margin = margin(l = -8),
                     legend.position=c(0.95,0.9),
-                    legend.background=element_rect(colour="black", fill=NA),
                     text=element_text(family="sans", size=8))
 
 p <- ggplot(df_order_summary, aes(x=Order, y=Mean_RA, fill=Soil)) +
@@ -166,7 +165,7 @@ p <- ggplot(df_order_summary, aes(x=Order, y=Mean_RA, fill=Soil)) +
   scale_fill_manual(values=colors) +
   labs(x="", y="Relative Abundance") +
   expand_limits(y = 0) + 
-  scale_y_continuous(expand=c(0,0)) +
+  scale_y_continuous(expand=c(0,0), limits = c(0,0.15), breaks = seq(0, 0.15, 0.05)) +
   main_theme +
   theme(axis.text.x=element_text(size=8, angle=50, hjust=1))
 
@@ -206,7 +205,7 @@ p_sig <- ggplot(df_order_summary_sig, aes(x=Order, y=Mean_RA, fill=Soil)) +
             vjust=0, size=3, family="sans") +
   scale_fill_manual(values=colors) +
   labs(x="", y="Relative Abundance") +
-  scale_y_continuous(expand=c(0,0), limits = c(0, 0.13)) +
+  scale_y_continuous(expand=c(0,0), limits = c(0, 0.15), breaks = seq(0, 0.15, 0.05)) +
   main_theme +
   theme(axis.text.x=element_text(size=8, angle=50, hjust=1),
         legend.position = "right",

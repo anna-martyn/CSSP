@@ -140,7 +140,6 @@ ASV_overlap_df <- ASV_overlap_df %>%
 write.csv(ASV_overlap_df, "HordeumCSSP_bulk_ASV_overlap.csv", row.names = FALSE)
 write.csv(ASV_overlap_df, "../6_suppl_files/HordeumCSSP_bulk_ASV_overlap.csv", row.names = FALSE)
 
-
 # Calculate the top20 bacterial orders among all soil samples.
 df_order <- data.frame(
   ASVid = rownames(asv_table_norm),

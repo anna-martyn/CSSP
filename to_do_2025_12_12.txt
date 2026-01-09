@@ -1,19 +1,42 @@
 12.12.25
 
-- soil data: keep/remove taxonomy clean file, if keep add script to data folder
-- chao1 folder -> consider changing .sh scripts to take input ASV table rfd straight from rarefication folder (for Lotus and Hordeum)
-- check how rarefication is done in all folders ->  make uniform, taking samples >=1000 reads
-- soil bulk folder -> folder 3_barplots_order > script 2_Hordeum…_orders_barplot.R > in final figure Chloroflexales are shown, even though their significance letters are all a > we only want to display orders with significant differences, so this needs to be checked (we had this problem before and Ib solved it somehow); display based on pairwise tests (no 3 equal letters); also adjust your axis to make b above Gaiellales NPK visible
+--------------
+DONE:
+--------------
+
+- soil data: keep/remove taxonomy clean file, if keep add script to data folder (ANNA: removed from data folder and simply adjusted in scripts)
+
+- chao1 folder -> consider changing .sh scripts to take input ASV table rfd straight from rarefication folder for Lotus and Hordeum (ANNA: did not do that because files are stored in MPI cluster, and server used for data analysis is from AU; versions of qiime etc are not the same, so should be fine to leave as is)
+
+- soil WT supplementary figure > in final figure font sizes bigger and axes etc.! (ANNA: fixed and figure ready)
+
+- soil CSSP > adjust DA heatmap folder > adjust Hordeum Maaslin2 script, make folders for output files for cleaner version (ANNA: done)
+
+- soil CSSP > final main figure > make with new plots (ANNA: done)
+
+- soil CSSP: supplementary figures: change sizes to match A4 (use cm) (ANNA: done)
+
+--------------
+TO BE DONE:
+--------------
+
 - fix quality issues of workflows in final figures (Biorender figures)
-- soil final figure: adjust NPK, PK, UF text size to text in figures; also check whether barplot is ok now (chlrooflexales not there, y axis adjusted to show letter b on top)
-- soil WT > fix issue with workflow
-- soil WT supplementary figure > in final figure font sizes bigger and axes etc.!
-- soil CSSP > adjust DA heatmap folder > adjust Hordeum Maaslin2 script, make folders for output files for cleaner version
-- soil CSSP > final main figure > make with new plots
--  soil CSSP: make supplementary tables with DA information that are saved in 5_DA_heatmaps folder as well as in 7_suppl_tables; they shall include:
+
+- soil bulk final figure: adjust NPK, PK, UF text size to text in figures; also check whether barplot is ok now (Chloroflexales not there)
+
+-------
+IB CHECK THESE:
+- soil bulk: folder 3_barplots_order > script 2_Hordeum…_orders_barplot.R > in final figure Chloroflexales are shown, even though their significance letters are all a > we only want to display orders with significant differences, so this needs to be checked (we had this problem before and Ib solved it somehow); display based on pairwise tests (no 3 equal letters); also adjust your axis to make b above Gaiellales NPK visible (ANNA: I set a higher y axis value so al letters are visible now; Ib - can you sort out the issue with Chloroflexales?)
+
+- soil CSSP: make supplementary tables with DA information that are saved in 5_DA_heatmaps folder as well as in 7_suppl_tables; they shall include:
     - One separate file for Lotus rhizosphere NPK, PK, UF; Lotus root NPK, PK, UF; Hordeum rhizosphere NPK, PK, UF; Hordeum root NPK, PK, UF (12 files in total)
     - each file includes : ASVid (only DA ones), symrk, ccamk, nsp1, nsp2 (depleted/ns/enriched), meanRA_WT, meanRA_symrk, meanRA_ccamk, meanRA_nsp1, meanRA_nsp2, taxonomy info (all columns)
-- soil CSSP: supplementary figures: change sizes to match A4 (use cm)
+
+-------
+
+
+
+
 - soil prediction: tidy up folders a little
 - soil prediction: summary table: remove last column (confidence) of taxonomy info
 - syncom & root exudate still need to be fully checked
@@ -22,6 +45,8 @@ General:
 - so far sometimes ANOVA used, sometimes Kruskal Wallis >>> use one kind everywhere!
 - check whether stacked bp showing average are done properly in all scripts
 - later: check whether necessary to mention RA in the supply. Table for soil - prediction (only if referred to specific detailed info other than taxonomy in the written results section)
+- check for all order barplots whether only orders where pairwise differences present are shown?
+- check whether pcoa/cpcoa plot script the same everywhere
 
 
 3 main things Ib
@@ -30,5 +55,6 @@ General:
 3) check that scripts contain all correct supplementary tables, that are saved in”current” directory but also in suppl_tables folder
 
 
+- check how rarefication is done in all folders ->  make uniform, taking samples >=1000 reads (ANNA: Soil: Lotus and Hordeum both incl. samples >=1000 reads)
 
 

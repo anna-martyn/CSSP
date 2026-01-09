@@ -16,7 +16,6 @@ library(ggplot2)
 design <- read.table("../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt",
                      sep = "\t",       
                      header = TRUE,    
-                     # row.names = 1,    
                      check.names = FALSE)  
 taxonomy <- read.table("../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_taxonomy_10_4.tsv", sep="\t", header=T, fill=T)
 asv_table <- read.table(

@@ -31,7 +31,7 @@ Hordeum_taxonomy <- read.table("../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_ta
   sep="\t", header=TRUE, fill=TRUE)
 
 # Rename the columns "Feature.ID" to "ASVid" in taxonomy files.
-# CLean up the taxonomy file layouts.
+# Clean up the taxonomy file layouts.
 rename_tax <- function(tax_table){
   colnames(tax_table)[colnames(tax_table) == "Feature.ID"] <- "ASVid"
   tax_table %>%
@@ -297,43 +297,18 @@ p1 <- ggplot(df.mean_order, aes(x=Soil, y=RA, fill=Order)) +
   guides(fill=guide_legend(nrow=21)) +
   facet_nested(~ Plant + Compartment, scales="free_x", space="free_x") +
   theme(
-    axis.text.x = element_text(size=8, color="black", angle=0, vjust=1), # version 1
-    # axis.text.x = element_text(size=8, color="black", angle=50, vjust=1), # version 2
+    axis.text.x = element_text(size=8, color="black", angle=0, vjust=1),
     strip.text.x = element_text(size=8, face="bold"),
-    legend.key.size = unit(0.25, 'cm'), # version 1
-    # legend.key.size = unit(0.4, 'cm'), # version 2
-    legend.margin = margin(l = -8) # this one removed in version 2?
+    legend.key.size = unit(0.25, 'cm'),
+    legend.margin = margin(l = -8)
   )
 
 p1
-
-# Make the stacked barplot (version 2).
-p1_v2 <- ggplot(df.mean_order, aes(x=Soil, y=RA, fill=Order)) +
-  geom_bar(stat="identity", width=0.7) +
-  scale_fill_manual(values=colors) +
-  scale_y_continuous(expand=c(0,0)) +
-  main_theme +
-  ylab("Mean relative abundance") +
-  labs(fill="Bacterial order") +
-  xlab("") +
-  guides(fill=guide_legend(nrow=21)) +
-  facet_nested(~ Plant + Compartment, scales="free_x", space="free_x") +
-  theme(
-    axis.text.x = element_text(size=8, color="black", angle=50, vjust=1), # version 2
-    strip.text.x = element_text(size=8, face="bold"),
-    legend.key.size = unit(0.4, 'cm') # version 2
-  )
-
-p1_v2
 
 # Save the plot.
 ggsave("LotusHordeum_Askov_WT_stackedbp_top20_meanRA.pdf", p1, width = 10, height = 6, unit = "cm")
 saveRDS(p1, file = "LotusHordeum_Askov_WT_stackedbp_top20_meanRA.rds")
 saveRDS(p1, file = "../7_final_figures/LotusHordeum_Askov_WT_stackedbp_top20_meanRA.rds")
-
-ggsave("LotusHordeum_Askov_WT_stackedbp_top20_meanRA_v2.pdf", p1_v2, width = 10, height = 6, unit = "cm")
-saveRDS(p1_v2, file = "LotusHordeum_Askov_WT_stackedbp_top20_meanRA_v2.rds")
-saveRDS(p1_v2, file = "../7_final_figures/LotusHordeum_Askov_WT_stackedbp_top20_meanRA_v2.rds")
 
 # Make a heatmap that displays these data and includes info on significance (differences between soil type in each plant-compartment combination.)
 # Prepare data for the heatmap by removing nodule samples.

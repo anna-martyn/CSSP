@@ -54,4 +54,4 @@ final_plot <- plot_grid(
 final_plot
 
 # Save the combined plot as a PDF file.
-ggsave("Suppl_Figure1_Askov_WT.pdf", final_plot, width=21, height=14)
+ggsave("Suppl_Figure1_Askov_WT.pdf", final_plot, width=21, height=14, unit="cm")

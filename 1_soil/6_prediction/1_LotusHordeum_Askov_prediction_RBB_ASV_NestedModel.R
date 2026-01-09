@@ -2,7 +2,7 @@
 options(warn=-1)
 rm(list=ls())
 
-# Load packages and set colours. ------------------------------------------------
+# Load packages and set colours ------------------------------------------------
 
 # Load all required packages.
 pkg <- c("data.table", "magrittr", "ggplot2", "RColorBrewer", "ggh4x",
@@ -32,7 +32,7 @@ order_colors <- data.frame(group=c("Burkholderiales","Caulobacterales",
                                     "#95bb72", "#fdbb6b",
                                     "#fed5a4", "grey") )
 
-# Load the input data. -------------------------------------------------------------
+# Load the input data ----------------------------------------------------------
 ## Lotus.
 ASV_table_Lotus <- fread("../1_data/1_Lotus/LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv")
 colnames(ASV_table_Lotus)[1] <- "ASVid"
@@ -86,12 +86,12 @@ Full_data <- lapply(1:2,
                                       ASV_table_t[[i]],
                                       by = "SampleID")
                     )
-names(Full_data) <- c("Lotus", "Barley")
+names(Full_data) <- c("Lotus", "Hordeum")
 
-Opt <- expand.grid(Host = c("Lotus", "Barley"),
+Opt <- expand.grid(Host = c("Lotus", "Hordeum"),
                    Compartment = c("Root", "Rhizosphere"))
 
-# Settings up tables for results -----------------------------------------------
+# Set up tables for results ----------------------------------------------------
 Res <- data.table(Host = NA,
                   Compartment = NA,
                   Accuracy = NA,
@@ -169,7 +169,7 @@ Nested_model_three_categories_predict <- function(Model, eval_data){
   return(pred)
 }
 
-# Running the prediction analysis ----------------------------------------------
+# Run the prediction analysis --------------------------------------------------
 for(i in 1:nrow(Opt)){
   run <- paste(as.matrix(Opt)[i,], collapse = "_")
   Current_plant <- as.matrix(Opt)[i,1]
@@ -245,7 +245,7 @@ for(i in 1:nrow(Opt)){
   num_NPK <- lapply(num_vec_NPK, function(x) paste(x, collapse = "+"))
   denom_NPK <- lapply(denom_vec_NPK, function(x) paste(x, collapse = "+"))
   
-  # Removing duplicate ratios for NPK
+  # Remove duplicate ratios for NPK.
   ratios_names_NPK <- paste(unlist(num_NPK), unlist(denom_NPK), sep = "/")
   NPK_idx <- match(unique(ratios_names_NPK), ratios_names_NPK)
 
@@ -288,7 +288,7 @@ for(i in 1:nrow(Opt)){
   num_PK <- lapply(num_vec_PK, function(x) paste(x, collapse = "+"))
   denom_PK <- lapply(denom_vec_PK, function(x) paste(x, collapse = "+"))
   
-  # Removing duplicate ratios for PK
+  # Remove duplicate ratios for PK.
   ratios_names_PK <- paste(unlist(num_PK), unlist(denom_PK), sep = "/")
   PK_idx <- match(unique(ratios_names_PK), ratios_names_PK)
 
@@ -395,22 +395,21 @@ for(i in 1:nrow(Opt)){
   Res <- rbind(Res, dt)
 }
 
-full_taxonomy <- rbind(taxonomy_barley, taxonomy_lotus)
+full_taxonomy <- rbind(taxonomy_Hordeum, taxonomy_Lotus)
 colnames(full_taxonomy)[1] <- "ASV_ID"
 ratio_summary <- merge(
   ratio_summary, full_taxonomy, by = "ASV_ID", all.x = T
 )
 ratio_summary <- ratio_summary[-1]
 
-fwrite(ratio_summary, "Ratios_summary.csv")
+fwrite(ratio_summary, "LotusHordeum_Askov_prediction_ratios_summary.csv")
 
 # Visualizing results ----------------------------------------------------------
-meta_data_full <- rbind(meta_data_barley, meta_data_lotus)
+meta_data_full <- rbind(meta_data_Hordeum, meta_data_Lotus)
 meta_data_full <- data.frame(meta_data_full[,-1],
                              row.names = meta_data_full$SampleID)
 res2[,Genotype:=meta_data_full[res2$SampleID,"Genotype"]]
 
-res2[Host == "Barley", Host:="Hordeum"]
 res2[,":="(Host = factor(Host, levels = c("Lotus", "Hordeum")),
            Compartment = factor(Compartment, levels = c("Rhizosphere", "Root")),
            Obs = factor(Obs, levels = c("NPK", "PK", "UF")),
@@ -444,7 +443,6 @@ ggplot(data = res2) +
   theme_bw() +
   labs(x = "Observed", y = "Predicted")+
   guides(size = "none", fill = guide_legend(override.aes = list(size=3))) +
-  # guides(fill = guide_legend(nrow = 2))+
   facet_grid(Host ~ Compartment) +
   scale_fill_manual(values = cols, labels = genotype_labels_legend) +
   theme(legend.position = "bottom",
@@ -465,7 +463,6 @@ ggplot(data = res2) +
         legend.key.size = unit(5, "mm"))+
   NULL -> g1; g1
 
-Barplot_data[Plant == "Barley", Plant:="Hordeum"]
 Barplot_data[,m:=paste(Plant, Compartment, sep = " \n")]
 Barplot_data[,m:=factor(m, levels = c("Lotus \nRhizosphere",
                                       "Hordeum \nRhizosphere",
@@ -484,14 +481,10 @@ Barplot_data[,Compartment:=factor(Compartment,
                                   levels = c("Rhizosphere", "Root"))]
 ggplot(data = Barplot_data, aes(x = Soil, y = Abundance, fill = Order))+
   geom_bar(stat = "identity", position = "stack", linewidth = 0.1) +
-  # facet_wrap(~Plant+Compartment, nrow = 1)+
-  # facet_wrap(~m, nrow = 1)+
   facet_wrap2(vars(Plant, Compartment), strip = strip_nested(), nrow = 1)+
   scale_fill_manual(values = order_colors$colors, breaks = order_colors$group,
                     name = "Bacterial orders")+
-  # ylim(0, 1.05)+
   labs(x = NULL, y = "Cumulative Mean Relative Abundance")+
-  # guides(fill = guide_legend(nrow = 3, title.position = "top"))+
   guides(fill = guide_legend(nrow = 3, title.position = "top"))+
   scale_y_continuous(expand = c(.001, .001), limits = c(0, 0.44))+
   theme_bw()+
@@ -502,7 +495,6 @@ ggplot(data = Barplot_data, aes(x = Soil, y = Abundance, fill = Order))+
         legend.key.size = unit(0.25, 'cm'),
         legend.key.spacing.y = unit(0, 'cm'),
         legend.justification = c(0.75, 0),
-        # panel.background = element_rect(fill = "white"),
         axis.title.y = element_text(size = 8, family = "Helvetica"),
         axis.text.y = element_text(size = 8, family = "Helvetica",
                                    colour = "black"),
@@ -521,7 +513,6 @@ R[,Accuracy:=paste0(Accuracy, "%")]
 R[Host == "Barley", Host:="Hordeum"]
 colnames(R) <- gsub("_", " ", colnames(R))
 R <- R[c(3:4,1:2)]
-# R <- R[c(3,1,4,2)]
 
 # IMPORTANT! 
 # Run Flowchart.R to produce the correct figure!
@@ -535,7 +526,7 @@ gg1 <- plot_grid(grob, tg,
 gg2 <- ggarrange(g1, g2, labels = c("B", "D"), ncol = 1, heights = c(0.5, 0.5))
 gg <- ggarrange(gg1, gg2, ncol = 2)
 
-ggsave(filename = "Prediction_plot_with_flowchart.pdf", plot = gg,
+ggsave(filename = "Figure3_Askov_prediction.pdf", plot = gg,
        width = 210, height = 200, units = "mm")
 
-fwrite(Res, "Prediction_summary.csv")
+fwrite(Res, "LotusHordeum_Askov_prediction_summary.csv")
