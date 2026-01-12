@@ -82,7 +82,13 @@ main_theme <- theme(panel.background=element_blank(),
 
 # Perform the Lotus cpcoa analysis.
 sqrt_transform <- T
-capscale.gen <- capscale(t(Lotus_asv_table_norm) ~ Compartment*Soil + Condition(Bio_rep), data=Lotus_design, add=F, sqrt.dist=sqrt_transform, distance="bray")
+capscale.gen <- capscale(
+  t(Lotus_asv_table_norm) ~ Compartment*Soil,
+  data = Lotus_design,
+  add = F, 
+  sqrt.dist = sqrt_transform, 
+  distance = "bray"
+)
 
 ## Perform an ANOVA-like permutation analysis.
 perm_anova.gen <- anova.cca(capscale.gen)
@@ -137,7 +143,13 @@ saveRDS(p1, file = "../7_final_figures/Lotus_Askov_WT_cpcoa.rds")
 
 # Perform the Hordeum cpcoa analysis.
 sqrt_transform <- T
-capscale.gen <- capscale(t(Hordeum_asv_table_norm) ~ Compartment*Soil + Condition(Bio_rep), data=Hordeum_design, add=F, sqrt.dist=sqrt_transform, distance="bray")
+capscale.gen <- capscale(
+  t(Hordeum_asv_table_norm) ~ Compartment*Soil, 
+  data = Hordeum_design, 
+  add = F, 
+  sqrt.dist = sqrt_transform, 
+  distance = "bray"
+)
 
 ## Perform an ANOVA-like permutation analysis.
 perm_anova.gen <- anova.cca(capscale.gen)
