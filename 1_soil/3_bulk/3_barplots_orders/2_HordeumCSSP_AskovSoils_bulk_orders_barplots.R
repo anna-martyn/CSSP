@@ -180,7 +180,10 @@ saveRDS(p, file = "../5_final_figure/Hordeum_barplot_bulk_top20_RA.rds")
 
 # Now we only plot the significant orders.
 sig_orders <- final_results %>%
-  filter(P_Value < 0.05) %>%
+  filter(P_Value < 0.05 & 
+    !(NPK_Letters == "a" & 
+      PK_Letters == "a" & 
+      UF_Letters == "a")) %>%
   pull(Order)
 
 df_order_summary_sig <- df_order_summary %>%
