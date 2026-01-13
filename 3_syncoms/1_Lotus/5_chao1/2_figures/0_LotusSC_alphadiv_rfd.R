@@ -13,9 +13,9 @@ library(ggtext)
 
 # Load chao1 and metadata files.
 # Note: we have one file for matched ASVs only, and one where all ASVs are included.
-alpha <- read.table("../1_Scripts/allASVs/LotusSC_allASVs_chao1.txt",
+ alpha <- read.table("../1_scripts/allASVs/LotusSC_allASVs_chao1.txt",
                     sep="\t", header=TRUE, row.names=1, check.names=FALSE)
-alpha_filt <- read.table("../1_Scripts/matchedASVsonly/LotusSC_matchedASVsonly_chao1.txt",
+alpha_filt <- read.table("../1_scripts/matchedASVsonly/LotusSC_matchedASVsonly_chao1.txt",
                          sep="\t", header=TRUE, row.names=1, check.names=FALSE)
 design <- read.table("../../1_data/LotusSC_metadata.txt", sep="\t", header=TRUE, row.names=1, check.names=FALSE)
 
@@ -186,7 +186,7 @@ run_analysis_plot <- function(df, colors, title, output_pdf, output_rds){
   print(combined)
   ggsave(output_pdf, combined, width=15, height=6)
   saveRDS(combined, output_rds)
-  saveRDS(combined, file = file.path("../../../3_final_figure", basename(output_rds)))
+  saveRDS(combined, file = file.path("../../../3_final_figures", basename(output_rds)))
 }
 
 # Run the function for both datasets (matched ASVs only, and all ASVs).
