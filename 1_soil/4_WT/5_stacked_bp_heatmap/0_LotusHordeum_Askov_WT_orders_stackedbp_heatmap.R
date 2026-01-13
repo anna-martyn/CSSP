@@ -155,16 +155,22 @@ Hordeum_top_orders_above1perc <- Lotus_meanRA %>%
   distinct(Order) %>%
   pull(Order)
 
-# Step 6: Check how many unique orders these would be to display when combining Lotus and Hordeum top20 rhizosphere and/or root with >=1% RA.
+# Step 6: Check how many unique orders these would be to display when combining
+# Lotus and Hordeum top20 rhizosphere and/or root with >=1% RA.
 combined_top_orders_1 <- unique(c(Lotus_top_orders_above1perc, Hordeum_top_orders_above1perc))
 length(combined_top_orders_1)
 
-### 3) One can go by the top20 bacterial orders across all samples, identified for Lotus and Hordeum separately.
-##### One would not look for top20 separately for soil or compartment, but average it across all samples.
-##### Then one could filter for orders with mean RA of min. 1%, and combine the unique orders for Lotus and Hordeum and display those.
+### 3) One can go by the top20 bacterial orders across all samples, identified for 
+### Lotus and Hordeum separately.
 
-## NOTE: Lotus nodule compartment again not taken into account, so average in rhizosphere and root calculated.
-## I did test taking the nodule compartment into account, but the result looked exactly the same, apart from loosing one group when nodule samples were included. Therefore I kept it excluded.
+##### One would not look for top20 separately for soil or compartment, but average
+##### it across all samples. Then one could filter for orders with mean RA of min.
+##### 1%, and combine the unique orders for Lotus and Hordeum and display those.
+
+## NOTE: Lotus nodule compartment again not taken into account, so average in 
+## rhizosphere and root calculated. I did test taking the nodule compartment 
+## into account, but the result looked exactly the same, apart from loosing
+## one group when nodule samples were included. Therefore I kept it excluded.
 
 # Step 1: Keep only the rhizosphere and root compartments.
 Lotus_filtered <- Lotus_order_summary %>%
@@ -200,13 +206,15 @@ Hordeum_top20_above1perc <- Hordeum_top20_orders %>%
   filter(MeanRA >= 0.01) %>%
   pull(Order)
 
-# Step 5: Combine the orders for Lotus and Hordeum and show how many unique orders would be displayed.
+# Step 5: Combine the orders for Lotus and Hordeum and show how many unique orders 
+# would be displayed.
 combined_top_orders_2 <- unique(c(Lotus_top20_above1perc, Hordeum_top20_above1perc))
 length(combined_top_orders_2)
 
 ####### I WILL GO AHEAD WITH OPTION 3 (combined_top_orders_2).
 
-# We will work with the selected bacterial orders, go back to the original dataframes and rename all other bacterial orders "Other".
+# We will work with the selected bacterial orders, go back to the original 
+# dataframes and rename all other bacterial orders "Other".
 Lotus_df.long <- Lotus_df.long %>%
   mutate(Order = if_else(Order %in% combined_top_orders_2, Order, "Other"))
 
@@ -310,7 +318,8 @@ ggsave("LotusHordeum_Askov_WT_stackedbp_top20_meanRA.pdf", p1, width = 10, heigh
 saveRDS(p1, file = "LotusHordeum_Askov_WT_stackedbp_top20_meanRA.rds")
 saveRDS(p1, file = "../7_final_figures/LotusHordeum_Askov_WT_stackedbp_top20_meanRA.rds")
 
-# Make a heatmap that displays these data and includes info on significance (differences between soil type in each plant-compartment combination.)
+# Make a heatmap that displays these data and includes info on significance 
+# (differences between soil type in each plant-compartment combination.)
 # Prepare data for the heatmap by removing nodule samples.
 df.heatmap <- df.sample_order %>%
   filter(Compartment %in% c("Rhizosphere", "Root"))
@@ -333,56 +342,90 @@ df.heatmap <- df.heatmap %>%
 letters_list <- list()
 plants <- unique(df.heatmap$Plant)
 comps  <- unique(df.heatmap$Compartment)
+ords  <- unique(df.heatmap$Order)
+cond.grid <- expand.grid(Plant = plants, Compartment = comps, Order = ords)
+j <- 1
 
 ## Loop over each plant-compartment-order.
-for(pl in plants){
-  for(comp in comps){
-    df_sub <- df.heatmap %>% filter(Plant==pl, Compartment==comp)
-    for(ord in unique(df_sub$Order)){
-      df_ord <- df_sub %>% filter(Order==ord)
-      df_samples <- df.sample_order %>% 
-        filter(Plant==pl, Compartment==comp, Order==ord)
-      soil_counts <- table(df_samples$Soil)
-      # Only test if at least 2 soils have >1 sample in original df.sample_order.
-      if(length(soil_counts) > 1 & all(soil_counts >= 2)){
-        kw <- kruskal.test(RA ~ Soil, data=df_samples)
-        if(!is.na(kw$p.value) & kw$p.value < 0.05){
-          # Perform Dunn post-hoc.
-          dunn_res <- dunnTest(RA ~ Soil, data=df_samples, method="bh")$res
-          # Convert p-adj to letters.
-          pvals_named <- setNames(dunn_res$P.adj, gsub(" ", "", dunn_res$Comparison))
-          cld <- multcompLetters(pvals_named, threshold=0.05)
-          # Map letters to soil levels.
-          soil_levels <- levels(df.heatmap$Soil)
-          letter_vec <- rep(NA, length(soil_levels))
-          names(letter_vec) <- soil_levels
-          letter_vec[names(cld$Letters)] <- cld$Letters
-          
-          letters_list[[paste(pl, comp, ord, sep="_")]] <- data.frame(
-            Plant = pl,
-            Compartment = comp,
-            Order = ord,
-            Soil = soil_levels,
-            letter = letter_vec,
-            stringsAsFactors = FALSE
-          )
-        }
-      }
-    }
+for(i in 1:nrow(cond.grid)){
+  df_samples <- df.sample_order %>% 
+        filter(
+          Plant == cond.grid$Plant[i], 
+          Compartment == cond.grid$Compartment[i],
+          Order == cond.grid$Order[i]
+        )
+  df_samples$Soil <- factor(df_samples$Soil, levels = c("UF", "NPK", "PK"))
+  a <- aov(RA ~ Soil, data = df_samples)
+  anv <- anova(a)
+  p_val <- anv$`Pr(>F)`[1]
+  if(p_val < 0.05){
+    tk <- TukeyHSD(a)
+    mcletters <- multcompLetters(tk$Soil[,"p adj"])
+    letters <- mcletters$Letters
+    df_res <- data.frame(
+      Plant = cond.grid$Plant[i],
+      Compartment = cond.grid$Compartment[i],
+      Order = cond.grid$Order[i],
+      Soil = names(letters),
+      letter = letters,
+      stringsAsFactors = FALSE
+    )
+    letters_list[[j]] <- df_res
+    j <- j+1
   }
 }
+
+# ## Loop over each plant-compartment-order.
+# for(pl in plants){
+#   for(comp in comps){
+#     df_sub <- df.heatmap %>% filter(Plant==pl, Compartment==comp)
+#     for(ord in unique(df_sub$Order)){
+#       df_ord <- df_sub %>% filter(Order==ord)
+#       df_samples <- df.sample_order %>% 
+#         filter(Plant==pl, Compartment==comp, Order==ord)
+#       soil_counts <- table(df_samples$Soil)
+#       # Only test if at least 2 soils have >1 sample in original df.sample_order.
+#       if(length(soil_counts) > 1 & all(soil_counts >= 2)){
+#         kw <- kruskal.test(RA ~ Soil, data=df_samples)
+#         if(!is.na(kw$p.value) & kw$p.value < 0.05){
+#           # Perform Dunn post-hoc.
+#           dunn_res <- dunnTest(RA ~ Soil, data=df_samples, method="bh")$res
+#           # Convert p-adj to letters.
+#           pvals_named <- setNames(dunn_res$P.adj, gsub(" ", "", dunn_res$Comparison))
+#           cld <- multcompLetters(pvals_named, threshold=0.05)
+#           # Map letters to soil levels.
+#           soil_levels <- levels(df.heatmap$Soil)
+#           letter_vec <- rep(NA, length(soil_levels))
+#           names(letter_vec) <- soil_levels
+#           letter_vec[names(cld$Letters)] <- cld$Letters
+          
+#           letters_list[[paste(pl, comp, ord, sep="_")]] <- data.frame(
+#             Plant = pl,
+#             Compartment = comp,
+#             Order = ord,
+#             Soil = soil_levels,
+#             letter = letter_vec,
+#             stringsAsFactors = FALSE
+#           )
+#         }
+#       }
+#     }
+#   }
+# }
 
 ## Combine all letters into a dataframe.
 df_letters <- bind_rows(letters_list)
 
 # Join the significance letters with the heatmap data.
 df.plot <- df.heatmap %>%
-  left_join(df_letters, by=c("Plant","Compartment","Order","Soil")) %>%
-  mutate(
-    Plant = factor(Plant, levels=c("Lotus","Hordeum")),
-    Compartment = factor(Compartment, levels=c("Rhizosphere","Root")),
-    Order = factor(Order, levels = c(sort(unique(Order[Order != "Other"])), "Other"))
-  )
+  left_join(df_letters, by=c("Plant","Compartment","Order","Soil"))
+# df.plot <- df.heatmap %>%
+#   left_join(df_letters, by=c("Plant","Compartment","Order","Soil")) %>%
+#   mutate(
+#     Plant = factor(Plant, levels=c("Lotus","Hordeum")),
+#     Compartment = factor(Compartment, levels=c("Rhizosphere","Root")),
+#     Order = factor(Order, levels = c(sort(unique(Order[Order != "Other"])), "Other"))
+#   )
 
 # Define the axis breaks and colours.
 breaks <- c(0, 0.005, 0.052, 0.052001, 0.15999, 0.16, 0.34, 0.64)

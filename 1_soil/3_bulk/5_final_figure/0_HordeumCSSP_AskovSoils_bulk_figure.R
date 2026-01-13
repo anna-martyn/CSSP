@@ -24,7 +24,7 @@ p1 <- placeholder <- ggplot() +
   geom_blank() +
   theme_void() +
   annotate("text", x = 0.5, y = 0.5, label = "", size = 6, hjust = 0.5) # workflow added manually later.
-
+#
 p2 <- HordeumCSSP_AskovSoils_bulk_chao1_rfd
 
 p3 <- Hordeum_bulk_PCoA
