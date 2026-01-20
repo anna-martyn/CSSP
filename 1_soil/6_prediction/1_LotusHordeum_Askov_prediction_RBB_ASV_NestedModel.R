@@ -5,7 +5,7 @@ rm(list=ls())
 # Load packages and set colours ------------------------------------------------
 
 # Load all required packages.
-pkg <- c("data.table", "magrittr", "ggplot2", "RColorBrewer", "ggh4x",
+pkg <- c("data.table", "magrittr", "ggplot2", "RColorBrewer", "ggh4x", "dplyr", "tidyr",
          "codacore", "tensorflow", "ggpubr", "gridExtra", "cowplot", "ggtext")
 for(pk in pkg){
   library(pk, character.only = T)
@@ -37,7 +37,10 @@ order_colors <- data.frame(group=c("Burkholderiales","Caulobacterales",
 ASV_table_Lotus <- fread("../1_data/1_Lotus/LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv")
 colnames(ASV_table_Lotus)[1] <- "ASVid"
 
-meta_data_Lotus <- fread("../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt")
+meta_data_Lotus <- fread(
+  "../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt", drop = c(5,7,8)
+)
+# meta_data_Lotus <- fread("../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt")
 meta_data_Lotus <- meta_data_Lotus[Compartment != "Nodules"]
 
 taxonomy_Lotus <- fread("../1_data/1_Lotus/LotusCSSP_AskovSoils_taxonomy_10_4.tsv", sep="\t", header=TRUE, fill=TRUE)
@@ -46,7 +49,10 @@ taxonomy_Lotus <- fread("../1_data/1_Lotus/LotusCSSP_AskovSoils_taxonomy_10_4.ts
 ASV_table_Hordeum <- fread("../1_data/2_Hordeum/HordeumCSSP_AskovSoils_ASVtable_10_4.tsv")
 colnames(ASV_table_Hordeum)[1] <- "ASVid"
 
-meta_data_Hordeum <- fread("../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt")
+meta_data_Hordeum <- fread(
+  "../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt", drop = c(2,3,8)
+)
+# meta_data_Hordeum <- fread("../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt")
 meta_data_Hordeum <- meta_data_Hordeum[Compartment != "Soil"]
 
 taxonomy_Hordeum <- fread("../1_data/2_Hordeum/HordeumCSSP_AskovSoils_taxonomy_10_4.tsv", sep="\t", header=TRUE, fill=TRUE)
@@ -64,6 +70,20 @@ rename_tax <- function(tax_table){
 
 taxonomy_Lotus <- rename_tax(taxonomy_Lotus)
 taxonomy_Hordeum <- rename_tax(taxonomy_Hordeum)
+
+# taxa_levels <- c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
+
+# taxonomy_Lotus[,c(taxa_levels):= tstrsplit(Taxon, "; ", fill = "u__Unknown")]
+# taxonomy_Lotus[,c(taxa_levels):= lapply(.SD, substr, 4, 1000), .SDcols = taxa_levels]
+# taxonomy_Lotus[Kingdom == "ssigned", Kingdom:= "Unassigned"]
+# taxonomy_Lotus[,Taxon:=NULL]
+# setcolorder(taxonomy_Lotus, c("Feature ID", taxa_levels, "Confidence"))
+
+# taxonomy_Hordeum[,c(taxa_levels):= tstrsplit(Taxon, "; ", fill = "u__Unknown")]
+# taxonomy_Hordeum[,c(taxa_levels):= lapply(.SD, substr, 4, 1000), .SDcols = taxa_levels]
+# taxonomy_Hordeum[,Taxon:=NULL]
+# setcolorder(taxonomy_Hordeum, c("Feature ID", taxa_levels, "Confidence"))
+
 
 # Combine both datasets.
 ASV_table <- list(Lotus = ASV_table_Lotus,
@@ -302,7 +322,7 @@ for(i in 1:nrow(Opt)){
   
   all_pred_ASV <- unique(c(unlist(num_vec_NPK), unlist(denom_vec_NPK),
                            unlist(num_vec_PK), unlist(denom_vec_PK)))
-  pred_ASV_tax <- taxonomy[[Current_plant]][Feature %in% all_pred_ASV]
+  # pred_ASV_tax <- taxonomy[[Current_plant]][Feature %in% all_pred_ASV]
   
   Taxonomy_df <- data.frame(as.data.frame(taxonomy[[Current_plant]][,-1]),
                             row.names = taxonomy[[Current_plant]]$ASV)
@@ -401,6 +421,7 @@ ratio_summary <- merge(
   ratio_summary, full_taxonomy, by = "ASV_ID", all.x = T
 )
 ratio_summary <- ratio_summary[-1]
+ratio_summary <- ratio_summary[order(Host, Compartment, Prediction, Role)]
 
 fwrite(ratio_summary, "LotusHordeum_Askov_prediction_ratios_summary.csv")
 
@@ -515,7 +536,11 @@ colnames(R) <- gsub("_", " ", colnames(R))
 R <- R[c(3:4,1:2)]
 
 # IMPORTANT! 
-# Run Flowchart.R to produce the correct figure!
+# Run Flowchart.R BEFORE running the code below to produce the correct figure!
+# Correct order of events:
+#  1. run line 1-535 of this script
+#  2, Run flowchart.R
+#  3. run the rest of this scripts.
 
 tg <- tableGrob(R, theme = ttheme_default(base_size = 8), rows = NULL)
 

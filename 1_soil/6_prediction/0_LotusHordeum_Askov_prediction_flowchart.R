@@ -1,6 +1,6 @@
 # Clean up.
 options(warn=-1)
-rm(list=ls())
+# rm(list=ls())
 
 # Load required packages.
 library(Gmisc, quietly = TRUE)
