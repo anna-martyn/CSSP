@@ -1,0 +1,5 @@
+Host,Compartment,NPK ratios,PK ratios,Accuracy
+Lotus,Rhizosphere,1 (2),"3 (2, 2, 6)",93.3%
+Lotus,Root,1 (2),1 (2),93.3%
+Hordeum,Rhizosphere,"2 (12, 2)","2 (18, 2)",83.3%
+Hordeum,Root,1 (7),"3 (14, 2, 2)",80%
