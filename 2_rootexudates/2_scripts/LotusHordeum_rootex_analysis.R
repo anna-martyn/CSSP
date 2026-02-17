@@ -495,6 +495,7 @@ Pathway_Lj <- rowsum(
 )
 Pathway_Lj <- data.table(Sample_ID = colnames(Pathway_Lj), t(Pathway_Lj))
 Pathway_Lj <- merge(meta_data_Lj, Pathway_Lj, "Sample_ID")
+Pathway_names <- unique(annotation_sub_Lj$`NPC#pathway`)
 gt_dt <- list()
 for(i in 1:length(Pathway_names)){
   Pt_dt <- Pathway_Lj[,c("Genotype", Pathway_names[i]), with = F]
@@ -699,7 +700,6 @@ ggplot(data = res_table, aes(x = logFC, y = -log10(p_adj), colour = DA))+
 
 volcano_legend <- get_plot_component(volcanoes, 'guide-box', return_all = TRUE)
 volcanoes <- volcanoes + guides(colour = "none")
-plot_grid(volcano_legend)
 
 # Boxplots for highlighted features --------------------------------------------
 ## Lotus
@@ -793,7 +793,7 @@ ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
 feat_set <- paste0( "Feature", c(2546, 2889, 495, 3095, 3069, 3288) )
 
 c("Feature2546" = "Gibberellin\n (F2546)",
-  "Feature2889" = "Absc. acid & de-\n rivatives (F2889)",
+  "Feature2889" = "Abscisic \nacid (F2889)",
   "Feature495" = "Esculetin\n (F495)",
   "Feature3095" = "Paeonin C\n (F3095)",
   "Feature3069" = "Isoorientin\n (F3069)",
@@ -859,7 +859,7 @@ ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
   guides(fill = "none")+
   ggh4x::facetted_pos_scales(
     y = list(
-      Feature == "Absisic acid and\n derivatives (F2889)" ~ 
+      Feature == "Abscisic \nacid (F2889)" ~ 
         scale_y_continuous(limits = c(0, 2500))
     )
   )+
