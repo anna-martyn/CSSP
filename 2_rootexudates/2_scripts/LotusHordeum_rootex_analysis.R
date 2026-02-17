@@ -247,6 +247,11 @@ feature_present_Lj <- rownames(metabolites_Lj)[
   apply(metabolites_Lj, 1, function(x) mean(x!=0)>=0.1)
 ]
 metabolites_Lj <- metabolites_Lj[feature_present_Lj,]
+# sup_tab_Lj <- data.table(
+#   Row_ID = gsub("Feature", "", rownames(metabolites_Lj)),
+#   metabolites_Lj
+# )
+# fwrite(metabolites_Lj, "../4_suppl_tables/suppl_tab_filtered_feature_table_Lotus.csv")
 
 ## Hordeum
 samples_keep <- meta_data_Hv[Genotype != "control", Sample_ID]
@@ -257,6 +262,11 @@ feature_present_Hv <- rownames(metabolites_Hv)[
   apply(metabolites_Hv, 1, function(x) mean(x!=0)>=0.1)
 ]
 metabolites_Hv <- metabolites_Hv[feature_present_Hv,]
+# sup_tab_Lj <- data.table(
+#   Row_ID = gsub("Feature", "", rownames(metabolites_Hv)),
+#   metabolites_Hv
+# )
+# fwrite(metabolites_Hv, "../4_suppl_tables/suppl_tab_filtered_feature_table_Hordeum.csv")
 
 # PCA plots after filtering ----------------------------------------------------
 legend_labels <- c(
@@ -456,7 +466,6 @@ feature_sig <- rownames(DA_Hv)[rowSums(DA_Hv)>0]
 DA_Hv_full <- DA_Hv
 DA_Hv <- DA_Hv[feature_sig,]
 
-DA_metabolites_Hv$res
 res_Hv <- ifelse(DA_metabolites_Hv$res[,2:5] > 0, 1, -1)
 res_Hv <- res_Hv[rownames(DA_Hv),]
 res_Hv[!DA_Hv] <- 0
@@ -472,6 +481,130 @@ res_Hv <- merge(res_Hv, Feat_tab_Hv, by = "Feature")
 res_Hv <- merge(res_Hv, annotation_Hv, by = "Feature", all.x = T)
 
 fwrite(res_Hv, "../4_suppl_tables/Hordeum_metabolite_test_results_tobit.csv")
+
+# Supplementary figure ---------------------------------------------------------
+## Lotus
+annotation_sub_Lj <- annotation_Lj[Feature %in% rownames(metabolites_Lj)]
+# Removing duplicates from annotation table
+dupe_feature_Lj <- names(table(annotation_sub_Lj$Feature))[table(annotation_sub_Lj$Feature)>1]
+w <- which(annotation_sub_Lj$Feature %in% dupe_feature_Lj)
+w <- w[-c(1,3,6,11,13,16,19)]
+annotation_sub_Lj <- annotation_sub_Lj[-w]
+Pathway_Lj <- rowsum(
+  metabolites_Lj[annotation_sub_Lj$Feature,], group = annotation_sub_Lj$`NPC#pathway`
+)
+Pathway_Lj <- data.table(Sample_ID = colnames(Pathway_Lj), t(Pathway_Lj))
+Pathway_Lj <- merge(meta_data_Lj, Pathway_Lj, "Sample_ID")
+gt_dt <- list()
+for(i in 1:length(Pathway_names)){
+  Pt_dt <- Pathway_Lj[,c("Genotype", Pathway_names[i]), with = F]
+  Pt_dt[,Genotype:=factor(Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2"))]
+  colnames(Pt_dt)[2] <- "y"
+  Pt_dt[,y:=log(y)]
+  a <- aov(y~Genotype, data = Pt_dt)
+  a2 <- TukeyHSD(a)
+  letters <- multcompLetters(a2$Genotype[,4])$Letters
+  gt_dt[[i]] <- data.table(
+    Pathway = Pathway_names[i],
+    Genotype = names(letters),
+    Letter = letters
+  )
+}
+gt_dt <- rbindlist(gt_dt)
+
+Pathway_Lj <- melt(
+  Pathway_Lj[,-(4:6)],
+  id.vars = 1:3, 
+  variable.name = "Pathway", 
+  value.name = "Intensity"
+)
+Pathway_Lj <- merge(Pathway_Lj, gt_dt)
+Letter_pos <- Pathway_Lj[,.(Letter_pos = max(Intensity)), .(Pathway, Genotype)]
+Pathway_Lj <- merge(Pathway_Lj, Letter_pos)
+Pathway_Lj[,Letter_pos:=Letter_pos+250000]
+Pathway_Lj[,Genotype:=factor(Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2"))]
+
+## Hordeum
+annotation_sub_Hv <- annotation_Hv[Feature %in% rownames(metabolites_Hv)]
+Pathway_Hv <- rowsum(
+  metabolites_Hv[annotation_sub_Hv$Feature,], group = annotation_sub_Hv$`NPC#pathway`
+)
+Pathway_Hv <- data.table(Sample_ID = colnames(Pathway_Hv), t(Pathway_Hv))
+Pathway_Hv <- merge(meta_data_Hv, Pathway_Hv, "Sample_ID")
+Pathway_names <- colnames(Pathway_Hv)[-(1:7)]
+gt_dt <- list()
+for(i in 1:length(Pathway_names)){
+  Pt_dt <- Pathway_Hv[,c("Genotype", Pathway_names[i]), with = F]
+  Pt_dt[,Genotype:=factor(Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2"))]
+  colnames(Pt_dt)[2] <- "y"
+  Pt_dt[,y:=log(y)]
+  a <- aov(y~Genotype, data = Pt_dt)
+  a2 <- TukeyHSD(a)
+  letters <- multcompLetters(a2$Genotype[,4])$Letters
+  gt_dt[[i]] <- data.table(
+    Pathway = Pathway_names[i],
+    Genotype = names(letters),
+    Letter = letters
+  )
+}
+gt_dt <- rbindlist(gt_dt)
+
+Pathway_Hv <- melt(
+  Pathway_Hv[,-c(2,4:7)],
+  id.vars = 1:2, 
+  variable.name = "Pathway", 
+  value.name = "Intensity"
+)
+Pathway_Hv <- merge(Pathway_Hv, gt_dt)
+Letter_pos <- Pathway_Hv[,.(Letter_pos = max(Intensity)), .(Pathway, Genotype)]
+Pathway_Hv <- merge(Pathway_Hv, Letter_pos)
+Pathway_Hv[,Letter_pos:=Letter_pos+20000]
+Pathway_Hv[,Genotype:=factor(Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2"))]
+Pathway_Hv[,Plant:="Hordeum"]
+setcolorder(
+  Pathway_Hv, 
+  c("Genotype", "Pathway", "Sample_ID", "Plant", "Intensity", "Letter", "Letter_pos")
+)
+
+Pathway_full <- rbind(Pathway_Lj, Pathway_Hv)
+Pathway_full[
+  Pathway == "Shikimates and Phenylpropanoids", Pathway:="Shikimates and\nPhenylpropanoids"
+]
+Pathway_full[
+  Pathway == "Amino acids and Peptides", Pathway:="Amino acids\n and Peptides"
+]
+
+Pathway_full[,Plant:=factor(Plant, levels = c("Lotus", "Hordeum"))]
+p <- ggplot(Pathway_full, aes(x = Genotype, y = Intensity, fill = Genotype)) +
+  geom_boxplot(width = 0.3, alpha = 0.7, outlier.size = 0.5) +
+  geom_text(data = Pathway_full, aes(x = Genotype, y = Letter_pos, label = Letter),
+            inherit.aes = FALSE, size = 8/.pt) +
+  facet_grid(Plant~Pathway, scales="free_y") +
+  scale_fill_manual(values = cols, labels = legend_labels)+
+  theme_bw()+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.text = element_text(colour = 'black', size = 8, face = "bold"),
+        strip.background = element_rect(colour = NA),
+        legend.position = "bottom",
+        axis.title = element_text(size = 8),
+        axis.text.x = element_text(
+          size = 8, colour = "black", angle = 90, vjust = 0.5, hjust=1
+        ),
+        axis.text.y = element_text(size = 8, colour = "black"),
+        legend.text = element_markdown(size = 8,
+                                       margin = margin(l = -0.1, unit = "pt")),
+        legend.title = element_text(size = 8),
+        plot.title = element_text(size = 8, hjust = 0.5))+
+  scale_x_discrete(labels=c(
+    "symrk"=expression(italic("symrk")),
+    "ccamk"=expression(italic("ccamk")),
+    "nsp1"=expression(italic("nsp1")),
+    "nsp2"=expression(italic("nsp2"))
+  )) +
+  NULL
+#
+ggsave("Supp_Fig5.pdf", p, width = 210, height = 160, units = "mm")
 
 # Volcano plots ----------------------------------------------------------------
 p_vals_dt <- rbind(
@@ -500,12 +633,13 @@ logFC_dt <- melt(logFC_dt,
 
 logFC_dt[,Genotype:=gsub("Genotype", "", Genotype)]
 logFC_dt[,logFC:=logFC/log(2)]
-res_table <- merge(x = logFC_dt, y = p_vals_dt,
-                   by = c("Feature", "Genotype", "Host"))
+res_table <- merge(logFC_dt,p_vals_dt, by = c("Feature", "Genotype", "Host"))
 res_table[,Sig:=p_adj<0.05]
-res_table[,DA:=fcase(Sig == T & logFC > 0, "Enriched",
-                     Sig == T & logFC < 0, "Depleted",
-                     default = "NS")]
+res_table[,DA:=fcase(
+  Sig == T & logFC > 0, "Enriched",
+  Sig == T & logFC < 0, "Depleted",
+  default = "NS"
+)]
 res_table[,Genotype:=factor(Genotype,
                             levels = c("symrk", "ccamk", "nsp1", "nsp2"))]
 
@@ -563,7 +697,7 @@ c("Feature269" = "Coumaric\nacid (F269)",
   "Feature1047" = "BiochaninA/\nOlmelin (F1047)",
   "Feature945" = "Formononetin\n (F945)",
   "Feature976" = "Vestitol\n (F976)",
-  "Feature1177" = "Dehydro-\nquercetin (F1177)",
+  "Feature1177" = "Dehydroquer-\ncetin (F1177)",
   "Feature1182" = "Diosmetin\n (F1182)",
   "Feature1046" = "Wogonin\n (F1046)",
   "Feature1320" = "Velutin\n (F1320)") -> name_change
@@ -615,7 +749,8 @@ ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
   ggtitle("Lotus")+
   theme(legend.position = "right",
         strip.background = element_rect(colour = NA),
-        axis.title.y=element_blank(),
+        # axis.title.y=element_blank(),
+        axis.title.y = element_text(hjust = 0.2),
         axis.title = element_text(size = 8),
         axis.text.x = element_blank(),
         axis.text.y = element_text(size = 8, colour = "black"),
@@ -640,7 +775,7 @@ ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
 feat_set <- paste0( "Feature", c(2546, 2889, 495, 3095, 3069, 3288) )
 
 c("Feature2546" = "Gibberellin\n (F2546)",
-  "Feature2889" = "Absisic acid and\n derivatives (F2889)",
+  "Feature2889" = "Absc. acid & de-\n rivatives (F2889)",
   "Feature495" = "Esculetin\n (F495)",
   "Feature3095" = "Paeonin C\n (F3095)",
   "Feature3069" = "Isoorientin\n (F3069)",
@@ -691,7 +826,7 @@ ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
   ggtitle("Hordeum")+
   theme(legend.position = "right",
         strip.background = element_rect(colour = NA),
-        axis.title.y=element_blank(),
+        # axis.title.y=element_blank(),
         axis.title = element_text(size = 8),
         axis.text.x = element_blank(),
         axis.text.y = element_text(size = 8, colour = "black"),
@@ -702,7 +837,7 @@ ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
         plot.margin = margin(l = 0.1, r = 0.1, t = 0.5,
                              b = 0.5, unit = "line"),
         legend.margin = margin(t = 20, unit = "pt"))+
-  labs(x = NULL)+
+  labs(x = NULL, y = " ")+
   guides(fill = "none")+
   ggh4x::facetted_pos_scales(
     y = list(
