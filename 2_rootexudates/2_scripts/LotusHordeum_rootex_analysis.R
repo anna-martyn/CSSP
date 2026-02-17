@@ -501,16 +501,19 @@ for(i in 1:length(Pathway_names)){
   Pt_dt[,Genotype:=factor(Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2"))]
   colnames(Pt_dt)[2] <- "y"
   Pt_dt[,y:=log(y)]
-  a <- aov(y~Genotype, data = Pt_dt)
-  a2 <- TukeyHSD(a)
-  letters <- multcompLetters(a2$Genotype[,4])$Letters
+  l <- lm(y~Genotype, data = Pt_dt)
+  # a <- aov(y~Genotype, data = Pt_dt)
+  # a2 <- TukeyHSD(a)
+  # letters <- multcompLetters(a2$Genotype[,4])$Letters
   gt_dt[[i]] <- data.table(
     Pathway = Pathway_names[i],
-    Genotype = names(letters),
-    Letter = letters
+    Genotype = levels(Pt_dt$Genotype)[-1],
+    Plant = "Lotus",
+    p_val = coef(summary(l))[-1, "Pr(>|t|)"]
+    # Letter = letters
   )
 }
-gt_dt <- rbindlist(gt_dt)
+gt_dt_Lj <- rbindlist(gt_dt)
 
 Pathway_Lj <- melt(
   Pathway_Lj[,-(4:6)],
@@ -518,11 +521,11 @@ Pathway_Lj <- melt(
   variable.name = "Pathway", 
   value.name = "Intensity"
 )
-Pathway_Lj <- merge(Pathway_Lj, gt_dt)
-Letter_pos <- Pathway_Lj[,.(Letter_pos = max(Intensity)), .(Pathway, Genotype)]
-Pathway_Lj <- merge(Pathway_Lj, Letter_pos)
-Pathway_Lj[,Letter_pos:=Letter_pos+250000]
-Pathway_Lj[,Genotype:=factor(Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2"))]
+# Pathway_Lj <- merge(Pathway_Lj, gt_dt)
+# Letter_pos <- Pathway_Lj[,.(Letter_pos = max(Intensity)), .(Pathway, Genotype)]
+# Pathway_Lj <- merge(Pathway_Lj, Letter_pos)
+# Pathway_Lj[,Letter_pos:=Letter_pos+250000]
+# Pathway_Lj[,Genotype:=factor(Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2"))]
 
 ## Hordeum
 annotation_sub_Hv <- annotation_Hv[Feature %in% rownames(metabolites_Hv)]
@@ -538,16 +541,19 @@ for(i in 1:length(Pathway_names)){
   Pt_dt[,Genotype:=factor(Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2"))]
   colnames(Pt_dt)[2] <- "y"
   Pt_dt[,y:=log(y)]
-  a <- aov(y~Genotype, data = Pt_dt)
-  a2 <- TukeyHSD(a)
-  letters <- multcompLetters(a2$Genotype[,4])$Letters
+  l <- lm(y~Genotype, data = Pt_dt)
+  # a <- aov(y~Genotype, data = Pt_dt)
+  # a2 <- TukeyHSD(a)
+  # letters <- multcompLetters(a2$Genotype[,4])$Letters
   gt_dt[[i]] <- data.table(
     Pathway = Pathway_names[i],
-    Genotype = names(letters),
-    Letter = letters
+    Genotype = levels(Pt_dt$Genotype)[-1],
+    Plant = "Hordeum",
+    p_val = coef(summary(l))[-1, "Pr(>|t|)"]
+    # Letter = letters
   )
 }
-gt_dt <- rbindlist(gt_dt)
+gt_dt_Hv <- rbindlist(gt_dt)
 
 Pathway_Hv <- melt(
   Pathway_Hv[,-c(2,4:7)],
@@ -555,18 +561,27 @@ Pathway_Hv <- melt(
   variable.name = "Pathway", 
   value.name = "Intensity"
 )
-Pathway_Hv <- merge(Pathway_Hv, gt_dt)
-Letter_pos <- Pathway_Hv[,.(Letter_pos = max(Intensity)), .(Pathway, Genotype)]
-Pathway_Hv <- merge(Pathway_Hv, Letter_pos)
-Pathway_Hv[,Letter_pos:=Letter_pos+20000]
-Pathway_Hv[,Genotype:=factor(Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2"))]
 Pathway_Hv[,Plant:="Hordeum"]
-setcolorder(
-  Pathway_Hv, 
-  c("Genotype", "Pathway", "Sample_ID", "Plant", "Intensity", "Letter", "Letter_pos")
-)
+setcolorder(Pathway_Hv, c("Sample_ID", "Plant"))
+
+gt_dt <- rbind(gt_dt_Lj, gt_dt_Hv)
+gt_dt[,p_adj:=p.adjust(p_val, method = "fdr")]
+gt_dt[,Label:=ifelse(p_adj<0.05, "*", "")]
 
 Pathway_full <- rbind(Pathway_Lj, Pathway_Hv)
+Pathway_full <- merge(
+  Pathway_full, gt_dt, by = c("Pathway", "Plant", "Genotype"), all.x = T
+)
+Pathway_full[Genotype == "WT",Label:=""]
+
+Letter_pos <- Pathway_full[,.(Label_pos = max(Intensity)), .(Pathway, Plant, Genotype)]
+Letter_pos[Plant == "Hordeum", Label_pos:=Label_pos+20000]
+Letter_pos[Plant == "Lotus", Label_pos:=Label_pos+250000]
+
+Pathway_full <- merge(
+  Pathway_full, Letter_pos, by = c("Pathway", "Plant", "Genotype")
+)
+
 Pathway_full[
   Pathway == "Shikimates and Phenylpropanoids", Pathway:="Shikimates and\nPhenylpropanoids"
 ]
@@ -574,11 +589,14 @@ Pathway_full[
   Pathway == "Amino acids and Peptides", Pathway:="Amino acids\n and Peptides"
 ]
 
-Pathway_full[,Plant:=factor(Plant, levels = c("Lotus", "Hordeum"))]
+Pathway_full[,":="(
+  Plant = factor(Plant, levels = c("Lotus", "Hordeum")),
+  Genotype = factor(Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2"))
+)]
 p <- ggplot(Pathway_full, aes(x = Genotype, y = Intensity, fill = Genotype)) +
   geom_boxplot(width = 0.3, alpha = 0.7, outlier.size = 0.5) +
-  geom_text(data = Pathway_full, aes(x = Genotype, y = Letter_pos, label = Letter),
-            inherit.aes = FALSE, size = 8/.pt) +
+  geom_text(data = Pathway_full, aes(x = Genotype, y = Label_pos, label = Label),
+            inherit.aes = FALSE, size = 20/.pt) +
   facet_grid(Plant~Pathway, scales="free_y") +
   scale_fill_manual(values = cols, labels = legend_labels)+
   theme_bw()+
@@ -604,7 +622,7 @@ p <- ggplot(Pathway_full, aes(x = Genotype, y = Intensity, fill = Genotype)) +
   )) +
   NULL
 #
-ggsave("Supp_Fig5.pdf", p, width = 210, height = 160, units = "mm")
+ggsave("Suppl_Fig5.pdf", p, width = 210, height = 160, units = "mm")
 
 # Volcano plots ----------------------------------------------------------------
 p_vals_dt <- rbind(
