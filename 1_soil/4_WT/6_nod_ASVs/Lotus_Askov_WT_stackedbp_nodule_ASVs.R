@@ -62,7 +62,7 @@ avg_per_asv <- Lotus_nod %>%
   summarise(Average = mean(RA, na.rm = TRUE), .groups = "drop") %>%
   pivot_wider(names_from = Soil, values_from = Average, values_fill = 0)
 
-# Filter for the top20 ASvs per soil with >=1% RA.
+# Filter for the top20 ASVs per soil with >=1% RA.
 top20_npk <- avg_per_asv %>% filter(NPK >= 0.01) %>% arrange(desc(NPK)) %>% slice(1:20) %>% pull(ASVid)
 top20_pk  <- avg_per_asv %>% filter(PK >= 0.01)  %>% arrange(desc(PK))  %>% slice(1:20) %>% pull(ASVid)
 top20_uf  <- avg_per_asv %>% filter(UF >= 0.01)  %>% arrange(desc(UF))  %>% slice(1:20) %>% pull(ASVid)
