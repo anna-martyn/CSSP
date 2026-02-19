@@ -668,7 +668,7 @@ res_table[,Host:=factor(Host, levels = c("Lotus", "Hordeum"))]
 ggplot(data = res_table, aes(x = logFC, y = -log10(p_adj), colour = DA))+
   geom_point(size = 0.5) +
   xlab(expression("log"[2]*"FC vs WT")) +
-  ylab(expression("-log"[10]*"p-value (adjuted for FDR)")) +
+  ylab(expression("-log"[10]*"p-value (adjusted for FDR)")) +
   geom_hline(yintercept = -log10(0.05), linetype = "dashed") +
   theme_light() +
   scale_color_manual(values = c("Enriched" = "#902121",
