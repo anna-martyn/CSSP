@@ -1,0 +1,102 @@
+2025-11-06 15:07:17.984519 INFO::Writing function arguments to log file
+2025-11-06 15:07:17.985185 DEBUG::Function arguments
+2025-11-06 15:07:17.985386 DEBUG::Output folder: Maaslin2_root
+2025-11-06 15:07:17.985531 DEBUG::Min Abundance: 0.000000
+2025-11-06 15:07:17.985655 DEBUG::Min Prevalence: 0.100000
+2025-11-06 15:07:17.98577 DEBUG::Normalization: TSS
+2025-11-06 15:07:17.985883 DEBUG::Transform: LOG
+2025-11-06 15:07:17.985995 DEBUG::Analysis method: LM
+2025-11-06 15:07:17.986114 DEBUG::Max significance: 0.250000
+2025-11-06 15:07:17.986223 DEBUG::Random effects:
+2025-11-06 15:07:17.986338 DEBUG::Fixed effects: Genotype
+2025-11-06 15:07:17.986447 DEBUG::Correction method: BH
+2025-11-06 15:07:17.98657 DEBUG::Standardize: TRUE
+2025-11-06 15:07:17.986685 DEBUG::Cores: 1
+2025-11-06 15:07:17.986791 INFO::Verifying options selected are valid
+2025-11-06 15:07:17.987315 INFO::Determining format of input files
+2025-11-06 15:07:17.987843 INFO::Input format is data samples as columns and metadata samples as rows
+2025-11-06 15:07:17.988557 DEBUG::Transformed data so samples are rows
+2025-11-06 15:07:17.98886 DEBUG::A total of 29 samples were found in both the data and metadata
+2025-11-06 15:07:17.989006 DEBUG::Reordering data/metadata to use same sample ordering
+2025-11-06 15:07:17.989635 INFO::Formula for fixed effects: expr ~  Genotype
+2025-11-06 15:07:17.990206 INFO::Factor detected for categorial metadata 'Genotype'. Provide a reference argument or manually set factor ordering to change reference level.
+2025-11-06 15:07:17.990646 INFO::Filter data based on min abundance and min prevalence
+2025-11-06 15:07:17.991088 INFO::Total samples in data: 29
+2025-11-06 15:07:17.991486 INFO::Min samples required with min abundance for a feature not to be filtered: 2.900000
+2025-11-06 15:07:17.992376 INFO::Total filtered features: 16
+2025-11-06 15:07:17.992852 INFO::Filtered feature names from abundance and prevalence filtering: P1_D2, P4_H11, P4_H7, P1_C9, P2_H9, P4_D8, P4_B8, P5_A4, P4_G7, P2_E4, P5_D2, P4_D3, P4_F5, P5_A6, P2_B3, P4_A5
+2025-11-06 15:07:17.993866 INFO::Total filtered features with variance filtering: 0
+2025-11-06 15:07:17.994376 INFO::Filtered feature names from variance filtering:
+2025-11-06 15:07:17.994777 INFO::Running selected normalization method: TSS
+2025-11-06 15:07:17.995636 INFO::Applying z-score to standardize continuous metadata
+2025-11-06 15:07:17.997737 INFO::Running selected transform method: LOG
+2025-11-06 15:07:17.998779 INFO::Running selected analysis method: LM
+2025-11-06 15:07:17.999488 INFO::Fitting model to feature number 1, P2_H11
+2025-11-06 15:07:18.001354 INFO::Fitting model to feature number 2, P5_A1
+2025-11-06 15:07:18.003263 INFO::Fitting model to feature number 3, P4_H10
+2025-11-06 15:07:18.005153 INFO::Fitting model to feature number 4, P1_A1
+2025-11-06 15:07:18.006937 INFO::Fitting model to feature number 5, P1_A8
+2025-11-06 15:07:18.008704 INFO::Fitting model to feature number 6, P4_A8
+2025-11-06 15:07:18.010378 INFO::Fitting model to feature number 7, P1_F10
+2025-11-06 15:07:18.012045 INFO::Fitting model to feature number 8, P1_E1
+2025-11-06 15:07:18.013694 INFO::Fitting model to feature number 9, P4_C7
+2025-11-06 15:07:18.01541 INFO::Fitting model to feature number 10, P4_B4
+2025-11-06 15:07:18.017099 INFO::Fitting model to feature number 11, P1_C1
+2025-11-06 15:07:18.018776 INFO::Fitting model to feature number 12, P2_D12
+2025-11-06 15:07:18.02043 INFO::Fitting model to feature number 13, P5_B3.P4_C1
+2025-11-06 15:07:18.022078 INFO::Fitting model to feature number 14, P2_C12
+2025-11-06 15:07:18.023726 INFO::Fitting model to feature number 15, P1_E8
+2025-11-06 15:07:18.02544 INFO::Fitting model to feature number 16, P1_D3
+2025-11-06 15:07:18.02712 INFO::Fitting model to feature number 17, P5_A10
+2025-11-06 15:07:18.028774 INFO::Fitting model to feature number 18, P1_A6
+2025-11-06 15:07:18.030409 INFO::Fitting model to feature number 19, P4_B10
+2025-11-06 15:07:18.032111 INFO::Fitting model to feature number 20, P4_E5
+2025-11-06 15:07:18.033874 INFO::Fitting model to feature number 21, P4_B2
+2025-11-06 15:07:18.035864 INFO::Fitting model to feature number 22, P4_F10
+2025-11-06 15:07:18.037868 INFO::Fitting model to feature number 23, P4_D7
+2025-11-06 15:07:18.039843 INFO::Fitting model to feature number 24, P4_C9
+2025-11-06 15:07:18.04196 INFO::Fitting model to feature number 25, P4_G1
+2025-11-06 15:07:18.043874 INFO::Fitting model to feature number 26, P4_G3
+2025-11-06 15:07:18.045634 INFO::Fitting model to feature number 27, P2_B12
+2025-11-06 15:07:18.047821 INFO::Fitting model to feature number 28, P5_E7
+2025-11-06 15:07:18.049994 INFO::Fitting model to feature number 29, P5_B10
+2025-11-06 15:07:18.052142 INFO::Fitting model to feature number 30, P1_B10
+2025-11-06 15:07:18.054435 INFO::Fitting model to feature number 31, P2_H2
+2025-11-06 15:07:18.05677 INFO::Fitting model to feature number 32, P4_B5
+2025-11-06 15:07:18.058854 INFO::Fitting model to feature number 33, P1_C2
+2025-11-06 15:07:18.060843 INFO::Fitting model to feature number 34, P2_A1
+2025-11-06 15:07:18.062846 INFO::Fitting model to feature number 35, P2_B1
+2025-11-06 15:07:18.064846 INFO::Fitting model to feature number 36, P1_A9
+2025-11-06 15:07:18.066746 INFO::Fitting model to feature number 37, P5_C1
+2025-11-06 15:07:18.068656 INFO::Fitting model to feature number 38, P2_C2.P4_E2
+2025-11-06 15:07:18.070548 INFO::Fitting model to feature number 39, P5_C5
+2025-11-06 15:07:18.07243 INFO::Fitting model to feature number 40, P3_A2
+2025-11-06 15:07:18.07431 INFO::Fitting model to feature number 41, P2_A8
+2025-11-06 15:07:18.07625 INFO::Fitting model to feature number 42, P4_E4
+2025-11-06 15:07:18.078412 INFO::Fitting model to feature number 43, P2_E10
+2025-11-06 15:07:18.080563 INFO::Fitting model to feature number 44, P5_D10
+2025-11-06 15:07:18.082698 INFO::Fitting model to feature number 45, P2_G8
+2025-11-06 15:07:18.084878 INFO::Fitting model to feature number 46, P2_H12
+2025-11-06 15:07:18.087069 INFO::Fitting model to feature number 47, P3_C6
+2025-11-06 15:07:18.089264 INFO::Fitting model to feature number 48, P5_D4.P4_F1
+2025-11-06 15:07:18.091412 INFO::Fitting model to feature number 49, P2_D3
+2025-11-06 15:07:18.093642 INFO::Fitting model to feature number 50, P2_F5
+2025-11-06 15:07:18.095779 INFO::Fitting model to feature number 51, P4_B11
+2025-11-06 15:07:18.097902 INFO::Fitting model to feature number 52, P5_D12
+2025-11-06 15:07:18.10004 INFO::Fitting model to feature number 53, P5_A5
+2025-11-06 15:07:18.102405 INFO::Fitting model to feature number 54, P2_D8
+2025-11-06 15:07:18.104574 INFO::Fitting model to feature number 55, P2_E3
+2025-11-06 15:07:18.106709 INFO::Fitting model to feature number 56, P4_H6
+2025-11-06 15:07:18.108849 INFO::Fitting model to feature number 57, P4_G10
+2025-11-06 15:07:18.111008 INFO::Fitting model to feature number 58, P2_D9
+2025-11-06 15:07:18.113165 INFO::Fitting model to feature number 59, P2_H3
+2025-11-06 15:07:18.169545 INFO::Counting total values for each feature
+2025-11-06 15:07:18.175198 INFO::Writing filtered data to file Maaslin2_root/features/filtered_data.tsv
+2025-11-06 15:07:18.177358 INFO::Writing filtered, normalized data to file Maaslin2_root/features/filtered_data_norm.tsv
+2025-11-06 15:07:18.179493 INFO::Writing filtered, normalized, transformed data to file Maaslin2_root/features/filtered_data_norm_transformed.tsv
+2025-11-06 15:07:18.181809 WARNING::Deleting existing residuals file: Maaslin2_root/fits/residuals.rds
+2025-11-06 15:07:18.182648 INFO::Writing residuals to file Maaslin2_root/fits/residuals.rds
+2025-11-06 15:07:18.183598 WARNING::Deleting existing fitted file: Maaslin2_root/fits/fitted.rds
+2025-11-06 15:07:18.184355 INFO::Writing fitted values to file Maaslin2_root/fits/fitted.rds
+2025-11-06 15:07:18.185041 INFO::Writing all results to file (ordered by increasing q-values): Maaslin2_root/all_results.tsv
+2025-11-06 15:07:18.186869 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): Maaslin2_root/significant_results.tsv

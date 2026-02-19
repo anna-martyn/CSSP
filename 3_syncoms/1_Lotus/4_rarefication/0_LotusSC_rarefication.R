@@ -34,7 +34,7 @@ sorted_depths <- sort(depths)
 
 # We will perform the rarefication in two ways:
 ## 1. Including all ASVs (the ones matched to a Lotus SynCom member, and other ASVs/contaminants).
-## 2. Including only ASVs matched to Lotus SynCom members.
+## 2. Including only ASVs matched to Lotus SynCom members. (later used for final plots)
 
 # For this we will make a second filtered dataframe, which we also load as phyloseq file.
 asv_table_filt <- asv_table[grepl("Lj", rownames(asv_table)), ]

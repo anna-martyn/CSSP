@@ -36,14 +36,14 @@ main_theme <- theme(
 )
 
 # Load data --------------------------------------------------------------------
-points_Lj <- fread("../1_Lotus/6_cpcoa_pcoa/pcoa/PCoA_points_Lj.csv")
-points_Hv <- fread("../2_Hordeum/5_cpcoa_pcoa/pcoa/PCoA_points_Hv.csv")
+points_Lj <- fread("../1_Lotus/6_cpcoa_pcoa/additional_outputs/LotusSC_PCoA_points.csv")
+points_Hv <- fread("../2_Hordeum/5_cpcoa_pcoa/additional_outputs/HordeumSC_PCoA_points.csv")
 
-segments_Lj <- fread("../1_Lotus/6_cpcoa_pcoa/pcoa/PCoA_segments_Lj.csv")
-segments_Hv <- fread("../2_Hordeum/5_cpcoa_pcoa/pcoa/PCoA_segments_Hv.csv")
+segments_Lj <- fread("../1_Lotus/6_cpcoa_pcoa/additional_outputs/LotusSC_PCoA_segments.csv")
+segments_Hv <- fread("../2_Hordeum/5_cpcoa_pcoa/additional_outputs/HordeumSC_PCoA_segments.csv")
 
-text_dt_Lj <- fread("../1_Lotus/6_cpcoa_pcoa/pcoa/PCoA_text_Lj.csv")
-text_dt_Hv <- fread("../2_Hordeum/5_cpcoa_pcoa/pcoa/PCoA_text_Hv.csv")
+text_dt_Lj <- fread("../1_Lotus/6_cpcoa_pcoa/additional_outputs/LotusSC_PCoA_text.csv")
+text_dt_Hv <- fread("../2_Hordeum/5_cpcoa_pcoa/additional_outputs/HordeumSC_PCoA_text.csv")
 
 points <- rbind(points_Lj[,-8], points_Hv[,-6])
 segments <- rbind(segments_Lj[,-8], segments_Hv[,-6])
@@ -94,5 +94,5 @@ p <- ggplot(points, aes(x=x, y=y, color=Genotype)) +
   NULL
 p
 
-ggsave("PCoA_plot_matched.pdf", p, width = 5, height = 13, unit = "cm")
-saveRDS(p, file = "PCoA_plot_matched.rds")
+ggsave("Plot_PCoA_matched.pdf", p, width = 5, height = 13, unit = "cm")
+saveRDS(p, file = "Plot_PCoA_matched.rds")

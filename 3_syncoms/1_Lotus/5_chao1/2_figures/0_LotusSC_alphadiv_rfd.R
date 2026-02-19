@@ -173,14 +173,18 @@ run_analysis_plot <- function(df, colors, title, output_pdf, output_rds){
   y_breaks <- pretty(y_limits)
   
   # Make the main plot (rhizosphere and root).
-  p1 <- plot_facet(df_main, plot_summary_main, anova_main, colors, y_limits=y_limits, y_breaks=y_breaks)
+  p1 <- plot_facet(df_main, plot_summary_main, anova_main, colors, y_limits=y_limits, y_breaks=y_breaks) +
+    ggtitle("Lotus") +
+    theme(plot.title = element_text(face = "bold", size = 8, hjust = 0))
   
   # Make a separate plot for the nodules compartment (as only WT data present).
   p2 <- plot_facet(df_nod, plot_summary_nod, anova_nod, colors, y_limits=y_limits, y_breaks=y_breaks) +
-    theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
+    theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())+
+    ggtitle("") +
+    theme(plot.title = element_text(face = "bold", size = 8, hjust = 0))
   
   # Combine both plots horizontally.
-  combined <- p1 + p2 + plot_layout(ncol=2, widths=c(2,0.2))
+  combined <- p1 + p2 + plot_layout(ncol=2, widths=c(2,0.3))
   
   # Save the plots.
   print(combined)

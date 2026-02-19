@@ -27,12 +27,12 @@ main_theme <- theme(
 )
 
 # Load data --------------------------------------------------------------------
-weight_Lj <- fread("../1_Lotus/2_shoot_fw/shoot_fw_boxplot_Lj.csv", drop = 1)
-weight_Hv <- fread("../2_Hordeum/2_shoot_fw/shoot_fw_boxplot_Hv.csv", drop = 1)
+weight_Lj <- fread("../1_Lotus/2_shoot_fw/LotusSC_shoot_fw_ANOVA.csv", drop = 1)
+weight_Hv <- fread("../2_Hordeum/2_shoot_fw/HordeumSC_shoot_fw_ANOVA.csv", drop = 1)
 
-weight_summary_Lj <- fread("../1_Lotus/2_shoot_fw/shoot_fw_boxplot_letters_Lj.csv",
+weight_summary_Lj <- fread("../1_Lotus/2_shoot_fw/LotusSC_shoot_fw_significance_letters.csv",
                            drop = 1)
-weight_summary_Hv <- fread("../2_Hordeum/2_shoot_fw/shoot_fw_boxplot_letters_Hv.csv",
+weight_summary_Hv <- fread("../2_Hordeum/2_shoot_fw/HordeumSC_shoot_fw_significance_letters.csv",
                            drop = 1)
 
 weight_summary <- rbind(weight_summary_Lj, weight_summary_Hv)
@@ -98,5 +98,5 @@ p1 <- ggplot(weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
 
 p1
 
-ggsave("Shootfw_boxplot.pdf", p1, width = 5, height = 6, unit = "cm")
-saveRDS(p1, file = "Shootfw_boxplot.rds")
+ggsave("Plot_shootfw_boxplot.pdf", p1, width = 5, height = 6, unit = "cm")
+saveRDS(p1, file = "Plot_shootfw_boxplot.rds")

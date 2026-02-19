@@ -7,7 +7,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load the ASV table.
 asv_table <- read.table(
-  "HordeumSC_ASVtable.tsv",
+  "../../1_data/without_input/HordeumSC_ASVtable.tsv",
   sep = "\t",
   header = TRUE,
   row.names = 1,

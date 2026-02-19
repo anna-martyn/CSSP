@@ -51,7 +51,7 @@ df_ord[,":="(
   Genotype = factor(Genotype, levels = names(colors_geno))
 )]
 
-# Visulaisation ----------------------------------------------------------------
+# Visualisation ----------------------------------------------------------------
 p_sig <- ggplot(df_ord, aes(x = Order, y = mean_RA, fill = Genotype)) +
   geom_bar(stat = "identity", position = dodge, width = 0.8, alpha = 0.9) +
   geom_errorbar(aes(ymin=mean_RA-1.96*se, ymax=mean_RA+1.96*se),
@@ -80,6 +80,6 @@ p_sig <- ggplot(df_ord, aes(x = Order, y = mean_RA, fill = Genotype)) +
   )
 p_sig
 
-ggsave("Order_RA_sign_orders_asterisks.pdf", p_sig,
+ggsave("Plot_RA_sign_orders.pdf", p_sig,
        width = 21, height = 6, unit = "cm")
-saveRDS(p_sig, file="Order_RA_sign_orders_asterisks.rds")
+saveRDS(p_sig, file="Plot_RA_sign_orders.rds")

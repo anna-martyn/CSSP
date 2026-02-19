@@ -67,8 +67,8 @@ main_theme <- theme(
   axis.line.x=element_line(color="black"),
   axis.line.y=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text.x = element_text(size = 20, colour = "black"),
-  axis.text.y = element_text(size = 20, colour = "black"),
+  axis.text.x = element_text(size = 8, colour = "black"),
+  axis.text.y = element_text(size = 8, colour = "black"),
   legend.background=element_blank(),
   legend.key=element_blank(),
   text=element_text(family="sans")
@@ -96,7 +96,7 @@ p <- ggplot(counts, aes(x=Genotype, y=Number, fill=Genotype)) +
   theme(
     legend.position="none",
     axis.title.x=element_blank(),
-    axis.title.y=element_text(size=20)
+    axis.title.y=element_text(size=8)
   ) +
   scale_x_discrete(labels=c(
     "WT"="WT",
