@@ -93,12 +93,14 @@ run_beta_diversity <- function(asv_table, table_name) {
   CPCoA_plot <- ggplot(CPCo_points, aes(x=CAP1, y=CAP2, colour=Genotype, shape=Compartment)) +
     geom_segment(data=segments, aes(x=CAP1, y=CAP2, xend=seg_x, yend=seg_y, color=Genotype),
                  alpha=0.5, show.legend=FALSE) +
-    geom_point(size=5, alpha=0.7) +
+    geom_point(size=3, alpha=0.7) +
     scale_color_manual(values=colors, labels=genotype_labels_legend) +
     scale_shape_manual(values=shapes) +
     labs(x = paste0("CPCo 1 (", round(var_expl[1]*100, 2), "%)", "\n", Lower_print),
          y = paste0("CPCo 2 (", round(var_expl[2]*100, 2), "%)")) +
-    main_theme
+    main_theme +
+    ggtitle("Hordeum") +
+    theme(plot.title = element_text(size=8, hjust=0))
 
   # Save CPCoA plot
   ggsave(paste0("HordeumSC_cpcoa_", table_name, ".pdf"), CPCoA_plot, width=5, height=5)
@@ -133,8 +135,8 @@ run_beta_diversity <- function(asv_table, table_name) {
       scale_color_manual(values=colors, labels=genotype_labels_legend) +
       labs(x=paste0("PCo 1 (", round(var_expl[1]*100,2), "%)"),
            y=paste0("PCo 2 (", round(var_expl[2]*100,2), "%)")) +
-      ggtitle(comp) +
       main_theme +
+      ggtitle(comp) +
       theme(plot.title = element_text(size=8, hjust=0))
 
     # Save PCoA

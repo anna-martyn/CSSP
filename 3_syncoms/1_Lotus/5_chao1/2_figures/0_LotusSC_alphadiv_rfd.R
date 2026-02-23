@@ -48,7 +48,8 @@ main_theme <- theme(
   axis.line.x=element_line(color="black"),
   axis.line.y=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text = element_text(size = 8, color = "black"),
+  axis.text.y = element_text(size = 8, color = "black"),
+  axis.text.x = element_text(hjust=1, angle = 30, size = 8, color = "black"),
   legend.text = element_text(size=8, color = "black"),
   legend.key=element_blank(),
   axis.title.y = element_text(size = 8),
@@ -184,7 +185,7 @@ run_analysis_plot <- function(df, colors, title, output_pdf, output_rds){
     theme(plot.title = element_text(face = "bold", size = 8, hjust = 0))
   
   # Combine both plots horizontally.
-  combined <- p1 + p2 + plot_layout(ncol=2, widths=c(2,0.3))
+  combined <- p1 + p2 + plot_layout(ncol=2, widths=c(2,0.4))
   
   # Save the plots.
   print(combined)

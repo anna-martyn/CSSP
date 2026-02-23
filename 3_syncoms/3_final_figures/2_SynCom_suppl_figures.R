@@ -36,7 +36,7 @@ p4 <- p4 +
   theme(legend.position = "none")
 
 legend_cpcoa <- ggpubr::get_legend(
-  p4 +
+  p3 +
     guides(color = guide_legend(title = "Genotype"),
            shape = guide_legend(title = "Compartment")) +
     theme(legend.position = "right")
