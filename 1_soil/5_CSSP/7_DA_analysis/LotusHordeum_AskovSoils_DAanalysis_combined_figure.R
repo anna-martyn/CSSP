@@ -58,7 +58,7 @@ plot_legend <- plot_grid(tax_leg, heat_leg, rel_widths = c(0.8, 0.2))
 
 combined_plot_with_legend <- plot_grid(
   combined_plot, plot_legend, 
-  rel_heights = c(0.9, 0.1),
+  rel_heights = c(0.86, 0.14),
   ncol = 1
 )
 

@@ -149,6 +149,6 @@ final_plot3 <- plot_grid(
 final_plot3
 
 # Save supplementary figures as PDF files.
-ggsave("Suppl_Figure2_Askov_CSSP.pdf", final_plot, width=21, height=8, unit="cm")
-ggsave("Suppl_Figure3_Askov_CSSP.pdf", final_plot2, width=21, height=29.7, unit="cm")
-ggsave("Suppl_Figure4_Askov_CSSP.pdf", final_plot3, width=21, height=29.7, unit="cm")
+ggsave("Suppl_Figure2_Askov_CSSP.pdf", final_plot, width = 21, height = 8, unit = "cm")
+ggsave("Suppl_Figure3_Askov_CSSP.pdf", final_plot2, width = 21, height = 29.7, unit = "cm")
+ggsave("Suppl_Figure4_Askov_CSSP.pdf", final_plot3, width = 21, height = 20, unit = "cm")

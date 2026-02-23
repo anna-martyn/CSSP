@@ -189,7 +189,7 @@ saveRDS(CPCoA_PCoA_plot, "../6_final_figures/HordeumCSSP_AskovSoils_cpcoaRootAll
 
 ## Also save an inidivudal plot as we'll use the legend of the plot for the final figure later.
 saveRDS(CPCoA_plot_Root, "HordeumCSSP_AskovSoils_cpcoa_with_legend.rds")
-saveRDS(CPCoA_plot_Root, "../6_final_figures/HordeumCSSP_AskovSoils_cpcoa_with_legend.rds")
+saveRDS(CPCoA_plot_Root, "../8_final_figures/HordeumCSSP_AskovSoils_cpcoa_with_legend.rds")
 
 # Combine plots for supplementary figures and save.
 ggarrange(
@@ -208,7 +208,7 @@ PCoA_plots <- annotate_figure(
 
 ggsave("HordeumCSSP_AskovSoils_pcoa_all.pdf", PCoA_plots, width = 9, height = 15, units = "cm")
 saveRDS(PCoA_plots, "HordeumCSSP_AskovSoils_pcoa_all.rds")
-saveRDS(PCoA_plots, "../6_final_figures/HordeumCSSP_AskovSoils_pcoa_all.rds")
+saveRDS(PCoA_plots, "../8_final_figures/HordeumCSSP_AskovSoils_pcoa_all.rds")
 
 ggarrange(
   CPCoA_plot_Rhizosphere + theme(legend.position = "none"),
@@ -222,4 +222,4 @@ CPCoA_plots <- annotate_figure(
 
 ggsave("HordeumCSSP_AskovSoils_cpcoa_all.pdf", CPCoA_plots, width = 12, height = 5.5, units = "cm")
 saveRDS(CPCoA_plots, "HordeumCSSP_AskovSoils_cpcoa_all.rds")
-saveRDS(CPCoA_plots, "../6_final_figures/HordeumCSSP_AskovSoils_cpcoa_all.rds")
+saveRDS(CPCoA_plots, "../8_final_figures/HordeumCSSP_AskovSoils_cpcoa_all.rds")

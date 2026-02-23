@@ -170,22 +170,14 @@ get_order_counts <- function(df) {
 }
 
 # Define the colour for each bacterial order.
-colors <- c(
-  "Acidobacteriales"="#570861","Burkholderiales"="#645394","Chloroflexales"="#CC99BB",
-  "Corynebacteriales"="#f6cefc","Frankiales"="#114477","Gaiellales"="#4477AA",
-  "Gemmatimonadales"="#77AADD","MB-A2-108"="#117777","Micrococcales"="#44AAAA",
-  "Nitrospirales"="#daf0ee","Pedosphaerales"="#013220","Propionibacteriales"="#117744",
-  "Pseudomonadales"="#88CCAA","Rhizobiales"="#fdbb6b","S085"="#774411",
-  "Solibacterales"="#DDAA77","Sphingomonadales"="lightyellow","Subgroup_7"="#AA4455",
-  "TK10"="#DD7788","Xanthomonadales"="#ffc0cb","Other"="lightgrey"
-)
+colors <- read.table("../../../0_files/Bacterial_order_colors.csv", header = T, sep = ",", comment.char = "")
 
 # Write the function for making pie charts.
 plot_pie <- function(count_df, title) {
   ggplot(count_df, aes(x = "", y = Count, fill = Order)) +
     geom_bar(width = 1, stat = "identity") +
     coord_polar("y", start = 0) +
-    scale_fill_manual(values = colors) +
+    scale_fill_manual(values = colors$Color, breaks = colors$Order) +
     theme_void() +
     labs(title = title)
 }
@@ -226,16 +218,17 @@ for(i in seq_along(ASV_names)) {
   df <- get(ASV_names[i])
   
   # Assign bacterial orders, ensure factor levels match the colours.
-  df$Order <- ifelse(df$Order %in% names(colors), df$Order, "Other")
-  df$Order <- factor(df$Order, levels = names(colors))
+  df$Order <- ifelse(df$Order %in% colors$Order, df$Order, "Other")
+  df$Order <- factor(df$Order, levels = colors$Order)
+  df$Order <- droplevels(df$Order)
   
   df_counts <- get_order_counts(df)
-  df_counts$Order <- factor(df_counts$Order, levels = names(colors))
+  df_counts$Order <- factor(df_counts$Order, levels = colors$Order)
   
   p <- ggplot(df_counts, aes(x = 1, y = Count, fill = Order)) +
     geom_bar(width = 1, stat = "identity") +
     coord_polar("y", start = 0) +
-    scale_fill_manual(values = colors, guide = guide_legend(ncol = 1)) +
+    scale_fill_manual(values = colors$Color, breaks = colors$Order, guide = guide_legend(ncol = 1)) +
     theme_void() +
     labs(title = plot_titles[i],fill="Bacterial order") +
     theme(plot.title = element_text(hjust = 0.5, size = 6), margin = margin(b = 1))

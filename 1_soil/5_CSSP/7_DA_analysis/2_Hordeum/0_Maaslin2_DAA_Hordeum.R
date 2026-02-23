@@ -273,30 +273,11 @@ htmp_hiabn <- heatmap_data[ASVid %in% DA_ASVs]
 tax_bar <- taxonomy[ASVid %in% unique(htmp_hiabn$ASVid)]
 
 ## Define colours for bacterial orders displayed in figure.
-colors_orders <- c(
-  "Burkholderiales" = "#645394",
-  "Caulobacterales" = "#8e3563", 
-  "Chloroflexales" = "#CC99BB",
-  "Flavobacteriales" = "#05294a",
-  "Frankiales" = "#114477",
-  "Gaiellales" = "#4477AA", 
-  "Gemmatimonadales" = "#77AADD",
-  "Micrococcales" = "#44AAAA",
-  "Micromonosporales" = "#99D6DD",
-  "Propionibacteriales" = "#117744",
-  "Pseudomonadales" = "#88CCAA",
-  "Pseudonocardiales" = "#95bb72",
-  "Rhizobiales" = "#fdbb6b",
-  "Sphingomonadales" = "lightyellow",
-  "Streptomycetales" = "#fed5a4",
-  "Xanthomonadales" = "#ffc0cb",
-  "Unknown" = "darkgrey",
-  "Other" = "lightgrey"
-)
+colors_orders <- fread("../../../../0_files/Bacterial_order_colors.csv")
 
 ## Define orders without assigned colours to 'Other'.
-tax_bar[!(Order %in% names(colors_orders)), Order:="Other"]
-tax_bar[,Order:=factor(Order, levels = names(colors_orders))]
+tax_bar[!(Order %in% colors_orders$Order), Order:="Other"]
+tax_bar[,Order:=factor(Order, levels = colors_orders$Order)]
 tax_bar <- tax_bar[order(Order)]
 
 ## Match ASV ordering between taxonomy and heatmap.
@@ -307,8 +288,8 @@ tax_bar$ASVid <- factor(tax_bar$ASVid, levels = tax_bar$ASVid)
 ## Make the taxonomy barplot.
 p_tax <- ggplot(tax_bar, aes(x=ASVid, y=1, fill=Order)) +
   geom_tile(show.legend = TRUE) +
-  scale_fill_manual(values = colors_orders, drop = F,
-                    breaks = factor(names(colors_orders))) +
+  scale_fill_manual(values = colors_orders$Color, drop = F,
+                    breaks = factor(colors_orders$Order)) +
   theme_void() +
   labs(fill = "Bacterial order") +
   theme(legend.position="bottom",

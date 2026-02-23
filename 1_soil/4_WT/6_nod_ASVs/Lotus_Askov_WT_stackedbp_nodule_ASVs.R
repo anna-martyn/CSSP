@@ -11,6 +11,7 @@ library(tidyr)
 library(ggplot2)
 library(stringr)
 library(RColorBrewer)
+library(tibble)
 
 # Load the input files.
 design <- read.table(

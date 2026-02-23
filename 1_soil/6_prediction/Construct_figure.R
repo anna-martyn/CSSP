@@ -21,19 +21,7 @@ cols <- c(
 
 colors <- c(NPK = "#6F944F", PK = "#B2563C", UF = "#3C7D82")
 
-order_colors <- data.frame(
-  group = c(
-    "Burkholderiales", "Caulobacterales", "Flavobacteriales", "Micrococcales",
-    "Pseudomonadales", "Rhizobiales", "Streptomycetales", "Sphingomonadales",
-    "Pseudonocardiales", "Unknown", "Other"
-  ),
-  colors = c(
-    "#645394", "#8e3563", "#05294a", "#44AAAA",
-    "#88CCAA", "#fdbb6b", "#fed5a4", "lightyellow",
-    "#95bb72", "grey", "lightgrey"
-  )
-)
-
+order_colors <- fread("../../0_files/Bacterial_order_colors.csv")
 
 # Set working directory to source file location.
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
@@ -210,9 +198,9 @@ ggplot(data = Res) +
   NULL -> g1; g1
 
 # Taxonomic composition plot ----
-tax_summary[!(Order %in% order_colors$group), Order:= "Other"]
+tax_summary[!(Order %in% order_colors$Order), Order:= "Other"]
 tax_summary[,":="(
-  Order = factor(Order, levels = order_colors$group),
+  Order = droplevels(factor(Order, levels = order_colors$Order)),
   Plant = factor(Plant, levels = c("Lotus", "Hordeum")),
   Compartment = factor(Compartment, levels = c("Rhizosphere", "Root")),
   Soil = factor(Soil, levels = c("NPK", "PK", "UF"))
@@ -223,8 +211,8 @@ ggplot(data = tax_summary, aes(x = Soil, y = RA, fill = Order))+
   geom_bar(stat = "identity", position = "stack", linewidth = 0.1) +
   facet_wrap2(vars(Plant, Compartment), strip = strip_nested(), nrow = 1)+
   scale_fill_manual(
-    values = order_colors$colors,
-    breaks = order_colors$group,
+    values = order_colors$Color,
+    breaks = order_colors$Order,
     name = "Bacterial orders"
   )+
   labs(x = NULL, y = "Cumulative Mean Relative Abundance")+

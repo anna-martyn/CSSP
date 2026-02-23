@@ -126,7 +126,7 @@ p1 <- ggplot(points, aes(x=x, y=y, color=Soil, shape=Compartment)) +
   labs(x=paste("CPCo 1 (", format(100 * eig[1] / sum(eig), digits=4), "%)", sep=""),
        y=paste("CPCo 2 (", format(100 * eig[2] / sum(eig), digits=4), "%)", sep="")) +
   ggtitle("Lotus", subtitle = paste(format(100 * variance, digits=3), 
-                                    "% of variance; p=", format(p.val, digits=2), sep="")) +
+                                    "% of variance; p<", format(p.val, digits=2), sep="")) +
   main_theme +
   theme(legend.position="right",
         legend.title = element_text(size = 8),
@@ -188,7 +188,7 @@ p2 <- ggplot(points, aes(x=x, y=y, color=Soil, shape=Compartment)) +
   labs(x=paste("CPCo 1 (", format(100 * eig[1] / sum(eig), digits=4), "%)", sep=""),
        y=paste("CPCo 2 (", format(100 * eig[2] / sum(eig), digits=4), "%)", sep="")) +
   ggtitle("Hordeum", subtitle = paste(format(100 * variance, digits=3), 
-                                    "% of variance; p=", format(p.val, digits=2), sep="")) +
+                                    "% of variance; p<", format(p.val, digits=2), sep="")) +
   main_theme +
   theme(legend.position="right",
         legend.title = element_text(size = 8),

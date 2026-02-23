@@ -21,19 +21,6 @@ cols <- c(
 
 colors <- c(NPK = "#6F944F", PK = "#B2563C", UF = "#3C7D82")
 
-order_colors <- data.frame(
-  group = c(
-    "Burkholderiales", "Caulobacterales", "Flavobacteriales", "Micrococcales",
-    "Pseudomonadales", "Rhizobiales", "Streptomycetales", "Sphingomonadales",
-    "Pseudonocardiales", "Unknown", "Other"
-  ),
-  colors = c(
-    "#645394", "#8e3563", "#05294a", "#44AAAA",
-    "#88CCAA", "#fdbb6b", "#fed5a4", "lightyellow",
-    "#95bb72", "grey", "lightgrey"
-  )
-)
-
 # Load the input data --------------------------------------
 ## Lotus
 ASV_table_Lotus <- fread("../1_data/1_Lotus/LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv")

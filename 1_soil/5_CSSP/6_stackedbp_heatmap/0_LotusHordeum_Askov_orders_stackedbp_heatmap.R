@@ -167,36 +167,7 @@ main_theme <- theme(
 )
 
 # Set the colours for the bacterial orders.
-colors <- c(
-  "Acidobacteriales"   = "#570861",
-  "Burkholderiales"    = "#645394",
-  "Caulobacterales"    = "#8e3563",
-  "Chitinophagales"    = "#b55385",
-  "Chloroflexales"     = "#CC99BB",
-  "Corynebacteriales"  = "#f6cefc",
-  "Flavobacteriales"   = "#05294a", 
-  "Frankiales"         = "#114477",
-  "Gaiellales"         = "#4477AA",
-  "Gemmatimonadales"   = "#77AADD",
-  "MB-A2-108"          = "#117777",
-  "Micrococcales"      = "#44AAAA",
-  "Micromonosporales"  = "#99D6DD",   
-  "Nitrospirales"      = "#daf0ee",
-  "Pedosphaerales"     = "#013220",
-  "Propionibacteriales"= "#117744",
-  "Pseudomonadales"    = "#88CCAA",
-  "Pseudonocardiales"  = "#95bb72",
-  "Rhizobiales"        = "#fdbb6b",
-  "S085"               = "#774411",
-  "Solibacterales"     = "#DDAA77",
-  "Sphingomonadales"   = "lightyellow",
-  "Streptomycetales"    = "#fed5a4",
-  "Subgroup_7"         = "#AA4455",
-  "TK10"               = "#DD7788",
-  "Xanthomonadales"    = "#ffc0cb",
-  "Unknown"            = "darkgrey",
-  "Other"              = "lightgrey"
-)
+colors <- read.table("../../../0_files/Bacterial_order_colors.csv", header = T, sep = ",", comment.char = "")
 
 # Make genotype names italic for mutants.
 genotype_labels <- c(
@@ -210,7 +181,7 @@ genotype_labels <- c(
 # Make the stacked barplot.
 p1 <- ggplot(df.mean_order, aes(x=Genotype, y=RA, fill=Order)) +
   geom_bar(stat="identity", width=0.7) +
-  scale_fill_manual(values=colors) +
+  scale_fill_manual(values = colors$Color, breaks = colors$Order) +
   scale_y_continuous(expand=c(0,0)) +
   scale_x_discrete(labels = function(x) parse(text = genotype_labels[x])) +
   main_theme +
