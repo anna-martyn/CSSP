@@ -178,42 +178,7 @@ asv_RA_WT$Compartment <- factor(asv_RA_WT$Compartment, levels = c("Rhizosphere",
 #----------------------------------------
 # Taxonomic color bar
 #----------------------------------------
-colors <- c(
-  "Acidobacteriales"   = "#570861",
-  "Actinomycetales"    = "#3e0034",  
-  "Bacillales"         = "#4b0e5e",  
-  "Burkholderiales"    = "#645394",
-  "Caulobacterales"    = "#8e3563",
-  "Chitinophagales"    = "#b55385",   # rose
-  "Chloroflexales"     = "#CC99BB",   # light purple-pink
-  "Corynebacteriales"  = "#f6cefc",
-  "Enterobacterales"   = "#191551",
-  "Flavobacteriales"   = "#05294a",   # navy
-  "Frankiales"         = "#114477",   # dark teal-blue
-  "Gaiellales"         = "#4477AA",   # medium blue
-  "Gemmatimonadales"   = "#77AADD",   # light blue
-  "MB-A2-108"          = "#117777",   # teal
-  "Micrococcales"      = "#44AAAA",   # turquoise,
-  "Micromonosporales"  = "#99D6DD",   
-  "Nitrospirales"      = "#daf0ee",   # pale aqua
-  "Pedosphaerales"     = "#013220",   # very dark green
-  "Propionibacteriales"= "#117744",   # forest green
-  "Pseudomonadales"    = "#88CCAA",   # pastel green
-  "Pseudonocardiales"  = "#95bb72",   # lime green (stays in the green cluster)
-  "Rhizobiales"        = "#fdbb6b",
-  "Rhodobacterales"    = "#C3834D",
-  "Rhodospirillales"   = "#302018",
-  "S085"               = "#774411",   # brown
-  "Solibacterales"     = "#DDAA77",   # beige-brown
-  "Sphingobacteriales" = "#8A6642",   
-  "Sphingomonadales"   = "lightyellow",
-  "Streptomycetales"   = "#fed5a4",   
-  "Subgroup_7"         = "#AA4455",   # dark red
-  "TK10"               = "#DD7788",   # reddish-pink
-  "Xanthomonadales"    = "#ffc0cb",   # light pink
-  "Unknown"            = "darkgrey",
-  "Other"              = "lightgrey"
-)
+colors <- read.table("../../../0_files/Bacterial_order_colors.csv", header = T, sep = ",", comment.char = "")
 
 tax_bar <- asv_RA_WT %>%
   distinct(ASVid, Order) %>% 
@@ -221,7 +186,7 @@ tax_bar <- asv_RA_WT %>%
 
 p_tax <- ggplot(tax_bar, aes(x=ASVid, y=1, fill=Order)) +
   geom_tile() +
-  scale_fill_manual(values=colors) +
+  scale_fill_manual(values = colors$Color, breaks = colors$Order) +
   theme_void() +
   labs(fill = "Bacterial order") +
   theme(legend.position="bottom",

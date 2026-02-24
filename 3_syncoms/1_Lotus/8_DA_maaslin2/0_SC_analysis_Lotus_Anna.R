@@ -186,23 +186,8 @@ asv_RA_WT$Compartment <- factor(asv_RA_WT$Compartment, levels = c("Rhizosphere",
 #----------------------------------------
 # Taxonomic color bar-----------------------------------------------------------
 #----------------------------------------
-colors <- c(
-  "Acidobacteriales"   = "#570861", "Actinomycetales" = "#3e0034",  
-  "Bacillales" = "#4b0e5e", "Burkholderiales" = "#645394",
-  "Caulobacterales" = "#8e3563", "Chitinophagales" = "#b55385",
-  "Chloroflexales" = "#CC99BB", "Corynebacteriales" = "#f6cefc",
-  "Flavobacteriales" = "#05294a", "Frankiales" = "#114477",
-  "Gaiellales" = "#4477AA", "Gemmatimonadales" = "#77AADD",
-  "MB-A2-108" = "#117777", "Micrococcales" = "#44AAAA",
-  "Micromonosporales" = "#99D6DD", "Nitrospirales" = "#daf0ee",
-  "Pedosphaerales" = "#013220", "Propionibacteriales" = "#117744",
-  "Pseudomonadales" = "#88CCAA", "Pseudonocardiales" = "#95bb72",
-  "Rhizobiales" = "#fdbb6b", "S085" = "#774411",
-  "Solibacterales" = "#DDAA77", "Sphingomonadales" = "lightyellow",
-  "Streptomycetales" = "#fed5a4", "Subgroup_7" = "#AA4455",
-  "TK10" = "#DD7788", "Xanthomonadales" = "#ffc0cb",
-  "Unknown" = "darkgrey", "Other" = "lightgrey"
-)
+colors <- read.table("../../../0_files/Bacterial_order_colors.csv", header = T, sep = ",", comment.char = "")
+
 
 tax_bar <- asv_RA_WT %>%
   distinct(ASVid, order) %>% 
@@ -210,7 +195,7 @@ tax_bar <- asv_RA_WT %>%
 
 p_tax <- ggplot(tax_bar, aes(x=ASVid, y=1, fill=order)) +
   geom_tile() +
-  scale_fill_manual(values=colors) +
+  scale_fill_manual(values = colors$Color, breaks = colors$Order) +
   theme_void() +
   labs(fill = "Bacterial order") +
   theme(legend.position="bottom",

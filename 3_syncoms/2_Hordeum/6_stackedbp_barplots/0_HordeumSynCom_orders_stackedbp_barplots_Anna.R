@@ -72,46 +72,7 @@ df_summary <- df_summary %>%
   mutate(Compartment = factor(Compartment, levels=c("Rhizosphere","Root")))
 
 # Define colours for orders.
-colors <- c(
-  "Acidobacteriales"   = "#570861",
-  "Actinomycetales"    = "#3e0034",
-  "Bacillales"         = "#4b0e5e",
-  "Burkholderiales"    = "#645394",
-  "Caulobacterales"    = "#8e3563",
-  "Cellvibrionales"    = "#9b6782ff",
-  "Chitinophagales"    = "#b55385",
-  "Chloroflexales"     = "#CC99BB",
-  "Corynebacteriales"  = "#f6cefc",
-  "Enterobacterales"   = "#191551",
-  "Flavobacteriales"   = "#05294a",
-  "Frankiales"         = "#114477",
-  "Gaiellales"         = "#4477AA",
-  "Gemmatimonadales"   = "#77AADD",
-  "MB-A2-108"          = "#117777",
-  "Micrococcales"      = "#44AAAA",
-  "Micromonosporales"  = "#99D6DD",
-  "Nitrospirales"      = "#daf0ee",
-  "Pedosphaerales"     = "#013220",
-  "Polyangiales"       = "#0da970ff",
-  "Propionibacteriales"= "#117744",
-  "Pseudomonadales"    = "#88CCAA",
-  "Pseudonocardiales"  = "#95bb72",
-  "Rhizobiales"        = "#fdbb6b",
-  "Rhodobacterales"    = "#C3834D",
-  "Rhodospirillales"   = "#302018",
-  "S085"               = "#774411",
-  "Saccharimonadales"  = "#ff8000ff",
-  "Solibacterales"     = "#DDAA77",
-  "Sphingobacteriales" = "#8A6642",
-  "Sphingomonadales"   = "lightyellow",
-  "Streptomycetales"   = "#fed5a4",
-  "Subgroup_5"         = "#6E2D43",
-  "Subgroup_7"         = "#AA4455",
-  "TK10"               = "#DD7788",
-  "Xanthomonadales"    = "#ffc0cb",
-  "Unknown"            = "darkgrey",
-  "Other"              = "lightgrey"
-)
+colors <- read.table("../../../0_files/Bacterial_order_colors.csv", header = T, sep = ",", comment.char = "")
 
 # Set genotype order and make mutant names italic.
 df_summary$Genotype <- factor(
@@ -146,7 +107,7 @@ main_theme <- theme(
 p1 <- ggplot(df_summary, aes(x=Genotype, y=mean_RA, fill=Order)) +
   geom_bar(stat="identity", width=0.5) +
   facet_wrap(~Compartment, scales="free_x") +
-  scale_fill_manual(values=colors) +
+  scale_fill_manual(values = colors$Color, breaks = colors$Order) +
   scale_x_discrete(labels = genotype_labels) +
   scale_y_continuous(expand=c(0,0)) +
   main_theme +
