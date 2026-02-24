@@ -12,6 +12,7 @@ library(ggplot2)
 library(ggtext)
 library(FSA)
 library(multcompView)
+library(tibble)
 
 # Load data.
 design <- read.table("../1_data/LotusSC_metadata.txt", header=TRUE, sep = "\t")

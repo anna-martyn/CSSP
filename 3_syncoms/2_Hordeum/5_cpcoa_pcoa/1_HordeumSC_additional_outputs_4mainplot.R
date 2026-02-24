@@ -5,12 +5,6 @@ rm(list=ls())
 # Set working directory.
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load data.
-design <- read.table("../1_data/without_input/HordeumSC_metadata.txt", header=T, sep="\t")
-asv_table <- fread("../1_data/without_input/HordeumSC_ASVtable.tsv")
-setnames(asv_table, old = names(asv_table)[1], new = "ASVid")
-
-
 # Load required packages.
 library(data.table)
 library(dplyr)
@@ -19,6 +13,11 @@ library(vegan)
 library(ggplot2)
 library(ggtext)
 library(cowplot)
+
+# Load data.
+design <- read.table("../1_data/without_input/HordeumSC_metadata.txt", header=T, sep="\t")
+asv_table <- fread("../1_data/without_input/HordeumSC_ASVtable.tsv")
+setnames(asv_table, old = names(asv_table)[1], new = "ASVid")
 
 # Filter asv table to only keep mateched ASVs.
 asv_table_matched <- asv_table[grepl("_", ASVid)]

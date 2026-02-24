@@ -9,6 +9,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 library(dplyr)
 library(multcompView)
 library(patchwork)
+library(ggplot2)
 library(ggtext)
 
 # Load chao1 and metadata files.

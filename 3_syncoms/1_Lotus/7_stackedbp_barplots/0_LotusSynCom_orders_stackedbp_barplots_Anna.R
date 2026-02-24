@@ -97,6 +97,7 @@ colors <- c(
   "Unknown"            = "darkgrey",
   "Other"              = "lightgrey"
 )
+# colors <- read.table("../../../0_files/Bacterial_order_colors.csv", header = T, sep = ",", comment.char = "")
 
 # Set genotype order and make mutant names italic.
 df_summary$Genotype <- factor(

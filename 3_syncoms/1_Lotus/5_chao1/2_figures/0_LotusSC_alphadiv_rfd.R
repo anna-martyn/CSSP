@@ -9,11 +9,12 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 library(dplyr)
 library(multcompView)
 library(patchwork)
+library(ggplot2)
 library(ggtext)
 
 # Load chao1 and metadata files.
 # Note: we have one file for matched ASVs only, and one where all ASVs are included.
- alpha <- read.table("../1_scripts/allASVs/LotusSC_allASVs_chao1.txt",
+alpha <- read.table("../1_scripts/allASVs/LotusSC_allASVs_chao1.txt",
                     sep="\t", header=TRUE, row.names=1, check.names=FALSE)
 alpha_filt <- read.table("../1_scripts/matchedASVsonly/LotusSC_matchedASVsonly_chao1.txt",
                          sep="\t", header=TRUE, row.names=1, check.names=FALSE)
