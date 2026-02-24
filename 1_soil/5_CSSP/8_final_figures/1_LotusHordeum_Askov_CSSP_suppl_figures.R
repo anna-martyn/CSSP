@@ -143,7 +143,7 @@ final_plot3 <- plot_grid(
   row4,
   row5,
   ncol = 1,
-  rel_heights = c(1/2, 1/2)
+  rel_heights = c(0.5, 0.5)
 )
 
 final_plot3
@@ -151,4 +151,4 @@ final_plot3
 # Save supplementary figures as PDF files.
 ggsave("Suppl_Figure2_Askov_CSSP.pdf", final_plot, width = 21, height = 8, unit = "cm")
 ggsave("Suppl_Figure3_Askov_CSSP.pdf", final_plot2, width = 21, height = 29.7, unit = "cm")
-ggsave("Suppl_Figure4_Askov_CSSP.pdf", final_plot3, width = 21, height = 20, unit = "cm")
+ggsave("Suppl_Figure4_Askov_CSSP.pdf", final_plot3, width = 21, height = 24, unit = "cm")

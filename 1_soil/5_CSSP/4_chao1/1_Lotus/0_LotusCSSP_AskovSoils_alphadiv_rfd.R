@@ -58,7 +58,6 @@ label_df <- data.frame()
 ## Use the function for each soil-compartment combination.
 for(s in levels(index$Soil)) {
   for(c in levels(index$Compartment)) {
-
     sub_df <- subset(index, Soil == s & Compartment == c)
     
     # Skip if fewer than 2 genotypes present (this is the case for the nodule compartment).
@@ -66,8 +65,8 @@ for(s in levels(index$Soil)) {
       next
     }
     
-## Make a summary dataframe for all outputs.
-  summary_df <- sub_df %>%
+    ## Make a summary dataframe for all outputs.
+    summary_df <- sub_df %>%
     group_by(Genotype) %>%
     summarise(Mean=mean(value),
               Max=max(value),
@@ -76,21 +75,22 @@ for(s in levels(index$Soil)) {
               Std=sd(value),
               .groups="drop")
 
-  ## Perform the ANOVA and TukeyHSD.
-  ano <- aov(value ~ Genotype, data=sub_df)
-  pairwise <- TukeyHSD(ano)
-  letters <- generate_label_df(pairwise, "Genotype")
+    ## Perform the ANOVA and TukeyHSD.
+    ano <- aov(value ~ Genotype, data=sub_df)
+    pairwise <- TukeyHSD(ano)
+    letters <- generate_label_df(pairwise, "Genotype")
+    letters <- letters[as.character(summary_df$Genotype),]
 
-  ## Add the letters and define the y-positions.
-  y_offset <- 0.3 * (max(summary_df$Max) - min(summary_df$Min))
-  
-  tmp <- summary_df %>%
-    mutate(Letters = letters$Letters,
-           y_position = Max + y_offset,
-           Soil = s,
-           Compartment = c)
+    ## Add the letters and define the y-positions.
+    y_offset <- 0.3 * (max(summary_df$Max) - min(summary_df$Min))
+    
+    tmp <- summary_df %>%
+      mutate(Letters = letters$Letters,
+            y_position = Max + y_offset,
+            Soil = s,
+            Compartment = c)
 
-  label_df <- rbind(label_df, tmp)
+    label_df <- rbind(label_df, tmp)
   }
 }
 

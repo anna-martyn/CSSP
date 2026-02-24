@@ -84,6 +84,7 @@ for(s in levels(index_filtered$Soil)) {
   ano <- aov(value ~ Genotype, data=sub_df)
   pairwise <- TukeyHSD(ano)
   letters <- generate_label_df(pairwise, "Genotype")
+  letters <- letters[as.character(summary_df$Genotype),]
 
   ## Add the letters and define the y-positions.
   y_offset <- 0.1 * (max(summary_df$Max) - min(summary_df$Min))

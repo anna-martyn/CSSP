@@ -110,13 +110,14 @@ get_top_orders <- function(df){
     summarise(MeanRA = mean(RA, na.rm=T), .groups="drop") %>%
     arrange(desc(MeanRA)) %>%
     slice_head(n=20) %>%
-    filter(MeanRA >= 0.01) %>%
+    # filter(MeanRA >= 0.01) %>%
     pull(Order)
 }
 
 Lotus_top <- get_top_orders(Lotus_RR)
 Hordeum_top <- get_top_orders(Hordeum_RR)
 combined_top_orders <- unique(c(Lotus_top, Hordeum_top))
+saveRDS(combined_top_orders, "../7_DA_analysis/Orders_to_display.rds")
 
 ### Step 3: Combine the orders for Lotus and Hordeum and show how many unique orders would be displayed.
 combined_top_orders <- unique(c(Lotus_top, Hordeum_top))
@@ -188,7 +189,7 @@ p1 <- ggplot(df.mean_order, aes(x=Genotype, y=RA, fill=Order)) +
   ylab("Mean relative abundance") +
   labs(fill="Bacterial order") +
   xlab("") +
-  guides(fill=guide_legend(nrow=21)) +
+  guides(fill=guide_legend(nrow=27)) +
   facet_nested(~ Plant + Compartment + Soil, scales="free_x", space="free_x") +
   theme(
     axis.text.x = element_text(size=8, color="black", angle=90, vjust=1, hjust=1),
@@ -215,26 +216,53 @@ df.plot <- df.sample_order %>%
     Order = factor(Order, levels = sort(unique(Order)))
   )
 
-## Perform significance analysis using pairwise Wilcoxon of mutants vs. WT.
+## Perform significance analysis using linear regression to obtain tests for mutants vs. WT.
 mutants <- c("symrk", "ccamk", "nsp1", "nsp2")
 
-df_pvals <- df.plot %>%
-  group_by(Plant, Compartment, Soil, Order, Genotype) %>%
-  filter(Genotype %in% mutants) %>%
-  summarise(
-    p.value = wilcox.test(
-      RA,
-      df.plot$RA[
-        df.plot$Plant == unique(Plant) &
-          df.plot$Compartment == unique(Compartment) &
-          df.plot$Soil == unique(Soil) &
-          df.plot$Order == unique(Order) &
-          df.plot$Genotype == "WT"
-      ],
-      exact = FALSE
-    )$p.value,
-    .groups = "drop"
+Opt <- expand.grid(
+  Plant = unique(df.plot$Plant),
+  Order = unique(df.plot$Order),
+  Compartment = unique(df.plot$Compartment),
+  Soil = unique(df.plot$Soil)
+)
+
+df_list <- list()
+for(i in 1:nrow(Opt)){
+  df <- df.plot %>%
+  filter(
+    Plant == Opt$Plant[i] & 
+      Compartment == Opt$Compartment[i] & 
+      Soil == Opt$Soil[i] & 
+      Order == Opt$Order[i]
   )
+  p_vals <- coef(summary(lm(RA~Genotype, data = df)))[-1,"Pr(>|t|)"]
+  df_list[[i]] <- tibble(
+    Plant = Opt$Plant[i],
+    Compartment = Opt$Compartment[i], 
+    Soil = Opt$Soil[i],
+    Order = Opt$Order[i],
+    Genotype = gsub("Genotype", "", names(p_vals)),
+    p.value = p_vals
+  )
+}
+df_pvals <- bind_rows(df_list)
+
+# df_pvals <- df.plot %>%
+#   group_by(Plant, Compartment, Soil, Order) %>%
+#   summarise(
+#     p.value = wilcox.test(
+#       RA,
+#       df.plot$RA[
+#         df.plot$Plant == unique(Plant) &
+#           df.plot$Compartment == unique(Compartment) &
+#           df.plot$Soil == unique(Soil) &
+#           df.plot$Order == unique(Order) &
+#           df.plot$Genotype == "WT"
+#       ],
+#       exact = FALSE
+#     )$p.value,
+#     .groups = "drop"
+#   )
 
 ## Adjust p-values using Benjamini-Hochberg.
 df_pvals <- df_pvals %>%
@@ -264,6 +292,7 @@ genotype_labels_heatmap <- c(
 )
 
 ## Make the heatmap plot.
+df.plot$Genotype <- factor(df.plot$Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2"))
 p_heatmap <- ggplot(df.plot, aes(x = Genotype, y = Order, fill = RA)) +
   geom_tile(color = "grey50") +
   geom_text(aes(label = sig), na.rm = TRUE, size = 3) +

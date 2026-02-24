@@ -274,8 +274,12 @@ tax_bar <- taxonomy[ASVid %in% unique(htmp_hiabn$ASVid)]
 ## Define colours for bacterial orders displayed in figure.
 colors_orders <- fread("../../../../0_files/Bacterial_order_colors.csv")
 
+# Load orders to display. These are top 20 mean RA orders in either Lotus or Hordeum
+# WT across compartments and soils (as used for supplementary figures).
+combined_top_orders <- readRDS("../Orders_to_display.rds")
+
 ## Define orders without assigned colours to 'Other'.
-tax_bar[!(Order %in% colors_orders$Order), Order:="Other"]
+tax_bar[!(Order %in% combined_top_orders), Order:="Other"]
 tax_bar[,Order:=factor(Order, levels = colors_orders$Order)]
 tax_bar <- tax_bar[order(Order)]
 
