@@ -49,59 +49,59 @@ grid.newpage()
 train <- boxGrob(
   "Training\n Data",
   x = 0.55, y = 0.9,
-  txt_gp = gpar(col = "black", fontsize = 8, family = "helvetica"),
+  txt_gp = gpar(col = "black", fontsize = 7, family = "helvetica"),
   box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2)
 )
 
 test <- boxGrob("Test Data",
                 x = 0.28, y = 0.9,
-                txt_gp = gpar(col = "black", fontsize = 8, family = "helvetica"),
+                txt_gp = gpar(col = "black", fontsize = 7, family = "helvetica"),
                 box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2))
 
 mod1 <- boxGrob("Model 1: \nPredicts NPK vs. non-NPK \nTrained on NPK, PK, and UF data",
-                x = 0.28, y = 0.65, width = unit(50, "mm"),
-                txt_gp = gpar(col = "black", fontsize = 8, family = "helvetica"),
+                x = 0.28, y = 0.65, width = unit(42, "mm"),
+                txt_gp = gpar(col = "black", fontsize = 7, family = "helvetica"),
                 box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2))
 
 mod2 <- boxGrob("Model 2: \nPredicts PK vs. UF \nTrained on PK and UF data",
-                x = 0.78, y = 0.65, width = unit(40, "mm"),
-                txt_gp = gpar(col = "black", fontsize = 8, family = "helvetica"),
+                x = 0.78, y = 0.65, width = unit(37, "mm"),
+                txt_gp = gpar(col = "black", fontsize = 7, family = "helvetica"),
                 box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2))
 
 pred <- boxGrob("Prediction on Test Data: \nNPK or non-NPK?",
                 x = 0.28, y = 0.45,
-                txt_gp = gpar(col = "black", fontsize = 8, family = "helvetica"),
+                txt_gp = gpar(col = "black", fontsize = 7, family = "helvetica"),
                 box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2))
 
 # Use diamondGrob as the box_fn in boxGrob.
 diamond_box <- boxGrob("NPK?", box_fn = diamondGrob,
                        x = 0.28, y = 0.3,
-                       txt_gp = gpar(col = "black", fontsize = 8, family = "helvetica"),
+                       txt_gp = gpar(col = "black", fontsize = 7, family = "helvetica"),
                        box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2))
 
 pred2 <- boxGrob("Prediction on Test Data: \nPK or UF?",
                  x = 0.78, y = 0.3,
-                 txt_gp = gpar(col = "black", fontsize = 8, family = "helvetica"),
+                 txt_gp = gpar(col = "black", fontsize = 7, family = "helvetica"),
                  box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2))
 
 concl <- boxGrob("Prediction \nconcluded",
                  x = 0.78, y = 0.1,
-                 txt_gp = gpar(col = "black", fontsize = 8, family = "helvetica"),
+                 txt_gp = gpar(col = "black", fontsize = 7, family = "helvetica"),
                  box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2))
 
 concl2 <- boxGrob("Prediction \nconcluded",
                   x = 0.28, y = 0.1,
-                  txt_gp = gpar(col = "black", fontsize = 8, family = "helvetica"),
+                  txt_gp = gpar(col = "black", fontsize = 7, family = "helvetica"),
                   box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2))
 
 No <- boxGrob("No",
               x = 0.45, y = 0.3, width = 0.05,
-              txt_gp = gpar(col = "black", fontsize = 8, family = "helvetica"),
+              txt_gp = gpar(col = "black", fontsize = 7, family = "helvetica"),
               box_gp = gpar(fill = "white", col = "white"))
 
 Yes <- boxGrob("Yes",
                x = 0.28, y = 0.22, height = 0.025,
-               txt_gp = gpar(col = "black", fontsize = 8, family = "helvetica"),
+               txt_gp = gpar(col = "black", fontsize = 7, family = "helvetica"),
                box_gp = gpar(fill = "white", col = "white"))
 
 train; test; mod1; mod2; pred; diamond_box; pred2; concl; concl2
@@ -116,8 +116,8 @@ cc4 <- connectGrob(test, pred, "Z", arrow_obj = custom_arrow)
 x_coords <- attr(cc4, "line")$x
 y_coords <- attr(cc4, "line")$y
 
-x_coords[2] <- x_coords[2] - unit(1, "mm")
-x_coords[3] <- x_coords[3] - unit(1, "mm")
+x_coords[2] <- x_coords[2] + unit(1, "mm")
+x_coords[3] <- x_coords[3] + unit(1, "mm")
 x_coords[4] <- coords(pred)$left + coords(pred)$width/2 + unit(1.7, "mm")
 y_coords[3] <- y_coords[3] + unit(16, "mm")
 y_coords[4] <- y_coords[4] + unit(16, "mm")
@@ -181,18 +181,19 @@ ggplot(data = Res) +
   scale_fill_manual(values = cols, labels = genotype_labels_legend) +
   theme(legend.position = "bottom",
         legend.margin = margin(t = -8),
+        legend.box.margin = margin(0, 0, 0, -15),
         strip.background = element_rect(colour = NA),
-        axis.title.y = element_text(size = 8, family = "Helvetica"),
-        axis.title.x = element_text(size = 8, family = "Helvetica"),
-        axis.text.y = element_text(size = 8, family = "Helvetica",
+        axis.title.y = element_text(size = 7, family = "Helvetica"),
+        axis.title.x = element_text(size = 7, family = "Helvetica"),
+        axis.text.y = element_text(size = 7, family = "Helvetica",
                                    colour = "black"),
-        axis.text.x = element_text(size = 8, family = "Helvetica",
+        axis.text.x = element_text(size = 7, family = "Helvetica",
                                    colour = "black"),
-        legend.text = element_markdown(size = 8, family = "Helvetica",
+        legend.text = element_markdown(size = 7, family = "Helvetica",
                                        colour = "black"),
-        legend.title = element_text(size = 8, family = "Helvetica",
+        legend.title = element_text(size = 7, family = "Helvetica",
                                     colour = "black"),
-        strip.text = element_text(size = 8, family = "Helvetica",
+        strip.text = element_text(size = 7, family = "Helvetica",
                                   face = "bold"),
         legend.key.size = unit(5, "mm"))+
   NULL -> g1; g1
@@ -227,17 +228,17 @@ ggplot(data = tax_summary, aes(x = Soil, y = RA, fill = Order))+
     legend.key.size = unit(0.25, 'cm'),
     legend.key.spacing.y = unit(0, 'cm'),
     legend.justification = c(0.75, 0),
-    axis.title.y = element_text(size = 8, family = "Helvetica"),
-    axis.text.y = element_text(size = 8, family = "Helvetica", colour = "black"),
-    axis.text.x = element_text(size = 8, family = "Helvetica", colour = "black"),
-    legend.text = element_text(size = 8, family = "Helvetica"),
-    legend.title = element_text(size = 8, family = "Helvetica"),
-    strip.text = element_text(size = 8, family = "Helvetica", face = "bold")
+    axis.title.y = element_text(size = 7, family = "Helvetica"),
+    axis.text.y = element_text(size = 7, family = "Helvetica", colour = "black"),
+    axis.text.x = element_text(size = 7, family = "Helvetica", colour = "black"),
+    legend.text = element_text(size = 7, family = "Helvetica"),
+    legend.title = element_text(size = 7, family = "Helvetica"),
+    strip.text = element_text(size = 7, family = "Helvetica", face = "bold")
   )+
   NULL -> g2; g2
 
 #  Combining plots ----
-tg <- tableGrob(Ratio_amount, theme = ttheme_default(base_size = 8), rows = NULL)
+tg <- tableGrob(Ratio_amount, theme = ttheme_default(base_size = 7), rows = NULL)
 
 gg1 <- plot_grid(grob, tg,
                  labels = c("A", "C"),
@@ -247,4 +248,4 @@ gg2 <- ggarrange(g1, g2, labels = c("B", "D"), ncol = 1, heights = c(0.5, 0.5))
 gg <- ggarrange(gg1, gg2, ncol = 2)
 
 ggsave(filename = "Figure3_Askov_prediction.pdf", plot = gg,
-       width = 210, height = 200, units = "mm")
+       width = 180, height = 200, units = "mm")
