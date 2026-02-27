@@ -93,5 +93,5 @@ final_plot
 
 # Save the final figure as a PDF file.
 ggsave("Figure2_Askov_WT.pdf", final_plot, 
-       width = 21, height = 23, units = "cm")
+       width = 18, height = 22, units = "cm")
 
