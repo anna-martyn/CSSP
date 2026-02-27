@@ -149,11 +149,11 @@ df_order <- data.frame(
 
 df.long <- df_order %>%
   pivot_longer(cols = -c(ASVid, Order), names_to = "sampleID", values_to = "RA") %>%
-  left_join(design %>% select(SampleID, Genotype), by = c("sampleID" = "SampleID")) %>%
+  left_join(design %>% select(SampleID, Genotype, Soil), by = c("sampleID" = "SampleID")) %>%
   filter(Genotype == "Soil")
 
 df.long_order <- df.long %>%
-  group_by(Order, sampleID) %>%
+  group_by(Order, sampleID, Soil) %>%
   summarise(RA = sum(RA, na.rm = TRUE), .groups = "drop")
 
 top_orders <- df.long_order %>%
@@ -249,12 +249,12 @@ top_row <- s + plot_list[[1]] + plot_list[[2]] + plot_list[[3]] + s +
 bottom_row <- plot_list[[4]] | plot_list[[5]] | plot_list[[6]] | plot_list[[7]]
 
 # Combine both rows with a single legend and update the text sizes.
-final_plot <- top_row / bottom_row + 
+final_plot <- (top_row / bottom_row) + 
   plot_layout(guides = "collect") & 
   theme(
     legend.position = "right",
-    legend.text  = element_text(size = 6),
-    legend.title = element_text(size = 6)
+    legend.text  = element_text(size = 8),
+    legend.title = element_text(size = 8)
   )
 
 # Update the pie chart title size and reduce the distance to the pies for both rows.

@@ -47,12 +47,12 @@ main_theme <- theme(panel.background=element_blank(),
                     axis.line.y=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
                     axis.text = element_text(size = 8, color = "black"),
-                    legend.text = element_text(size=8, color = "black"),
+                    legend.text = element_text(size = 8, color = "black"),
                     legend.key=element_blank(),
                     axis.title.y = element_text(size = 8),
                     legend.position="none",
                     legend.background=element_blank(),
-                    plot.title = element_text(size=8, hjust=1))
+                    plot.title = element_text(size = 8, hjust=1))
 
 # Make summary file of minimum and maximum values, mean, median and standard deviation.
 chao_summarise <- index_bulk%>%
@@ -87,8 +87,9 @@ p1 <- ggplot(index_bulk, aes(x=Soil, y=value, fill=Soil)) +
   geom_jitter(position=position_jitter(width=0, height=0.17), size=1, alpha=1) +
   scale_fill_manual(values=as.character(colors$color)) +
   labs(x="", y="Chao1 index") + 
-  geom_text(data=label_df, aes(x=Soil, y=y_position, label=Letters), inherit.aes=FALSE, size=8/.pt) +
+  geom_text(data=label_df, aes(x=Soil, y=y_position, label=Letters), inherit.aes=FALSE, size = 8/.pt) +
   main_theme+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
   NULL
 
 p1

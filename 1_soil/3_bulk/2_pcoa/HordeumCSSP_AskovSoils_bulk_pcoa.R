@@ -87,12 +87,12 @@ main_theme <- theme(panel.background=element_blank(),
                     axis.line.y=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
                     axis.text = element_text(size = 8, color = "black"),
-                    legend.text = element_text(size=8, color = "black"),
-                    legend.title = element_text(size=8, color = "black",
+                    legend.text = element_text(size = 8, color = "black"),
+                    legend.title = element_text(size = 8, color = "black",
                                                 hjust = 0.5, margin = margin(b = -2)),
                     legend.key=element_blank(),
                     axis.title.y = element_text(size = 8),
-                    text=element_text(size=8, color="black"),
+                    text=element_text(size = 8, color="black"),
                     legend.position="right",
                     legend.margin = margin(l = -10),
                     legend.background=element_blank(),
@@ -108,12 +108,13 @@ p <- ggplot(points, aes(x=x, y=y, colour=Soil)) +
   labs(x=paste("PCoA 1 (", format(100 * eig[1] / sum(eig), digits=4), "%)", sep=""),
        y=paste("PCoA 2 (", format(100 * eig[2] / sum(eig), digits=4), "%)", sep="")) +
   main_theme+
+  scale_x_continuous(breaks = seq(-0.4, 0.4, by = 0.2))+
   NULL
 
 p
 
 # Save the plot.
-ggsave(paste("Hordeum_bulk_PCoA.pdf", sep=""), p, width=5, height=5, units = "cm")
+ggsave(paste("Hordeum_bulk_PCoA.pdf", sep=""), p, width = 5, height = 5, units = "cm")
 saveRDS(p, file = "Hordeum_bulk_PCoA.rds")
 saveRDS(p, file = "../5_final_figure/Hordeum_bulk_PCoA.rds")
 
