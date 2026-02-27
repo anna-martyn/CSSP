@@ -53,17 +53,19 @@ df.long_order <- df.long %>%
   group_by(Order, sampleID, Soil) %>%
   summarise(RA=sum(RA, na.rm=TRUE), .groups="drop")
 
-# Identify the top 20 bacterial orders by mean RA across all soil samples.
-top20_orders <- df.long_order %>%
-  group_by(Order) %>%
-  summarise(MeanRA=mean(RA, na.rm=TRUE), .groups="drop") %>%
-  arrange(desc(MeanRA)) %>%
-  slice_head(n=20) %>%
-  pull(Order)
+# Identify the top 20 bacterial orders per soil type.
+top_orders <- df.long_order %>%
+  group_by(Soil, Order) %>%
+  summarise(MeanRA=mean(RA), .groups="drop") %>%
+  group_by(Soil) %>%
+  slice_max(MeanRA, n=20) %>%
+  ungroup() %>%
+  pull(Order) %>%
+  unique()
 
 # Group the remaining orders as "Other" and sort alphabetically.
 df.long_order <- df.long_order %>%
-  mutate(Order = ifelse(Order %in% top20_orders, Order, "Other")) %>%
+  mutate(Order = ifelse(Order %in% top_orders, Order, "Other")) %>%
   mutate(Order = factor(Order, levels=c(sort(unique(Order[Order!="Other"])), "Other"))) %>%
   mutate(Soil = factor(Soil, levels=c("NPK","PK","UF")))
 
@@ -98,7 +100,7 @@ p1 <- ggplot(df.long_order, aes(x=sampleID, y=RA, fill=Order)) +
   theme(axis.text.x=element_blank(),
         strip.text.x=element_text(size=8, face="bold"),
         axis.title.x=element_blank()) +
-  guides(fill=guide_legend(nrow=21))
+  guides(fill=guide_legend(ncol=1))
 
 p1
 
@@ -109,9 +111,9 @@ saveRDS(p1, file="../5_final_figure/Hordeum_bulk_order_top20_RA_stackedbp.rds")
 
 # Now we repeat the plot but showing the mean RA of bacterial orders across the samples of the same soil type.
 
-## Collapse non-top20 orders as "Other" using the same top20_orders.
+## Collapse non-top20 orders as "Other" using the same top_orders.
 df.long2 <- df.long %>%
-  mutate(Order = ifelse(Order %in% top20_orders, Order, "Other"))
+  mutate(Order = ifelse(Order %in% top_orders, Order, "Other"))
 
 ## Sum the RA per sample per order.
 df.sample_order <- df.long2 %>%
@@ -133,7 +135,7 @@ p2 <- ggplot(df.mean_order, aes(x=Soil, y=RA, fill=Order)) +
   ylab("Mean relative abundance") +
   labs(fill="Bacterial order") + 
   xlab("") +
-  guides(fill=guide_legend(nrow=21))
+  guides(fill=guide_legend(ncol=1))
 
 p2
 

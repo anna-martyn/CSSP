@@ -156,12 +156,14 @@ df.long_order <- df.long %>%
   group_by(Order, sampleID) %>%
   summarise(RA = sum(RA, na.rm = TRUE), .groups = "drop")
 
-top20_orders <- df.long_order %>%
-  group_by(Order) %>%
-  summarise(MeanRA = mean(RA, na.rm = TRUE), .groups = "drop") %>%
-  arrange(desc(MeanRA)) %>%
-  slice_head(n = 20) %>%
-  pull(Order)
+top_orders <- df.long_order %>%
+  group_by(Soil, Order) %>%
+  summarise(MeanRA=mean(RA), .groups="drop") %>%
+  group_by(Soil) %>%
+  slice_max(MeanRA, n=20) %>%
+  ungroup() %>%
+  pull(Order) %>%
+  unique()
 
 # Make a function to get the counts for each bacterial order.
 get_order_counts <- function(df) {
@@ -192,7 +194,7 @@ for(name in ASV_names) {
   df <- get(name)
   
   # Add top20 bacterial orders or "Other".
-  df$Order <- ifelse(df$Order %in% top20_orders, df$Order, "Other")
+  df$Order <- ifelse(df$Order %in% top_orders, df$Order, "Other")
   
   # Set the factor levels: alphabetically for all except "Other" last.
   df$Order <- factor(df$Order, levels = c(sort(setdiff(unique(df$Order), "Other")), "Other"))
