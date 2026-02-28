@@ -42,9 +42,9 @@ main_theme <- theme(
   axis.line.x=element_line(color="black"),
   axis.line.y=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text.x = element_text(size = 8, angle = 45, vjust = 1, 
+  axis.text.x = element_text(size = 6, angle = 45, vjust = 1, 
                              hjust=1, colour = "black"),
-  axis.text.y = element_text(size = 8, colour = "black"),
+  axis.text.y = element_text(size = 6, colour = "black"),
   legend.background=element_blank(),
   legend.key=element_blank(),
   text=element_text(family="sans")
@@ -83,7 +83,7 @@ Labels_dt[,y_pos:=y_pos + ifelse(Plant_species == "Lotus", 0.01, 0.2)]
 p1 <- ggplot(Lotus_weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   geom_text(data=Labels_dt[Plant_species == "Lotus"], 
             aes(x=Genotype, y = y_pos, label = Letter),
-            inherit.aes=FALSE, size=8/.pt) +
+            inherit.aes=FALSE, size = 6/.pt) +
   geom_boxplot(width = 0.5, position = dodge, outlier.size = 0.5)+
   scale_fill_manual(values=as.character(colors$color)) +
   facet_wrap(~Soil_type, nrow=1)+
@@ -93,14 +93,14 @@ p1 <- ggplot(Lotus_weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   ggtitle("Lotus")+
   theme(
     legend.position="none", 
-    plot.title = element_text(size = 8, face = "bold"),
-    legend.title = element_text(size = 8, colour = "black"),
-    strip.text = element_text(size = 8, colour = "black", face = "bold"),
-    legend.text = element_text(size = 8, colour = "black"),
+    plot.title = element_text(size = 6, face = "bold"),
+    legend.title = element_text(size = 6, colour = "black"),
+    strip.text = element_text(size = 6, colour = "black", face = "bold"),
+    legend.text = element_text(size = 6, colour = "black"),
     axis.title.x = element_blank(),
-    axis.title.y = element_text(size = 8, colour = "black"),
-    axis.text.y = element_text(size = 8, colour = "black"),
-    axis.text.x = element_text(size = 8, angle = 45, vjust = 1,
+    axis.title.y = element_text(size = 6, colour = "black"),
+    axis.text.y = element_text(size = 6, colour = "black"),
+    axis.text.x = element_text(size = 6, angle = 45, vjust = 1,
                                hjust=1, colour = "black"),
     legend.key.size = unit(0.5,"cm")
   )+
@@ -121,7 +121,7 @@ saveRDS(p1, "../8_final_figures/LotusCSSP_AskovSoils_shootfw.rds")
 p2 <- ggplot(Hordeum_weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   geom_text(data=Labels_dt[Plant_species == "Hordeum"], 
             aes(x=Genotype, y = y_pos, label = Letter),
-            inherit.aes=FALSE, size=8/.pt) +
+            inherit.aes=FALSE, size = 6/.pt) +
   geom_boxplot(width=0.5, position = dodge, outlier.size = 0.5)+
   scale_fill_manual(values=as.character(colors$color)) +
   facet_wrap(~Soil_type, scales = "free_x", nrow=1)+
@@ -131,14 +131,14 @@ p2 <- ggplot(Hordeum_weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   ggtitle("Hordeum")+
   theme(
     legend.position="none", 
-    plot.title = element_text(size = 8, face = "bold"),
-    legend.title = element_text(size = 8, colour = "black"),
-    strip.text = element_text(size = 8, colour = "black", face = "bold"),
-    legend.text = element_text(size = 8, colour = "black"),
+    plot.title = element_text(size = 6, face = "bold"),
+    legend.title = element_text(size = 6, colour = "black"),
+    strip.text = element_text(size = 6, colour = "black", face = "bold"),
+    legend.text = element_text(size = 6, colour = "black"),
     axis.title.x = element_blank(),
     axis.title.y = element_blank(),
-    axis.text.y = element_text(size = 8, colour = "black"),
-    axis.text.x = element_text(size = 8, angle = 45, vjust = 1,
+    axis.text.y = element_text(size = 6, colour = "black"),
+    axis.text.x = element_text(size = 6, angle = 45, vjust = 1,
                                hjust=1, colour = "black"),
     legend.key.size = unit(0.5,"cm")
   )+

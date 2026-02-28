@@ -295,8 +295,8 @@ p_tax <- ggplot(tax_bar, aes(x = ASVid, y=1, fill = Order)) +
   theme_void() +
   labs(fill = "Bacterial order") +
   theme(legend.position="none",
-        legend.text = element_text(color = "black", size = 8),
-        legend.title = element_text(color = "black", size = 8, face = "bold"),
+        legend.text = element_text(color = "black", size = 6),
+        legend.title = element_text(color = "black", size = 6, face = "bold"),
         legend.key.size = unit(0.25, 'cm'),
         legend.key.spacing.y = unit(0, 'cm'),
         plot.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "lines")
@@ -343,13 +343,13 @@ heatmap <- ggplot(data = htmp_hiabn,
     panel.spacing = unit(0.2,'lines'),
     strip.background = element_rect(colour = NA),
     strip.placement = "outside",
-    axis.title.y = element_text(size = 8, family = "Helvetica",
+    axis.title.y = element_text(size = 6, family = "Helvetica",
                                 colour = "black", face = "bold"),
-    axis.text.y = element_markdown(size = 8, family = "Helvetica",
+    axis.text.y = element_markdown(size = 6, family = "Helvetica",
                                    colour = "black"),
-    legend.text = element_text(size = 8, family = "Helvetica"),
-    legend.title = element_text(size = 8, family = "Helvetica"),
-    strip.text = element_text(size = 8, family = "Helvetica",
+    legend.text = element_text(size = 6, family = "Helvetica"),
+    legend.title = element_text(size = 6, family = "Helvetica"),
+    strip.text = element_text(size = 6, family = "Helvetica",
                               face = "bold"),
     plot.margin = margin(t = 0, r = 0, b = 0.5, l = 0, unit = "lines")
   )+
@@ -374,10 +374,10 @@ bar_plot <- ggplot(data = mean_RA_res,
     axis.title.x = element_blank(),
     panel.spacing = unit(0.2,'lines'),
     panel.grid = element_blank(),
-    axis.text.x = element_text(size = 8, family = "Helvetica",
+    axis.text.x = element_text(size = 6, family = "Helvetica",
                                colour = "black"),
-    legend.text = element_text(size = 8, family = "Helvetica"),
-    legend.title = element_text(size = 8, family = "Helvetica"),
+    legend.text = element_text(size = 6, family = "Helvetica"),
+    legend.title = element_text(size = 6, family = "Helvetica"),
     strip.text = element_blank(),
     plot.margin = margin(t = 0, r = 0, b = 0.5, l = 0, unit = "lines")
   )+
@@ -387,7 +387,7 @@ bar_plot <- ggplot(data = mean_RA_res,
 p_axis_title <- ggplot() +
   theme_void() +
   geom_text(aes(x = -10, y = 0, label = "RA in WT"),
-            fontface = "bold", size = 8/.pt) +
+            fontface = "bold", size = 6/.pt) +
   xlab(NULL) + ylab(NULL)
 
 # Save output files ------------------------------------------------------------

@@ -41,11 +41,11 @@ genotype_labels_legend <- c(
 
 # Set the main theme for the plots.
 main_theme <- theme(
-  axis.title = element_text(size = 8, colour = "black"),
-  axis.text = element_text(size = 8, colour = "black"),
-  legend.text = element_markdown(size = 8, colour = "black"),
-  legend.title = element_text(size = 8, colour = "black", face = "bold"),
-  plot.title = element_text(size = 8, colour = "black", face = "bold", 
+  axis.title = element_text(size = 6, colour = "black"),
+  axis.text = element_text(size = 6, colour = "black"),
+  legend.text = element_markdown(size = 6, colour = "black"),
+  legend.title = element_text(size = 6, colour = "black", face = "bold"),
+  plot.title = element_text(size = 6, colour = "black", face = "bold", 
                             hjust = 0.5)
 )
 
@@ -168,7 +168,7 @@ for(i in 1:nrow(Opt)){
 
 # Combine plots for the main figure and save.
 text <- ggplot() +
-  annotate("text", x = 1, y = 1, label = "Hordeum", size = 8/.pt,
+  annotate("text", x = 1, y = 1, label = "Hordeum", size = 6/.pt,
            fontface = "bold", colour = "black") +
   theme(
     panel.background = element_rect(fill = "lightgrey", color = NA),
@@ -185,7 +185,7 @@ text/((CPCoA_plot_Root + theme(legend.position = "none"))+
 
 ggsave("HordeumCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.pdf", CPCoA_PCoA_plot, width = 9, height = 5.5, units = "cm")
 saveRDS(CPCoA_PCoA_plot, "HordeumCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.rds")
-saveRDS(CPCoA_PCoA_plot, "../6_final_figures/HordeumCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.rds")
+saveRDS(CPCoA_PCoA_plot, "../8_final_figures/HordeumCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.rds")
 
 ## Also save an inidivudal plot as we'll use the legend of the plot for the final figure later.
 saveRDS(CPCoA_plot_Root, "HordeumCSSP_AskovSoils_cpcoa_with_legend.rds")
@@ -203,7 +203,7 @@ ggarrange(
 ) -> PCoA_plots
 
 PCoA_plots <- annotate_figure(
-  PCoA_plots, top = text_grob("Hordeum", size = 8, face = "bold")
+  PCoA_plots, top = text_grob("Hordeum", size = 6, face = "bold")
 )
 
 ggsave("HordeumCSSP_AskovSoils_pcoa_all.pdf", PCoA_plots, width = 9, height = 15, units = "cm")
@@ -217,7 +217,7 @@ ggarrange(
 ) -> CPCoA_plots
 
 CPCoA_plots <- annotate_figure(
-  CPCoA_plots, top = text_grob("Hordeum", size = 8, face = "bold")
+  CPCoA_plots, top = text_grob("Hordeum", size = 6, face = "bold")
 )
 
 ggsave("HordeumCSSP_AskovSoils_cpcoa_all.pdf", CPCoA_plots, width = 12, height = 5.5, units = "cm")

@@ -61,4 +61,4 @@ final_plot <- plot_grid(
 
 # Save final figure.
 ggsave("Figure4_Askov_CSSP.pdf", final_plot, 
-       width = 21, height = 29.7, units = "cm")
+       width = 18, height = 22, units = "cm")
