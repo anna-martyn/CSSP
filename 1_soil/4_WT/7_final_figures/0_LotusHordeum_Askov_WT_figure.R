@@ -30,7 +30,7 @@ p2 <- LotusHordeum_Askov_WT_shootfw_boxplots
 
 p3 <- Lotus_Askov_WT_nodule_cts
 p3_aligned <- p3 + labs(title = " ") +
-  theme(plot.title = element_text(size = 8, color = NA))
+  theme(plot.title = element_text(size = 6, color = NA))
 
 p4 <- Lotus_Askov_WT_cpcoa +
   theme(legend.position = "bottom",
@@ -57,7 +57,7 @@ row1 <- plot_grid(
   ncol = 3,
   rel_widths = c(1.2, 1.2, 0.6),
   labels = c("A","B","C"),
-  label_size = 15,
+  label_size = 12,
   label_fontface = "bold",
   label_x = 0, label_y = 1
 )
@@ -67,7 +67,7 @@ col1 <- ggarrange(
   p5 + theme(legend.spacing.y = unit(0, "pt")),
   ncol = 1,
   labels = c("D", ""),
-  font.label = list(size = 15, face = "bold"),
+  font.label = list(size = 12, face = "bold"),
   common.legend = T,
   legend = "bottom"
 ) + 
@@ -77,7 +77,7 @@ bottom_rows <- plot_grid(
   col1, p6,
   ncol = 2,
   labels = c("", "E"),
-  label_size = 15,
+  label_size = 12,
   rel_widths = c(1/3, 2/3)
 )
 

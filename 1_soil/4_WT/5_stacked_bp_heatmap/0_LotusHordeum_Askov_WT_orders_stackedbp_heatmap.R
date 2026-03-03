@@ -252,13 +252,13 @@ main_theme <- theme(
   axis.line.x=element_line(color="black"),
   axis.line.y=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text=element_text(size=8, color="black"),
-  legend.text=element_text(size=8, color="black"),
+  axis.text=element_text(size = 6, color="black"),
+  legend.text=element_text(size = 6, color="black"),
   legend.key=element_blank(),
-  axis.title.y=element_text(size=8),
+  axis.title.y=element_text(size = 6),
   legend.position="right",
   legend.background=element_blank(),
-  text=element_text(family="sans", size=8, color="black")
+  text=element_text(family="sans", size = 6, color="black")
 )
 
 # Set the colours for the bacterial orders.
@@ -276,8 +276,8 @@ p1 <- ggplot(df.mean_order, aes(x=Soil, y=RA, fill=Order)) +
   guides(fill=guide_legend(nrow=21)) +
   facet_nested(~ Plant + Compartment, scales="free_x", space="free_x") +
   theme(
-    axis.text.x = element_text(size=8, color="black", angle=0, vjust=1),
-    strip.text.x = element_text(size=8, face="bold"),
+    axis.text.x = element_text(size = 6, color="black", angle=0, vjust=1),
+    strip.text.x = element_text(size = 6, face="bold"),
     legend.key.size = unit(0.25, 'cm'),
     legend.margin = margin(l = -8)
   )
@@ -435,7 +435,7 @@ df.plot <- df.plot %>%
 # Then make the final heatmap.
 p_heatmap <- ggplot(df.plot, aes(x=Soil, y=Order, fill=RA)) +
   geom_tile(color="grey50") +
-  geom_text(aes(label=letter), na.rm=TRUE, size=3) +
+  geom_text(aes(label=letter), na.rm=TRUE, size = 6/.pt) +
   scale_fill_gradientn(
     colors = colors,
     values = values,
@@ -456,16 +456,16 @@ p_heatmap <- ggplot(df.plot, aes(x=Soil, y=Order, fill=RA)) +
   xlab(NULL) +
   ylab("Bacterial order") +
   theme(
-    axis.text.x = element_text(size=8, angle=0, vjust=1, hjust=0.5, 
+    axis.text.x = element_text(size = 6, angle=0, vjust=1, hjust=0.5, 
                                colour = "black"),
     axis.title.y = element_blank(),
-    axis.title.x = element_text(size=8, colour = "black"),
+    axis.title.x = element_text(size = 6, colour = "black"),
     panel.grid = element_blank(),
     panel.background = element_blank(),
     strip.background = element_rect(fill="grey90", color=NA),
-    strip.text = element_text(size=8, face="bold"),
-    legend.text = element_text(size=8, colour = "black"),
-    legend.title = element_text(size=8, colour = "black"),
+    strip.text = element_text(size = 6, face="bold"),
+    legend.text = element_text(size = 6, colour = "black"),
+    legend.title = element_text(size = 6, colour = "black"),
     legend.position = "bottom",
     plot.margin = margin(r = 10, l = 20)
   )

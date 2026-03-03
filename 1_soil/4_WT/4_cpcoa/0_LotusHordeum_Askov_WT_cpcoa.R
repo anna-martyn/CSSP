@@ -71,14 +71,14 @@ main_theme <- theme(panel.background=element_blank(),
                     axis.line.x=element_line(color="black"),
                     axis.line.y=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
-                    axis.text = element_text(size = 8, color = "black"),
-                    legend.text = element_text(size = 8, color = "black"),
+                    axis.text = element_text(size = 6, color = "black"),
+                    legend.text = element_text(size = 6, color = "black"),
                     legend.key=element_blank(),
-                    axis.title.y = element_text(size = 8),
-                    text=element_text(size = 8, color="black"),
+                    axis.title.y = element_text(size = 6),
+                    text=element_text(size = 6, color="black"),
                     legend.position="none",
                     legend.background=element_blank(),
-                    plot.title = element_text(size = 8, hjust=0.9))
+                    plot.title = element_text(size = 6, hjust=0.9))
 
 # Perform the Lotus cpcoa analysis.
 sqrt_transform <- T
@@ -129,10 +129,10 @@ p1 <- ggplot(points, aes(x=x, y=y, color=Soil, shape=Compartment)) +
                                     "% of variance; p<", format(p.val, digits=2), sep="")) +
   main_theme +
   theme(legend.position="right",
-        legend.title = element_text(size = 8),
-        axis.title.x = element_text(size = 8),
-        plot.title = element_text(face="bold", size = 8, hjust=0),
-        plot.subtitle = element_text(size = 8, hjust=0)) 
+        legend.title = element_text(size = 6),
+        axis.title.x = element_text(size = 6),
+        plot.title = element_text(face="bold", size = 6, hjust=0),
+        plot.subtitle = element_text(size = 6, hjust=0)) 
 
 p1
 
@@ -191,10 +191,10 @@ p2 <- ggplot(points, aes(x=x, y=y, color=Soil, shape=Compartment)) +
                                     "% of variance; p<", format(p.val, digits=2), sep="")) +
   main_theme +
   theme(legend.position="right",
-        legend.title = element_text(size = 8),
-        axis.title.x = element_text(size = 8),
-        plot.title = element_text(face="bold", size = 8, hjust=0),
-        plot.subtitle = element_text(size = 8, hjust=0)) 
+        legend.title = element_text(size = 6),
+        axis.title.x = element_text(size = 6),
+        plot.title = element_text(face="bold", size = 6, hjust=0),
+        plot.subtitle = element_text(size = 6, hjust=0)) 
 
 p2
 

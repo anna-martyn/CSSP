@@ -101,8 +101,8 @@ main_theme <- theme(panel.background=element_blank(),
                     axis.line.x=element_line(color="black"),
                     axis.line.y=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
-                    axis.text.x = element_text(size = 8, colour = "black"),
-                    axis.text.y = element_text(size = 8, colour = "black"),
+                    axis.text.x = element_text(size = 6, colour = "black"),
+                    axis.text.y = element_text(size = 6, colour = "black"),
                     legend.background=element_blank(),
                     legend.key=element_blank(),
                     text=element_text(family="sans"))
@@ -112,7 +112,7 @@ weight_summary$y_pos[5:6] <- c(0.9, 0.6)
 p <- ggplot(weight, aes(x=Soil_type, y=Fresh_weight, fill=Soil_type)) +
   geom_boxplot(width=0.3, alpha=0.7, outlier.size = 1.5) +
   geom_text(data=weight_summary, aes(x=Soil_type, y=y_pos * 1.2, label=label),
-            inherit.aes=FALSE, size=8/.pt) +
+            inherit.aes=FALSE, size = 6/.pt) +
   geom_blank(data=upper_limits, aes(y=Fresh_weight)) +
   scale_fill_manual(values=colors$color) +
   facet_wrap(~Plant_species, scales="free_y") +
@@ -120,9 +120,9 @@ p <- ggplot(weight, aes(x=Soil_type, y=Fresh_weight, fill=Soil_type)) +
   ylab("Shoot fresh weight/plant (g)") +
   theme(
     legend.position="none",
-    strip.text.x = element_text(size = 8, face = "bold"),
+    strip.text.x = element_text(size = 6, face = "bold"),
     axis.title.x = element_blank(),
-    axis.title.y = element_text(size = 8, colour = "black")
+    axis.title.y = element_text(size = 6, colour = "black")
   ) +
   scale_y_continuous(
     breaks = scales::pretty_breaks(n = 4),

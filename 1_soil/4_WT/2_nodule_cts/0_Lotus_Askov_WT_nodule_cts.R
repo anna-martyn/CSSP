@@ -63,8 +63,8 @@ main_theme <- theme(panel.background=element_blank(),
                     axis.line.x=element_line(color="black"),
                     axis.line.y=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
-                    axis.text.x = element_text(size = 8, colour = "black"),
-                    axis.text.y = element_text(size = 8), colour = "black",
+                    axis.text.x = element_text(size = 6, colour = "black"),
+                    axis.text.y = element_text(size = 6), colour = "black",
                     legend.background=element_blank(),
                     legend.key=element_blank(),
                     text=element_text(family="sans"))
@@ -74,14 +74,14 @@ p1 <- ggplot(nod, aes(x=Soil_type, y=pink, fill=Soil_type)) +
   geom_boxplot(width=0.3, alpha=0.7, outlier.size = 1.5)+
   scale_fill_manual(values=as.character(colors$color)) +
   geom_text(data=letters_df, aes(x=Soil_type, y=y_pos*1.1, label=label),
-            inherit.aes=FALSE, size=8/.pt) +
+            inherit.aes=FALSE, size = 6/.pt) +
   main_theme +
   ylab("Pink nodule counts/plant")+
   scale_y_continuous()+
   theme(legend.position="none", 
-        strip.text.x = element_text(size = 8),
+        strip.text.x = element_text(size = 6),
         axis.title.x = element_blank(),
-        axis.title.y = element_text(size = 8, colour = "black"),
+        axis.title.y = element_text(size = 6, colour = "black"),
         legend.key.size = unit(1,"cm"))
 p1
 
