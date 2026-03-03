@@ -143,14 +143,14 @@ main_theme <- theme(panel.background=element_blank(),
                     panel.border=element_rect(colour="black", fill=NA, linewidth=1),
                     axis.line=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
-                    axis.text=element_text(size=8, color="black"),
-                    legend.text=element_text(size=8),
+                    axis.text=element_text(size = 6, color="black"),
+                    legend.text=element_text(size = 6),
                     legend.key=element_blank(),
                     legend.key.size = unit(0.25, 'cm'),
-                    axis.title.y=element_text(size=8),
+                    axis.title.y=element_text(size = 6),
                     legend.margin = margin(l = -8),
                     legend.position=c(0.95,0.9),
-                    text=element_text(family="sans", size=8))
+                    text=element_text(family="sans", size = 6))
 
 p <- ggplot(df_order_summary, aes(x=Order, y=Mean_RA, fill=Soil)) +
   geom_bar(stat="identity", position=position_dodge(width=0.9),
@@ -161,13 +161,13 @@ p <- ggplot(df_order_summary, aes(x=Order, y=Mean_RA, fill=Soil)) +
             aes(x=Order, y=Mean_RA + SE_RA + 0.005, label=Letter, fill=Soil),
             position=position_dodge(width=0.9),
             inherit.aes=FALSE,
-            vjust=0, size=3, family="sans") +
+            vjust=0, size = 6/.pt, family="sans") +
   scale_fill_manual(values=colors) +
   labs(x="", y="Relative Abundance") +
   expand_limits(y = 0) + 
   scale_y_continuous(expand=c(0,0), limits = c(0,0.15), breaks = seq(0, 0.15, 0.05)) +
   main_theme +
-  theme(axis.text.x=element_text(size=8, angle=50, hjust=1))
+  theme(axis.text.x=element_text(size = 6, angle=50, hjust=1))
 
 p
 
@@ -205,12 +205,12 @@ p_sig <- ggplot(df_order_summary_sig, aes(x=Order, y=Mean_RA, fill=Soil)) +
             aes(x=Order, y=Mean_RA + SE_RA + 0.005, label=Letter, fill=Soil),
             position=position_dodge(width=0.9),
             inherit.aes=FALSE,
-            vjust=0, size=3, family="sans") +
+            vjust=0, size = 6/.pt, family="sans") +
   scale_fill_manual(values=colors) +
   labs(x="", y="Relative Abundance") +
   scale_y_continuous(expand=c(0,0), limits = c(0, 0.15), breaks = seq(0, 0.15, 0.05)) +
   main_theme +
-  theme(axis.text.x=element_text(size=8, angle=50, hjust=1),
+  theme(axis.text.x=element_text(size = 6, angle=50, hjust=1),
         legend.position = "right",
         legend.background=element_blank())
 

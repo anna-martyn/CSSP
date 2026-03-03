@@ -86,21 +86,21 @@ main_theme <- theme(panel.background=element_blank(),
                     axis.line.x=element_line(color="black"),
                     axis.line.y=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
-                    axis.text = element_text(size = 8, color = "black"),
-                    legend.text = element_text(size = 8, color = "black"),
-                    legend.title = element_text(size = 8, color = "black",
+                    axis.text = element_text(size = 6, color = "black"),
+                    legend.text = element_text(size = 6, color = "black"),
+                    legend.title = element_text(size = 6, color = "black",
                                                 hjust = 0.5, margin = margin(b = -2)),
                     legend.key=element_blank(),
-                    axis.title.y = element_text(size = 8),
-                    text=element_text(size = 8, color="black"),
+                    axis.title.y = element_text(size = 6),
+                    text=element_text(size = 6, color="black"),
                     legend.position="right",
                     legend.margin = margin(l = -10),
                     legend.background=element_blank(),
-                    plot.title = element_text(size=8, hjust=0.9),
+                    plot.title = element_text(size = 6, hjust=0.9),
                     legend.key.spacing.y = unit(-0.3, 'cm'))
 
 p <- ggplot(points, aes(x=x, y=y, colour=Soil)) +
-  geom_point(alpha=0.7, size=3) +
+  geom_point(alpha=0.7, size = 3) +
   geom_segment(data=segments,
                mapping=aes(x=x, y=y, xend=seg_x, yend=seg_y, colour=Soil,),
                alpha=0.5, show.legend=FALSE) +

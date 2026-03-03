@@ -63,8 +63,8 @@ p <- ggVennDiagram(
   venn_data,
   label = "count",
   label_alpha = 0,
-  label_size = 8/.pt,
-  set_size = 8/.pt,
+  label_size = 6/.pt,
+  set_size = 6/.pt,
   edge_size = 0.5
 ) +
   scale_fill_gradient(low = "white", high = "white") +
@@ -253,15 +253,15 @@ final_plot <- (top_row / bottom_row) +
   plot_layout(guides = "collect") & 
   theme(
     legend.position = "right",
-    legend.text  = element_text(size = 8),
-    legend.title = element_text(size = 8)
+    legend.text  = element_text(size = 6),
+    legend.title = element_text(size = 6)
   )
 
 # Update the pie chart title size and reduce the distance to the pies for both rows.
 final_plot <- final_plot & 
   theme(
     plot.title = element_text(
-      size = 8, 
+      size = 6, 
       hjust = 0.5,
       margin = margin(t=10, b = 1)
     )

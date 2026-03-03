@@ -80,13 +80,13 @@ main_theme <- theme(
   axis.line.x=element_line(color="black"),
   axis.line.y=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text=element_text(size=8, color="black"),
-  legend.text=element_text(size=8, color="black"),
+  axis.text=element_text(size = 6, color="black"),
+  legend.text=element_text(size = 6, color="black"),
   legend.key=element_blank(),
-  axis.title.y=element_text(size=8),
+  axis.title.y=element_text(size = 6),
   legend.position="right",
   legend.background=element_blank(),
-  text=element_text(family="sans", size=8, color="black")
+  text=element_text(family="sans", size = 6, color="black")
 )
 
 p1 <- ggplot(df.long_order, aes(x=sampleID, y=RA, fill=Order)) +
@@ -98,7 +98,7 @@ p1 <- ggplot(df.long_order, aes(x=sampleID, y=RA, fill=Order)) +
   ylab("Relative abundance") +
   labs(fill="Bacterial order") + 
   theme(axis.text.x=element_blank(),
-        strip.text.x=element_text(size=8, face="bold"),
+        strip.text.x=element_text(size = 6, face="bold"),
         axis.title.x=element_blank()) +
   guides(fill=guide_legend(ncol=1))
 

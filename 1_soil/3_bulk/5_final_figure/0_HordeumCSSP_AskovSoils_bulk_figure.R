@@ -44,8 +44,8 @@ p7_nolegend <- HordeumCSSP_bulk_ASV_overlap_piecharts_nolegend
 legend_p7 <- get_legend(
   p4_aligned + theme(
     legend.position = "right",
-    legend.title = element_text(size = 8),
-    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 6),
+    legend.text = element_text(size = 6),
     legend.key.size = unit(0.25, 'cm')
   )
 )
@@ -56,7 +56,7 @@ row1 <- plot_grid(
   ncol = 3,
   rel_widths = c(0.55, 0.15, 0.3),
   labels = c("A","B","C"),
-  label_size = 15,
+  label_size = 12,
   label_fontface = "bold",
   label_x = 0, label_y = 1,
   axis = "b"
@@ -67,7 +67,7 @@ row2 <- plot_grid(
   ncol = 2,
   rel_widths = c(0.2, 0.8),
   labels = c("D","E"),
-  label_size = 15,
+  label_size = 12,
   label_fontface = "bold",
   label_x = 0, label_y = 1,
   axis = "b"
@@ -78,7 +78,7 @@ row3 <- plot_grid(
   ncol = 3,
   rel_widths = c(0.325,0.5,0.175),
   labels = c("F","",""),
-  label_size = 15,
+  label_size = 12,
   label_fontface = "bold",
   label_x = 0, label_y = 1
 )
