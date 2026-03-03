@@ -199,8 +199,8 @@ p_tax <- ggplot(tax_bar, aes(x=ASVid, y=1, fill=order)) +
   theme_void() +
   labs(fill = "Bacterial order") +
   theme(legend.position="bottom",
-        legend.text = element_text(color="black", size=8),
-        legend.title = element_text(color="black", size=8),
+        legend.text = element_text(color="black", size = 6),
+        legend.title = element_text(color="black", size = 6),
         legend.key.size = unit(0.25, 'cm'),
         legend.key.spacing.y = unit(0, 'cm'),
         plot.margin = margin(c(0.25, 0, 0.25, 0), unit = "lines")
@@ -256,14 +256,14 @@ p_bubble <- ggplot(da_all, aes(x = ASV_ID, y = Genotype, fill = DA)) +
     axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5,
                                size = 6, color = "black"),
     axis.title.x = element_blank(),
-    axis.title.y=element_text(color="black", size=8),
+    axis.title.y=element_text(color="black", size = 6),
     strip.placement = "outside",
     # strip.background = element_rect(fill = "grey80", color = "grey50"),
-    strip.text.y.left = element_text(color = "black", size = 8, hjust = 0.5,
+    strip.text.y.left = element_text(color = "black", size = 6, hjust = 0.5,
                                      face = "bold"),
-    axis.text.y = element_text(color = "black", size = 8),
-    legend.text = element_text(color = "black", size = 8),
-    legend.title = element_text(color = "black", size = 8),
+    axis.text.y = element_text(color = "black", size = 6),
+    legend.text = element_text(color = "black", size = 6),
+    legend.title = element_text(color = "black", size = 6),
     legend.position = "bottom",
     strip.background = element_rect(colour = NA),
     plot.margin = margin(c(0, 0, 0, 0), unit = "lines"),
@@ -299,12 +299,12 @@ p_RA <- ggplot(asv_RA_WT, aes(x=ASVid, y=mean_RA)) +
   theme_bw() +
   ggtitle("Lotus") +
   theme(axis.text.x=element_blank(),
-        plot.title = element_text(color="black", size=8, face = "bold"),
+        plot.title = element_text(color="black", size = 6, face = "bold"),
         axis.ticks.x=element_blank(),
         axis.title.x=element_blank(),
-        axis.text.y=element_text(color="black", size=8),
-        axis.title.y=element_text(color="black", size=8),
-        strip.text = element_text(color="black", size=8, face = "bold"),
+        axis.text.y=element_text(color="black", size = 6),
+        axis.title.y=element_text(color="black", size = 6),
+        strip.text = element_text(color="black", size = 6, face = "bold"),
         strip.placement = "outside",
         strip.background = element_rect(colour = NA),
         plot.margin = margin(c(0, 0, 0, 0), unit = "lines"),
@@ -335,11 +335,14 @@ p_RA
 #----------------------------------------
 
 # Filter out Nodules and rename Rhizo-\nsphere back to Rhizosphere again.
+# asv_RA_WT_no_nod <- asv_RA_WT %>% 
+#   filter(Compartment != "Nod-\nules") %>% 
+#   mutate(Compartment = recode(Compartment, "Rhizo-\nsphere" = "Rhizosphere"),
+#          Compartment = factor(Compartment, levels = c("Rhizosphere", "Root")))
+
 asv_RA_WT_no_nod <- asv_RA_WT %>% 
   filter(Compartment != "Nod-\nules") %>% 
-  mutate(Compartment = recode(Compartment, "Rhizo-\nsphere" = "Rhizosphere"),
-         Compartment = factor(Compartment, levels = c("Rhizosphere", "Root")))
-
+  mutate(Compartment = factor(Compartment, levels = c("Rhizo-\nsphere", "Root")))
 
 p_RA_no_nod <- ggplot(asv_RA_WT_no_nod, aes(x = ASVid, y = mean_RA)) +
   geom_bar(stat="identity", fill="grey50") +
@@ -350,12 +353,12 @@ p_RA_no_nod <- ggplot(asv_RA_WT_no_nod, aes(x = ASVid, y = mean_RA)) +
   theme_bw() +
   ggtitle("Lotus") +
   theme(axis.text.x=element_blank(),
-        plot.title = element_text(color="black", size=8, face="bold"),
+        plot.title = element_text(color="black", size = 6, face="bold"),
         axis.ticks.x=element_blank(),
         axis.title.x=element_blank(),
-        axis.text.y=element_text(color="black", size=8),
-        axis.title.y=element_text(color="black", size=8),
-        strip.text = element_text(color="black", size=8, face="bold"),
+        axis.text.y=element_text(color="black", size = 6),
+        axis.title.y=element_text(color="black", size = 6),
+        strip.text = element_text(color="black", size = 6, face="bold"),
         strip.placement = "outside",
         strip.background = element_rect(colour = NA),
         plot.margin = margin(c(0, 0, 0, 0), unit = "lines"),
@@ -363,7 +366,7 @@ p_RA_no_nod <- ggplot(asv_RA_WT_no_nod, aes(x = ASVid, y = mean_RA)) +
   force_panelsizes(cols = c(1, 1), rows = c(1, 1)) +
   facetted_pos_scales(
     y = list(
-      Compartment == "Rhizosphere" ~ scale_y_continuous(limits = c(0, 0.33), expand = c(0,0)),
+      Compartment == "Rhizo-\nsphere" ~ scale_y_continuous(limits = c(0, 0.33), expand = c(0,0)),
       Compartment == "Root" ~ scale_y_continuous(limits = c(0, 0.33), expand = c(0,0))
     )
   )
@@ -379,13 +382,13 @@ p_tax_clean <- p_tax + theme(legend.position = "none")
 
 # Combine plots vertically
 main_plot <- p_RA / p_tax_clean / (p_bubble + theme(legend.position = "none")) + 
-  plot_layout(heights = c(0.54, 0.04, 0.42))
+  plot_layout(heights = c(0.3, 0.05, 0.65))
 
 final_plot <- main_plot
 final_plot
 
 main_plot2 <- p_RA_no_nod / p_tax_clean / (p_bubble + theme(legend.position = "none")) + 
-  plot_layout(heights = c(0.54, 0.04, 0.42))
+  plot_layout(heights = c(0.35, 0.05, 0.6))
 
 final_plot2 <- main_plot2
 final_plot2

@@ -57,8 +57,8 @@ main_theme <- theme(
   axis.line.x=element_line(color="black"),
   axis.line.y=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text.x = element_text(size = 8, colour = "black"),
-  axis.text.y = element_text(size = 8, colour = "black"),
+  axis.text.x = element_text(size = 6, colour = "black"),
+  axis.text.y = element_text(size = 6, colour = "black"),
   legend.background=element_blank(),
   legend.key=element_blank(),
   text=element_text(family="sans")
@@ -69,15 +69,15 @@ weight_summary$y_pos[2] <- weight_summary$y_pos[2] - 0.015
 p1 <- ggplot(weight, aes(x=Genotype, y=Fresh_weight, fill=Genotype)) +
   geom_boxplot(width=0.3, outlier.color=NA, alpha=0.7) +
   geom_text(data=weight_summary, aes(x=Genotype, y=y_pos*1.2, label=label), 
-            inherit.aes=FALSE, size=8/.pt) +
+            inherit.aes=FALSE, size = 6/.pt) +
   scale_fill_manual(values=colors) +
   main_theme +
   ylab("Shoot fresh weight/plant (g)") +
   theme(
     legend.position="none",
-    plot.title = element_text(size=8, face="bold", hjust=0.5),
+    plot.title = element_text(size = 6, face="bold", hjust=0.5),
     axis.title.x=element_blank(),
-    axis.title.y=element_text(size=8)
+    axis.title.y=element_text(size = 6)
   ) +
   scale_x_discrete(labels=c(
     "WT"="WT",

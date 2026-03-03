@@ -28,8 +28,8 @@ main_theme <- theme(
   axis.line.x=element_line(color="black"),
   axis.line.y=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text.x = element_text(size = 8, colour = "black"),
-  axis.text.y = element_text(size = 8, colour = "black"),
+  axis.text.x = element_text(size = 6, colour = "black"),
+  axis.text.y = element_text(size = 6, colour = "black"),
   legend.background=element_blank(),
   legend.key=element_blank(),
   text=element_text(family="sans")
@@ -74,7 +74,7 @@ p <- ggplot(points, aes(x=x, y=y, color=Genotype)) +
                                   yend = seg_y, color = Genotype),
                alpha=0.5) +
   geom_label(data = text_dt, aes(x = -0.175, y = -0.25, label = text),
-             colour = "black", fill = "grey", alpha = 0.2, size = 8/.pt)+
+             colour = "black", fill = "grey", alpha = 0.2, size = 6/.pt)+
   scale_color_manual(values=colors, labels=legend_labels) +
   guides(color = guide_legend(override.aes = list(linetype = 0))) +
   labs(
@@ -83,12 +83,12 @@ p <- ggplot(points, aes(x=x, y=y, color=Genotype)) +
   ) +
   main_theme +
   theme(
-    plot.title = element_text(face="bold", size=8, hjust=0),
-    legend.text = element_markdown(size=8, color="black"),
-    strip.text = element_text(size = 8, colour = "black", face = "bold"),
+    plot.title = element_text(face="bold", size = 6, hjust=0),
+    legend.text = element_markdown(size = 6, color="black"),
+    strip.text = element_text(size = 6, colour = "black", face = "bold"),
     strip.placement = "outside",
-    axis.title.x=element_text(size = 8, colour = "black"),
-    axis.title.y=element_text(size = 8, colour = "black"),
+    axis.title.x=element_text(size = 6, colour = "black"),
+    axis.title.y=element_text(size = 6, colour = "black"),
     legend.key.size = unit(0.25, "cm")
   )+
   NULL

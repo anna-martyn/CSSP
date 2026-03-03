@@ -39,16 +39,16 @@ main_theme <- theme(panel.background=element_blank(),
                     axis.line.x=element_line(color="black"),
                     axis.line.y=element_line(color="black"),
                     axis.ticks=element_line(color="black"),
-                    axis.text = element_text(size = 8, color = "black"),
-                    # legend.text = element_text(size=8, color = "black"),
-                    legend.text = ggtext::element_markdown(size=8, color = "black"),
+                    axis.text = element_text(size = 6, color = "black"),
+                    # legend.text = element_text(size = 6, color = "black"),
+                    legend.text = ggtext::element_markdown(size = 6, color = "black"),
                     legend.key=element_blank(),
-                    axis.title.y = element_text(size = 8),
-                    text=element_text(size=8, color="black"),
+                    axis.title.y = element_text(size = 6),
+                    text=element_text(size = 6, color="black"),
                     legend.position="right",
                     # legend.background=element_rect(colour="black", fill=NA),
                     legend.background=element_blank(),
-                    plot.title = element_text(size=8, hjust=0.9))
+                    plot.title = element_text(size = 6, hjust=0.9))
 
 # Write the function for making cpcoa and pcoa plots.
 
@@ -100,7 +100,7 @@ run_beta_diversity <- function(asv_table, table_name) {
          y = paste0("CPCo 2 (", round(var_expl[2]*100, 2), "%)")) +
     main_theme +
     ggtitle("Hordeum") +
-    theme(plot.title = element_text(size=8, hjust=0))
+    theme(plot.title = element_text(size = 6, hjust=0))
 
   # Save CPCoA plot
   ggsave(paste0("HordeumSC_cpcoa_", table_name, ".pdf"), CPCoA_plot, width=5, height=5)
@@ -137,7 +137,7 @@ run_beta_diversity <- function(asv_table, table_name) {
            y=paste0("PCo 2 (", round(var_expl[2]*100,2), "%)")) +
       main_theme +
       ggtitle(comp) +
-      theme(plot.title = element_text(size=8, hjust=0))
+      theme(plot.title = element_text(size = 6, hjust=0))
 
     # Save PCoA
     ggsave(paste0("HordeumSC_pcoa_", table_name, "_", comp, ".pdf"), p, width=5, height=5)

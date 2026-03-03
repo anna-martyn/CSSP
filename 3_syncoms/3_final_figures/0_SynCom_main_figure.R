@@ -83,7 +83,7 @@ row1 <- ggarrange(
   ncol = 3,
   widths = c(0.33, 0.2, 0.47),
   labels = c("A","B","C"),
-  font.label = list(size = 15, color = "black", face = "bold"),
+  font.label = list(size = 12, color = "black", face = "bold"),
   align = "v",
   common.legend = T,
   legend = "bottom"
@@ -92,7 +92,7 @@ row1 <- ggarrange(
 row2 <- plot_grid(
   p3,
   labels = "D",
-  label_size = 15,
+  label_size = 12,
   label_fontface = "bold"
 )
 
@@ -140,7 +140,7 @@ row2 <- plot_grid(
 row3 <- ggarrange(p4, p5,
                   nrow = 1,
                   labels = c("E", ""),
-                  font.label = list(size = 15),
+                  font.label = list(size = 12),
                   widths = c(0.57, 0.43),
                   # common.legend = T,
                   # legend = "bottom",
@@ -155,13 +155,13 @@ final_plot <- plot_grid(
   ncol = 1,
   # labels = c("", "", ""),
   # label_size = 15,
-  rel_heights = c(0.3,0.24,0.4,0.06)
+  rel_heights = c(0.3, 0.24, 0.4, 0.06)
 )
 
 final_plot
 
 # Save the combined plot as PDF
-ggsave("Figure_6_SynCom.pdf", final_plot, width = 21, height = 29.7, 
+ggsave("Figure_6_SynCom.pdf", final_plot, width = 18, height = 22, 
        units = "cm")
 
 # pdf("LotusSC_figure.pdf", width = 21/2.54, height = 29.7/2.54)

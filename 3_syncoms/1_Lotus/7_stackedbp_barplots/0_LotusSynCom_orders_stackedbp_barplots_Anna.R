@@ -88,13 +88,13 @@ main_theme <- theme(
   axis.line.x=element_line(color="black"),
   axis.line.y=element_line(color="black"),
   axis.ticks=element_line(color="black"),
-  axis.text=element_text(size=8, color="black"),
-  legend.text=element_text(size=8, color="black"),
+  axis.text=element_text(size = 6, color="black"),
+  legend.text=element_text(size = 6, color="black"),
   legend.key=element_blank(),
-  axis.title.y=element_text(size=8),
+  axis.title.y=element_text(size = 6),
   legend.position="right",
   legend.background=element_blank(),
-  text=element_text(family="sans", size=8, color="black")
+  text=element_text(family="sans", size = 6, color="black")
 )
 
 # p1 <- ggplot(df_summary, aes(x=Genotype, y=mean_RA, fill=order)) +
@@ -106,8 +106,8 @@ main_theme <- theme(
 #   main_theme +
 #   ylab("Mean relative abundance") +
 #   labs(fill="Bacterial order") +
-#   theme(axis.text.x = element_markdown(size=8, color="black", angle=30, hjust=1),
-#         strip.text.x=element_text(size=8, face="bold"),
+#   theme(axis.text.x = element_markdown(size = 6, color="black", angle=30, hjust=1),
+#         strip.text.x=element_text(size = 6, face="bold"),
 #         legend.position = "bottom",
 #         legend.title.position = "top",
 #         legend.key.size = unit(0.25, "cm"),
@@ -127,10 +127,10 @@ p1 <- ggplot(df_summary, aes(y=Genotype, x=mean_RA, fill=order)) +
   main_theme +
   ylab("Mean relative abundance") +
   labs(fill="Bacterial order") +
-  theme(axis.text.x = element_markdown(size=8, color="black"),
-        # strip.text.x=element_text(size=8, face="bold"),
-        # strip.text.y.left = element_text(angle = 0, size = 8, face = "bold"),
-        strip.text.y = element_text(angle = 0, size = 8, face = "bold"),
+  theme(axis.text.x = element_markdown(size = 6, color="black"),
+        # strip.text.x=element_text(size = 6, face="bold"),
+        # strip.text.y.left = element_text(angle = 0, size = 6, face = "bold"),
+        strip.text.y = element_text(angle = 0, size = 6, face = "bold"),
         legend.position = "bottom",
         legend.title.position = "top",
         legend.key.size = unit(0.25, "cm"),
@@ -243,7 +243,7 @@ p_sig <- ggplot(df_ord, aes(x = order, y = mean_RA, fill = Genotype)) +
     aes(x = order, y=mean_RA+1.96*se+0.015, label=Sig, fill=Genotype),
     position=dodge,
     inherit.aes=FALSE,
-    size=4
+    size = 6
   ) + 
   facet_wrap(~Compartment, scales="free_x") +
   scale_fill_manual(values = colors_geno, labels=genotype_labels_legend) +
@@ -255,7 +255,7 @@ p_sig <- ggplot(df_ord, aes(x = order, y = mean_RA, fill = Genotype)) +
     legend.text = element_markdown(),
     strip.text = element_text(face="bold", size=rel(1)),
     legend.position = "none",
-    plot.title = element_text(size = 8)
+    plot.title = element_text(size = 6)
   )
 
 p_sig

@@ -190,8 +190,8 @@ p_tax <- ggplot(tax_bar, aes(x=ASVid, y=1, fill=Order)) +
   theme_void() +
   labs(fill = "Bacterial order") +
   theme(legend.position="bottom",
-        legend.text = element_text(color="black", size=8),
-        legend.title = element_text(color="black", size=8),
+        legend.text = element_text(color="black", size = 6),
+        legend.title = element_text(color="black", size = 6),
         legend.key.size = unit(0.25, 'cm'),
         legend.key.spacing.y = unit(0, 'cm'),
         plot.margin = margin(0.25, 0, 0.25, 0, unit = "lines")
@@ -243,17 +243,17 @@ p_bubble <- ggplot(da_all, aes(x = ASV_ID, y = Genotype, fill = DA)) +
     axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5,
                                size = 6, color = "black"),
     axis.title.x = element_blank(),
-    # axis.title.y=element_text(color="black", size=8),
+    # axis.title.y=element_text(color="black", size = 6),
     axis.title.y=element_blank(),
     strip.placement = "outside",
     legend.position = "bottom",
     # strip.background = element_rect(fill = "grey80", color = "grey50"),
-    # strip.text.y.left = element_text(color = "black", size = 8, hjust = 0.5,
+    # strip.text.y.left = element_text(color = "black", size = 6, hjust = 0.5,
     #                                  face = "bold"),
-    # axis.text.y = element_text(color = "black", size = 8),
+    # axis.text.y = element_text(color = "black", size = 6),
     axis.text.y = element_blank(),
-    legend.text = element_text(color = "black", size = 8),
-    legend.title = element_text(color = "black", size = 8),
+    legend.text = element_text(color = "black", size = 6),
+    legend.title = element_text(color = "black", size = 6),
     # strip.background = element_rect(colour = NA),
     strip.text = element_blank(),
     strip.background = element_blank(),
@@ -292,10 +292,10 @@ asv_RA_WT <- asv_RA_WT %>% filter(ASVid %in% isolate_keep)
 #   theme(axis.text.x=element_blank(),
 #         axis.ticks.x=element_blank(),
 #         axis.title.x=element_blank(),
-#         axis.text.y=element_text(color="black", size=8),
-#         # axis.title.y=element_text(color="black", size=8),
+#         axis.text.y=element_text(color="black", size = 6),
+#         # axis.title.y=element_text(color="black", size = 6),
 #         axis.title.y=element_blank(),
-#         # strip.text = element_text(color="black", size=8, face = "bold"),
+#         # strip.text = element_text(color="black", size = 6, face = "bold"),
 #         strip.placement = "outside",
 #         strip.text = element_blank(),
 #         strip.background = element_blank(),
@@ -319,14 +319,14 @@ p_RA <- ggplot(asv_RA_WT, aes(x = ASVid, y = mean_RA)) +
   theme_bw() +
   ggtitle("Hordeum")+
   theme(axis.text.x=element_blank(),
-        plot.title = element_text(color="black", size=8, face = "bold"),
+        plot.title = element_text(color="black", size = 6, face = "bold"),
         axis.ticks.x=element_blank(),
         axis.title.x=element_blank(),
-        # axis.text.y=element_text(color="black", size=8),
+        # axis.text.y=element_text(color="black", size = 6),
         axis.text.y=element_blank(),
-        # axis.title.y=element_text(color="black", size=8),
+        # axis.title.y=element_text(color="black", size = 6),
         axis.title.y=element_blank(),
-        # strip.text = element_text(color="black", size=8, face = "bold"),
+        # strip.text = element_text(color="black", size = 6, face = "bold"),
         strip.placement = "outside",
         # strip.background = element_rect(colour = NA),
         strip.text = element_blank(),
@@ -355,7 +355,7 @@ p_tax_clean <- p_tax + theme(legend.position = "none")
 
 # Combine plots vertically
 main_plot <- p_RA / p_tax_clean / (p_bubble + theme(legend.position = "none")) + 
-  plot_layout(heights = c(0.54, 0.04, 0.42))
+  plot_layout(heights = c(0.35, 0.05, 0.6))
 
 main_plot <- main_plot +
   theme(plot.margin = unit(c(0, 0, 0, 0), "cm"),
