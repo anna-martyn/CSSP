@@ -296,7 +296,7 @@ centroids_Lj <- dtLj[,.(PC1_cent = mean(PC1), PC2_cent = mean(PC2)),
                      list(Genotype, Host)]
 segments_Lj <- merge(dtLj, centroids_Lj, by=c("Genotype", "Host"))
 ggplot(data = dtLj, mapping = aes(x = PC1, y = PC2, colour = Genotype))+
-  geom_point(size = 2, stroke = 0.25)+
+  geom_point(size = 1.5, stroke = 0.25)+
   geom_segment(data = segments_Lj, aes(x = PC1, y = PC2, xend = PC1_cent,
                                        yend = PC2_cent, color = Genotype),
                alpha = 0.5, show.legend = FALSE)+
@@ -305,20 +305,20 @@ ggplot(data = dtLj, mapping = aes(x = PC1, y = PC2, colour = Genotype))+
   theme_bw()+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        strip.text = element_text(colour = 'black', size = 8, face = "bold"),
+        strip.text = element_text(colour = 'black', size = 6, face = "bold"),
         strip.background = element_rect(colour = NA),
         legend.position = "bottom",
-        axis.title = element_text(size = 8),
-        axis.text.x = element_text(size = 8, colour = "black"),
-        axis.text.y = element_text(size = 8, colour = "black"),
-        legend.text = element_markdown(size = 8,
+        axis.title = element_text(size = 6),
+        axis.text.x = element_text(size = 6, colour = "black"),
+        axis.text.y = element_text(size = 6, colour = "black"),
+        legend.text = element_markdown(size = 6,
                                        margin = margin(l = -0.1, unit = "pt")),
-        legend.title = element_text(size = 8),
+        legend.title = element_text(size = 6),
         legend.margin = margin(t = 0, r = 5, l = 5),
         legend.key = element_rect(fill = NA),
         legend.key.spacing.y = unit(-0.1, "cm"),
         legend.key.spacing.x = unit(0.001, "cm"),
-        plot.title = element_text(size = 8, hjust = 0.5))+
+        plot.title = element_text(size = 6, hjust = 0.5))+
   labs(x = paste("PC1", var_exp_Lj[1]), y = paste("PC2", var_exp_Lj[2]))+
   facet_wrap(~Host)+
   guides(fill = guide_legend(nrow = 1))+
@@ -328,7 +328,7 @@ centroids_Hv <- dtHv[,.(PC1_cent = mean(PC1), PC2_cent = mean(PC2)),
                      list(Genotype, Host)]
 segments_Hv <- merge(dtHv, centroids_Hv, by=c("Genotype", "Host"))
 ggplot(data = dtHv, mapping = aes(x = PC1, y = PC2, colour = Genotype))+
-  geom_point(size = 2, stroke = 0.25)+
+  geom_point(size = 1.5, stroke = 0.25)+
   scale_colour_manual(name = "Genotype",
                     breaks = names(cols),
                     values = cols)+
@@ -338,20 +338,20 @@ ggplot(data = dtHv, mapping = aes(x = PC1, y = PC2, colour = Genotype))+
   theme_bw()+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        strip.text = element_text(colour = 'black', size = 8, face = "bold"),
+        strip.text = element_text(colour = 'black', size = 6, face = "bold"),
         strip.background = element_rect(colour = NA),
         legend.position = "none",
-        axis.title = element_text(size = 8),
-        axis.text.x = element_text(size = 8, colour = "black"),
-        axis.text.y = element_text(size = 8, colour = "black"),
-        legend.text = element_text(size = 8,
+        axis.title = element_text(size = 6),
+        axis.text.x = element_text(size = 6, colour = "black"),
+        axis.text.y = element_text(size = 6, colour = "black"),
+        legend.text = element_text(size = 6,
                                    margin = margin(l = -0.1, unit = "pt")),
-        legend.title = element_text(size = 8),
+        legend.title = element_text(size = 6),
         legend.margin = margin(t = 0, r = 5, l = 5),
         legend.key = element_rect(fill = NA),
         legend.key.spacing.y = unit(-0.1, "cm"),
         legend.key.spacing.x = unit(0.001, "cm"),
-        plot.title = element_text(size = 8, hjust = 0.5))+
+        plot.title = element_text(size = 6, hjust = 0.5))+
   labs(x = paste("PC1", var_exp_Hv[1]),
        y = paste("PC2", var_exp_Hv[2]))+
   facet_wrap(~Host)+
@@ -603,18 +603,18 @@ p <- ggplot(Pathway_full, aes(x = Genotype, y = Intensity, fill = Genotype)) +
   theme_bw()+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        strip.text = element_text(colour = 'black', size = 8, face = "bold"),
+        strip.text = element_text(colour = 'black', size = 6, face = "bold"),
         strip.background = element_rect(colour = NA),
         legend.position = "bottom",
-        axis.title = element_text(size = 8),
+        axis.title = element_text(size = 6),
         axis.text.x = element_text(
-          size = 8, colour = "black", angle = 90, vjust = 0.5, hjust=1
+          size = 6, colour = "black", angle = 90, vjust = 0.5, hjust=1
         ),
-        axis.text.y = element_text(size = 8, colour = "black"),
-        legend.text = element_markdown(size = 8,
+        axis.text.y = element_text(size = 6, colour = "black"),
+        legend.text = element_markdown(size = 6,
                                        margin = margin(l = -0.1, unit = "pt")),
-        legend.title = element_text(size = 8),
-        plot.title = element_text(size = 8, hjust = 0.5))+
+        legend.title = element_text(size = 6),
+        plot.title = element_text(size = 6, hjust = 0.5))+
   scale_x_discrete(labels=c(
     "symrk"=expression(italic("symrk")),
     "ccamk"=expression(italic("ccamk")),
@@ -677,22 +677,22 @@ ggplot(data = res_table, aes(x = logFC, y = -log10(p_adj), colour = DA))+
                      name = "DEM") +
   facet_grid(factor(Host, levels = c("Lotus", "Hordeum"))~Genotype)+
   geom_label(data = text_data, aes(x = -25, y = 8.5, label = N_DA),
-             colour = "black", fill = "grey", alpha = 0.2, size = 8/.pt)+
+             colour = "black", fill = "grey", alpha = 0.2, size = 6/.pt)+
   theme(
     panel.border = element_rect(color = "black", size = 0.5),
-    axis.title = element_text(size = 8),
-    axis.text.x = element_text(size = 8, colour = "black"),
-    axis.text.y = element_text(size = 8, colour = "black"),
-    plot.title = element_text(size = 8, hjust = 0.5),
-    strip.text = element_text(colour = 'black', size = 8, face = "bold"),
+    axis.title = element_text(size = 6),
+    axis.text.x = element_text(size = 6, colour = "black"),
+    axis.text.y = element_text(size = 6, colour = "black"),
+    plot.title = element_text(size = 6, hjust = 0.5),
+    strip.text = element_text(colour = 'black', size = 6, face = "bold"),
     legend.position = "bottom",
     strip.background =element_rect(fill="lightgrey"),
     legend.key = element_rect(fill = NA),
     legend.key.spacing.x = unit(5, "pt"),
     legend.key.size = unit(5, "pt"),
     legend.box.spacing = unit(5, "pt"),
-    legend.text = element_text(size = 8),
-    legend.title = element_text(size = 8, hjust = 0.5, margin = margin(r = 5))
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 6, hjust = 0.5, margin = margin(r = 5))
   ) +
   xlim(-30,30)+
   guides(color = guide_legend(override.aes = list(size = 2)))+
@@ -769,13 +769,13 @@ ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
         strip.background = element_rect(colour = NA),
         # axis.title.y=element_blank(),
         axis.title.y = element_text(hjust = 0.2),
-        axis.title = element_text(size = 8),
+        axis.title = element_text(size = 6),
         axis.text.x = element_blank(),
-        axis.text.y = element_text(size = 8, colour = "black"),
-        strip.text = element_text(colour = 'black', size = 8, face = "bold"),
-        legend.text = element_text(size = 8),
-        legend.title = element_text(size = 8),
-        plot.title = element_text(size = 8, hjust = 0.5, face = "bold"),
+        axis.text.y = element_text(size = 6, colour = "black"),
+        strip.text = element_text(colour = 'black', size = 6, face = "bold"),
+        legend.text = element_text(size = 6),
+        legend.title = element_text(size = 6),
+        plot.title = element_text(size = 6, hjust = 0.5, face = "bold"),
         plot.margin = margin(l = 0.1, r = 0.1, t = 0.5,
                              b = 0.5, unit = "line"),
         legend.margin = margin(t = 20, unit = "pt"))+
@@ -845,13 +845,13 @@ ggplot(feat_set_dt, aes(x=Genotype, y=Intensity, fill=Genotype)) +
   theme(legend.position = "right",
         strip.background = element_rect(colour = NA),
         # axis.title.y=element_blank(),
-        axis.title = element_text(size = 8),
+        axis.title = element_text(size = 6),
         axis.text.x = element_blank(),
-        axis.text.y = element_text(size = 8, colour = "black"),
-        strip.text = element_text(colour = 'black', size = 8, face = "bold"),
-        legend.text = element_text(size = 8),
-        legend.title = element_text(size = 8),
-        plot.title = element_text(size = 8, hjust = 0.5, face = "bold"),
+        axis.text.y = element_text(size = 6, colour = "black"),
+        strip.text = element_text(colour = 'black', size = 6, face = "bold"),
+        legend.text = element_text(size = 6),
+        legend.title = element_text(size = 6),
+        plot.title = element_text(size = 6, hjust = 0.5, face = "bold"),
         plot.margin = margin(l = 0.1, r = 0.1, t = 0.5,
                              b = 0.5, unit = "line"),
         legend.margin = margin(t = 20, unit = "pt"))+
@@ -957,34 +957,34 @@ sum_tab[,Host:=factor(Host, levels = c("Lotus", "Hordeum"))]
 ggplot(data = sum_tab, mapping = aes(x = Genotype, y = Class, size = Amount,
                                      fill = pos_prob))+
   geom_label(data = Text, mapping = aes(x = Genotype, y = Class, label = N), 
-             size = 8/.pt, fill = NA, label.size = NA)+
+             size = 6/.pt, fill = NA, label.size = NA)+
   geom_point(shape = 21)+
   facet_wrap(~factor(Host, levels = c("Lotus", "Hordeum")))+
   scale_fill_gradient2(midpoint = 0.5, low = "darkblue",
                        mid = "white", high = "#902121",
                        name = "Proportion of enriched DEMs")+
-  scale_size_continuous(breaks = c(1, 10, 50, 100))+
+  scale_size_continuous(breaks = c(1, 10, 50, 100), range = c(1,5))+
   labs(size = "# of DEMs")+
   ggtitle("")+
   theme_bw()+
   theme(axis.title.y=element_blank(),
         strip.background = element_rect(colour = NA),
         panel.border = element_rect(color = "black", size = 0.5),
-        axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 8,
+        axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 6,
                                    colour = "black"),
         axis.title = element_blank(),
-        axis.text.y = element_text(size = 8, colour = "black"),
-        strip.text = element_text(colour = 'black', size = 8, face = "bold"),
+        axis.text.y = element_text(size = 6, colour = "black"),
+        strip.text = element_text(colour = 'black', size = 6, face = "bold"),
         legend.position = "bottom",
         legend.box="vertical",
         legend.justification = c(1.5, 0),
-        legend.text = element_text(size = 8,
+        legend.text = element_text(size = 6,
                                    margin = margin(t = 2, unit = "pt")),
-        legend.title = element_text(size = 8,
+        legend.title = element_text(size = 6,
                                     margin = margin(r = 5)),
         legend.key = element_rect(fill = NA),
         legend.key.spacing.x = unit(5, "pt"),
-        plot.title = element_text(size = 8, hjust = 0.5),
+        plot.title = element_text(size = 6, hjust = 0.5),
         legend.margin = margin(t = 2, r = 8, l = 5, unit = "pt"))+
   scale_x_discrete(labels=c(
     "symrk"=expression(italic("symrk")),
@@ -998,12 +998,12 @@ ggplot(data = sum_tab, mapping = aes(x = Genotype, y = Class, size = Amount,
 # Combine all plots in final figure  -------------------------------------------
 combined_legend <- ggarrange(PCA_legend, volcano_legend)
 gg <- plot_grid(PCA_all, volcanoes, rel_widths = c(0.2, 0.8),
-                labels = c("A", "B"), label_size = 15, label_fontface = "bold")
+                labels = c("A", "B"), label_size = 12, label_fontface = "bold")
 gg2 <- plot_grid(gg, combined_legend, nrow = 2, rel_heights = c(0.95, 0.05))
 gg3 <- plot_grid(Bubble, feature_box, rel_widths = c(0.5, 0.5),
-                 labels = c("C", "D"), label_size = 15, label_fontface = "bold")
+                 labels = c("C", "D"), label_size = 12, label_fontface = "bold")
 gg4 <- plot_grid(gg2, gg3, nrow = 2, rel_heights = c(0.35, 0.65))
 
 ggsave("../3_final_figures/Figure5_LotusHordeum_rootexudates.pdf", gg4,
-       width = 210, height = 297, units = "mm")
+       width = 180, height = 220, units = "mm")
 
