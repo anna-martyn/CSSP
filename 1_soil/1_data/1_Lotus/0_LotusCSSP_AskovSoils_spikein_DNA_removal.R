@@ -16,12 +16,12 @@ asv_table <- read.table(
   skip = 1    
 )
 
-# For the Lotus CSSP Askov soil samples, spike-in DNA was added during library preparation.
-# As we are not using the spike-in info in our analysis, we want to remove the spike-in ASV from the ASV table for further analysis.
-# The id of the spike-in ASV is "85fa8bb918a926d97659d9b64ca6fedd"
+# Removing spike-in
 asv_table <- asv_table[!rownames(asv_table) %in% "85fa8bb918a926d97659d9b64ca6fedd", ]
+# The ASV "85fa8bb918a926d97659d9b64ca6fedd" represents spike-in DNA, which was added during
+# library preparation, but will not be used in the data analysis
 
-# Save the ASV table where the spike-in sequence has been removed.
+# Save ASV table without spike-in
 write.table(
   asv_table,
   file = "LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv",
