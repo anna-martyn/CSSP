@@ -77,7 +77,8 @@ for(comp in levels(index$Compartment)) {
   letters <- generate_label_df(pairwise, "Soil")
   
   ## Add the letters and define the y-positions.
-  y_offset <- 0.075 * (max(summary_df$Max) - min(summary_df$Min))
+  # y_offset <- 0.075 * (max(summary_df$Max) - min(summary_df$Min))
+  y_offset <- 125
   
   tmp <- summary_df %>%
     mutate(Letters = letters$Letters,

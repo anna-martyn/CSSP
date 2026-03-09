@@ -317,7 +317,7 @@ ords  <- unique(df.heatmap$Order)
 cond.grid <- expand.grid(Plant = plants, Compartment = comps, Order = ords)
 j <- 1
 
-## Loop over each plant-compartment-order.
+## Loop over each plant-compartment-order combination.
 for(i in 1:nrow(cond.grid)){
   df_samples <- df.sample_order %>% 
         filter(
