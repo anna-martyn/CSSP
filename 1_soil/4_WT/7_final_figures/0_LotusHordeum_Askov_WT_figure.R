@@ -6,12 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load the required packages.
-library(ggplot2)
-library(ggpubr)
-library(patchwork)
-library(cowplot)
-library(magick)
-library(grid)
+pkg <- c("ggplot2", "ggpubr", "cowplot", "patchwork", "magick", "grid")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Read all plot files (rds files) into variables.
 plot_files <- list.files(pattern = "\\.rds$")

@@ -1,10 +1,12 @@
 # Set working directory and load packages --------------------------------------
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-library(ggplot2)
-library(ggh4x)
-library(multcompView)
-library(data.table)
+pkg <- c(
+  "data.table", "ggplot2", "multcompView", "ggh4x"
+)
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Settings ---------------------------------------------------------------------
 # Set colors for genotypes.

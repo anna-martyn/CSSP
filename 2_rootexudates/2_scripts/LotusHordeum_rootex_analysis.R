@@ -1,7 +1,6 @@
 # Load packages and load function ----------------------------------------------
 pkg <- c("data.table", "magrittr", "ggplot2", "ggfortify", "multcompView",
-         "ggpubr","RColorBrewer", "ComplexHeatmap", "colorRamp2", "gridtext",
-         "cowplot", "ggtext")
+         "ggpubr", "colorRamp2", "gridtext", "cowplot", "ggtext")
 for(pk in pkg){
   library(pk, character.only = T)
 }

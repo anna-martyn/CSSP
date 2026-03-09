@@ -6,10 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load required packages.
-library(ggplot2)
-library(dplyr)
-library(car)
-library(multcompView)
+pkg <- c("ggplot2", "dplyr", "car", "multcompView")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load chao1 and metadata file.
 alpha <- read.table("../../2_rarefication_chao1/2_Hordeum/2_chao1/HordeumCSSP_AskovSoils_chao1.txt",

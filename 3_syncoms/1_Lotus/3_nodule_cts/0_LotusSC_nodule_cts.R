@@ -6,9 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load required packages.
-library(ggplot2)
-library(multcompView)
-library(dplyr)
+pkg <- c("dplyr", "ggplot2","multcompView")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load input data.
 counts <- read.table("LotusSC_nodule_counts.txt", header=T, sep="\t")

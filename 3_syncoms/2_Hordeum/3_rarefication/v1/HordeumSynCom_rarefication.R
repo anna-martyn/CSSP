@@ -16,7 +16,6 @@ asv_table <- read.table(
   skip = 1     
 )
 # Install required packages.
-library(BiocManager)
 library(phyloseq)
 
 # Filter ASV table to only keep samples of interest.

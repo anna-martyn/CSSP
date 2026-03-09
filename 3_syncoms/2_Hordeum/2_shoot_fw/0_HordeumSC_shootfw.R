@@ -6,9 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load required packages.
-library(ggplot2)
-library(multcompView)
-library(dplyr)
+pkg <- c("dplyr", "ggplot2", "multcompView")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load data.
 weight <- read.table("HordeumSC_shootfw.txt", header=T, sep="\t")

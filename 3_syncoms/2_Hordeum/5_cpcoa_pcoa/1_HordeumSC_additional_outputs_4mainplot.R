@@ -6,13 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load required packages.
-library(data.table)
-library(dplyr)
-library(tidyr)
-library(vegan)
-library(ggplot2)
-library(ggtext)
-library(cowplot)
+pkg <- c("data.table", "dplyr", "tidyr", "ggplot2", "vegan", "ggtext", "cowplot")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load data.
 design <- read.table("../1_data/without_input/HordeumSC_metadata.txt", header=T, sep="\t")

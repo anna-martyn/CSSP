@@ -8,7 +8,7 @@ rm(list=ls())
 # Load packages and data -------------------------------------------------------
 ## Load required packages.
 pkg <- c("data.table", "magrittr", "ggplot2", "vegan", "Maaslin2", "patchwork",
-         "RColorBrewer", "colorRamp2", "ggh4x", "ggtext", "tidyr", "dplyr")
+         "colorRamp2", "ggh4x", "ggtext", "tidyr", "dplyr")
 
 for(pk in pkg){
   library(pk, character.only = T)

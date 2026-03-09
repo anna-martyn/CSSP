@@ -6,15 +6,13 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load required packages.
-library(ggVennDiagram)
-library(ggtext)
-library(dplyr)
-library(tidyr)
-library(tibble)
-library(stringr)
-library(ggplot2)
-library(patchwork)
-library(cowplot)
+pkg <- c(
+  "ggplot2", "dplyr", "tidyr", "tibble", "stringr", 
+  "ggVennDiagram", "ggtext", "patchwork", "cowplot"
+)
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load data.
 design <- read.table("../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt", header=T, sep="\t")

@@ -7,8 +7,10 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load plotting functions.
 pkg <- c("data.table", "magrittr", "ggplot2", "vegan", "ggtext", "ggpubr", 
-         "grid","tidyverse","patchwork")
-for(pk in pkg) library(pk, character.only=TRUE)
+         "grid", "tidyverse", "patchwork")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load input files.
 asv_table_all <- fread("../1_data/without_input/HordeumSC_ASVtable.tsv")

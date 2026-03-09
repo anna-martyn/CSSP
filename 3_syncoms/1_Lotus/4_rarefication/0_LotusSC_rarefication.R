@@ -6,7 +6,6 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load the required packages.
-library(BiocManager)
 library(phyloseq)
 
 # Load the ASV table.

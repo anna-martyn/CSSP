@@ -14,8 +14,7 @@ asv_table <- read.table(
   check.names = FALSE,
 )
 
-# Install required packages.
-library(BiocManager)
+# Load packages.
 library(phyloseq)
 
 # Load the ASV table as a phyloseq object.

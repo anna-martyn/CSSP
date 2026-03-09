@@ -6,9 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load the required packages.
-pkg <- c("data.table", "magrittr", "ggplot2", "vegan", "ggtext", "ggpubr", 
-         "grid","tidyverse","patchwork")
-
+pkg <- c(
+  "data.table", "magrittr", "ggplot2", "vegan", "ggtext",
+   "ggpubr", "grid", "tidyverse", "patchwork"
+)
 for(pk in pkg){
   library(pk, character.only = T)
 }

@@ -5,9 +5,10 @@ options(warn=-1)
 rm(list=ls())
 
 # Load required packages.
-pkg <- c("data.table", "magrittr", "ggplot2", "vegan", "tibble", "cowplot",
-         "RColorBrewer", "Maaslin2", "ComplexHeatmap", "ggh4x",
-         "colorRamp2","dplyr","tidyr","ggtext","patchwork","scales")
+pkg <- c(
+  "data.table", "magrittr", "ggplot2", "vegan", "tibble", "cowplot", "Maaslin2",
+  "ggh4x", "colorRamp2", "dplyr", "tidyr", "ggtext", "patchwork", "scales"
+)
 for(pk in pkg) library(pk, character.only = TRUE)
 
 # Set working directory.

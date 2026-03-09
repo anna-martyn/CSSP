@@ -6,12 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load the required packages.
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(stringr)
-library(RColorBrewer)
-library(tibble)
+pkg <- c("ggplot2", "dplyr", "tidyr", "tibble", "stringr")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load the input files.
 design <- read.table(

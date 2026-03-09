@@ -6,12 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load the required packages.
-library(dplyr)
-library(tidyr)
-library(tibble)
-library(stringr)
-library(ggplot2)
-library(multcompView)
+pkg <- c("ggplot2", "dplyr", "tidyr", "tibble", "stringr", "multcompView")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load the input data.
 design <- read.table("../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt", header=T, sep="\t")

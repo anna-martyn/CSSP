@@ -4,7 +4,7 @@ rm(list=ls())
 
 ## Load required packages.
 pkg <- c("data.table", "magrittr", "ggplot2", "vegan", "Maaslin2", "patchwork",
-         "RColorBrewer", "colorRamp2", "ggh4x", "ggtext", "ggpubr", "cowplot")
+         "colorRamp2", "ggh4x", "ggtext", "ggpubr", "cowplot")
 
 for(pk in pkg){
   library(pk, character.only = T)

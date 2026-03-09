@@ -6,9 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load required packages.
-library(ggplot2)
-library(multcompView)
-library(dplyr)
+pkg <- c("ggplot2", "multcompView", "dplyr")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load data.
 weight <- read.table("HordeumCSSP_axenic_fw_input.txt", header=T, sep="\t")

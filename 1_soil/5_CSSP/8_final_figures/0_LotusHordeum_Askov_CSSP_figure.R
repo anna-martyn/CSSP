@@ -3,9 +3,7 @@ options(warn=-1)
 rm(list=ls())
 
 # Load packages and import plots.
-pkg <- c("data.table", "ggplot2", "vegan", "ggtext", "ggpubr", "grid", 
-         "cowplot")
-
+pkg <- c("data.table", "ggplot2", "vegan", "ggtext", "ggpubr", "grid", "cowplot")
 for(pk in pkg){
   library(pk, character.only = T)
 }

@@ -6,14 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load packages.
-library(dplyr)
-library(tidyr)
-library(tibble)
-library(stringr)
-library(ggplot2)
-library(ggforce)
-library(ggh4x)
-library(ggalluvial)
+pkg <- c("ggplot2", "dplyr", "tidyr", "tibble", "stringr", "ggforce", "ggh4x", "ggalluvial")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load data.
 design <- read.table("../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt", header=T, sep="\t")

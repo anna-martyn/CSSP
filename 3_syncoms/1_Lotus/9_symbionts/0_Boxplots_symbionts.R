@@ -6,13 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load packages.
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(ggtext)
-library(FSA)
-library(multcompView)
-library(tibble)
+pkg <- c("dplyr", "tidyr", "tibble", "ggplot2", "FSA", "multcompView", "ggtext")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load data.
 design <- read.table("../1_data/LotusSC_metadata.txt", header=TRUE, sep = "\t")

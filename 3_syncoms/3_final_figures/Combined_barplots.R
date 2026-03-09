@@ -1,10 +1,12 @@
 # Set working directory and load packages --------------------------------------
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-library(ggplot2)
-library(data.table)
-library(ggtext)
-library(ggh4x)
+pkg <- c(
+  "data.table", "ggplot2", "ggtext", "ggh4x"
+)
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Settings ---------------------------------------------------------------------
 main_theme <- theme(

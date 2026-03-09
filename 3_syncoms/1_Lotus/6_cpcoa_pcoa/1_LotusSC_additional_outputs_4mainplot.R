@@ -12,13 +12,10 @@ asv_table <- read.table("../1_data/LotusSC_ASVtable_nospike.tsv",
                         check.names = FALSE, comment.char = "")
 
 # Load required packages.
-library(data.table)
-library(dplyr)
-library(tidyr)
-library(vegan)
-library(ggplot2)
-library(ggtext)
-library(cowplot)
+pkg <- c("data.table", "dplyr", "tidyr", "ggplot2", "vegan", "cowplot", "ggtext")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Filter design file to only keep genotypes and compartments of interest, and match asv table file accordingly.
 # Also filter asv table to only keep matched ASVs.

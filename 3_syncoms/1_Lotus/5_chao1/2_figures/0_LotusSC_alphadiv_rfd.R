@@ -6,11 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load required packages.
-library(dplyr)
-library(multcompView)
-library(patchwork)
-library(ggplot2)
-library(ggtext)
+pkg <- c("dplyr", "ggplot2", "patchwork", "multcompView", "ggtext")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load chao1 and metadata files.
 # Note: we have one file for matched ASVs only, and one where all ASVs are included.

@@ -6,12 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load the required packages.
-library(tidyr)
-library(dplyr)
-library(tibble)
-library(ggplot2)
-library(ggh4x)
-library(scales)
+pkg <- c("dplyr", "tidyr", "ggplot2", "tibble", "ggh4x", "scales")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load the Lotus and Hordeum input files.
 Lotus_design <- read.table("../../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt", header=T, sep="\t")

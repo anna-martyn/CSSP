@@ -14,17 +14,13 @@ taxonomy <- read.table("../1_data/LjSC_taxonomy.txt", sep="\t", header=TRUE,
                        fill = TRUE)
 
 # Load packages.
-library(dplyr)
-library(tidyr)
-library(tibble)
-library(ggplot2)
-library(ggtext)
-library(ggforce)
-library(ggalluvial)
-library(FSA)
-library(multcompView)
-library(scales)
-library(Maaslin2)
+pkg <- c(
+  "dplyr", "tidyr", "tibble", "ggplot2", "ggforce", "scales", 
+  "Maaslin2", "ggalluvial", "FSA", "multcompView", "ggtext"
+)
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Modify asv table to only keep matched ASVs.
 asv_table_matched <- asv_table[grepl("Lj", rownames(asv_table)), ]

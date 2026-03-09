@@ -6,11 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load required packages.
-library(data.table)
-library(dplyr)
-library(tidyr)
-library(vegan)
-library(ggplot2)
+pkg <- c("ggplot2", "dplyr", "data.table", "tidyr", "vegan")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load data.
 design <- read.table("../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt",

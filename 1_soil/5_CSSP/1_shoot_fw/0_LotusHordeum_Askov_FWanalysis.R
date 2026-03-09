@@ -6,8 +6,7 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load the required packages. 
-pkg <- c("data.table", "ggplot2", "scales", "grid", "RColorBrewer",
-         "car", "multcompView", "ggh4x")
+pkg <- c("data.table", "ggplot2", "scales", "grid", "car", "multcompView", "ggh4x")
 
 for(pk in pkg){
   library(pk, character.only = T)

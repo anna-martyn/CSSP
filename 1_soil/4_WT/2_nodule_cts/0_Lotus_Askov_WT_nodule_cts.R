@@ -6,10 +6,10 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load the required packages.
-library(ggplot2)
-library(car)
-library(multcompView)
-library(dplyr)
+pkg <- c("ggplot2", "dplyr", "car", "multcompView")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load the nodule count data.
 nod <- read.table("LotusCSSP_AskovSoils_nodule_cts.txt", header=T, sep="\t")

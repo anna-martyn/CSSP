@@ -6,13 +6,12 @@ rm(list=ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load the required packages.
-library(ggplot2)
-library(scales)
-library(grid)
-library(RColorBrewer)
-library(car)
-library(multcompView)
-library(dplyr)
+pkg <- c(
+  "ggplot2", "dplyr", "scales", "multcompView", "grid", "car"
+)
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Load the shoot fresh weight input file and fix the decimals.
 weight <- read.table("LotusHordeum_AskovSoils_shootfw.txt",

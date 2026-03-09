@@ -15,17 +15,13 @@ taxonomy <- read.table("../1_data/without_input/CerealSC_taxonomy_May23.txt",
                        sep = "\t", header = TRUE, fill = TRUE)
 
 # Load packages.
-library(dplyr)
-library(tidyr)
-library(tibble)
-library(ggplot2)
-library(ggtext)
-library(ggforce)
-library(ggalluvial)
-library(FSA)
-library(multcompView)
-library(scales)
-library(Maaslin2)
+pkg <- c(
+  "dplyr", "tidyr", "tibble", "ggplot2", "ggtext", "ggforce", "ggalluvial",
+  "FSA", "multcompView", "scales", "Maaslin2"
+)
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Modify asv table file to only keep matched ASVs.
 asv_table_matched <- asv_table[grepl("_", rownames(asv_table)), , drop = FALSE]
