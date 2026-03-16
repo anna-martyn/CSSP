@@ -18,7 +18,7 @@ asv_table <- read.table(
 library(phyloseq)
 
 # Create phyloseq object
-phs <- phyloseq(otu_table(asv_table, taxa_are_rows = T))
+phs <- phyloseq(otu_table(asv_table, taxa_are_rows = TRUE))
 
 # Check the minimum sequencing depth in the dataset
 min_depth <- min(sample_sums(phs))
@@ -26,10 +26,10 @@ min_depth > 1000 # >1000 reads in all samples, no further filtering
 
 # Rarefy ASV table
 set.seed(1673967505)
-RR <- rarefy_even_depth(phs)
+phs_rarefied <- rarefy_even_depth(phs)
 
 # Convert rarefied ASV table to dataframe with column for ASV IDs
-asv_table_rarefied <- as.matrix(otu_table(RR))
+asv_table_rarefied <- as.matrix(otu_table(phs_rarefied))
 asv_table_rarefied <- data.frame(ASVid = rownames(asv_table_rarefied), asv_table_rarefied)
 
 # Save rarefied ASV table
