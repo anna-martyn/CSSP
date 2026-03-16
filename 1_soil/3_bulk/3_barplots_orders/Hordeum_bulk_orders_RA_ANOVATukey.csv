@@ -1,4 +1,4 @@
-"Order","P_Value","NPK_Letters","PK_Letters","UF_Letters"
+"Order","p_val","NPK_Letters","PK_Letters","UF_Letters"
 "Acidobacteriales",0.030022425602338,"ab","a","b"
 "Bacillales",0.00123424476450045,"b","a","a"
 "Burkholderiales",0.304586790513981,"a","a","a"

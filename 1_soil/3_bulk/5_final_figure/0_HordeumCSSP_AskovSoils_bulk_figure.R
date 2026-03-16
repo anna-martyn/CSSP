@@ -1,45 +1,44 @@
-# Clean up.
+# Clean up
 options(warn=-1)
 rm(list=ls())
 
-# Set working directory to source file location.
+# Set working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load the required packages.
-pkg <- c("ggplot2", "patchwork", "cowplot", "grid", "magick")
+# Load packages
+pkg <- c("ggplot2", "cowplot", "grid")
 for(pk in pkg){
   library(pk, character.only = T)
 }
 
-# Read all RDS plots.
-plot_files <- list.files(pattern = "\\.rds$")
-for (f in plot_files) {
-  plot_name <- tools::file_path_sans_ext(f)
-  assign(plot_name, readRDS(f))
-}
-
-# Select the plots wanted for display and modify if necessary.
+# Placeholder for workflow to be added in image editor
 p1 <- placeholder <- ggplot() +
   geom_blank() +
   theme_void() +
-  annotate("text", x = 0.5, y = 0.5, label = "", size = 6, hjust = 0.5) # workflow added manually later.
-#
-p2 <- HordeumCSSP_AskovSoils_bulk_chao1_rfd
+  annotate("text", x = 0.5, y = 0.5, label = "", size = 6, hjust = 0.5)
 
-p3 <- Hordeum_bulk_PCoA
+# Reading plots from RDS files
+p2 <- readRDS("HordeumCSSP_AskovSoils_bulk_chao1_rfd.rds")
+p3 <- readRDS("Hordeum_bulk_PCoA.rds")
+p4 <- readRDS("Hordeum_bulk_order_top20_RA_mean_stackedbp.rds")
+p5 <- readRDS("Hordeum_barplot_bulk_top20_RA_sign.rds")
+p6 <- readRDS("Hordeum_bulk_Venn_ASVs.rds")
+p7_nolegend <- readRDS("HordeumCSSP_bulk_ASV_overlap_piecharts_nolegend.rds")
 
-p4 <- Hordeum_bulk_order_top20_RA_mean_stackedbp
-p4_aligned <- p4 + labs(title = " ") + theme(plot.title = element_text(size = 6, color = NA))
-p4_nolegend <- p4_aligned + theme(legend.position="none")
+# Modifying plots
+p4_aligned <- p4 + 
+  labs(title = " ") + 
+  theme(plot.title = element_text(size = 6, color = NA))
+p4_nolegend <- p4_aligned + 
+  theme(legend.position = "none")
 
-p5 <- Hordeum_barplot_bulk_top20_RA_sign
-p5_aligned <- p5 + labs(title = " ") + theme(plot.title = element_text(size = 6, color = NA))
+p5_aligned <- p5 + 
+  labs(title = " ") + 
+  theme(plot.title = element_text(size = 6, color = NA))
 
-p6 <- Hordeum_bulk_Venn_ASVs
 p6_aligned <- ggdraw(p6) + 
   theme(plot.margin = margin(t = 20, r = 5, b = 5, l = 5))
 
-p7_nolegend <- HordeumCSSP_bulk_ASV_overlap_piecharts_nolegend
 legend_p7 <- get_legend(
   p4_aligned + theme(
     legend.position = "right",
@@ -49,7 +48,7 @@ legend_p7 <- get_legend(
   )
 )
 
-# Assemble the rows for the final figure.
+# Assembling the rows for final figure
 row1 <- plot_grid(
   p1, p2, p3,
   ncol = 3,
@@ -85,7 +84,7 @@ row3 <- plot_grid(
 
 row4 <- ggplot() + theme_void()
 
-# Combine all rows for the final figure.
+# Combine all rows
 combined <- plot_grid(
   row1,
   row2,
@@ -96,19 +95,13 @@ combined <- plot_grid(
 
 combined
 
-# Save the final figure and finally add a box around the piecharts for better visualisation.
+# Saving final figure and add a box around the piecharts
 pdf("Figure1_Askov_bulk.pdf", width = 18/2.54, height = 22/2.54)
-combined
-grid.draw(linesGrob(x = unit(c(0.28, 0.34), "npc"),
-                    y = unit(c(0.25, 0.34), "npc")))
-grid.draw(linesGrob(x = unit(c(0.28, 0.34), "npc"),
-                    y = unit(c(0.12, 0.02), "npc")))
-grid.draw(linesGrob(x = unit(c(0.34, 0.81), "npc"),
-                    y = unit(c(0.02, 0.02), "npc")))
-grid.draw(linesGrob(x = unit(c(0.34, 0.81), "npc"),
-                    y = unit(c(0.34, 0.34), "npc")))
-grid.draw(linesGrob(x = unit(c(0.81, 0.81), "npc"),
-                    y = unit(c(0.02, 0.34), "npc")))
-grid.draw(linesGrob(x = unit(c(0.34, 0.34), "npc"),
-                    y = unit(c(0.02, 0.34), "npc")))
+  combined
+  grid.draw(linesGrob(x = unit(c(0.28, 0.34), "npc"), y = unit(c(0.25, 0.34), "npc")))
+  grid.draw(linesGrob(x = unit(c(0.28, 0.34), "npc"), y = unit(c(0.12, 0.02), "npc")))
+  grid.draw(linesGrob(x = unit(c(0.34, 0.81), "npc"), y = unit(c(0.02, 0.02), "npc")))
+  grid.draw(linesGrob(x = unit(c(0.34, 0.81), "npc"), y = unit(c(0.34, 0.34), "npc")))
+  grid.draw(linesGrob(x = unit(c(0.81, 0.81), "npc"), y = unit(c(0.02, 0.34), "npc")))
+  grid.draw(linesGrob(x = unit(c(0.34, 0.34), "npc"), y = unit(c(0.02, 0.34), "npc")))
 dev.off()

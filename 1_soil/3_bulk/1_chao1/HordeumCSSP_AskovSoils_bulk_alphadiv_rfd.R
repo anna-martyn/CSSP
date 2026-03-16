@@ -9,7 +9,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 # Load packages
 pkg <- c("ggplot2", "dplyr", "multcompView")
 for(pk in pkg){
-  library(pk, character.only = T)
+  library(pk, character.only = TRUE)
 }
 
 # Load chao1 and metadata
@@ -31,7 +31,7 @@ design <- read.table(
 
 # Combine alpha diversity (chao1) and metadata
 index <- cbind(alpha[, 1], design[match(row.names(alpha), row.names(design)), ] )
-colnames(index)[1] <- "value"
+colnames(index)[1] <- "Chao1"
 
 # Keep only soil data
 index_bulk <- subset(index, Genotype == "Soil")
@@ -48,7 +48,7 @@ colors <- colors[match(soils, colors$group), ]
 # ANOVA and figure ------------------------------------------------------------
 # Set main theme
 main_theme <- theme(
-  panel.background=element_blank(),
+  panel.background = element_blank(),
   panel.grid.major = element_line(color = "gray90"),
   panel.border = element_rect(colour = "black", fill=NA, linewidth=1),
   axis.line.x = element_line(color = "black"),
@@ -67,15 +67,15 @@ main_theme <- theme(
 chao_summary <- index_bulk %>%
   group_by(Soil) %>%
   summarise(
-    Mean = mean(value),
-    Max = max(value), 
-    Min = min(value), 
-    Median = median(value), 
-    Std = sd(value)
+    Mean = mean(Chao1),
+    Max = max(Chao1), 
+    Min = min(Chao1), 
+    Median = median(Chao1), 
+    Std = sd(Chao1)
   )
 
 # ANOVA and Tukey HSD
-ano <- aov(value ~ Soil, data = index_bulk)
+ano <- aov(Chao1 ~ Soil, data = index_bulk)
 anova(ano)
 pairwise <- TukeyHSD(ano)
 generate_label_df <- function(pairwise, variable){
@@ -96,11 +96,11 @@ label_df <- chao_summary %>%
 anova_p <- summary(ano)[[1]][["Pr(>F)"]][1]
 
 # Boxplot with significance letters and ANOVA p-value as title
-box_plot <- ggplot(index_bulk, aes(x = Soil, y = value, fill = Soil)) +
+box_plot <- ggplot(index_bulk, aes(x = Soil, y = Chao1, fill = Soil)) +
   geom_boxplot(
     alpha = 0.7, position=position_dodge(width = 0.7), outlier.color = NA, width = 0.3
   ) +
-  geom_jitter(position = position_jitter(width = 0, height = 0.17), size=1, alpha = 1) +
+  geom_jitter(position = position_jitter(width = 0, height = 0.17), size = 1, alpha = 1) +
   scale_fill_manual(values = as.character(colors$color)) +
   labs(x = "", y = "Chao1 index") + 
   geom_text(
@@ -110,7 +110,7 @@ box_plot <- ggplot(index_bulk, aes(x = Soil, y = value, fill = Soil)) +
     size = 6/.pt
   ) +
   main_theme +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
   NULL
 
 box_plot
