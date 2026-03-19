@@ -1,4 +1,5 @@
-# Load packages and set colours --------------------------
+# Seup ------------------------------------------------------------------------
+# Loading packages
 pkg <- c(
   "data.table", "magrittr", "ggplot2", "ggh4x", "codacore", 
   "tensorflow", "ggpubr", "gridExtra", "cowplot", "ggtext"
@@ -7,93 +8,109 @@ for(pk in pkg){
   library(pk, character.only = T)
 }
 
-# Set working directory to source file location.
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Define colours for the genotypes, soils, and bacterial orders of interest.
-cols <- c(
-  "WT" = "#A9C289",
-  "symrk" = "#FEDA8B",
-  "ccamk" = "#FDB366",
-  "nsp1" = "#C0E4EF",
-  "nsp2" = "#6EA6CD"
-)
-
-colors <- c(NPK = "#6F944F", PK = "#B2563C", UF = "#3C7D82")
-
-# Load the input data --------------------------------------
+# Loading data
 ## Lotus
-ASV_table_Lotus <- fread("../1_data/1_Lotus/LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv")
-colnames(ASV_table_Lotus)[1] <- "ASVid"
+lotus_asv_table <- fread(
+  "../1_data/1_Lotus/LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv"
+)
+colnames(lotus_asv_table)[1] <- "ASVid"
 
-meta_data_Lotus <- fread(
+lotus_design <- fread(
   "../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt", drop = c(5,7,8)
 )
-meta_data_Lotus <- meta_data_Lotus[Compartment != "Nodules"]
+### Removing Nodule samples from metadata
+lotus_design <- lotus_design[Compartment != "Nodules"]
 
-taxonomy_Lotus <- fread("../1_data/1_Lotus/LotusCSSP_AskovSoils_taxonomy_10_4.tsv")
+lotus_taxonomy <- fread("../1_data/1_Lotus/LotusCSSP_AskovSoils_taxonomy_10_4.tsv")
 
 ## Hordeum
-ASV_table_Hordeum <- fread("../1_data/2_Hordeum/HordeumCSSP_AskovSoils_ASVtable_10_4.tsv")
-colnames(ASV_table_Hordeum)[1] <- "ASVid"
+hordeum_asv_table <- fread(
+  "../1_data/2_Hordeum/HordeumCSSP_AskovSoils_ASVtable_10_4.tsv"
+)
+colnames(hordeum_asv_table)[1] <- "ASVid"
 
-meta_data_Hordeum <- fread(
+hordeum_design <- fread(
   "../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt", drop = c(2,3,8)
 )
-meta_data_Hordeum <- meta_data_Hordeum[Compartment != "Soil"]
+### Removing soil samples from metadata
+hordeum_design <- hordeum_design[Compartment != "Soil"]
 
-taxonomy_Hordeum <- fread("../1_data/2_Hordeum/HordeumCSSP_AskovSoils_taxonomy_10_4.tsv")
+hordeum_taxonomy <- fread(
+  "../1_data/2_Hordeum/HordeumCSSP_AskovSoils_taxonomy_10_4.tsv"
+)
 
-# Clean up the taxonomy file layouts
-taxa_levels <- c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
+# Cleaning up taxonomy
+taxa_clean <- function(taxonomy){
+  taxa_levels <- c(
+    "Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species"
+  )
+  taxonomy[,c(taxa_levels):= tstrsplit(Taxon, "; ", fill = "u__Unknown")]
+  taxonomy[,c(taxa_levels):= lapply(.SD, substr, 4, 1000), .SDcols = taxa_levels]
+  taxonomy[Kingdom == "ssigned", Kingdom:= "Unassigned"]
+  taxonomy[,Taxon:=NULL]
+  setcolorder(taxonomy, c("Feature ID", taxa_levels, "Confidence"))
+  return(taxonomy)
+}
 
-taxonomy_Lotus[,c(taxa_levels):= tstrsplit(Taxon, "; ", fill = "u__Unknown")]
-taxonomy_Lotus[,c(taxa_levels):= lapply(.SD, substr, 4, 1000), .SDcols = taxa_levels]
-taxonomy_Lotus[Kingdom == "ssigned", Kingdom:= "Unassigned"]
-taxonomy_Lotus[,Taxon:=NULL]
-setcolorder(taxonomy_Lotus, c("Feature ID", taxa_levels, "Confidence"))
+lotus_taxonomy <- taxa_clean(lotus_taxonomy)
+hordeum_taxonomy <- taxa_clean(hordeum_taxonomy)
 
-taxonomy_Hordeum[,c(taxa_levels):= tstrsplit(Taxon, "; ", fill = "u__Unknown")]
-taxonomy_Hordeum[,c(taxa_levels):= lapply(.SD, substr, 4, 1000), .SDcols = taxa_levels]
-taxonomy_Hordeum[,Taxon:=NULL]
-setcolorder(taxonomy_Hordeum, c("Feature ID", taxa_levels, "Confidence"))
+# Removing non-bacterial ASVs from 
+non_bac_asv <- lotus_taxonomy[Kingdom != "Bacteria", "Feature ID"][[1]]
+lotus_asv_table <- lotus_asv_table[!(ASVid %in% non_bac_asv)]
 
-# # Remove non-bacterial ASVs from 
-Non_Bac_ASV <- taxonomy_Lotus[Kingdom != "Bacteria", "Feature ID"][[1]]
-ASV_table_Lotus <- ASV_table_Lotus[!(ASVid %in% Non_Bac_ASV)]
-
-# Set up list for easy retrieval later
-ASV_table <- list(Lotus = ASV_table_Lotus, Hordeum = ASV_table_Hordeum)
-meta_data <- rbind(meta_data_Lotus, meta_data_Hordeum)
-taxonomy <- rbind(taxonomy_Lotus, taxonomy_Hordeum)
+# Setting up list for easy retrieval
+asv_table <- list(Lotus = lotus_asv_table, Hordeum = hordeum_asv_table)
+design <- rbind(lotus_design, hordeum_design)
+taxonomy <- rbind(lotus_taxonomy, hordeum_taxonomy)
 setnames(taxonomy, "Feature ID", "ASVid")
 
-# Set up RA tables
-ASV_table_Lotus_RA <- data.table(
-  ASVid = ASV_table_Lotus$ASVid,
-  t(t(ASV_table_Lotus[,-1])/colSums(ASV_table_Lotus[,-1]))
+# Setting up RA tables
+convert_to_RA <- function(asv_table){
+  data.table(
+    ASVid = asv_table$ASVid,
+    t(t(asv_table[,-1])/colSums(asv_table[,-1]))
+  )
+}
+asv_table_RA <- lapply(asv_table, convert_to_RA)
+
+Opt <- expand.grid(
+  Host = c("Lotus", "Hordeum"),
+  Compartment = c("Root", "Rhizosphere")
 )
 
-ASV_table_Hordeum_RA <- data.table(
-  ASVid = ASV_table_Hordeum$ASVid,
-  t(t(ASV_table_Hordeum[,-1])/colSums(ASV_table_Hordeum[,-1]))
-)
+# Functions for nested classification model -----------------------------------
 
-ASV_table_RA <- list(Lotus = ASV_table_Lotus_RA, Hordeum = ASV_table_Hordeum_RA)
-
-Opt <- expand.grid(Host = c("Lotus", "Hordeum"), Compartment = c("Root", "Rhizosphere"))
-
-# Functions for the nested classification model --------------------------------
-Nested_model <- function(OTU_table, y, highest_order, seed, lambda, overlap = T){
-  Highest_order_resp <- ifelse(y == highest_order, highest_order, paste("Not", highest_order))
+# The following function distinguishes between 'highest order' and 'lower order' 
+# levels. 'Highest order' refers to the level that the first predicts for, while 
+# the lower levels refers to the levels the subsequent model predicts between. In 
+# practice, we want the first model to distinguish between NPK and non-NPK soils, 
+# so NPK is the 'highest order level'. The second model distinguishes between PK 
+# and UF soils, so those are referred to as 'lower order levels'.
+Nested_model <- function(asv_table, y, highest_order, seed, lambda, overlap = T){
+  # Setting up binary variables that checks if a samples belongs to the highest 
+  # order level or not.
+  Highest_order_resp <- ifelse(
+    y == highest_order, highest_order, paste("Not", highest_order)
+  )
   Highest_order_resp <- relevel(factor(Highest_order_resp), ref = highest_order)
   
-  OTU_table_T <- transpose(OTU_table, make.names = "ASVid", keep.names = "SampleID")
+  # Tranposing ASV table
+  asv_table_transp <- transpose(
+    l = asv_table,
+    make.names = "ASVid",
+    keep.names = "SampleID"
+  )
 
+  # Training codacore model for binary classification between highest order 
+  # level or not (in Practice: NPK vs. non-NPK in practice)
   set.seed(seed)
   tf$random$set_seed(seed)
   cc1 <- codacore(
-    x = data.frame(OTU_table_T[,-1], row.names = OTU_table_T$SampleID),
+    x = data.frame(asv_table_transp[,-1], row.names = asv_table_transp$SampleID),
     y = Highest_order_resp,
     objective = "binary classification",
     logRatioType = "SLR",
@@ -101,12 +118,19 @@ Nested_model <- function(OTU_table, y, highest_order, seed, lambda, overlap = T)
     overlap = overlap
   )
   
+  # Removing samples that do not belong to the highest order level 
+  # (in practice: remove NPK samples)
   Not_highest_idx <- which(y != highest_order)
   y2 <- y[Not_highest_idx]
-  OTU_table_lower_T <- OTU_table_T[Not_highest_idx]
+  asv_table_lower_transp <- asv_table_transp[Not_highest_idx]
   
+  # Training codacore model for binary classification between the lower order levels 
+  # (In practice: Predict if a samples is from PK or UF soil)
   cc2 <- codacore(
-    x = data.frame(OTU_table_lower_T[,-1], row.names = OTU_table_lower_T$SampleID),
+    x = data.frame(
+      asv_table_lower_transp[,-1],
+      row.names = asv_table_lower_transp$SampleID
+    ),
     y = y2,
     objective = "binary classification",
     logRatioType = "SLR",
@@ -117,31 +141,48 @@ Nested_model <- function(OTU_table, y, highest_order, seed, lambda, overlap = T)
   return( list(Highest = cc1, Lowest = cc2) )
 }
 
-inverse_logit <- function(x) exp(x)/(1+exp(x))
-Nested_model_pred <- function(Model, eval_data, thresh = 0.5){
-  eval_data_T <- transpose(eval_data, keep.names = "SampleID", make.names = "ASVid")
+# Function that returns predtictions based on a nested model fit obtained from 
+# the Nested_model function
+Nested_model_pred <- function(Model, test_data, thresh = 0.5){
+  # Transformation that converts predicted log-odds into probabilities
+  inverse_logit <- function(x) exp(x)/(1+exp(x))
+  
+  # Transposing test data
+  test_data_transp <- transpose(
+    test_data, keep.names = "SampleID", make.names = "ASVid"
+  )
 
+  # Obtain predictions from highest order model 
+  # (In practice: NPK vs. non-NPK prediction)
   pred <- predict(
     Model$Highest,
-    data.frame(eval_data_T[,-1], row.names = eval_data_T$SampleID),
+    data.frame(test_data_transp[,-1], row.names = test_data_transp$SampleID),
     logits = F
   )
+  # Converting log-odds into probabilities and obtaining predicted soil-type
   prob <- inverse_logit(pred)
   prob[is.nan(prob)] <- 1
   pred <- ifelse(prob < thresh, "NPK", "Not NPK")
   
+  # Keeping only samples from test data predicted to be from non-NPK soil
   lower_idx <- which(pred == "Not NPK")
-  x_lower <- eval_data_T[lower_idx]
-  pred2 <- predict(
+  test_data_lower_transp <- test_data_transp[lower_idx]
+  # Obtaining prediction from Model 2, PK vs UF
+  pred_lower <- predict(
     Model$Lowest,
-    data.frame(x_lower[,-1], row.names = x_lower$SampleID),
+    data.frame(
+      test_data_lower_transp[,-1],
+      row.names = test_data_lower_transp$SampleID
+    ),
     logits = F
   )
-  prob2 <- inverse_logit(pred2)
-  prob2[is.nan(prob2)] <- 1
-  pred2 <- ifelse(prob2 < thresh, "PK", "UF")
+  # Converting log-odds into probabilities and obtaining predicted soil-type
+  prob <- inverse_logit(pred_lower)
+  prob[is.nan(prob)] <- 1
+  pred_lower <- ifelse(prob < thresh, "PK", "UF")
   
-  pred[lower_idx] <- pred2
+  # Returning full vector of trinary predictions
+  pred[lower_idx] <- pred_lower
   return(pred)
 }
 
@@ -155,29 +196,29 @@ for(i in 1:nrow(Opt)){
   Current_plant <- as.matrix(Opt)[i,1]
   cat(run, "\r")
 
-  ASV_table_sub <- ASV_table[[Opt$Host[i]]]
-  meta_data_sub <- meta_data[
+  asv_table_sub <- asv_table[[Opt$Host[i]]]
+  design_sub <- design[
     Plant == Opt$Host[i] & Compartment == Opt$Compartment[i]
   ]
-  sample_sub <- meta_data_sub$SampleID
-  ASV_table_sub <- ASV_table_sub[,c("ASVid", sample_sub), with = F]
+  sample_sub <- design_sub$SampleID
+  asv_table_sub <- asv_table_sub[,c("ASVid", sample_sub), with = F]
   
   # Filter out ASVs present in less than 10% of samples
-  pres_idx <- which(rowMeans(ASV_table_sub[,-1] != 0) >= 0.1)
-  ASV_table_sub <- ASV_table_sub[pres_idx]
+  pres_idx <- which(rowMeans(asv_table_sub[,-1] != 0) >= 0.1)
+  asv_table_sub <- asv_table_sub[pres_idx]
 
   # Splitting into test and training data
   set.seed(1700294030)
-  test_samples <- meta_data_sub[
+  test_samples <- design_sub[
     ,.(SampleID = sample(SampleID, 2, replace = FALSE)), by = .(Genotype, Soil)
   ]$SampleID
-  training_samples <- setdiff(meta_data_sub$SampleID, test_samples)
+  training_samples <- setdiff(design_sub$SampleID, test_samples)
 
-  x_train <- ASV_table_sub[,c("ASVid", training_samples), with = F]
-  x_test <- ASV_table_sub[,c("ASVid", test_samples), with = F]
+  x_train <- asv_table_sub[,c("ASVid", training_samples), with = F]
+  x_test <- asv_table_sub[,c("ASVid", test_samples), with = F]
 
-  y_train <- meta_data_sub[SampleID %in% training_samples, Soil]
-  y_test <- meta_data_sub[SampleID %in% test_samples, Soil]
+  y_train <- design_sub[SampleID %in% training_samples, Soil]
+  y_test <- design_sub[SampleID %in% test_samples, Soil]
 
   # Fitting prediction model
   tf$random$set_seed(1700294030)
@@ -196,7 +237,7 @@ for(i in 1:nrow(Opt)){
   dt <- data.table(SampleID = names(pred), Obs = y_test, Pred = pred)
   dt <- dt[order(Obs)]
   dt[,":="(Host = Opt$Host[i], Compartment = Opt$Compartment[i])]
-  dt <- merge(dt, meta_data_sub[,c(1,3)], by = "SampleID")
+  dt <- merge(dt, design_sub[,c(1,3)], by = "SampleID")
   Res_list[[i]] <- dt
 
   # Extracting ASVs used in predictions
@@ -287,13 +328,13 @@ for(i in 1:nrow(Opt)){
   Ratio_summary_temp[,":="(Compartment = Opt$Compartment[i], Host = Opt$Host[i])]
   pred_ASVs <- unique(Ratio_summary_temp$ASVid)
   
-  ASV_table_RA_sub <- ASV_table_RA[[Opt$Host[i]]]
-  ASV_table_RA_sub <- ASV_table_RA_sub[ASVid %in% pred_ASVs]
-  ASV_table_RA_sub <- transpose(
-    ASV_table_RA_sub, keep.names = "SampleID", make.names = "ASVid"
+  asv_table_RA_sub <- asv_table_RA[[Opt$Host[i]]]
+  asv_table_RA_sub <- asv_table_RA_sub[ASVid %in% pred_ASVs]
+  asv_table_RA_sub <- transpose(
+    asv_table_RA_sub, keep.names = "SampleID", make.names = "ASVid"
   )
-  ASV_table_RA_sub <- merge(meta_data_sub, ASV_table_RA_sub, by = "SampleID")
-  mean_RAs <- ASV_table_RA_sub[,lapply(.SD, mean), Soil, .SDcols = pred_ASVs]
+  asv_table_RA_sub <- merge(design_sub, asv_table_RA_sub, by = "SampleID")
+  mean_RAs <- asv_table_RA_sub[,lapply(.SD, mean), Soil, .SDcols = pred_ASVs]
   mean_RAs <- transpose(mean_RAs, make.names = "Soil", keep.names = "ASVid")
   colnames(mean_RAs)[-1] <- paste(colnames(mean_RAs)[-1], "RA", sep = "_")
 
@@ -302,15 +343,15 @@ for(i in 1:nrow(Opt)){
 
   # Summarising RA and taxonomic information for ASVs used for estimation
   ASV_pred <- unique(Ratio_summary_temp$ASVid)
-  ASV_table_RA_sub <- ASV_table_RA[[Opt$Host[i]]]
-  ASV_table_RA_sub <- ASV_table_RA_sub[ASVid %in% ASV_pred]
-  ASV_table_RA_sub <- ASV_table_RA_sub[,c("ASVid", sample_sub), with = F]
-  ASV_table_RA_sub <- merge(taxonomy[,c(1, 5)], ASV_table_RA_sub, by = "ASVid")
-  Order_table_RA_sub <- ASV_table_RA_sub[,lapply(.SD, mean), Order, .SDcols = sample_sub]
+  asv_table_RA_sub <- asv_table_RA[[Opt$Host[i]]]
+  asv_table_RA_sub <- asv_table_RA_sub[ASVid %in% ASV_pred]
+  asv_table_RA_sub <- asv_table_RA_sub[,c("ASVid", sample_sub), with = F]
+  asv_table_RA_sub <- merge(taxonomy[,c(1, 5)], asv_table_RA_sub, by = "ASVid")
+  Order_table_RA_sub <- asv_table_RA_sub[,lapply(.SD, mean), Order, .SDcols = sample_sub]
   Order_table_RA_sub_T <- transpose(
     Order_table_RA_sub, make.names = "Order", keep.names = "SampleID"
   )
-  Order_table_RA_sub_T <- merge(meta_data_sub, Order_table_RA_sub_T, by = "SampleID")
+  Order_table_RA_sub_T <- merge(design_sub, Order_table_RA_sub_T, by = "SampleID")
   Order_info <- melt(
     Order_table_RA_sub_T,
     id.vars = 1:5,
