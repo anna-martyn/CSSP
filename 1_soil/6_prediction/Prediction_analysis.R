@@ -1,9 +1,6 @@
 # Seup ------------------------------------------------------------------------
 # Loading packages
-pkg <- c(
-  "data.table", "magrittr", "ggplot2", "ggh4x", "codacore", 
-  "tensorflow", "ggpubr", "gridExtra", "cowplot", "ggtext"
-)
+pkg <- c("data.table", "codacore","tensorflow")
 for(pk in pkg){
   library(pk, character.only = T)
 }
@@ -77,26 +74,11 @@ convert_to_RA <- function(asv_table){
 }
 asv_table_RA <- lapply(asv_table, convert_to_RA)
 
-Opt <- expand.grid(
-  Host = c("Lotus", "Hordeum"),
-  Compartment = c("Root", "Rhizosphere")
-)
-
 # Functions for nested classification model -----------------------------------
-
-# The following function distinguishes between 'highest order' and 'lower order' 
-# levels. 'Highest order' refers to the level that the first predicts for, while 
-# the lower levels refers to the levels the subsequent model predicts between. In 
-# practice, we want the first model to distinguish between NPK and non-NPK soils, 
-# so NPK is the 'highest order level'. The second model distinguishes between PK 
-# and UF soils, so those are referred to as 'lower order levels'.
-Nested_model <- function(asv_table, y, highest_order, seed, lambda, overlap = T){
-  # Setting up binary variables that checks if a samples belongs to the highest 
-  # order level or not.
-  Highest_order_resp <- ifelse(
-    y == highest_order, highest_order, paste("Not", highest_order)
-  )
-  Highest_order_resp <- relevel(factor(Highest_order_resp), ref = highest_order)
+Nested_model <- function(asv_table, y, seed, lambda, overlap = T){
+  # Setting up NPK vs non-NPK binary variable
+  NPK_bin_var <- ifelse(y == "NPK", "NPK", "Non-NPK")
+  NPK_bin_var <- relevel(factor(NPK_bin_var), ref = "NPK")
   
   # Tranposing ASV table
   asv_table_transp <- transpose(
@@ -105,40 +87,37 @@ Nested_model <- function(asv_table, y, highest_order, seed, lambda, overlap = T)
     keep.names = "SampleID"
   )
 
-  # Training codacore model for binary classification between highest order 
-  # level or not (in Practice: NPK vs. non-NPK in practice)
+  # Training codacore model for binary classification between NPK and non-NPK soils
   set.seed(seed)
   tf$random$set_seed(seed)
-  cc1 <- codacore(
+  Model1 <- codacore(
     x = data.frame(asv_table_transp[,-1], row.names = asv_table_transp$SampleID),
-    y = Highest_order_resp,
+    y = NPK_bin_var,
     objective = "binary classification",
     logRatioType = "SLR",
     lambda = lambda,
     overlap = overlap
   )
   
-  # Removing samples that do not belong to the highest order level 
-  # (in practice: remove NPK samples)
-  Not_highest_idx <- which(y != highest_order)
-  y2 <- y[Not_highest_idx]
-  asv_table_lower_transp <- asv_table_transp[Not_highest_idx]
+  # Removing NPK samples
+  Non_NPK_idx <- which(y != "NPK")
+  y_non_NPK <- y[Non_NPK_idx]
+  asv_table_non_NPK_transp <- asv_table_transp[Non_NPK_idx]
   
-  # Training codacore model for binary classification between the lower order levels 
-  # (In practice: Predict if a samples is from PK or UF soil)
-  cc2 <- codacore(
+  # Training codacore model for binary classification between PK and UF soils
+  Model2 <- codacore(
     x = data.frame(
-      asv_table_lower_transp[,-1],
-      row.names = asv_table_lower_transp$SampleID
+      asv_table_non_NPK_transp[,-1],
+      row.names = asv_table_non_NPK_transp$SampleID
     ),
-    y = y2,
+    y = y_non_NPK,
     objective = "binary classification",
     logRatioType = "SLR",
     lambda = lambda,
     overlap = overlap
   )
   
-  return( list(Highest = cc1, Lowest = cc2) )
+  return( list(Model1 = Model1, Model2 = Model2) )
 }
 
 # Function that returns predtictions based on a nested model fit obtained from 
@@ -152,24 +131,26 @@ Nested_model_pred <- function(Model, test_data, thresh = 0.5){
     test_data, keep.names = "SampleID", make.names = "ASVid"
   )
 
-  # Obtain predictions from highest order model 
-  # (In practice: NPK vs. non-NPK prediction)
+  # Obtain predictions between NPK and non-NPK soils from Model 1
   pred <- predict(
-    Model$Highest,
-    data.frame(test_data_transp[,-1], row.names = test_data_transp$SampleID),
+    Model$Model1,
+    data.frame(
+      test_data_transp[,-1],
+      row.names = test_data_transp$SampleID
+    ),
     logits = F
   )
   # Converting log-odds into probabilities and obtaining predicted soil-type
   prob <- inverse_logit(pred)
   prob[is.nan(prob)] <- 1
-  pred <- ifelse(prob < thresh, "NPK", "Not NPK")
+  pred <- ifelse(prob < thresh, "NPK", "non-NPK")
   
-  # Keeping only samples from test data predicted to be from non-NPK soil
-  lower_idx <- which(pred == "Not NPK")
+  # Keeping only samples from test data predicted to be from non-NPK soils
+  lower_idx <- which(pred == "non-NPK")
   test_data_lower_transp <- test_data_transp[lower_idx]
   # Obtaining prediction from Model 2, PK vs UF
   pred_lower <- predict(
-    Model$Lowest,
+    Model$Model2,
     data.frame(
       test_data_lower_transp[,-1],
       row.names = test_data_lower_transp$SampleID
@@ -187,23 +168,32 @@ Nested_model_pred <- function(Model, test_data, thresh = 0.5){
 }
 
 # Run the prediction analysis --------------------------------------------------
-Ratio_summary_list <- list()
-Res_list <- list()
-Ratio_amount_list <- list()
+Opt <- expand.grid(
+  Host = c("Lotus", "Hordeum"),
+  Compartment = c("Root", "Rhizosphere")
+)
+ratio_summary_list <- list()
+res_list <- list()
+ratio_amount_list <- list()
 tax_summary_list <- list()
 for(i in 1:nrow(Opt)){
   run <- paste(as.matrix(Opt)[i,], collapse = "_")
-  Current_plant <- as.matrix(Opt)[i,1]
   cat(run, "\r")
+  
+  # Setting up the current host-compartment combination for the current iteration
+  current_host <- Opt$Host[i]
+  current_comp <- Opt$Compartment[i]
 
-  asv_table_sub <- asv_table[[Opt$Host[i]]]
+  # Subsetting ASV table and metadata to only contain samples from current 
+  # plant-compartment combination
+  asv_table_sub <- asv_table[[current_host]]
   design_sub <- design[
-    Plant == Opt$Host[i] & Compartment == Opt$Compartment[i]
+    Plant == current_host & Compartment == current_comp
   ]
   sample_sub <- design_sub$SampleID
   asv_table_sub <- asv_table_sub[,c("ASVid", sample_sub), with = F]
   
-  # Filter out ASVs present in less than 10% of samples
+  # Filtering out ASVs present in less than 10% of samples
   pres_idx <- which(rowMeans(asv_table_sub[,-1] != 0) >= 0.1)
   asv_table_sub <- asv_table_sub[pres_idx]
 
@@ -223,9 +213,8 @@ for(i in 1:nrow(Opt)){
   # Fitting prediction model
   tf$random$set_seed(1700294030)
   cc <- Nested_model(
-    OTU_table = x_train,
+    asv_table = x_train,
     y = y_train,
-    highest_order = "NPK",
     seed = 1700299435,
     lambda = 1
   )
@@ -234,150 +223,199 @@ for(i in 1:nrow(Opt)){
   eval <- mean(y_test == pred)
   
   # Summarising results
-  dt <- data.table(SampleID = names(pred), Obs = y_test, Pred = pred)
-  dt <- dt[order(Obs)]
-  dt[,":="(Host = Opt$Host[i], Compartment = Opt$Compartment[i])]
-  dt <- merge(dt, design_sub[,c(1,3)], by = "SampleID")
-  Res_list[[i]] <- dt
+  pred_res <- data.table(SampleID = names(pred), Obs = y_test, Pred = pred)
+  pred_res <- pred_res[order(Obs)]
+  pred_res[,":="(Host = current_host, Compartment = current_comp)]
+  pred_res <- merge(
+    x = pred_res,
+    y = design_sub[,c("SampleID","Genotype")],
+    by = "SampleID"
+  )
+  res_list[[i]] <- pred_res
 
   # Extracting ASVs used in predictions
-  num_vec_NPK <- lapply(
-    cc$Highest$ensemble, function(x) x_train$ASVid[x$hard$numerator]
+  ## Numerators model 1
+  num_model1 <- lapply(
+    cc$Model1$ensemble, function(x) x_train$ASVid[x$hard$numerator]
   )
-  denom_vec_NPK <- lapply(
-    cc$Highest$ensemble, function(x) x_train$ASVid[x$hard$denominator]
+  ## Denominators model 1
+  denom_model1 <- lapply(
+    cc$Model1$ensemble, function(x) x_train$ASVid[x$hard$denominator]
+  )
+  ## Numerators model 2
+  num_model2 <- lapply(
+    cc$Model2$ensemble, function(x) x_train$ASVid[x$hard$numerator]
+  )
+  ## Denominators model 2
+  denom_model2 <- lapply(
+    cc$Model2$ensemble, function(x) x_train$ASVid[x$hard$denominator]
   )
 
-  num_vec_PK <- lapply(
-    cc$Lowest$ensemble, function(x) x_train$ASVid[x$hard$numerator]
-  )
-  denom_vec_PK <- lapply(
-    cc$Lowest$ensemble, function(x) x_train$ASVid[x$hard$denominator]
-  )
-
-  # Coutning the ASVs in the ratios for table C
-  Mat_temp <- matrix(
+  # Counting the ASVs in ratios for table C
+  count_mat_model1 <- matrix(
     c(
-      unlist(lapply(num_vec_NPK, length)),
-      unlist(lapply(denom_vec_NPK, length))
+      unlist(lapply(num_model1, length)),
+      unlist(lapply(denom_model1, length))
     ),
     ncol = 2
   )
-  # NPK_ASVs_in_Ratios <- apply(Mat_temp, 1, function(x) paste(x[1], x[2], sep = "/"))
-  NPK_ASVs_in_Ratios <- rowSums(Mat_temp)
-  NPK_ratios <- paste0(
-    length(num_vec_NPK), " (",
-    paste(NPK_ASVs_in_Ratios, collapse = ", "), ")"
+  # asv_in_ratios_model1 <- apply(count_mat_model1, 1, function(x) paste(x[1], x[2], sep = "/"))
+  asv_in_ratios_model1 <- rowSums(count_mat_model1)
+  ratios_model1 <- paste0(
+    length(num_model1), " (",
+    paste(asv_in_ratios_model1, collapse = ", "), ")"
   )
 
-  Mat_temp <- matrix(
+  count_mat_model2 <- matrix(
     c(
-      unlist(lapply(num_vec_PK, length)),
-      unlist(lapply(denom_vec_PK, length))
+      unlist(lapply(num_model2, length)),
+      unlist(lapply(denom_model2, length))
     ),
     ncol = 2
   )
-  # PK_ASVs_in_Ratios <- apply(Mat_temp, 1, function(x) paste(x[1], x[2], sep = "/"))
-  PK_ASVs_in_Ratios <- rowSums(Mat_temp)
-  PK_ratios <- paste0(
-    length(num_vec_PK), " (",
-    paste(PK_ASVs_in_Ratios, collapse = ", "), ")"
+  # asv_in_ratios_model2 <- apply(count_mat_model2, 1, function(x) paste(x[1], x[2], sep = "/"))
+  asv_in_ratios_model2 <- rowSums(count_mat_model2)
+  ratios_model2 <- paste0(
+    length(num_model2), " (",
+    paste(asv_in_ratios_model2, collapse = ", "), ")"
   )
 
-  Ratio_amount_list[[i]] <- data.table(
-    Host = Opt$Host[i],
-    Compartment = Opt$Compartment[i],
-    "NPK ratios" = NPK_ratios,
-    "PK ratios" = PK_ratios,
+  ratio_amount_list[[i]] <- data.table(
+    Host = current_host,
+    Compartment = current_comp,
+    "NPK ratios" = ratios_model1,
+    "PK ratios" = ratios_model2,
     Accuracy = eval
   )
 
   # Constructing supplementary table
-  Sum_num_NPK <- lapply(
-    1:length(num_vec_NPK), function(i) data.table(
-      ASVid = num_vec_NPK[[i]],
+  # Summarising all ratios in both models
+  ## Numerators in model 1
+  model1_num_summary <- lapply(
+    1:length(num_model1), function(i) data.table(
+      ASVid = num_model1[[i]],
       Role = paste0("Numerator", i),
       Prediction = "NPK vs. non-NPK"
     )
   )
-  Sum_denom_NPK <- lapply(
-    1:length(denom_vec_NPK), function(i) data.table(
-      ASVid = denom_vec_NPK[[i]],
+  ## Denominators in model 1
+  model1_denom_summary <- lapply(
+    1:length(denom_model1), function(i) data.table(
+      ASVid = denom_model1[[i]],
       Role = paste0("Denominator", i),
       Prediction = "NPK vs. non-NPK"
     )
   )
-
-  Sum_num_PK <- lapply(
-    1:length(num_vec_PK), function(i) data.table(
-      ASVid = num_vec_PK[[i]],
+  ## Numerators in model 2
+  model2_num_summary <- lapply(
+    1:length(num_model2), function(i) data.table(
+      ASVid = num_model2[[i]],
       Role = paste0("Numerator", i),
       Prediction = "PK vs. UF"
     )
   )
-  Sum_denom_PK <- lapply(
-    1:length(denom_vec_PK), function(i) data.table(
-      ASVid = denom_vec_PK[[i]],
+  ## Denominators in model 2
+  model2_denom_summary <- lapply(
+    1:length(denom_model2), function(i) data.table(
+      ASVid = denom_model2[[i]],
       Role = paste0("Denominator", i),
       Prediction = "PK vs. UF"
     )
   )
-
-  lst <- c(Sum_num_NPK, Sum_denom_NPK, Sum_num_PK, Sum_denom_PK)
-  Ratio_summary_temp <- rbindlist(lst)
-  Ratio_summary_temp[,":="(Compartment = Opt$Compartment[i], Host = Opt$Host[i])]
-  pred_ASVs <- unique(Ratio_summary_temp$ASVid)
+  # Collecting information on both numerators and denominators into a single data table
+  both_models_ratios_list <- c(
+    model1_num_summary, model1_denom_summary,
+    model2_num_summary, model2_denom_summary
+  )
+  both_models_ratios <- rbindlist(both_models_ratios_list)
+  both_models_ratios[,":="(Compartment = current_comp, Host = current_host)]
   
-  asv_table_RA_sub <- asv_table_RA[[Opt$Host[i]]]
-  asv_table_RA_sub <- asv_table_RA_sub[ASVid %in% pred_ASVs]
+  # Vector containing ASVs involvled in at least one log-ratio used for predictions
+  pred_asv <- unique(both_models_ratios$ASVid)
+  
+  # Subsetting ASV table with RAs to keep only samples from the current host and 
+  # ASVs involved in log-ratios used for predictions
+  asv_table_RA_sub <- asv_table_RA[[current_host]]
+  asv_table_RA_sub <- asv_table_RA_sub[ASVid %in% pred_asv]
+  
+  # Transposing ASV table
   asv_table_RA_sub <- transpose(
     asv_table_RA_sub, keep.names = "SampleID", make.names = "ASVid"
   )
+  
+  # Adding information from metadata to merged ASV table
+  # Only samples from the current compartment are kept, since design_sub only 
+  # contains these samples, and only common samples are kept in merge, unless
+  # all = TRUE is set
   asv_table_RA_sub <- merge(design_sub, asv_table_RA_sub, by = "SampleID")
-  mean_RAs <- asv_table_RA_sub[,lapply(.SD, mean), Soil, .SDcols = pred_ASVs]
+  # Taking the mean RA for each prediction ASV within soils and across genotypes
+  mean_RAs <- asv_table_RA_sub[,lapply(.SD, mean), Soil, .SDcols = pred_asv]
   mean_RAs <- transpose(mean_RAs, make.names = "Soil", keep.names = "ASVid")
   colnames(mean_RAs)[-1] <- paste(colnames(mean_RAs)[-1], "RA", sep = "_")
 
-  Ratio_summary_temp <- merge(Ratio_summary_temp, mean_RAs)
-  Ratio_summary_list[[i]] <- Ratio_summary_temp
+  # Merging ratio summaries with RA means
+  both_models_ratios <- merge(both_models_ratios, mean_RAs)
+  ratio_summary_list[[i]] <- both_models_ratios
 
-  # Summarising RA and taxonomic information for ASVs used for estimation
-  ASV_pred <- unique(Ratio_summary_temp$ASVid)
-  asv_table_RA_sub <- asv_table_RA[[Opt$Host[i]]]
-  asv_table_RA_sub <- asv_table_RA_sub[ASVid %in% ASV_pred]
+  # Summarising RA and taxonomic information for ASVs used for prediction
+  ## Subsetting ASV table with RAs, keeping only samples from current 
+  ## host-compartment combination and ASVs used for prediction
+  asv_table_RA_sub <- asv_table_RA[[current_host]]
+  asv_table_RA_sub <- asv_table_RA_sub[ASVid %in% pred_asv]
   asv_table_RA_sub <- asv_table_RA_sub[,c("ASVid", sample_sub), with = F]
-  asv_table_RA_sub <- merge(taxonomy[,c(1, 5)], asv_table_RA_sub, by = "ASVid")
-  Order_table_RA_sub <- asv_table_RA_sub[,lapply(.SD, mean), Order, .SDcols = sample_sub]
-  Order_table_RA_sub_T <- transpose(
-    Order_table_RA_sub, make.names = "Order", keep.names = "SampleID"
+  
+  ## Adding order information to ASV table
+  asv_table_RA_sub <- merge(
+    x = taxonomy[,c("ASVid", "Order")],
+    y = asv_table_RA_sub,
+    by = "ASVid"
   )
-  Order_table_RA_sub_T <- merge(design_sub, Order_table_RA_sub_T, by = "SampleID")
-  Order_info <- melt(
-    Order_table_RA_sub_T,
+  
+  ## Aggregating RAs at the order level
+  orders_RA <- asv_table_RA_sub[,lapply(.SD, sum), Order, .SDcols = sample_sub]
+  
+  ## Tranposing order information and merging it with metadata
+  orders_RA_transp <- transpose(
+    orders_RA, make.names = "Order", keep.names = "SampleID"
+  )
+  orders_RA_transp <- merge(design_sub, orders_RA_transp, by = "SampleID")
+
+  ## Converting to long form and saving information on orders
+  order_info <- melt(
+    orders_RA_transp,
     id.vars = 1:5,
     variable.name = "Order",
     value.name = "RA"
   )
-  tax_summary_list[[i]] <- Order_info[,.(RA = mean(RA)), .(Plant, Compartment, Soil, Order)]
+  tax_summary_list[[i]] <- order_info[,.(RA = mean(RA)), .(Plant, Compartment, Soil, Order)]
 }
 
+# Collecting taxonomic information on ASVs used for predictions in all 
+# plant-compartment combinations
 tax_summary <- rbindlist(tax_summary_list)
 tax_summary[,.(RA = sum(RA)), .(Plant, Compartment, Soil)]
 fwrite(tax_summary, "Pred_taxonomic_composition.csv")
 
-Res <- rbindlist(Res_list)
-Ratio_summary <- rbindlist(Ratio_summary_list)
-Ratio_summary <- merge(Ratio_summary, taxonomy, by = "ASVid")
-Ratio_summary <- Ratio_summary[order(Host, Compartment, Prediction, Role)]
-fwrite(Ratio_summary, file = "LotusHordeum_Askov_prediction_ratios_summary.csv")
+# Collecting information on which ASVs are used for predictions in all 
+# plant-compartment combinations
+res <- rbindlist(res_list)
+ratio_summary <- rbindlist(ratio_summary_list)
+ratio_summary <- merge(ratio_summary, taxonomy, by = "ASVid")
+ratio_summary <- ratio_summary[order(Host, Compartment, Prediction, Role)]
+fwrite(ratio_summary, file = "LotusHordeum_Askov_prediction_ratios_summary.csv")
 
-Ratio_amount <- rbindlist(Ratio_amount_list)
-Ratio_amount[,":="(
+# Collecting information on the amount of ASVs used for predictions in all 
+# plant-compartment combinations and their accuracies
+ratio_amount <- rbindlist(ratio_amount_list)
+ratio_amount[,":="(
   Accuracy = paste0(round(Accuracy*100, 1), "%"),
   Compartment = relevel(Compartment, ref = "Rhizosphere")
 )]
-Ratio_amount <- Ratio_amount[order(Host, Compartment)]
-fwrite(Ratio_amount, "Pred_accuracy_summary.csv")
+ratio_amount <- ratio_amount[order(Host, Compartment)]
+fwrite(ratio_amount, "Pred_accuracy_summary.csv")
 
-Res[,.(Accuracy = mean(Obs == Pred)), .(Host, Compartment)]
-fwrite(Res, "Prediction_results.csv")
+# Collecting information on the observed vs. predicted soils in all
+# samples in the test data
+fwrite(res, "Prediction_results.csv")
+
+res[,.(Accuracy = mean(Obs == Pred)), .(Host, Compartment)]
