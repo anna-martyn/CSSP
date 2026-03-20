@@ -1,55 +1,54 @@
-# Clean up.
-options(warn=-1)
-rm(list=ls())
+# Cleaning up
+options(warn = -1)
+rm(list = ls())
 
-# Set working directory to source file location.
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load the required packages.
-pkg <- c("ggplot2", "ggpubr", "cowplot", "patchwork", "magick", "grid")
+# Loading data
+pkg <- c("ggplot2", "ggpubr", "cowplot")
 for(pk in pkg){
   library(pk, character.only = T)
 }
 
-# Read all plot files (rds files) into variables.
-plot_files <- list.files(pattern = "\\.rds$")
-for (f in plot_files) {
-  plot_name <- tools::file_path_sans_ext(f)  # remove .rds extension
-  assign(plot_name, readRDS(f))
-}
-
-# Assign plots to variables and modify if necessary.
+# Blank placeholder
 p1 <- placeholder <- ggplot() +
   geom_blank() +
   theme_void() +
   annotate("text", x = 0.5, y = 0.5, label = "", size = 6, hjust = 0.5)
 
-p2 <- LotusHordeum_Askov_WT_shootfw_boxplots
+# Loading plots from rds files
+p2 <- readRDS("LotusHordeum_Askov_WT_shootfw_boxplots.rds")
+p3 <- readRDS("Lotus_Askov_WT_nodule_cts.rds")
+p4 <- readRDS("Lotus_Askov_WT_cpcoa.rds")
+p5 <- readRDS("Hordeum_Askov_WT_cpcoa.rds")
+p6 <- readRDS("LotusHordeum_Askov_WT_orders_heatmap.rds")
 
-p3 <- Lotus_Askov_WT_nodule_cts
+# Modifying plots
 p3_aligned <- p3 + labs(title = " ") +
   theme(plot.title = element_text(size = 6, color = NA))
 
-p4 <- Lotus_Askov_WT_cpcoa +
-  theme(legend.position = "bottom",
-        legend.box="vertical",
-        legend.margin=margin())+
+p4 <- p4 +
+  theme(
+    legend.position = "bottom",
+    legend.box = "vertical",
+    legend.margin = margin(),
+    legend.spacing.y = unit(0, "pt")
+  ) +
+  guides(shape = guide_legend(title.position = "top", title.hjust = 0.5))
+
+p5 <- p5 + 
+  theme(
+    legend.position = "bottom",
+    legend.box = "vertical", 
+    legend.margin = margin(),
+    legend.spacing.y = unit(0, "pt"),
+    plot.margin = margin(t = 0.5, b = 1, l = 0.5, r = 0.5, unit = "lines")
+  )+
   guides(shape = guide_legend(title.position = "top", title.hjust=0.5))
-p4 <- p4 + theme(legend.spacing.y = unit(0.5, "lines"))
 
-p5 <- Hordeum_Askov_WT_cpcoa + 
-  theme(legend.position = "bottom",
-        legend.box="vertical", 
-        legend.margin=margin())+
-  guides(shape = guide_legend(title.position = "top", title.hjust=0.5))
-p5 <- p5 + theme(
-  legend.spacing.y = unit(0.5, "lines"),
-  plot.margin = margin(t = 0.5, b = 1, l = 0.5, r = 0.5, unit = "lines")
-)
 
-p6 <- LotusHordeum_Askov_WT_orders_heatmap
-
-# Assemble the individual rows for the final figure.
+# Assembling rows
 row1 <- plot_grid(
   p1, p2, p3_aligned,
   ncol = 3,
@@ -79,17 +78,19 @@ bottom_rows <- plot_grid(
   rel_widths = c(1/3, 2/3)
 )
 
-# Combine all rows in the final figure.
+# Combining all plots
 final_plot <- plot_grid(
-  row1,
-  bottom_rows,
+  row1, bottom_rows,
   ncol = 1,
   rel_heights = c(0.3, 0.7)
 )
 
-final_plot
-
-# Save the final figure as a PDF file.
-ggsave("Figure2_Askov_WT.pdf", final_plot, 
-       width = 18, height = 22, units = "cm")
+# Saving figure
+ggsave(
+  filename = "Figure2_Askov_WT.pdf",
+  plot = final_plot,
+  width = 18,
+  height = 22,
+  units = "cm"
+)
 
