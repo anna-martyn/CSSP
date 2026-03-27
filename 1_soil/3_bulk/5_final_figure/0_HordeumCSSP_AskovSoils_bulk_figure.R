@@ -1,11 +1,11 @@
-# Clean up
-options(warn=-1)
-rm(list=ls())
+# Cleaning up
+options(warn = -1)
+rm(list = ls())
 
-# Set working directory to source file location
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load packages
+# Loading packages
 pkg <- c("ggplot2", "cowplot", "grid")
 for(pk in pkg){
   library(pk, character.only = T)
@@ -18,12 +18,18 @@ p1 <- placeholder <- ggplot() +
   annotate("text", x = 0.5, y = 0.5, label = "", size = 6, hjust = 0.5)
 
 # Reading plots from RDS files
-p2 <- readRDS("HordeumCSSP_AskovSoils_bulk_chao1_rfd.rds")
-p3 <- readRDS("Hordeum_bulk_PCoA.rds")
-p4 <- readRDS("Hordeum_bulk_order_top20_RA_mean_stackedbp.rds")
-p5 <- readRDS("Hordeum_barplot_bulk_top20_RA_sign.rds")
-p6 <- readRDS("Hordeum_bulk_Venn_ASVs.rds")
-p7_nolegend <- readRDS("HordeumCSSP_bulk_ASV_overlap_piecharts_nolegend.rds")
+p2 <- readRDS("../1_chao1/1_rds_files/HordeumCSSP_AskovSoils_bulk_chao1_rfd.rds")
+p3 <- readRDS("../2_pcoa/1_rds_files/Hordeum_bulk_PCoA.rds")
+p4 <- readRDS(
+  "../3_barplots_orders/1_rds_files/Hordeum_bulk_order_top20_RA_mean_stackedbp.rds"
+)
+p5 <- readRDS(
+  "../3_barplots_orders/1_rds_files/Hordeum_barplot_bulk_top20_RA_sign.rds"
+)
+p6 <- readRDS("../4_venn_piecharts/1_rds_files/Hordeum_bulk_Venn_ASVs.rds")
+p7_nolegend <- readRDS(
+  "../4_venn_piecharts/1_rds_files/HordeumCSSP_bulk_ASV_overlap_piecharts_nolegend.rds"
+)
 
 # Modifying plots
 p4_aligned <- p4 + 
@@ -92,8 +98,6 @@ combined <- plot_grid(
   ncol = 1,
   rel_heights = c(0.3, 0.35, 0.35)
 )
-
-combined
 
 # Saving final figure and add a box around the piecharts
 pdf("Figure1_Askov_bulk.pdf", width = 18/2.54, height = 22/2.54)

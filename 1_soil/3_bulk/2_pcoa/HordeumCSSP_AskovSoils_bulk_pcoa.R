@@ -1,18 +1,18 @@
 # Seup ------------------------------------------------------------------------
-# Clean up.
-options(warn=-1)
-rm(list=ls())
+# Cleaning up
+options(warn = -1)
+rm(list = ls())
 
-# Set working directory to source file location
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load packages
+# Loading packages
 pkg <- c("ggplot2", "dplyr", "tidyr", "vegan")
 for(pk in pkg){
   library(pk, character.only = T)
 }
 
-# Load data
+# Loading data
 design <- read.table(
   file = "../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt",
   sep = "\t",       
@@ -34,7 +34,7 @@ asv_table <- read.table(
   comment.char = ""
 )
 
-# Clean up the taxonomy file
+# Cleaning up taxonomy
 taxonomy <- taxonomy %>% rename(ASVid = Feature.ID)
 taxonomy <- taxonomy %>%
   separate(
@@ -47,11 +47,11 @@ taxonomy <- taxonomy %>%
   replace(is.na(.), "Unknown") %>%
   select(ASVid, Kingdom, Phylum, Class, Order, Family, Genus, Species, Confidence)
 
-# Keep soil samples
+# Keeping only soil samples
 design_bulk <- design %>% filter(Genotype == "Soil")
 asv_table_bulk <- asv_table[, design_bulk$SampleID]
 
-# Define colours and shapes for the plot
+# Defining colours and shapes
 colors <- data.frame(
   group = c("NPK", "PK", "UF"),
   colors = c("#6F944F", "#B2563C", "#3C7D82")
@@ -67,7 +67,7 @@ shapes <- shapes[shapes$group %in% design_bulk$Soil,]
 
 # Principal coordinate analysis -----------------------------------------------
 
-# Convert ASV reads to relative abundances
+# Relative abundances
 asv_table_norm <- apply(asv_table_bulk, 2, function(x) x / sum(x))
 
 # Bray-Curtis distances
@@ -90,10 +90,10 @@ points$Soil <- factor(points$Soil, levels = colors$group)
 shapes <- shapes[shapes$group %in% points$Soil, ]
 points$Soil <- factor(points$Soil, levels = shapes$group)
 
-# Calculate centroids by soil
+# Identifying centroids by soil
 centroids <- aggregate(cbind(points$x, points$y) ~ Soil, data = points, FUN = mean)
 
-# Join the centroids back to the points so each sample has its group centroid
+# Joining centroids and points so each sample has its group centroid
 segments <- merge(
   x = points, 
   y = setNames(centroids, c('Soil','seg_x','seg_y')),
@@ -101,29 +101,34 @@ segments <- merge(
   sort = FALSE
 )
 
-# Set main theme
+# Main theme
 main_theme <- theme(
   panel.background = element_blank(),
   panel.grid.major = element_line(color = "gray90"),
   panel.border = element_rect(colour = "black", fill = NA, linewidth = 1),
-  axis.line.x = element_line(color="black"),
-  axis.line.y = element_line(color="black"),
-  axis.ticks = element_line(color="black"),
+  axis.line.x = element_line(color = "black"),
+  axis.line.y = element_line(color = "black"),
+  axis.ticks = element_line(color = "black"),
   axis.text = element_text(size = 6, color = "black"),
   legend.text = element_text(size = 6, color = "black"),
-  legend.title = element_text(size = 6, color = "black", hjust = 0.5, margin = margin(b = -2)),
+  legend.title = element_text(
+    size = 6,
+    color = "black",
+    hjust = 0.5,
+    margin = margin(b = -2)
+  ),
   legend.key = element_blank(),
   axis.title.y = element_text(size = 6),
-  text = element_text(size = 6, color="black"),
+  text = element_text(size = 6, color = "black"),
   legend.position = "right",
   legend.margin = margin(l = -10),
   legend.background = element_blank(),
-  plot.title = element_text(size = 6, hjust=0.9),
+  plot.title = element_text(size = 6, hjust = 0.9),
   legend.key.spacing.y = unit(-0.3, 'cm')
 )
 
 # Plot
-p <- ggplot(points, aes(x = x, y = y, colour = Soil)) +
+PCoA_plot <- ggplot(points, aes(x = x, y = y, colour = Soil)) +
   geom_point(alpha = 0.7, size = 3) +
   geom_segment(
     data = segments,
@@ -140,10 +145,13 @@ p <- ggplot(points, aes(x = x, y = y, colour = Soil)) +
   scale_x_continuous(breaks = seq(-0.4, 0.4, by = 0.2))+
   NULL
 
-p
-
 # Save
-ggsave("Hordeum_bulk_PCoA.pdf", p, width = 5, height = 5, units = "cm")
-saveRDS(p, file = "Hordeum_bulk_PCoA.rds")
-saveRDS(p, file = "../5_final_figure/Hordeum_bulk_PCoA.rds")
+ggsave(
+  filename = "2_figures/Hordeum_bulk_PCoA.pdf",
+  plot = PCoA_plot,
+  width = 5,
+  height = 5,
+  units = "cm"
+)
+saveRDS(PCoA_plot, file = "1_rds_files/Hordeum_bulk_PCoA.rds")
 

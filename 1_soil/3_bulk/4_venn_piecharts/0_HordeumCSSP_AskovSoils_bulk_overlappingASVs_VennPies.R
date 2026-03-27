@@ -1,18 +1,18 @@
 # Seup ------------------------------------------------------------------------
-# Clean up
-options(warn=-1)
-rm(list=ls())
+# Cleaning up
+options(warn = -1)
+rm(list = ls())
 
-# Set working directory to source file location
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load packages
+# Loading packages
 pkg <- c("ggplot2", "dplyr", "tidyr", "ggVennDiagram", "patchwork")
 for(pk in pkg){
   library(pk, character.only = T)
 }
 
-# Load data
+# Loading data
 design <- read.table(
   file = "../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt",
   header = TRUE,
@@ -33,7 +33,7 @@ asv_table <- read.table(
   comment.char = ""
 )
 
-# Clean up taxonomy
+# Cleaning up taxonomy
 taxonomy <- taxonomy %>% rename(ASVid = Feature.ID)
 taxonomy <- taxonomy %>%
   separate(
@@ -85,20 +85,24 @@ Venn_diagram <- ggVennDiagram(
   )+
   NULL
 
-Venn_diagram
-
-# Save plot
-ggsave("Hordeum_bulk_Venn_ASVs.pdf", Venn_diagram, width = 5, height = 5, bg = "white", unit = "cm")
-saveRDS(Venn_diagram, file = "Hordeum_bulk_Venn_ASVs.rds")
-saveRDS(Venn_diagram, file = "../5_final_figure/Hordeum_bulk_Venn_ASVs.rds")
+# Saving plot
+ggsave(
+  filename = "2_figures/Hordeum_bulk_Venn_ASVs.pdf",
+  plot = Venn_diagram,
+  width = 5,
+  height = 5,
+  bg = "white",
+  unit = "cm"
+)
+saveRDS(object = Venn_diagram, file = "1_rds_files/Hordeum_bulk_Venn_ASVs.rds")
 
 # Pie charts ------------------------------------------------------------------
-## ASVs present in NPK, PK, and UF
+# ASVs present in NPK, PK, and UF
 NPK_ASVs <- rownames(asv_NPK)
 PK_ASVs  <- rownames(asv_PK)
 UF_ASVs  <- rownames(asv_UF)
 
-## Unique and overlapping ASV presences by soil
+# Unique and overlapping ASV presences by soil
 ASVs_only_NPK <- setdiff(NPK_ASVs, union(PK_ASVs, UF_ASVs))
 ASVs_only_PK  <- setdiff(PK_ASVs,  union(NPK_ASVs, UF_ASVs))
 ASVs_only_UF  <- setdiff(UF_ASVs,  union(NPK_ASVs, PK_ASVs))
@@ -118,7 +122,7 @@ ASVs_PK_UF_df    <- taxonomy %>% filter(ASVid %in% ASVs_PK_UF)
 ASVs_NPK_PK_df   <- taxonomy %>% filter(ASVid %in% ASVs_NPK_PK)
 ASVs_all3_df     <- taxonomy %>% filter(ASVid %in% ASVs_all3)
 
-# Construct data frame with above information
+# Constructing data frame with above information
 assign_category <- function(asv) {
   if(asv %in% ASVs_only_NPK) return("NPK only")
   if(asv %in% ASVs_only_PK)  return("PK only")
@@ -150,8 +154,17 @@ ASV_overlap_df$Category <- factor(
 ASV_overlap_df <- ASV_overlap_df %>%
   arrange(Category)
 
-write.csv(ASV_overlap_df, "HordeumCSSP_bulk_ASV_overlap.csv", row.names = FALSE)
-write.csv(ASV_overlap_df, "../6_suppl_files/HordeumCSSP_bulk_ASV_overlap.csv", row.names = FALSE)
+write.csv(
+  x = ASV_overlap_df,
+  "3_tables/HordeumCSSP_bulk_ASV_overlap.csv",
+  row.names = FALSE
+)
+
+write.csv(
+  x = ASV_overlap_df,
+  "../6_suppl_files/HordeumCSSP_bulk_ASV_overlap.csv",
+  row.names = FALSE
+)
 
 # Top 20 orders across all soils
 df_order <- data.frame(
@@ -184,7 +197,7 @@ get_order_counts <- function(df) {
   as.data.frame.table(counts) %>% setNames(c("Order", "Count"))
 }
 
-# Load order colours
+# Loading order colours
 colors <- read.table(
   file = "../../../0_files/Bacterial_order_colors.csv",
   header = TRUE,
@@ -211,19 +224,19 @@ ASV_names <- c(
 for(name in ASV_names) {
   df <- get(name)
   
-  # Assign non-top 20 orders to 'Other'
+  # Assigning non-top 20 orders to 'Other'
   df$Order <- ifelse(df$Order %in% top_orders, df$Order, "Other")
   
   # Setting the factor levels, "Other" last, rest alphabetically
   df$Order <- factor(df$Order, levels = c(sort(setdiff(unique(df$Order), "Other")), "Other"))
   df_counts <- get_order_counts(df)
   
-  # Set same factor order in df_counts
+  # Setting same factor order in df_counts
   df_counts$Order <- factor(df_counts$Order, levels = levels(df$Order))
   
   p <- plot_pie(df_counts, title = name)
   print(p)
-  ggsave(paste0(name, "_pie.pdf"), p, width = 5, height = 5, bg = "white")
+  ggsave(paste0("2_figures/", name, "_pie.pdf"), p, width = 5, height = 5, bg = "white")
 }
 
 # All pie charts in one figure
@@ -236,7 +249,7 @@ plot_list <- list()
 for(i in seq_along(ASV_names)) {
   df <- get(ASV_names[i])
   
-  # Assign non-top 20 orders to 'Other' and set factor order
+  # Assigning non-top 20 orders to 'Other' and set factor order
   df$Order <- ifelse(df$Order %in% colors$Order, df$Order, "Other")
   df$Order <- factor(df$Order, levels = colors$Order)
   df$Order <- droplevels(df$Order)
@@ -247,71 +260,81 @@ for(i in seq_along(ASV_names)) {
   p <- ggplot(df_counts, aes(x = 1, y = Count, fill = Order)) +
     geom_bar(width = 1, stat = "identity") +
     coord_polar("y", start = 0) +
-    scale_fill_manual(values = colors$Color, breaks = colors$Order, guide = guide_legend(ncol = 1)) +
+    scale_fill_manual(
+      values = colors$Color,
+      breaks = colors$Order,
+      guide = guide_legend(ncol = 1)
+    ) +
     theme_void() +
-    labs(title = plot_titles[i],fill="Bacterial order") +
-    theme(plot.title = element_text(hjust = 0.5, size = 6), margin = margin(b = 1))
+    labs(title = plot_titles[i], fill = "Bacterial order") +
+    theme(
+      plot.title = element_text(hjust = 0.5, size = 6),
+      margin = margin(b = 1)
+    )
   
   plot_list[[i]] <- p
 }
 
-# Add spacers to create a staggered layout (top row centered over bottom row gaps)
+# Adding spacers to create a staggered layout (top row centered over bottom row gaps)
 s <- plot_spacer()
 
 # top row with 3 pies, and add spacers at the start and end
-top_row <- s + plot_list[[1]] + plot_list[[2]] + plot_list[[3]] + s + 
-  plot_layout(ncol = 5, widths = c(0.5,1,1,1,0.5))
+top_row <- s +
+  plot_list[[1]] +
+  plot_list[[2]] +
+  plot_list[[3]] +
+  s +
+  plot_layout(ncol = 5, widths = c(0.5, 1, 1, 1, 0.5))
 
 #  bottom row with 4 pies
 bottom_row <- plot_list[[4]] | plot_list[[5]] | plot_list[[6]] | plot_list[[7]]
 
-# Combine rows with single legend
-final_plot <- (top_row / bottom_row) + 
-  plot_layout(guides = "collect") & 
+# Combining rows with single legend
+final_plot <- (top_row / bottom_row) +
+  plot_layout(guides = "collect") &
   theme(
     legend.position = "right",
-    legend.text  = element_text(size = 6),
+    legend.text = element_text(size = 6),
     legend.title = element_text(size = 6)
   )
 
-# Plot title layout
-final_plot <- final_plot & 
+# Plotting title layout
+final_plot <- final_plot &
   theme(
     plot.title = element_text(
-      size = 6, 
+      size = 6,
       hjust = 0.5,
       margin = margin(t = 10, b = 1)
     )
   )
 
-final_plot
-
-# Save plot
+# Saving plot
 ggsave(
-  "HordeumCSSP_bulk_ASV_overlap_piecharts.pdf",
-  final_plot,
+  filename = "2_figures/HordeumCSSP_bulk_ASV_overlap_piecharts.pdf",
+  plot = final_plot,
   width = 12,
   height = 6,
   bg = "white",
   units = "cm"
 )
-saveRDS(final_plot, file = "HordeumCSSP_bulk_ASV_overlap_piecharts.rds")
-saveRDS(final_plot, file = "../5_final_figure/HordeumCSSP_bulk_ASV_overlap_piecharts.rds")
+
+saveRDS(
+  object = final_plot,
+  file = "1_rds_files/HordeumCSSP_bulk_ASV_overlap_piecharts.rds"
+)
 
 # Remove legend
 final_plot_nolegend <- final_plot & theme(legend.position = "none")
-final_plot_nolegend
 
 ggsave(
-  "HordeumCSSP_bulk_ASV_overlap_piecharts_nolegend.pdf", 
-  final_plot_nolegend,
+  filename = "2_figures/HordeumCSSP_bulk_ASV_overlap_piecharts_nolegend.pdf",
+  plot = final_plot_nolegend,
   width = 12,
   height = 6,
   bg = "white",
   units = "cm"
 )
-saveRDS(final_plot_nolegend, file = "HordeumCSSP_bulk_ASV_overlap_piecharts_nolegend.rds")
 saveRDS(
-  final_plot_nolegend, 
-  file = "../5_final_figure/HordeumCSSP_bulk_ASV_overlap_piecharts_nolegend.rds"
+  object = final_plot_nolegend,
+  file = "1_rds_files/HordeumCSSP_bulk_ASV_overlap_piecharts_nolegend.rds"
 )

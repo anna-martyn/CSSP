@@ -1,18 +1,18 @@
 # Seup ------------------------------------------------------------------------
-# Clean up.
-options(warn=-1)
-rm(list=ls())
+# Cleaning up
+options(warn = -1)
+rm(list = ls())
 
-# Set working directory to source file location.
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load packages
+# Loading packages
 pkg <- c("ggplot2", "dplyr", "multcompView")
 for(pk in pkg){
   library(pk, character.only = TRUE)
 }
 
-# Load chao1 and metadata
+# Loading data
 alpha <- read.table(
   file = "../../2_rarefication_chao1/2_Hordeum/2_chao1/HordeumCSSP_AskovSoils_chao1.txt",
   sep = "\t",       
@@ -29,11 +29,11 @@ design <- read.table(
   check.names = FALSE
 )  
 
-# Combine alpha diversity (chao1) and metadata
+# Combining alpha diversity (chao1) and metadata
 index <- cbind(alpha[, 1], design[match(row.names(alpha), row.names(design)), ] )
 colnames(index)[1] <- "Chao1"
 
-# Keep only soil data
+# Keeping only soil data
 index_bulk <- subset(index, Genotype == "Soil")
 
 # Colours
@@ -45,8 +45,8 @@ soils <- c("NPK", "PK", "UF")
 index_bulk$Soil <- factor(index_bulk$Soil, levels = soils)
 colors <- colors[match(soils, colors$group), ]
 
-# ANOVA and figure ------------------------------------------------------------
-# Set main theme
+# ANOVA and plot --------------------------------------------------------------
+# Main theme
 main_theme <- theme(
   panel.background = element_blank(),
   panel.grid.major = element_line(color = "gray90"),
@@ -87,7 +87,7 @@ generate_label_df <- function(pairwise, variable){
 }
 labels <- generate_label_df(pairwise , "Soil")
 
-# label positions above the max value by group
+# Label positions above the max value by group
 label_df <- chao_summary %>%
   mutate(Letters = labels$Letters, y_position = Max + 0.075 * (max(Max) - min(Min))) %>%
   select(Soil, Max, Letters, y_position)
@@ -95,7 +95,7 @@ label_df <- chao_summary %>%
 # Overall ANOVA p-value
 anova_p <- summary(ano)[[1]][["Pr(>F)"]][1]
 
-# Boxplot with significance letters and ANOVA p-value as title
+# Boxplot
 box_plot <- ggplot(index_bulk, aes(x = Soil, y = Chao1, fill = Soil)) +
   geom_boxplot(
     alpha = 0.7, position=position_dodge(width = 0.7), outlier.color = NA, width = 0.3
@@ -113,13 +113,23 @@ box_plot <- ggplot(index_bulk, aes(x = Soil, y = Chao1, fill = Soil)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
   NULL
 
-box_plot
+# Saving plot
 
-# Save the plot
-ggsave("HordeumCSSP_AskovSoils_bulk_chao1_rfd.pdf", box_plot, width = 3, height = 5, units = "cm")
-saveRDS(box_plot, file = "HordeumCSSP_AskovSoils_bulk_chao1_rfd.rds")
-saveRDS(box_plot, file = "../5_final_figure/HordeumCSSP_AskovSoils_bulk_chao1_rfd.rds")
+ggsave(
+  filename = "2_figures/HordeumCSSP_AskovSoils_bulk_chao1_rfd.pdf",
+  plot = box_plot,
+  width = 3,
+  height = 5,
+  units = "cm"
+)
+saveRDS(
+  object = box_plot,
+  file = "1_rds_files/HordeumCSSP_AskovSoils_bulk_chao1_rfd.rds"
+)
 
 # Save ANOVA and Tukey HSD output file
-write.csv(labels, file = "HordeumCSSP_AskovSoils_bulk_chao1_ANOVA_TukeyHSD_rfd.csv")
+write.csv(
+  x = labels,
+  file = "3_tables/HordeumCSSP_AskovSoils_bulk_chao1_ANOVA_TukeyHSD_rfd.csv"
+)
 

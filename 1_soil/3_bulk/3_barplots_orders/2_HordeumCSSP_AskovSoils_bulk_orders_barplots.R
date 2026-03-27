@@ -1,18 +1,18 @@
 # Seup ------------------------------------------------------------------------
-# Clean up.
-options(warn=-1)
-rm(list=ls())
+# Cleaning up
+options(warn = -1)
+rm(list = ls())
 
-# Set working directory to source file location.
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load the required packages.
+# Loadinging packages
 pkg <- c("ggplot2", "dplyr", "tidyr", "tibble", "multcompView")
 for(pk in pkg){
   library(pk, character.only = T)
 }
 
-# Load the input data.
+# Loading the input data
 design <- read.table(
   file = "../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt",
   header = TRUE,
@@ -33,7 +33,7 @@ asv_table <- read.table(
   comment.char = ""
 )
 
-# Clean up taxonomy
+# Cleaning up taxonomy
 taxonomy <- taxonomy %>% rename(ASVid = Feature.ID)
 taxonomy <- taxonomy %>%
   separate(
@@ -49,7 +49,8 @@ taxonomy <- taxonomy %>%
 # ASV table with relative abundances (RA)
 asv_table_norm <- sweep(asv_table, 2, colSums(asv_table), "/")
 
-# Merge ASV table with the taxonomy, convert to long form, and keep only soil samples
+# Merging ASV table with the taxonomy, converting to long form, 
+# and keeping only soil samples
 df_long <- asv_table_norm %>% 
   rownames_to_column("ASVid") %>%
   left_join(taxonomy %>% select(ASVid, Order), by = "ASVid") %>%
@@ -57,7 +58,7 @@ df_long <- asv_table_norm %>%
   left_join(design %>% select(SampleID, Soil, Genotype), by = c("sampleID" = "SampleID")) %>%
   filter(Genotype == "Soil")
 
-# Aggregate RAs by order-level 
+# Aggregating RAs by order-level 
 df_order_sample <- df_long %>%
   group_by(Order, sampleID, Soil) %>%
   summarise(RA = sum(RA), .groups = "drop")
@@ -72,7 +73,7 @@ top_orders <- df_order_sample %>%
   pull(Order) %>%
   unique()
 
-# Assign non-top orders as "Other".
+# Assigning non-top orders as "Other".
 df_order_sample <- df_order_sample %>%
   mutate(
     Order = factor(
@@ -125,9 +126,13 @@ for(order_name in order_levels) {
   ))
 }
 
-write.csv(final_results, "Hordeum_bulk_orders_RA_ANOVATukey.csv", row.names = FALSE)
+write.csv(
+  x = final_results,
+  file = "3_tables/Hordeum_bulk_orders_RA_ANOVATukey.csv",
+  row.names = FALSE
+)
 
-# Add letters to summary file
+# Adding letters to summary file
 df_plot_letters <- df_order_summary %>%
   left_join(
     final_results %>%
@@ -146,7 +151,7 @@ df_plot_letters <- df_order_summary %>%
       select(Order, Soil, Letter), by = c("Order","Soil")
   )
 
-# Dataframe for asterisks
+# Dataframe with asterisks
 df_plot_asterisk <- final_results %>%
   mutate(asterisk = ifelse(p_val < 0.05, "*", NA)) %>%
   select(Order, asterisk) %>%
@@ -158,7 +163,7 @@ df_plot_asterisk <- final_results %>%
   ) %>%
   mutate(y_position = max_height + 0.01)
 
-# Set soil colours
+# Soil colours
 colors <- c("NPK" = "#6F944F", "PK" = "#B2563C", "UF" = "#3C7D82")
 
 # Barplot all top orders ------------------------------------------------------
@@ -179,7 +184,7 @@ main_theme <- theme(
   text = element_text(family = "sans", size = 6)
 )
 
-# plot
+# Plot
 bar_plot <- ggplot(df_order_summary, aes(x = Order, y = Mean_RA, fill = Soil)) +
   geom_bar(stat = "identity", position = position_dodge(width = 0.9), width = 0.8, alpha = 0.8) +
   geom_errorbar(
@@ -204,12 +209,19 @@ bar_plot <- ggplot(df_order_summary, aes(x = Order, y = Mean_RA, fill = Soil)) +
   main_theme +
   theme(axis.text.x=element_text(size = 6, angle = 50, hjust = 1))
 
-bar_plot
+# Saving plot
+ggsave(
+  filename = "2_figures/Hordeum_barplot_bulk_top20_RA.pdf",
+  plot = bar_plot,
+  width = 12,
+  height = 6,
+  units = "cm"
+)
 
-# Save plot
-ggsave("Hordeum_barplot_bulk_top20_RA.pdf", bar_plot, width = 12, height = 6, units = "cm")
-saveRDS(bar_plot, file = "Hordeum_barplot_bulk_top20_RA.rds")
-saveRDS(bar_plot, file = "../5_final_figure/Hordeum_barplot_bulk_top20_RA.rds")
+saveRDS(
+  object = bar_plot,
+  file = "1_rds_files/Hordeum_barplot_bulk_top20_RA.rds"
+)
 
 # Barplot only significant top orders -----------------------------------------
 sig_orders <- final_results %>%
@@ -252,9 +264,16 @@ bar_plot_sig <- ggplot(df_order_summary_sig, aes(x = Order, y = Mean_RA, fill = 
     legend.background = element_blank()
   )
 
-bar_plot_sig
+# Saving updated plot
+ggsave(
+  filename = "2_figures/Hordeum_barplot_bulk_top20_RA_sign.pdf",
+  plot = bar_plot_sig,
+  width = 8,
+  height = 6,
+  units = "cm"
+)
 
-# Save the updated plot
-ggsave("Hordeum_barplot_bulk_top20_RA_sign.pdf", bar_plot_sig, width = 8, height = 6, units = "cm")
-saveRDS(bar_plot_sig, file = "Hordeum_barplot_bulk_top20_RA_sign.rds")
-saveRDS(bar_plot_sig, file = "../5_final_figure/Hordeum_barplot_bulk_top20_RA_sign.rds")
+saveRDS(
+  object = bar_plot_sig,
+  file = "1_rds_files/Hordeum_barplot_bulk_top20_RA_sign.rds"
+)
