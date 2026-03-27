@@ -212,8 +212,15 @@ for(i in 1:nrow(opt)){
 
 # Combine plots for the main figure and save.
 text <- ggplot() +
-  annotate("text", x = 1, y = 1, label = "Hordeum", size = 6/.pt,
-           fontface = "bold", colour = "black") +
+  annotate(
+    "text",
+    x = 1,
+    y = 1,
+    label = "Hordeum",
+    size = 6 / .pt,
+    fontface = "bold",
+    colour = "black"
+  ) +
   theme(
     panel.background = element_rect(fill = "lightgrey", color = NA),
     panel.grid = element_blank(),
@@ -230,23 +237,22 @@ CPCoA_PCoA_plot <- text /
 
 # Saving plot
 ggsave(
-  "HordeumCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.pdf",
-  CPCoA_PCoA_plot,
+  filename = "2_figures/HordeumCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.pdf",
+  plot = CPCoA_PCoA_plot,
   width = 9,
   height = 5.5,
   units = "cm"
 )
-saveRDS(CPCoA_PCoA_plot, "HordeumCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.rds")
+
 saveRDS(
-  CPCoA_PCoA_plot,
-  "../8_final_figures/HordeumCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.rds"
+  object = CPCoA_PCoA_plot,
+  file = "1_rds_files/HordeumCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.rds"
 )
 
 # Saving individual plot to use legend later
-saveRDS(CPCoA_plot_Root, "HordeumCSSP_AskovSoils_cpcoa_with_legend.rds")
 saveRDS(
-  CPCoA_plot_Root,
-  "../8_final_figures/HordeumCSSP_AskovSoils_cpcoa_with_legend.rds"
+  object = CPCoA_plot_Root,
+  file = "1_rds_files/HordeumCSSP_AskovSoils_cpcoa_with_legend.rds"
 )
 
 # Combine plots for supplementary figures
@@ -266,14 +272,14 @@ PCoA_plots <- annotate_figure(
 
 # Saving plot
 ggsave(
-  "HordeumCSSP_AskovSoils_pcoa_all.pdf",
-  PCoA_plots,
+  filename = "2_figures/HordeumCSSP_AskovSoils_pcoa_all.pdf",
+  plot = PCoA_plots,
   width = 9,
   height = 15,
   units = "cm"
 )
-saveRDS(PCoA_plots, "HordeumCSSP_AskovSoils_pcoa_all.rds")
-saveRDS(PCoA_plots, "../8_final_figures/HordeumCSSP_AskovSoils_pcoa_all.rds")
+
+saveRDS(object = PCoA_plots, "1_rds_files/HordeumCSSP_AskovSoils_pcoa_all.rds")
 
 # Combine CPCoA plots for supplementary figures
 CPCoA_plots <- ggarrange(
@@ -288,11 +294,14 @@ CPCoA_plots <- annotate_figure(
 
 # Saving plots
 ggsave(
-  "HordeumCSSP_AskovSoils_cpcoa_all.pdf",
-  CPCoA_plots,
+  filename = "2_figures/HordeumCSSP_AskovSoils_cpcoa_all.pdf",
+  plot = CPCoA_plots,
   width = 12,
   height = 5.5,
   units = "cm"
 )
-saveRDS(CPCoA_plots, "HordeumCSSP_AskovSoils_cpcoa_all.rds")
-saveRDS(CPCoA_plots, "../8_final_figures/HordeumCSSP_AskovSoils_cpcoa_all.rds")
+
+saveRDS(
+  object = CPCoA_plots,
+  file = "1_rds_files/HordeumCSSP_AskovSoils_cpcoa_all.rds"
+)

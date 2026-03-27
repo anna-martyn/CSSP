@@ -224,17 +224,17 @@ CPCoA_PCoA_plot <- text /
 
 # Saving plot
 ggsave(
-  "LotusCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.pdf",
-  CPCoA_PCoA_plot,
+  filename = "2_figures/LotusCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.pdf",
+  plot = CPCoA_PCoA_plot,
   width = 9,
   height = 5.5,
   units = "cm"
 )
-saveRDS(CPCoA_PCoA_plot, "LotusCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.rds")
 saveRDS(
-  CPCoA_PCoA_plot,
-  "../8_final_figures/LotusCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.rds"
+  object = CPCoA_PCoA_plot,
+  file = "1_rds_files/LotusCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.rds"
 )
+
 
 # Combine PCoA plots for supplementary figures
 PCoA_plots <- ggarrange(
@@ -254,14 +254,14 @@ PCoA_plots <- annotate_figure(
 
 # Saving plot
 ggsave(
-  "LotusCSSP_AskovSoils_pcoa_all.pdf",
-  PCoA_plots,
+  filename = "2_figures/LotusCSSP_AskovSoils_pcoa_all.pdf",
+  plot = PCoA_plots,
   width = 9,
   height = 15,
   units = "cm"
 )
-saveRDS(PCoA_plots, "LotusCSSP_AskovSoils_pcoa_all.rds")
-saveRDS(PCoA_plots, "../8_final_figures/LotusCSSP_AskovSoils_pcoa_all.rds")
+
+saveRDS(object = PCoA_plots, "1_rds_files/LotusCSSP_AskovSoils_pcoa_all.rds")
 
 # Combine CPCoA plots for supplementary figures
 CPCoA_plots <- ggarrange(
@@ -277,12 +277,15 @@ CPCoA_plots <- annotate_figure(
 
 # Saving plots
 ggsave(
-  "LotusCSSP_AskovSoils_cpcoa_all.pdf",
-  CPCoA_plots,
+  filename = "2_figures/LotusCSSP_AskovSoils_cpcoa_all.pdf",
+  plot = CPCoA_plots,
   width = 12,
   height = 5.5,
   units = "cm"
 )
-saveRDS(CPCoA_plots, "LotusCSSP_AskovSoils_cpcoa_all.rds")
-saveRDS(CPCoA_plots, "../8_final_figures/LotusCSSP_AskovSoils_cpcoa_all.rds")
+
+saveRDS(
+  object = CPCoA_plots,
+  file = "1_rds_files/LotusCSSP_AskovSoils_cpcoa_all.rds"
+)
 

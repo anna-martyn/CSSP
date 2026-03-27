@@ -14,7 +14,7 @@ for(pk in pkg){
 
 # Loading data
 weight <- read.table(
-  "HordeumCSSP_axenic_fw_input.txt",
+  file = "../../1_data/2_Hordeum/HordeumCSSP_axenic_fw_input.txt",
   header = TRUE,
   sep = "\t"
 )
@@ -117,15 +117,18 @@ box_plot <- ggplot(weight, aes(x = Genotype, y = Shoot_fw, fill = Genotype)) +
   ) +
   scale_y_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, 1))
 
-write.csv(weight_summary, "HordeumCSSP_axenic_shoot_fw_ANOVA.csv")
+write.csv(
+  x = weight_summary,
+  file = "3_tables/HordeumCSSP_axenic_shoot_fw_ANOVA.csv"
+)
 
 # Saving plot
 ggsave(
-  "HordeumCSSP_axenic_shoot_fw.pdf",
-  box_plot,
+  filename = "2_figures/HordeumCSSP_axenic_shoot_fw.pdf",
+  plot = box_plot,
   width = 6,
   height = 6,
   units = "cm"
 )
-saveRDS(box_plot, "HordeumCSSP_axenic_shoot_fw.rds")
-saveRDS(box_plot, "../8_final_figures/HordeumCSSP_axenic_shoot_fw.rds")
+
+saveRDS(object = box_plot, file = "1_rds_files/HordeumCSSP_axenic_shoot_fw.rds")

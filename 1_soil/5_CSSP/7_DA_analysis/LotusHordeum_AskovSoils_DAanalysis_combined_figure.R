@@ -64,18 +64,14 @@ combined_plot_with_legend <- ggarrange(
 
 # Saving plot
 ggsave(
-  "LotusHordeum_CSSP_Askov_DA_figure_combined2.pdf",
-  combined_plot_with_legend,
+  filename = "4_figures/LotusHordeum_CSSP_Askov_DA_figure_combined2.pdf",
+  plot = combined_plot_with_legend,
   width = 210,
   height = 180,
   units = "mm"
 )
 
 saveRDS(
-  combined_plot_with_legend,
-  "LotusHordeum_CSSP_Askov_DA_figure_combined.rds"
-)
-saveRDS(
-  combined_plot_with_legend,
-  "../8_final_figures/LotusHordeum_CSSP_Askov_DA_figure_combined.rds"
+  object = combined_plot_with_legend,
+  file = "3_rds_files/LotusHordeum_CSSP_Askov_DA_figure_combined.rds"
 )

@@ -14,7 +14,7 @@ for(pk in pkg){
 }
 
 # Loading data
-nod <- fread("LotusCSSP_Askov_nodule_cts_all.txt")
+nod <- fread("../../1_data/1_Lotus/LotusCSSP_Askov_nodule_cts_all.txt")
 
 # Setting genotype colours
 colors <- data.frame(
@@ -50,7 +50,7 @@ main_theme <- theme(
   text = element_text(family = "sans")
 )
 
-# Make the plot.
+# Plot
 box_plot <- ggplot(nod, aes(x = Genotype, y = pink, fill = Genotype)) +
   geom_boxplot(
     width = 0.5,
@@ -91,11 +91,14 @@ box_plot <- ggplot(nod, aes(x = Genotype, y = pink, fill = Genotype)) +
   )
 
 ggsave(
-  "LotusCSSP_AskovSoils_nod_cts.pdf",
-  box_plot,
+  filename = "2_figures/LotusCSSP_AskovSoils_nod_cts.pdf",
+  plot = box_plot,
   width = 6,
   height = 5,
   units = "cm"
 )
-saveRDS(box_plot, "LotusCSSP_AskovSoils_nod_cts.rds")
-saveRDS(box_plot, "../8_final_figures/LotusCSSP_AskovSoils_nod_cts.rds")
+
+saveRDS(
+  object = box_plot,
+  file = "1_rds_files/LotusCSSP_AskovSoils_nod_cts.rds"
+)

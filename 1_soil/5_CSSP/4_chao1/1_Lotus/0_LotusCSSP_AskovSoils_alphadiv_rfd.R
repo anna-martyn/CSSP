@@ -20,6 +20,7 @@ alpha <- read.table(
   row.names = 1,
   check.names = FALSE
 )
+
 design <- read.table(
   "../../../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt",
   sep = "\t",
@@ -165,18 +166,21 @@ box_plots <- ggplot(index, aes(x = Genotype, y = Chao1, fill = Genotype)) +
 
 # Saving plot
 ggsave(
-  "LotusCSSP_AskovSoils_chao1_rfd.pdf",
-  box_plots,
+  filename = "2_figures/LotusCSSP_AskovSoils_chao1_rfd.pdf",
+  plot = box_plots,
   width = 12,
   height = 10,
   unit = "cm"
 )
-saveRDS(box_plots, file = "LotusCSSP_AskovSoils_chao1_rfd.rds")
+
 saveRDS(
-  box_plots,
-  file = "../../8_final_figures/LotusCSSP_AskovSoils_chao1_rfd.rds"
+  object = box_plots,
+  file = "1_rds_files/LotusCSSP_AskovSoils_chao1_rfd.rds"
 )
 
 # Saving ANOVA Tukey results
-write.csv(label_df, file = "LotusCSSP_AskovSoils_chao1_ANOVA_TukeyHSD_rfd.csv")
+write.csv(
+  x = label_df,
+  file = "3_tables/LotusCSSP_AskovSoils_chao1_ANOVA_TukeyHSD_rfd.csv"
+)
 

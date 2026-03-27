@@ -1,30 +1,42 @@
-# Clean up.
-options(warn=-1)
-rm(list=ls())
+# Cleaning up
+options(warn = -1)
+rm(list = ls())
 
-# Load packages and import plots.
+# Loading packages
 pkg <- c("data.table", "ggplot2", "vegan", "ggtext", "ggpubr", "grid", "cowplot")
 for(pk in pkg){
-  library(pk, character.only = T)
+  library(pk, character.only = TRUE)
 }
 
-# Set working directory to source file location.
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load individual files and legends etc. for plot.
+# Loading individual files, legends etc. for plot
 empty <- ggplot() + theme_void()
-Lotus_boxplot <- readRDS("LotusCSSP_AskovSoils_shootfw.rds")
-Hordeum_boxplot <- readRDS("HordeumCSSP_AskovSoils_shootfw.rds")
+Lotus_boxplot <- readRDS(
+  "../1_shoot_fw/1_rds_files/LotusCSSP_AskovSoils_shootfw.rds"
+)
+Hordeum_boxplot <- readRDS(
+  "../1_shoot_fw/1_rds_files/HordeumCSSP_AskovSoils_shootfw.rds"
+)
 
-Lotus_CPCoA_PCoA <- readRDS("LotusCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.rds")
-Hordeum_CPCoA_PCoA <- readRDS("HordeumCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.rds")
-Hordeum_CPCoA <- readRDS("HordeumCSSP_AskovSoils_cpcoa_with_legend.rds")
+Lotus_CPCoA_PCoA <- readRDS(
+  "../5_cpcoa_pcoa/1_rds_files/LotusCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.rds"
+)
+Hordeum_CPCoA_PCoA <- readRDS(
+  "../5_cpcoa_pcoa/1_rds_files/HordeumCSSP_AskovSoils_cpcoaRootAll_pcoaRootUF.rds"
+)
+Hordeum_CPCoA <- readRDS(
+  "../5_cpcoa_pcoa/1_rds_files/HordeumCSSP_AskovSoils_cpcoa_with_legend.rds"
+)
 
 legend <- ggpubr::get_legend(Hordeum_CPCoA)
 
-Heatmap <- readRDS("LotusHordeum_CSSP_Askov_DA_figure_combined.rds")
+Heatmap <- readRDS(
+  "../7_DA_analysis/3_rds_files/LotusHordeum_CSSP_Askov_DA_figure_combined.rds"
+)
 
-# Define individual rows for final figure.
+# Defining individual rows for final figure
 row1 <- plot_grid(
   empty, Lotus_boxplot, Hordeum_boxplot,
   ncol = 3,
@@ -47,7 +59,7 @@ row2 <- plot_grid(
 
 row3 <- Heatmap
 
-# Combine rows in final figure.
+# Combining rows in final figure
 final_plot <- plot_grid(
   row1, row2, row3,
   ncol = 1,
@@ -57,6 +69,11 @@ final_plot <- plot_grid(
   rel_heights = c(0.2, 0.2, 0.6)
 )
 
-# Save final figure.
-ggsave("Figure4_Askov_CSSP.pdf", final_plot, 
-       width = 18, height = 22, units = "cm")
+# Saving final figure
+ggsave(
+  filename = "Figure4_Askov_CSSP.pdf",
+  plot = final_plot,
+  width = 18,
+  height = 22,
+  units = "cm"
+)

@@ -173,21 +173,20 @@ box_plots <- ggplot(
 
 # Saving plot
 ggsave(
-  "HordeumCSSP_AskovSoils_chao1_rfd.pdf",
-  box_plots,
+  filename = "2_figures/HordeumCSSP_AskovSoils_chao1_rfd.pdf",
+  plot = box_plots,
   width = 12,
   height = 10,
   unit = "cm"
 )
-saveRDS(box_plots, file = "HordeumCSSP_AskovSoils_chao1_rfd.rds")
 saveRDS(
-  box_plots,
-  file = "../../8_final_figures/HordeumCSSP_AskovSoils_chao1_rfd.rds"
+  object = box_plots,
+  file = "1_rds_files/HordeumCSSP_AskovSoils_chao1_rfd.rds"
 )
 
 # Saving ANOVA Tukey HSD results
 write.csv(
-  label_df,
-  file = "HordeumCSSP_AskovSoils_chao1_ANOVA_TukeyHSD_rfd.csv"
+  x = label_df,
+  file = "3_tables/HordeumCSSP_AskovSoils_chao1_ANOVA_TukeyHSD_rfd.csv"
 )
 

@@ -19,11 +19,15 @@ for (f in plot_files) {
 }
 
 # Load the plots wanted for the supplementary figures.
-p1 <- LotusCSSP_AskovSoils_nod_cts
+p1 <- readRDS("../3_nod_cts/1_rds_files/LotusCSSP_AskovSoils_nod_cts.rds")
 
-p2 <- HordeumCSSP_axenic_shoot_fw
+p2 <- readRDS(
+  "../2_shoot_fw_axenic/1_rds_files/HordeumCSSP_axenic_shoot_fw.rds"
+)
 
-p3 <- LotusCSSP_AskovSoils_chao1_rfd
+p3 <- readRDS(
+  "../4_chao1/1_Lotus/1_rds_files/LotusCSSP_AskovSoils_chao1_rfd.rds"
+)
 genotype_labels <- c(
   "WT"    = "WT",
   "symrk" = "<i>symrk</i>",
@@ -35,29 +39,42 @@ p3 <- p3 +
   scale_x_discrete(labels = genotype_labels) +
   theme(axis.text.x = ggtext::element_markdown())
 
-p4 <- HordeumCSSP_AskovSoils_chao1_rfd
+p4 <- readRDS(
+  "../4_chao1/2_Hordeum/1_rds_files/HordeumCSSP_AskovSoils_chao1_rfd.rds"
+)
 p4 <- p4 +
   scale_x_discrete(labels = genotype_labels) +
   theme(axis.text.x = ggtext::element_markdown())
 
 
-p5 <- LotusCSSP_AskovSoils_cpcoa_all
-p6 <- HordeumCSSP_AskovSoils_cpcoa_all
-p7 <- LotusCSSP_AskovSoils_pcoa_all
-p8 <- HordeumCSSP_AskovSoils_pcoa_all
-p9 <- LotusHordeum_Askov_stackedbp_top20_meanRA
+p5 <- readRDS("../5_cpcoa_pcoa/1_rds_files/LotusCSSP_AskovSoils_cpcoa_all.rds")
+p6 <- readRDS(
+  "../5_cpcoa_pcoa/1_rds_files/HordeumCSSP_AskovSoils_cpcoa_all.rds"
+)
+p7 <- readRDS("../5_cpcoa_pcoa/1_rds_files/LotusCSSP_AskovSoils_pcoa_all.rds")
+p8 <- readRDS("../5_cpcoa_pcoa/1_rds_files/HordeumCSSP_AskovSoils_pcoa_all.rds")
+p9 <- readRDS(
+  "../6_stackedbp_heatmap/1_rds_files/LotusHordeum_Askov_stackedbp_top20_meanRA.rds"
+)
+
 p9 <- p9 +
   scale_x_discrete(labels = genotype_labels) +
   theme(axis.text.x = ggtext::element_markdown())
 
-p10 <- LotusHordeum_Askov_orders_heatmap
+p10 <- readRDS(
+  "../6_stackedbp_heatmap/1_rds_files/LotusHordeum_Askov_orders_heatmap.rds"
+)
+
 p10 <- p10 +
   scale_x_discrete(labels = genotype_labels) +
   theme(axis.text.x = ggtext::element_markdown())
 
-cpcoa_legend <- ggpubr::get_legend(HordeumCSSP_AskovSoils_cpcoa_with_legend)
+legend_plot <- readRDS(
+  "../5_cpcoa_pcoa/1_rds_files/HordeumCSSP_AskovSoils_cpcoa_with_legend.rds"
+)
+cpcoa_legend <- ggpubr::get_legend(legend_plot)
 pcoa_legend <- ggpubr::get_legend(
-  HordeumCSSP_AskovSoils_cpcoa_with_legend +
+  legend_plot +
     guides(color = guide_legend(title = "Genotype"),
            shape = "none",
            fill = "none")
@@ -147,6 +164,24 @@ final_plot3 <- plot_grid(
 final_plot3
 
 # Save supplementary figures as PDF files.
-ggsave("Suppl_Figure2_Askov_CSSP.pdf", final_plot, width = 21, height = 8, unit = "cm")
-ggsave("Suppl_Figure3_Askov_CSSP.pdf", final_plot2, width = 21, height = 29.7, unit = "cm")
-ggsave("Suppl_Figure4_Askov_CSSP.pdf", final_plot3, width = 21, height = 24, unit = "cm")
+ggsave(
+  "Suppl_Figure2_Askov_CSSP.pdf",
+  final_plot,
+  width = 21,
+  height = 8,
+  unit = "cm"
+)
+ggsave(
+  "Suppl_Figure3_Askov_CSSP.pdf",
+  final_plot2,
+  width = 21,
+  height = 29.7,
+  unit = "cm"
+)
+ggsave(
+  "Suppl_Figure4_Askov_CSSP.pdf",
+  final_plot3,
+  width = 21,
+  height = 24,
+  unit = "cm"
+)

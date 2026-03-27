@@ -6,15 +6,15 @@ rm(list = ls())
 # Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load the required packages. 
+# Loading packages 
 pkg <- c("data.table", "ggplot2", "multcompView")
 
 for(pk in pkg){
   library(pk, character.only = TRUE)
 }
 
-# Load data
-weight <- fread("LotusHordeum_AskovSoils_shootfw.txt")
+# Loading data
+weight <- fread("../../1_data/LotusHordeum_AskovSoils_shootfw.txt")
 
 # Setting genotype colours
 colors <- data.frame(
@@ -142,14 +142,16 @@ box_plot_lotus <- ggplot(
   )
 
 ggsave(
-  "LotusCSSP_AskovSoils_shootfw.pdf",
-  box_plot_lotus,
+  filename = "2_figures/LotusCSSP_AskovSoils_shootfw.pdf",
+  plot = box_plot_lotus,
   width = 6,
   height = 5,
   units = "cm"
 )
-saveRDS(box_plot_lotus, "LotusCSSP_AskovSoils_shootfw.rds")
-saveRDS(box_plot_lotus, "../8_final_figures/LotusCSSP_AskovSoils_shootfw.rds")
+saveRDS(
+  object = box_plot_lotus,
+  file = "1_rds_files/LotusCSSP_AskovSoils_shootfw.rds"
+)
 
 ## Hordeum
 box_plot_hordeum <- ggplot(
@@ -202,11 +204,14 @@ box_plot_hordeum <- ggplot(
   )
 
 ggsave(
-  "HordeumCSSP_AskovSoils_shootfw.pdf",
-  box_plot_hordeum,
+  filename = "2_figures/HordeumCSSP_AskovSoils_shootfw.pdf",
+  plot = box_plot_hordeum,
   width = 6,
   height = 5,
   units = "cm"
 )
-saveRDS(box_plot_hordeum, "HordeumCSSP_AskovSoils_shootfw.rds")
-saveRDS(box_plot_hordeum, "../8_final_figures/HordeumCSSP_AskovSoils_shootfw.rds")
+
+saveRDS(
+  object = box_plot_hordeum,
+  file = "1_rds_files/HordeumCSSP_AskovSoils_shootfw.rds"
+)
