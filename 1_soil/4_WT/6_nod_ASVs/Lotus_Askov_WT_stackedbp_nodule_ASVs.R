@@ -46,7 +46,7 @@ taxonomy <- taxonomy %>%
   replace(is.na(.), "Unknown") %>%
   select(ASVid, Kingdom, Phylum, Class, Order, Family, Genus, Species, Confidence)
 
-# Filter ASV table to keep only samples in design and ASVs in taxonomy
+# Filtering ASV table to keep only samples in design and ASVs in taxonomy
 samples_to_keep <- intersect(colnames(asv_table), design$SampleID)
 asv_table <- asv_table[rownames(asv_table) %in% taxonomy$ASVid, samples_to_keep]
 
@@ -99,7 +99,7 @@ top_asv <- unique(c(top20_npk, top20_pk, top20_uf))
 # Keeping only top ASVs for plotting
 avg_top_asv <- avg_per_asv %>% filter(ASVid %in% top_asv)
 
-# Assign the genus and numeric suffix alphabetically.
+# Assigning the genus and numeric suffix alphabetically.
 avg_top_asv <- avg_top_asv %>%
   arrange(Genus, ASVid) %>%
   group_by(Genus) %>%
@@ -189,15 +189,15 @@ bar_plot <- ggplot(df_long, aes(x = Soil_type, y = RA, fill = Isolate)) +
     legend.margin = margin(l = -8)
   )
 
-bar_plot
-
 # Saving plot
 ggsave(
-  filename = "Lotus_Askov_WT_stackedbp_NoduleASVs.pdf",
+  filename = "2_figures/Lotus_Askov_WT_stackedbp_NoduleASVs.pdf",
   plot = bar_plot,
   width = 10,
   height = 6,
   units = "cm"
 )
-saveRDS(bar_plot, file = "Lotus_Askov_WT_stackedbp_NoduleASVs.rds")
-saveRDS(bar_plot, file = "../7_final_figures/Lotus_Askov_WT_stackedbp_NoduleASVs.rds")
+saveRDS(
+  object = bar_plot,
+  file = "1_rds_files/Lotus_Askov_WT_stackedbp_NoduleASVs.rds"
+)

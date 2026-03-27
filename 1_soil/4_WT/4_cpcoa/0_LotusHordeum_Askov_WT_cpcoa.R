@@ -1,19 +1,19 @@
 # Seup ------------------------------------------------------------------------
-# Clean up
+# Cleaning up
 options(warn = -1)
 rm(list = ls())
 
-# Set working directory to source file location.
+# Setting working directory to source file location.
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load the required packages.
+# Loading packages
 library("ggplot2")
 library("vegan")
 
-# Load the cpcoa functions file.
+# Loading file with cpcoa functions
 source("cpcoa.func.R")
 
-# Load the Lotus files.
+# Loading Lotus data
 Lotus_design <- read.table(
   file = "../../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt",
   header = TRUE,
@@ -28,7 +28,7 @@ Lotus_asv_table <- read.table(
   comment.char = ""
 )
 
-# Load Hordeum files.
+# Loading Hordeum data
 Hordeum_design <- read.table(
   file = "../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt",
   header = TRUE,
@@ -44,7 +44,7 @@ Hordeum_asv_table <- read.table(
   skip = 1
 )
 
-# Keep samples present in both design and ASV table
+# Keeping only samples present in both design and ASV table
 idx <- intersect(Lotus_design$SampleID, colnames(Lotus_asv_table))
 Lotus_design <- Lotus_design[match(idx, Lotus_design$SampleID), ]
 Lotus_asv_table <- Lotus_asv_table[, idx]
@@ -53,7 +53,7 @@ idx <- intersect(Hordeum_design$SampleID, colnames(Hordeum_asv_table))
 Hordeum_design <- Hordeum_design[match(idx, Hordeum_design$SampleID), ]
 Hordeum_asv_table <- Hordeum_asv_table[, idx]
 
-# Keep only samples with genotype WT
+# Keeping only WT samples
 Lotus_wt_samples <- Lotus_design$SampleID[Lotus_design$Genotype == "WT"]
 Lotus_design <- Lotus_design[Lotus_design$SampleID %in% Lotus_wt_samples, ]
 Lotus_asv_table <- Lotus_asv_table[, Lotus_wt_samples]
@@ -135,9 +135,12 @@ segments <- merge(
 )
 
 # Plot
-CPCoA_plot_Lj <- ggplot(points, aes(x = x, y = y, color = Soil, shape = Compartment)) +
+CPCoA_plot_Lj <- ggplot(
+  points,
+  aes(x = x, y = y, color = Soil, shape = Compartment)
+) +
   geom_segment(
-    data = segments, 
+    data = segments,
     mapping = aes(x = x, y = y, xend = seg_x, yend = seg_y, color = Soil),
     alpha = 0.5,
     show.legend = FALSE
@@ -145,8 +148,20 @@ CPCoA_plot_Lj <- ggplot(points, aes(x = x, y = y, color = Soil, shape = Compartm
   geom_point(size = 3, alpha = 0.7) +
   scale_colour_manual(values = as.character(colors$color)) +
   scale_shape_manual(values = shapes$shape) +
-  labs(x = paste("CPCo 1 (", format(100 * eig[1] / sum(eig), digits = 4), "%)", sep = ""),
-       y = paste("CPCo 2 (", format(100 * eig[2] / sum(eig), digits = 4), "%)", sep = "")) +
+  labs(
+    x = paste(
+      "CPCo 1 (",
+      format(100 * eig[1] / sum(eig), digits = 4),
+      "%)",
+      sep = ""
+    ),
+    y = paste(
+      "CPCo 2 (",
+      format(100 * eig[2] / sum(eig), digits = 4),
+      "%)",
+      sep = ""
+    )
+  ) +
   ggtitle(
     "Lotus",
     subtitle = paste(
@@ -162,15 +177,19 @@ CPCoA_plot_Lj <- ggplot(points, aes(x = x, y = y, color = Soil, shape = Compartm
     legend.title = element_text(size = 6),
     axis.title.x = element_text(size = 6),
     plot.title = element_text(face = "bold", size = 6, hjust = 0),
-    plot.subtitle = element_text(size = 6, hjust=0)
+    plot.subtitle = element_text(size = 6, hjust = 0)
   )
 
-CPCoA_plot_Lj
+# Saving plot
+ggsave(
+  filename = "2_figures/Lotus_Askov_WT_cpcoa.pdf",
+  CPCoA_plot_Lj,
+  width = 5,
+  height = 5,
+  units = "cm"
+)
 
-## Save plot
-ggsave(paste("Lotus_Askov_WT_cpcoa.pdf", sep=""), CPCoA_plot_Lj, width=5, height=5, units = "cm")
-saveRDS(CPCoA_plot_Lj, file = "Lotus_Askov_WT_cpcoa.rds")
-saveRDS(CPCoA_plot_Lj, file = "../7_final_figures/Lotus_Askov_WT_cpcoa.rds")
+saveRDS(object = CPCoA_plot_Lj, file = "1_rds_files/Lotus_Askov_WT_cpcoa.rds")
 
 # Hordeum CPCoA and plot ------------------------------------------------------
 CPCoA_Hv <- capscale(
@@ -181,7 +200,7 @@ CPCoA_Hv <- capscale(
   distance = "bray"
 )
 
-# Perform an ANOVA-like permutation analysis.
+# Permanova
 perm_anova <- anova.cca(CPCoA_Hv)
 print(perm_anova)
 
@@ -191,7 +210,7 @@ eig <- CPCoA_Hv$CCA$eig
 variance <- var_tbl["constrained", "proportion"]
 p_val <- perm_anova[1, 4]
 
-# Extract the weighted average (sample) scores
+# Extracting the weighted average (sample) scores
 points <- CPCoA_Hv$CCA$wa[, 1:2]
 points <- as.data.frame(points)
 colnames(points) <- c("x", "y")
@@ -201,7 +220,7 @@ points <- cbind(points, Hordeum_design[match(rownames(points), Hordeum_design$Sa
 points$Soil <- factor(points$Soil, levels = colors$group)
 points$Compartment <- factor(points$Compartment, levels = shapes$group)
 
-## Calculate the centroids per soil-compartment combination.
+# Identifying centroids for each soil-compartment combination
 centroids <- aggregate(cbind(x,y) ~ Soil + Compartment, data = points, FUN = mean)
 segments <- merge(
   x = points,
@@ -211,7 +230,10 @@ segments <- merge(
 )
 
 # Plot
-CPCoA_plot_Hv <- ggplot(points, aes(x = x, y = y, color = Soil, shape = Compartment)) +
+CPCoA_plot_Hv <- ggplot(
+  points,
+  aes(x = x, y = y, color = Soil, shape = Compartment)
+) +
   geom_segment(
     data = segments,
     mapping = aes(x = x, y = y, xend = seg_x, yend = seg_y, color = Soil),
@@ -221,15 +243,27 @@ CPCoA_plot_Hv <- ggplot(points, aes(x = x, y = y, color = Soil, shape = Compartm
   geom_point(size = 3, alpha = 0.7) +
   scale_colour_manual(values = as.character(colors$color)) +
   scale_shape_manual(values = shapes$shape) +
-  labs(x = paste("CPCo 1 (", format(100 * eig[1] / sum(eig), digits = 4), "%)", sep = ""),
-       y = paste("CPCo 2 (", format(100 * eig[2] / sum(eig), digits = 4), "%)", sep = "")) +
+  labs(
+    x = paste(
+      "CPCo 1 (",
+      format(100 * eig[1] / sum(eig), digits = 4),
+      "%)",
+      sep = ""
+    ),
+    y = paste(
+      "CPCo 2 (",
+      format(100 * eig[2] / sum(eig), digits = 4),
+      "%)",
+      sep = ""
+    )
+  ) +
   ggtitle(
-    "Hordeum", 
+    "Hordeum",
     subtitle = paste(
       format(100 * variance, digits = 3),
       "% of variance; p<",
       format(p_val, digits = 2),
-      sep=""
+      sep = ""
     )
   ) +
   main_theme +
@@ -241,9 +275,11 @@ CPCoA_plot_Hv <- ggplot(points, aes(x = x, y = y, color = Soil, shape = Compartm
     plot.subtitle = element_text(size = 6, hjust = 0)
   ) 
 
-CPCoA_plot_Hv
-
-## Save the plot.
-ggsave("Hordeum_Askov_WT_cpcoa.pdf", CPCoA_plot_Hv, width = 5, height = 5)
-saveRDS(CPCoA_plot_Hv, file = "Hordeum_Askov_WT_cpcoa.rds")
-saveRDS(CPCoA_plot_Hv, file = "../7_final_figures/Hordeum_Askov_WT_cpcoa.rds")
+# Saving plot
+ggsave(
+  filename = "2_figures/Hordeum_Askov_WT_cpcoa.pdf",
+  plot = CPCoA_plot_Hv,
+  width = 5,
+  height = 5
+)
+saveRDS(object = CPCoA_plot_Hv, file = "1_rds_files/Hordeum_Askov_WT_cpcoa.rds")

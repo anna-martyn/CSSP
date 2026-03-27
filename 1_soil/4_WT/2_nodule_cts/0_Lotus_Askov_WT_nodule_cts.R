@@ -1,24 +1,28 @@
 # Seup ------------------------------------------------------------------------
-# Clean up
+# Cleaning up
 options(warn = -1)
 rm(list = ls())
 
-# Set working directory to source file location.
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load packages
+# Loading packages
 pkg <- c("ggplot2", "dplyr", "multcompView")
 for(pk in pkg){
   library(pk, character.only = T)
 }
 
-# Load data
-nod <- read.table("LotusCSSP_AskovSoils_nodule_cts.txt", header = T, sep = "\t")
+# Loading data
+nod <- read.table(
+  "../../1_data/1_Lotus/LotusCSSP_AskovSoils_nodule_cts.txt",
+  header = TRUE,
+  sep = "\t"
+)
 
-# Set factor levels
+# Factor levels
 nod$Soil_type <- factor(nod$Soil_type, levels = c("NPK", "PK", "UF"))
 
-# Set soil colours
+# Soil colours
 colors <- data.frame(
   group = c("NPK", "PK", "UF"),
   colors = c("#6F944F","#B2563C","#3C7D82")
@@ -94,9 +98,14 @@ box_plot <- ggplot(nod, aes(x = Soil_type, y = pink, fill = Soil_type)) +
         axis.title.x = element_blank(),
         axis.title.y = element_text(size = 6, colour = "black"),
         legend.key.size = unit(1,"cm"))
-box_plot
 
 # Save plot
-ggsave("Lotus_Askov_WT_nodule_cts.pdf", box_plot, width = 3, height = 6, units = "cm")
-saveRDS(box_plot, file = "Lotus_Askov_WT_nodule_cts.rds")
-saveRDS(box_plot, file = "../7_final_figures/Lotus_Askov_WT_nodule_cts.rds")
+ggsave(
+  filename = "2_figures/Lotus_Askov_WT_nodule_cts.pdf",
+  plot = box_plot,
+  width = 3,
+  height = 6,
+  units = "cm"
+)
+
+saveRDS(object = box_plot, file = "1_rds_files/Lotus_Askov_WT_nodule_cts.rds")

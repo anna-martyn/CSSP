@@ -1,25 +1,25 @@
 # Seup ------------------------------------------------------------------------
-# Clean up
+# Cleaning up
 options(warn = -1)
 rm(list = ls())
 
-# Set working directory to source file location
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load packages
+# Loading packages
 pkg <- c("ggplot2", "dplyr", "multcompView")
 for(pk in pkg){
   library(pk, character.only = T)
 }
 
-# Load data
+# Loading data
 weight <- read.table("LotusHordeum_AskovSoils_shootfw.txt", header = TRUE, sep = "\t")
 
-# Set factor levels
+# Factor levels
 weight$Soil_type <- factor(weight$Soil_type, levels = c("NPK", "PK", "UF"))
 weight$Plant_species <- factor(weight$Plant_species, levels = c("Lotus", "Hordeum"))
 
-# Set the colours for the plot.
+# Setting colours for the plot
 colors <- data.frame(
   group = c("NPK", "PK", "UF"),
   colors = c("#6F944F", "#B2563C", "#3C7D82")
@@ -145,18 +145,18 @@ box_plot <- ggplot(weight, aes(x = Soil_type, y = Fresh_weight, fill = Soil_type
     limits = c(0, NA)
   )
 
-box_plot
-
-# Save plot
+# Saving plot
 ggsave(
-  filename = "LotusHordeum_Askov_WT_shootfw_boxplots.pdf",
+  filename = "2_figures/LotusHordeum_Askov_WT_shootfw_boxplots.pdf",
   plot = box_plot,
   width = 3.5,
   height = 6,
   units = "cm"
 )
-saveRDS(box_plot, file = "LotusHordeum_Askov_WT_shootfw_boxplots.rds")
-saveRDS(box_plot, file = "../7_final_figures/LotusHordeum_Askov_WT_shootfw_boxplots.rds")
+saveRDS(
+  object = box_plot,
+  file = "1_rds_files/LotusHordeum_Askov_WT_shootfw_boxplots.rds"
+)
 
 # Function to perform Tukey and save results
 perform_anova_tukey <- function(df, species_name){
@@ -171,7 +171,11 @@ perform_anova_tukey <- function(df, species_name){
     Letters = letters,
     stringsAsFactors = FALSE
   )
-  write.csv(letters_df, paste0("TukeyHSD_", species_name, "_WT_CSSP.csv"), row.names = FALSE)
+  write.csv(
+    x = letters_df,
+    file = paste0("3_tables/TukeyHSD_", species_name, "_WT_CSSP.csv"),
+    row.names = FALSE
+  )
 }
 
 perform_anova_tukey(weight, "Lotus")

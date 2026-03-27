@@ -1,5 +1,5 @@
 # Seup ------------------------------------------------------------------------
-# Clean up
+# Cleaning up
 options(warn = -1)
 rm(list = ls())
 
@@ -341,12 +341,19 @@ p1 <- ggplot(df.mean_order, aes(x = Soil, y = RA, fill = Order)) +
     legend.margin = margin(l = -8)
   )
 
-p1
+# Saving plot
+ggsave(
+  filename = "2_figures/LotusHordeum_Askov_WT_stackedbp_top20_meanRA.pdf",
+  plot = p1,
+  width = 10,
+  height = 6,
+  unit = "cm"
+)
 
-# Save the plot.
-ggsave("LotusHordeum_Askov_WT_stackedbp_top20_meanRA.pdf", p1, width = 10, height = 6, unit = "cm")
-saveRDS(p1, file = "LotusHordeum_Askov_WT_stackedbp_top20_meanRA.rds")
-saveRDS(p1, file = "../7_final_figures/LotusHordeum_Askov_WT_stackedbp_top20_meanRA.rds")
+saveRDS(
+  object = p1,
+  file = "1_rds_files/LotusHordeum_Askov_WT_stackedbp_top20_meanRA.rds"
+)
 
 # Make a heatmap that displays these data and includes info on significance 
 # (differences between soil type in each plant-compartment combination.)
@@ -533,6 +540,14 @@ p_heatmap <- ggplot(df.plot, aes(x = Soil, y = Order, fill = RA)) +
 p_heatmap
 
 # Save the heatmap.
-ggsave("LotusHordeum_Askov_WT_orders_heatmap.pdf", p_heatmap, width = 12, height = 6, unit = "cm")
-saveRDS(p_heatmap, file = "LotusHordeum_Askov_WT_orders_heatmap.rds")
-saveRDS(p_heatmap, file = "../7_final_figures/LotusHordeum_Askov_WT_orders_heatmap.rds")
+ggsave(
+  filename = "2_figures/LotusHordeum_Askov_WT_orders_heatmap.pdf",
+  plot = p_heatmap,
+  width = 12,
+  height = 6,
+  unit = "cm"
+)
+saveRDS(
+  object = p_heatmap,
+  file = "1_rds_files/LotusHordeum_Askov_WT_orders_heatmap.rds"
+)

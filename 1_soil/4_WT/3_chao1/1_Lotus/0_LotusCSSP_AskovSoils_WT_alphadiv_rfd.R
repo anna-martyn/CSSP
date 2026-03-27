@@ -1,18 +1,18 @@
 # Seup ------------------------------------------------------------------------
-# Clean up
+# Cleaning up
 options(warn = -1)
 rm(list = ls())
 
-# Set working directory to source file location
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load packages
+# Loading packages
 pkg <- c("ggplot2", "dplyr", "multcompView")
 for(pk in pkg){
   library(pk, character.only = T)
 }
 
-# Load data
+# Loading data
 alpha <- read.table(
   "../../../2_rarefication_chao1/1_Lotus/2_chao1/LotusCSSP_AskovSoils_chao1.txt",
   sep = "\t",
@@ -32,7 +32,7 @@ design <- read.table(
 index <- cbind(alpha[,1], design[match(row.names(alpha), row.names(design)), ])
 colnames(index)[1] <- "Chao1"
 
-# Keep only WT samples
+# Keeping only WT samples
 index <- index %>% filter(Genotype == "WT")
 
 # Setting the soil and compartment factor levels
@@ -58,7 +58,7 @@ generate_label_df <- function(pairwise, variable){
 # Empty dataframe for significance
 label_df <- data.frame()
 
-# Apply above function by compartment
+# Applying above function by compartment
 for(comp in levels(index$Compartment)){
   
   sub_df <- subset(index, Compartment == comp)
@@ -137,12 +137,21 @@ box_plot <- ggplot(index, aes(x=Soil, y = Chao1, fill = Soil)) +
   main_theme +
   theme(plot.title = element_text(face = "bold", size = 8, hjust = 0))
 
-box_plot
+# Saving plot
+ggsave(
+  filename = "2_figures/LotusCSSP_AskovSoils_WT_chao1_rfd.pdf",
+  plot = box_plot,
+  width = 7,
+  height = 5,
+  unit = "cm"
+)
+saveRDS(
+  object = box_plot,
+  file = "1_rds_files/LotusCSSP_AskovSoils_WT_chao1_rfd.rds"
+)
 
-# Save the plot.
-ggsave("LotusCSSP_AskovSoils_WT_chao1_rfd.pdf", box_plot, width=7, height=5, unit="cm")
-saveRDS(box_plot, file = "LotusCSSP_AskovSoils_WT_chao1_rfd.rds")
-saveRDS(box_plot, file = "../../7_final_figures/LotusCSSP_AskovSoils_WT_chao1_rfd.rds")
-
-# Save ANOVA Tukey HSD output file.
-write.csv(label_df, file =  "LotusCSSP_AskovSoils_WT_chao1_ANOVA_TukeyHSD_rfd.csv")
+# Saving ANOVA Tukey HSD results
+write.csv(
+  x = label_df,
+  file = "3_tables/LotusCSSP_AskovSoils_WT_chao1_ANOVA_TukeyHSD_rfd.csv"
+)

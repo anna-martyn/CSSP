@@ -1,18 +1,18 @@
 # Seup ------------------------------------------------------------------------
-# Clean up
+# Cleaning up
 options(warn = -1)
 rm(list = ls())
 
-# Set working directory to source file location
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load packages
+# Loading packages
 pkg <- c("ggplot2", "dplyr", "multcompView")
 for(pk in pkg){
   library(pk, character.only = TRUE)
 }
 
-# Load data
+# Loading data
 alpha <- read.table(
   "../../../2_rarefication_chao1/2_Hordeum/2_chao1/HordeumCSSP_AskovSoils_chao1.txt",
   sep = "\t",       
@@ -29,14 +29,14 @@ design <- read.table(
   check.names = FALSE
 )
 
-# Combine alpha diversity (chao1) and metadata
+# Combining alpha diversity (chao1) and metadata
 index <- cbind(alpha[, 1], design[match(row.names(alpha), row.names(design)), ])
 colnames(index)[1] <- "Chao1"
 
-# Keep only WT samples
+# Keeping only WT samples
 index <- index %>% filter(Genotype == "WT")
 
-# Set the soil and compartment factor levels
+# Soil and compartment factor levels
 soils <- c("NPK", "PK", "UF")
 index$Soil <- factor(index$Soil, levels = soils)
 index$Compartment <- factor(index$Compartment, levels = c("Rhizosphere", "Root"))
@@ -59,7 +59,7 @@ generate_label_df <- function(pairwise, variable){
 # Empty dataframe for significance labels
 label_df <- data.frame()
 
-# Apply function by compartment
+# Applying function by compartment
 for(comp in levels(index$Compartment)) {
   
   sub_df <- subset(index, Compartment == comp)
@@ -135,13 +135,23 @@ box_plot <- ggplot(index, aes(x = Soil, y = Chao1, fill = Soil)) +
   main_theme +
   theme(plot.title = element_text(face = "bold", size = 8, hjust = 0))
 
-box_plot
+# Saving plot
+ggsave(
+  filename = "2_figures/Hordeum_AskovSoils_WT_chao1_rfd.pdf",
+  plot = box_plot,
+  width = 7,
+  height = 5,
+  units = "cm"
+)
 
-# Save plot
-ggsave("Hordeum_AskovSoils_WT_chao1_rfd.pdf", box_plot, width = 7, height = 5, units = "cm")
-saveRDS(box_plot, file = "Hordeum_AskovSoils_WT_chao1_rfd.rds")
-saveRDS(box_plot, file = "../../7_final_figures/Hordeum_AskovSoils_WT_chao1_rfd.rds")
+saveRDS(
+  object = box_plot,
+  file = "1_rds_files/Hordeum_AskovSoils_WT_chao1_rfd.rds"
+)
 
-# Save ANOVA Tukey output
-write.csv(label_df, file = "Hordeum_AskovSoils_WT_chao1_ANOVA_TukeyHSD_rfd.csv")
+# Saving ANOVA and Tukey HSD results
+write.csv(
+  x = label_df,
+  file = "3_tables/Hordeum_AskovSoils_WT_chao1_ANOVA_TukeyHSD_rfd.csv"
+)
 
