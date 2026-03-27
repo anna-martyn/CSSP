@@ -18,11 +18,11 @@ p1 <- placeholder <- ggplot() +
   annotate("text", x = 0.5, y = 0.5, label = "", size = 6, hjust = 0.5)
 
 # Loading plots from rds files
-p2 <- readRDS("LotusHordeum_Askov_WT_shootfw_boxplots.rds")
-p3 <- readRDS("Lotus_Askov_WT_nodule_cts.rds")
-p4 <- readRDS("Lotus_Askov_WT_cpcoa.rds")
-p5 <- readRDS("Hordeum_Askov_WT_cpcoa.rds")
-p6 <- readRDS("LotusHordeum_Askov_WT_orders_heatmap.rds")
+p2 <- readRDS("../1_shoot_fw/1_rds_files/LotusHordeum_Askov_WT_shootfw_boxplots.rds")
+p3 <- readRDS("../2_nodule_cts/1_rds_files/Lotus_Askov_WT_nodule_cts.rds")
+p4 <- readRDS("../4_cpcoa/1_rds_files/Lotus_Askov_WT_cpcoa.rds")
+p5 <- readRDS("../4_cpcoa/1_rds_files/Hordeum_Askov_WT_cpcoa.rds")
+p6 <- readRDS("../5_stacked_bp_heatmap/1_rds_files/LotusHordeum_Askov_WT_orders_heatmap.rds")
 
 # Modifying plots
 p3_aligned <- p3 + labs(title = " ") +
