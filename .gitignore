@@ -1,5 +1,14 @@
 # macOS junk files
 .DS_Store
 
+# All files starting with .
+.*
+# Exceptions to the above (files starting with . that we do want to track)
+!.gitignore
+!.gitattributes
+!.git
+
 # R history
 .Rhistory
+
+
