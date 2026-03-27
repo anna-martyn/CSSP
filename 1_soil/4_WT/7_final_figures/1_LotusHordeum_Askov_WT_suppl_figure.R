@@ -1,30 +1,31 @@
-# Clean up.
-options(warn=-1)
-rm(list=ls())
+# Cleaning up
+options(warn = -1)
+rm(list = ls())
 
-# Set working directory to source file location.
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load the required packages.
-pkg <- c("ggplot2", "forcats", "cowplot", "patchwork", "magick", "grid")
+# Loading packages
+pkg <- c("ggplot2", "cowplot")
 for(pk in pkg){
-  library(pk, character.only = T)
+  library(pk, character.only = TRUE)
 }
 
-# Read all plot files (rds files) into variables.
-plot_files <- list.files(pattern = "\\.rds$")
-for (f in plot_files) {
-  plot_name <- tools::file_path_sans_ext(f)  # remove .rds extension
-  assign(plot_name, readRDS(f))
-}
+# Loading plots
+p1 <- readRDS(
+  "../3_chao1/1_Lotus/1_rds_files/LotusCSSP_AskovSoils_WT_chao1_rfd.rds"
+)
+p2 <- readRDS(
+  "../3_chao1/2_Hordeum/1_rds_files/Hordeum_AskovSoils_WT_chao1_rfd.rds"
+)
+p3 <- readRDS(
+  "../5_stacked_bp_heatmap/1_rds_files/LotusHordeum_Askov_WT_stackedbp_top20_meanRA.rds"
+)
+p4 <- readRDS(
+  "../6_nod_ASVs/1_rds_files/Lotus_Askov_WT_stackedbp_NoduleASVs.rds"
+)
 
-# Load the plots wanted for the final figure.
-p1 <- LotusCSSP_AskovSoils_WT_chao1_rfd
-p2 <- Hordeum_AskovSoils_WT_chao1_rfd
-p3 <- LotusHordeum_Askov_WT_stackedbp_top20_meanRA
-p4 <- Lotus_Askov_WT_stackedbp_NoduleASVs
-
-# Define the individual rows for the final figure.
+# Defining rows of final figure
 row1 <- plot_grid(
   p1, p2,
   ncol = 2,
@@ -41,7 +42,7 @@ row2 <- plot_grid(
   rel_widths = c(2/3, 1/3)
 )
 
-# Combine rows in final figure.
+# Combining rows in final figure
 final_plot <- plot_grid(
   row1,
   row2,
@@ -49,7 +50,11 @@ final_plot <- plot_grid(
   rel_heights = c(0.5, 0.5)
 )
 
-final_plot
-
-# Save the combined plot as a PDF file.
-ggsave("Suppl_Figure1_Askov_WT.pdf", final_plot, width=21, height=14, unit="cm")
+# Saving combined plot
+ggsave(
+  filename = "Suppl_Figure1_Askov_WT.pdf",
+  plot = final_plot,
+  width = 21,
+  height = 14,
+  unit = "cm"
+)
