@@ -1,14 +1,15 @@
-# Clean up.
-options(warn=-1)
-rm(list=ls())
+# Seup ------------------------------------------------------------------------
+# Cleaning up
+options(warn = -1)
+rm(list = ls())
 
-# Set working directory to source file location.
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load the required packages.
+# Loading packages
 library(phyloseq)
 
-# Load the ASV table.
+# Loading data
 asv_table <- read.table(
   "../1_data/LotusSC_ASVtable_nospike.tsv",
   sep = "\t",
@@ -17,18 +18,13 @@ asv_table <- read.table(
   check.names = FALSE
 )
 
-# Load the ASV table as a phyloseq object.
-phs <- phyloseq(otu_table(asv_table, taxa_are_rows = T))
+# Creating phyloseq object
+phs <- phyloseq(otu_table(asv_table, taxa_are_rows = TRUE))
 
-# Check minimum sequencing depth in the dataset.
+# Checking minimum sequencing depth ASV table
 min_depth <- min(sample_sums(phs))
 cat("Lowest sequencing depth in the dataset:", min_depth, "\n")
-
-# Check overview read counts in all samples.
-depths <- sample_sums(phs)
-sorted_depths <- sort(depths)
-
-# All samples have a depth of >5000 reads, therefore we don't have to filter and we can keep all samples.
+# All samples have a depth of >5000 reads, so no filtering required
 
 
 # We will perform the rarefication in two ways:
@@ -36,47 +32,59 @@ sorted_depths <- sort(depths)
 ## 2. Including only ASVs matched to Lotus SynCom members. (later used for final plots)
 
 # For this we will make a second filtered dataframe, which we also load as phyloseq file.
-asv_table_filt <- asv_table[grepl("Lj", rownames(asv_table)), ]
-phs_filt <- phyloseq(otu_table(asv_table_filt, taxa_are_rows = T))
 
+# Filtered dataset containing only ASVs matched to SynCom
+asv_table_filt <- asv_table[grepl("Lj", rownames(asv_table)), ]
+phs_filt <- phyloseq(otu_table(asv_table_filt, taxa_are_rows = TRUE))
+
+# Ensruing that minimum sequencing depth is still sufficuent high
 min_depth <- min(sample_sums(phs_filt))
 cat("Lowest sequencing depth in the dataset:", min_depth, "\n")
+# Minimum sequencing depth is still >5000, so no filtering required
 
-# The depth is still >5000 reads in all samples.
-
-# Then we will rarefy both ASV tables using phyloseq.
+# Rarefying full and filtered ASV tables
 set.seed(1673967505)
-RR <- rarefy_even_depth(phs)
-RR_filt <- rarefy_even_depth(phs_filt)
+phs_rare <- rarefy_even_depth(phs)
+phs_rare_filt <- rarefy_even_depth(phs_filt)
 
-# Convert rarefied ASV tables to dataframes.
-M <- as.matrix(otu_table(RR))
-ASVtable_rarefied <- as.data.frame(M)
+# Converting rarefied ASV tables to dataframes
+asv_tabe_rare <- as.matrix(otu_table(phs_rare))
+asv_tabe_rare <- as.data.frame(asv_tabe_rare)
 
-M_filt <- as.matrix(otu_table(RR_filt))
-ASVtable_rarefied_filt <- as.data.frame(M_filt)
+asv_tabe_rare_filt <- as.matrix(otu_table(phs_rare_filt))
+asv_tabe_rare_filt <- as.data.frame(asv_tabe_rare_filt)
 
-# Add an 'ASVid' column from the row names.
-ASVtable_rarefied$ASVid <- rownames(ASVtable_rarefied)
-ASVtable_rarefied <- ASVtable_rarefied[, c("ASVid", setdiff(names(ASVtable_rarefied), "ASVid"))]
+# Adding 'ASVid' as a column
+asv_tabe_rare$ASVid <- rownames(asv_tabe_rare)
+asv_tabe_rare <- asv_tabe_rare[, c(
+  "ASVid",
+  setdiff(names(asv_tabe_rare), "ASVid")
+)]
 
-ASVtable_rarefied_filt$ASVid <- rownames(ASVtable_rarefied_filt)
-ASVtable_rarefied_filt <- ASVtable_rarefied_filt[, c("ASVid", setdiff(names(ASVtable_rarefied_filt), "ASVid"))]
+asv_tabe_rare_filt$ASVid <- rownames(asv_tabe_rare_filt)
+asv_tabe_rare_filt <- asv_tabe_rare_filt[, c(
+  "ASVid",
+  setdiff(names(asv_tabe_rare_filt), "ASVid")
+)]
 
-# Save the rarefied ASV tables as csv and txt files.
-write.csv(ASVtable_rarefied, file =  "LotusSC_rfd.csv")
-write.table(ASVtable_rarefied, 
-            file = "LotusSC_rfd.txt", 
-            sep = "\t",
-            row.names = FALSE,
-            col.names = TRUE, 
-            quote = FALSE)
+# Saveing rarefied ASV tables
+write.csv(asv_tabe_rare, file = "LotusSC_rfd.csv")
+write.table(
+  asv_tabe_rare,
+  file = "LotusSC_rfd.txt",
+  sep = "\t",
+  row.names = FALSE,
+  col.names = TRUE,
+  quote = FALSE
+)
 
-write.csv(ASVtable_rarefied_filt, file =  "LotusSC_rfd_nocontaminants.csv")
-write.table(ASVtable_rarefied_filt, 
-            file = "LotusSC_rfd_nocontaminants.txt", 
-            sep = "\t",
-            row.names = FALSE,
-            col.names = TRUE, 
-            quote = FALSE)
+write.csv(asv_tabe_rare_filt, file = "LotusSC_rfd_nocontaminants.csv")
+write.table(
+  asv_tabe_rare_filt,
+  file = "LotusSC_rfd_nocontaminants.txt",
+  sep = "\t",
+  row.names = FALSE,
+  col.names = TRUE,
+  quote = FALSE
+)
 

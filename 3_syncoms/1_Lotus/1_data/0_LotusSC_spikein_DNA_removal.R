@@ -1,8 +1,8 @@
-# Clean up.
-options(warn=-1)
-rm(list=ls())
+# Clean up
+options(warn = -1)
+rm(list = ls())
 
-# Set working directory to source file location.
+# Set working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load the ASV table.
@@ -16,12 +16,11 @@ asv_table <- read.table(
   skip = 1
 )
 
-# For the Lotus SynCom samples, spike-in DNA was added during library preparation.
-# We are not using the spike-in info in our analysis, therefore we remove the spike-in ASV from the ASV table for further analysis.
-# The ID of the spike-in ASV is "85fa8bb918a926d97659d9b64ca6fedd"
+# Removing spike-in sequences, "85fa8bb918a926d97659d9b64ca6fedd", 
+# which is not used in the remaining analysis
 asv_table <- asv_table[!rownames(asv_table) %in% "85fa8bb918a926d97659d9b64ca6fedd", ]
 
-# Save the ASV table where the spike-in sequence has been removed.
+# Saving ASV table without spike-in
 write.table(
   asv_table,
   file = "LotusSC_ASVtable_nospike.tsv",

@@ -1,117 +1,117 @@
-2026-03-03 13:12:09.954503 INFO::Writing function arguments to log file
-2026-03-03 13:12:09.955167 DEBUG::Function arguments
-2026-03-03 13:12:09.955381 DEBUG::Output folder: Maaslin2_rhizo
-2026-03-03 13:12:09.955546 DEBUG::Min Abundance: 0.000000
-2026-03-03 13:12:09.955686 DEBUG::Min Prevalence: 0.100000
-2026-03-03 13:12:09.955816 DEBUG::Normalization: TSS
-2026-03-03 13:12:09.955948 DEBUG::Transform: LOG
-2026-03-03 13:12:09.956069 DEBUG::Analysis method: LM
-2026-03-03 13:12:09.956185 DEBUG::Max significance: 0.250000
-2026-03-03 13:12:09.956302 DEBUG::Random effects:
-2026-03-03 13:12:09.956434 DEBUG::Fixed effects: Genotype
-2026-03-03 13:12:09.956552 DEBUG::Correction method: BH
-2026-03-03 13:12:09.956666 DEBUG::Standardize: TRUE
-2026-03-03 13:12:09.956778 DEBUG::Cores: 1
-2026-03-03 13:12:09.95689 INFO::Verifying options selected are valid
-2026-03-03 13:12:09.957367 INFO::Determining format of input files
-2026-03-03 13:12:09.95788 INFO::Input format is data samples as columns and metadata samples as rows
-2026-03-03 13:12:09.958586 DEBUG::Transformed data so samples are rows
-2026-03-03 13:12:09.958928 DEBUG::A total of 20 samples were found in both the data and metadata
-2026-03-03 13:12:09.959084 DEBUG::Reordering data/metadata to use same sample ordering
-2026-03-03 13:12:09.959732 INFO::Formula for fixed effects: expr ~  Genotype
-2026-03-03 13:12:09.960265 INFO::Factor detected for categorial metadata 'Genotype'. Provide a reference argument or manually set factor ordering to change reference level.
-2026-03-03 13:12:09.9607 INFO::Filter data based on min abundance and min prevalence
-2026-03-03 13:12:09.961114 INFO::Total samples in data: 20
-2026-03-03 13:12:09.961576 INFO::Min samples required with min abundance for a feature not to be filtered: 2.000000
-2026-03-03 13:12:09.962538 INFO::Total filtered features: 4
-2026-03-03 13:12:09.962991 INFO::Filtered feature names from abundance and prevalence filtering: LjRoot224, LjRoot246, LjRoot153, LjRoot231
-2026-03-03 13:12:09.964183 INFO::Total filtered features with variance filtering: 0
-2026-03-03 13:12:09.964661 INFO::Filtered feature names from variance filtering:
-2026-03-03 13:12:09.965075 INFO::Running selected normalization method: TSS
-2026-03-03 13:12:09.966041 INFO::Applying z-score to standardize continuous metadata
-2026-03-03 13:12:09.968168 INFO::Running selected transform method: LOG
-2026-03-03 13:12:09.969347 INFO::Running selected analysis method: LM
-2026-03-03 13:12:09.970016 INFO::Fitting model to feature number 1, LjRoot221
-2026-03-03 13:12:09.97186 INFO::Fitting model to feature number 2, LjRoot149
-2026-03-03 13:12:09.973656 INFO::Fitting model to feature number 3, LjRoot223
-2026-03-03 13:12:09.97541 INFO::Fitting model to feature number 4, G37_LjNodule209
-2026-03-03 13:12:09.977143 INFO::Fitting model to feature number 5, G21_LjRoot111
-2026-03-03 13:12:09.979048 INFO::Fitting model to feature number 6, LjRoot228
-2026-03-03 13:12:09.981436 INFO::Fitting model to feature number 7, G3_LjRoot129
-2026-03-03 13:12:09.983628 INFO::Fitting model to feature number 8, LjRoot196
-2026-03-03 13:12:09.985995 INFO::Fitting model to feature number 9, G32_LjRoot291
-2026-03-03 13:12:09.988274 INFO::Fitting model to feature number 10, LjRoot259
-2026-03-03 13:12:09.990253 INFO::Fitting model to feature number 11, G11_LjRoot25
-2026-03-03 13:12:09.992089 INFO::Fitting model to feature number 12, G8_LjRoot126
-2026-03-03 13:12:09.993883 INFO::Fitting model to feature number 13, LjRoot17
-2026-03-03 13:12:09.995934 INFO::Fitting model to feature number 14, G2_LjRoot102
-2026-03-03 13:12:09.997976 INFO::Fitting model to feature number 15, G16_LjRoot125
-2026-03-03 13:12:09.999994 INFO::Fitting model to feature number 16, LjRoot82
-2026-03-03 13:12:10.001863 INFO::Fitting model to feature number 17, G20_LjRoot162
-2026-03-03 13:12:10.003621 INFO::Fitting model to feature number 18, LjRoot183
-2026-03-03 13:12:10.005303 INFO::Fitting model to feature number 19, G1_LjRoot134
-2026-03-03 13:12:10.006961 INFO::Fitting model to feature number 20, LjRoot71
-2026-03-03 13:12:10.008627 INFO::Fitting model to feature number 21, LjRoot289
-2026-03-03 13:12:10.010294 INFO::Fitting model to feature number 22, LjRoot3
-2026-03-03 13:12:10.011981 INFO::Fitting model to feature number 23, G4_LjRoot26
-2026-03-03 13:12:10.013791 INFO::Fitting model to feature number 24, LjRoot18
-2026-03-03 13:12:10.015467 INFO::Fitting model to feature number 25, G6_LjRoot130
-2026-03-03 13:12:10.017119 INFO::Fitting model to feature number 26, G17_LjRoot232
-2026-03-03 13:12:10.018767 INFO::Fitting model to feature number 27, LjRoot227
-2026-03-03 13:12:10.020416 INFO::Fitting model to feature number 28, LjRoot219
-2026-03-03 13:12:10.022055 INFO::Fitting model to feature number 29, LjRoot122
-2026-03-03 13:12:10.023708 INFO::Fitting model to feature number 30, LjRoot243
-2026-03-03 13:12:10.025353 INFO::Fitting model to feature number 31, G12_LjRoot70
-2026-03-03 13:12:10.026985 INFO::Fitting model to feature number 32, G29_LjRoot226
-2026-03-03 13:12:10.028708 INFO::Fitting model to feature number 33, G22_LjRoot238
-2026-03-03 13:12:10.03036 INFO::Fitting model to feature number 34, LjRoot237
-2026-03-03 13:12:10.032004 INFO::Fitting model to feature number 35, G7_LjRoot117
-2026-03-03 13:12:10.033654 INFO::Fitting model to feature number 36, LjRoot10
-2026-03-03 13:12:10.035292 INFO::Fitting model to feature number 37, LjRoot229
-2026-03-03 13:12:10.036931 INFO::Fitting model to feature number 38, G5_LjRoot105
-2026-03-03 13:12:10.038555 INFO::Fitting model to feature number 39, LjRoot11
-2026-03-03 13:12:10.040177 INFO::Fitting model to feature number 40, G36_LjRoot142
-2026-03-03 13:12:10.041806 INFO::Fitting model to feature number 41, G14_LjRoot22
-2026-03-03 13:12:10.043429 INFO::Fitting model to feature number 42, LjRoot285
-2026-03-03 13:12:10.045104 INFO::Fitting model to feature number 43, LjRoot240
-2026-03-03 13:12:10.046761 INFO::Fitting model to feature number 44, LjRoot248
-2026-03-03 13:12:10.048405 INFO::Fitting model to feature number 45, G35_LjRoot145
-2026-03-03 13:12:10.050042 INFO::Fitting model to feature number 46, LjRoot89
-2026-03-03 13:12:10.051663 INFO::Fitting model to feature number 47, LjRoot1
-2026-03-03 13:12:10.053268 INFO::Fitting model to feature number 48, G30_LjRoot2
-2026-03-03 13:12:10.054908 INFO::Fitting model to feature number 49, LjRoot277
-2026-03-03 13:12:10.056526 INFO::Fitting model to feature number 50, LjRoot152
-2026-03-03 13:12:10.058146 INFO::Fitting model to feature number 51, G33_LjRoot104
-2026-03-03 13:12:10.059768 INFO::Fitting model to feature number 52, G27_LjRoot78
-2026-03-03 13:12:10.061417 INFO::Fitting model to feature number 53, LjRoot30
-2026-03-03 13:12:10.063104 INFO::Fitting model to feature number 54, LjRoot295
-2026-03-03 13:12:10.064761 INFO::Fitting model to feature number 55, LjRoot296
-2026-03-03 13:12:10.066452 INFO::Fitting model to feature number 56, LjRoot257
-2026-03-03 13:12:10.068085 INFO::Fitting model to feature number 57, G9_LjRoot131
-2026-03-03 13:12:10.069744 INFO::Fitting model to feature number 58, G24_LjRoot12
-2026-03-03 13:12:10.071403 INFO::Fitting model to feature number 59, LjRoot244
-2026-03-03 13:12:10.073075 INFO::Fitting model to feature number 60, G15_LjRoot29
-2026-03-03 13:12:10.075858 INFO::Fitting model to feature number 61, LjRoot230
-2026-03-03 13:12:10.078216 INFO::Fitting model to feature number 62, LjRoot258
-2026-03-03 13:12:10.080268 INFO::Fitting model to feature number 63, LjRoot8
-2026-03-03 13:12:10.082108 INFO::Fitting model to feature number 64, LjRoot220
-2026-03-03 13:12:10.083888 INFO::Fitting model to feature number 65, G34_LjRoot233
-2026-03-03 13:12:10.085604 INFO::Fitting model to feature number 66, LjRoot80
-2026-03-03 13:12:10.087297 INFO::Fitting model to feature number 67, LjRoot247
-2026-03-03 13:12:10.08895 INFO::Fitting model to feature number 68, LjRoot58
-2026-03-03 13:12:10.090572 INFO::Fitting model to feature number 69, LjRoot261
-2026-03-03 13:12:10.092196 INFO::Fitting model to feature number 70, G31_LjRoot101
-2026-03-03 13:12:10.093841 INFO::Fitting model to feature number 71, LjRoot28
-2026-03-03 13:12:10.095522 INFO::Fitting model to feature number 72, G25_LjRoot27
-2026-03-03 13:12:10.097178 INFO::Fitting model to feature number 73, LjRoot288
-2026-03-03 13:12:10.098836 INFO::Fitting model to feature number 74, LjRoot100
-2026-03-03 13:12:10.110467 INFO::Counting total values for each feature
-2026-03-03 13:12:10.117198 INFO::Writing filtered data to file Maaslin2_rhizo/features/filtered_data.tsv
-2026-03-03 13:12:10.119272 INFO::Writing filtered, normalized data to file Maaslin2_rhizo/features/filtered_data_norm.tsv
-2026-03-03 13:12:10.121168 INFO::Writing filtered, normalized, transformed data to file Maaslin2_rhizo/features/filtered_data_norm_transformed.tsv
-2026-03-03 13:12:10.123137 WARNING::Deleting existing residuals file: Maaslin2_rhizo/fits/residuals.rds
-2026-03-03 13:12:10.123906 INFO::Writing residuals to file Maaslin2_rhizo/fits/residuals.rds
-2026-03-03 13:12:10.124795 WARNING::Deleting existing fitted file: Maaslin2_rhizo/fits/fitted.rds
-2026-03-03 13:12:10.125503 INFO::Writing fitted values to file Maaslin2_rhizo/fits/fitted.rds
-2026-03-03 13:12:10.126165 INFO::Writing all results to file (ordered by increasing q-values): Maaslin2_rhizo/all_results.tsv
-2026-03-03 13:12:10.128111 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): Maaslin2_rhizo/significant_results.tsv
+2026-03-27 09:58:06.839659 INFO::Writing function arguments to log file
+2026-03-27 09:58:06.84045 DEBUG::Function arguments
+2026-03-27 09:58:06.840654 DEBUG::Output folder: Maaslin2_rhizo
+2026-03-27 09:58:06.840807 DEBUG::Min Abundance: 0.000000
+2026-03-27 09:58:06.84095 DEBUG::Min Prevalence: 0.100000
+2026-03-27 09:58:06.841085 DEBUG::Normalization: TSS
+2026-03-27 09:58:06.841234 DEBUG::Transform: LOG
+2026-03-27 09:58:06.841453 DEBUG::Analysis method: LM
+2026-03-27 09:58:06.841692 DEBUG::Max significance: 0.250000
+2026-03-27 09:58:06.841934 DEBUG::Random effects:
+2026-03-27 09:58:06.842154 DEBUG::Fixed effects: Genotype
+2026-03-27 09:58:06.842404 DEBUG::Correction method: BH
+2026-03-27 09:58:06.842669 DEBUG::Standardize: TRUE
+2026-03-27 09:58:06.842967 DEBUG::Cores: 1
+2026-03-27 09:58:06.843246 INFO::Verifying options selected are valid
+2026-03-27 09:58:06.844248 INFO::Determining format of input files
+2026-03-27 09:58:06.8449 INFO::Input format is data samples as columns and metadata samples as rows
+2026-03-27 09:58:06.845768 DEBUG::Transformed data so samples are rows
+2026-03-27 09:58:06.846173 DEBUG::A total of 20 samples were found in both the data and metadata
+2026-03-27 09:58:06.846341 DEBUG::Reordering data/metadata to use same sample ordering
+2026-03-27 09:58:06.847026 INFO::Formula for fixed effects: expr ~  Genotype
+2026-03-27 09:58:06.847673 INFO::Factor detected for categorial metadata 'Genotype'. Provide a reference argument or manually set factor ordering to change reference level.
+2026-03-27 09:58:06.848131 INFO::Filter data based on min abundance and min prevalence
+2026-03-27 09:58:06.848586 INFO::Total samples in data: 20
+2026-03-27 09:58:06.849022 INFO::Min samples required with min abundance for a feature not to be filtered: 2.000000
+2026-03-27 09:58:06.850129 INFO::Total filtered features: 4
+2026-03-27 09:58:06.850733 INFO::Filtered feature names from abundance and prevalence filtering: LjRoot224, LjRoot246, LjRoot153, LjRoot231
+2026-03-27 09:58:06.852124 INFO::Total filtered features with variance filtering: 0
+2026-03-27 09:58:06.852711 INFO::Filtered feature names from variance filtering:
+2026-03-27 09:58:06.853179 INFO::Running selected normalization method: TSS
+2026-03-27 09:58:06.854271 INFO::Applying z-score to standardize continuous metadata
+2026-03-27 09:58:06.85728 INFO::Running selected transform method: LOG
+2026-03-27 09:58:06.858584 INFO::Running selected analysis method: LM
+2026-03-27 09:58:06.859355 INFO::Fitting model to feature number 1, LjRoot221
+2026-03-27 09:58:06.861578 INFO::Fitting model to feature number 2, LjRoot149
+2026-03-27 09:58:06.86354 INFO::Fitting model to feature number 3, LjRoot223
+2026-03-27 09:58:06.865282 INFO::Fitting model to feature number 4, G37_LjNodule209
+2026-03-27 09:58:06.866964 INFO::Fitting model to feature number 5, G21_LjRoot111
+2026-03-27 09:58:06.868708 INFO::Fitting model to feature number 6, LjRoot228
+2026-03-27 09:58:06.870439 INFO::Fitting model to feature number 7, G3_LjRoot129
+2026-03-27 09:58:06.872076 INFO::Fitting model to feature number 8, LjRoot196
+2026-03-27 09:58:06.873713 INFO::Fitting model to feature number 9, G32_LjRoot291
+2026-03-27 09:58:06.875337 INFO::Fitting model to feature number 10, LjRoot259
+2026-03-27 09:58:06.876949 INFO::Fitting model to feature number 11, G11_LjRoot25
+2026-03-27 09:58:06.878574 INFO::Fitting model to feature number 12, G8_LjRoot126
+2026-03-27 09:58:06.88015 INFO::Fitting model to feature number 13, LjRoot17
+2026-03-27 09:58:06.881693 INFO::Fitting model to feature number 14, G2_LjRoot102
+2026-03-27 09:58:06.883225 INFO::Fitting model to feature number 15, G16_LjRoot125
+2026-03-27 09:58:06.88477 INFO::Fitting model to feature number 16, LjRoot82
+2026-03-27 09:58:06.886308 INFO::Fitting model to feature number 17, G20_LjRoot162
+2026-03-27 09:58:06.887856 INFO::Fitting model to feature number 18, LjRoot183
+2026-03-27 09:58:06.889405 INFO::Fitting model to feature number 19, G1_LjRoot134
+2026-03-27 09:58:06.890938 INFO::Fitting model to feature number 20, LjRoot71
+2026-03-27 09:58:06.892471 INFO::Fitting model to feature number 21, LjRoot289
+2026-03-27 09:58:06.894009 INFO::Fitting model to feature number 22, LjRoot3
+2026-03-27 09:58:06.895534 INFO::Fitting model to feature number 23, G4_LjRoot26
+2026-03-27 09:58:06.897049 INFO::Fitting model to feature number 24, LjRoot18
+2026-03-27 09:58:06.898597 INFO::Fitting model to feature number 25, G6_LjRoot130
+2026-03-27 09:58:06.900146 INFO::Fitting model to feature number 26, G17_LjRoot232
+2026-03-27 09:58:06.901677 INFO::Fitting model to feature number 27, LjRoot227
+2026-03-27 09:58:06.90322 INFO::Fitting model to feature number 28, LjRoot219
+2026-03-27 09:58:06.904781 INFO::Fitting model to feature number 29, LjRoot122
+2026-03-27 09:58:06.906338 INFO::Fitting model to feature number 30, LjRoot243
+2026-03-27 09:58:06.908733 INFO::Fitting model to feature number 31, G12_LjRoot70
+2026-03-27 09:58:06.911701 INFO::Fitting model to feature number 32, G29_LjRoot226
+2026-03-27 09:58:06.914616 INFO::Fitting model to feature number 33, G22_LjRoot238
+2026-03-27 09:58:06.917639 INFO::Fitting model to feature number 34, LjRoot237
+2026-03-27 09:58:06.920519 INFO::Fitting model to feature number 35, G7_LjRoot117
+2026-03-27 09:58:06.923358 INFO::Fitting model to feature number 36, LjRoot10
+2026-03-27 09:58:06.926156 INFO::Fitting model to feature number 37, LjRoot229
+2026-03-27 09:58:06.928945 INFO::Fitting model to feature number 38, G5_LjRoot105
+2026-03-27 09:58:06.931735 INFO::Fitting model to feature number 39, LjRoot11
+2026-03-27 09:58:06.934758 INFO::Fitting model to feature number 40, G36_LjRoot142
+2026-03-27 09:58:06.938108 INFO::Fitting model to feature number 41, G14_LjRoot22
+2026-03-27 09:58:06.941039 INFO::Fitting model to feature number 42, LjRoot285
+2026-03-27 09:58:06.943214 INFO::Fitting model to feature number 43, LjRoot240
+2026-03-27 09:58:06.945363 INFO::Fitting model to feature number 44, LjRoot248
+2026-03-27 09:58:06.947391 INFO::Fitting model to feature number 45, G35_LjRoot145
+2026-03-27 09:58:06.949181 INFO::Fitting model to feature number 46, LjRoot89
+2026-03-27 09:58:06.950866 INFO::Fitting model to feature number 47, LjRoot1
+2026-03-27 09:58:06.952585 INFO::Fitting model to feature number 48, G30_LjRoot2
+2026-03-27 09:58:06.954372 INFO::Fitting model to feature number 49, LjRoot277
+2026-03-27 09:58:06.956176 INFO::Fitting model to feature number 50, LjRoot152
+2026-03-27 09:58:06.958797 INFO::Fitting model to feature number 51, G33_LjRoot104
+2026-03-27 09:58:06.963527 INFO::Fitting model to feature number 52, G27_LjRoot78
+2026-03-27 09:58:06.967883 INFO::Fitting model to feature number 53, LjRoot30
+2026-03-27 09:58:06.971971 INFO::Fitting model to feature number 54, LjRoot295
+2026-03-27 09:58:06.975869 INFO::Fitting model to feature number 55, LjRoot296
+2026-03-27 09:58:06.979741 INFO::Fitting model to feature number 56, LjRoot257
+2026-03-27 09:58:06.9836 INFO::Fitting model to feature number 57, G9_LjRoot131
+2026-03-27 09:58:06.987372 INFO::Fitting model to feature number 58, G24_LjRoot12
+2026-03-27 09:58:06.990618 INFO::Fitting model to feature number 59, LjRoot244
+2026-03-27 09:58:06.99292 INFO::Fitting model to feature number 60, G15_LjRoot29
+2026-03-27 09:58:06.995165 INFO::Fitting model to feature number 61, LjRoot230
+2026-03-27 09:58:06.997331 INFO::Fitting model to feature number 62, LjRoot258
+2026-03-27 09:58:06.999509 INFO::Fitting model to feature number 63, LjRoot8
+2026-03-27 09:58:07.001831 INFO::Fitting model to feature number 64, LjRoot220
+2026-03-27 09:58:07.004685 INFO::Fitting model to feature number 65, G34_LjRoot233
+2026-03-27 09:58:07.009033 INFO::Fitting model to feature number 66, LjRoot80
+2026-03-27 09:58:07.012951 INFO::Fitting model to feature number 67, LjRoot247
+2026-03-27 09:58:07.01668 INFO::Fitting model to feature number 68, LjRoot58
+2026-03-27 09:58:07.019783 INFO::Fitting model to feature number 69, LjRoot261
+2026-03-27 09:58:07.02217 INFO::Fitting model to feature number 70, G31_LjRoot101
+2026-03-27 09:58:07.024328 INFO::Fitting model to feature number 71, LjRoot28
+2026-03-27 09:58:07.026389 INFO::Fitting model to feature number 72, G25_LjRoot27
+2026-03-27 09:58:07.02846 INFO::Fitting model to feature number 73, LjRoot288
+2026-03-27 09:58:07.030518 INFO::Fitting model to feature number 74, LjRoot100
+2026-03-27 09:58:07.061496 INFO::Counting total values for each feature
+2026-03-27 09:58:07.07446 INFO::Writing filtered data to file Maaslin2_rhizo/features/filtered_data.tsv
+2026-03-27 09:58:07.077834 INFO::Writing filtered, normalized data to file Maaslin2_rhizo/features/filtered_data_norm.tsv
+2026-03-27 09:58:07.080926 INFO::Writing filtered, normalized, transformed data to file Maaslin2_rhizo/features/filtered_data_norm_transformed.tsv
+2026-03-27 09:58:07.0842 WARNING::Deleting existing residuals file: Maaslin2_rhizo/fits/residuals.rds
+2026-03-27 09:58:07.08533 INFO::Writing residuals to file Maaslin2_rhizo/fits/residuals.rds
+2026-03-27 09:58:07.086839 WARNING::Deleting existing fitted file: Maaslin2_rhizo/fits/fitted.rds
+2026-03-27 09:58:07.087897 INFO::Writing fitted values to file Maaslin2_rhizo/fits/fitted.rds
+2026-03-27 09:58:07.089029 INFO::Writing all results to file (ordered by increasing q-values): Maaslin2_rhizo/all_results.tsv
+2026-03-27 09:58:07.09211 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): Maaslin2_rhizo/significant_results.tsv
