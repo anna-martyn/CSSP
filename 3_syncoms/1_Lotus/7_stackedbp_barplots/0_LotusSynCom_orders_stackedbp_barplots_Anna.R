@@ -191,7 +191,7 @@ design <- data.frame(design[,-1], row.names = design$SampleID)
 taxonomy <- data.frame(taxonomy[,-1], row.names = taxonomy$ASVid)
 orders <- taxonomy[rownames(asv_table_matched), "order"]
 
-# Aggregating ASV table to order level
+# Aggregating ASV table at order level
 order_table <- rowsum(asv_table_matched, orders)
 
 # Testing mutant effects for each compartment separately

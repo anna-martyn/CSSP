@@ -109,7 +109,7 @@ da_sz_root <- Structural_zeros3(
   min_present_reps = 2
 )
 
-# Differential abundance analysis using Maaslin2 -------------------------------
+# Differential abundance analysis ----------------------------------------------
 # Rhizosphere
 da_maa_rhizo <- Maaslin2(
   input_data = asv_table_rhizo,
@@ -183,6 +183,7 @@ for(g in c("symrk", "ccamk", "nsp1", "nsp2")){
 RA_rhizo <- t(t(asv_table_rhizo)/colSums(asv_table_rhizo))
 RA_root  <- t(t(asv_table_root)/colSums(asv_table_root))
 
+# Rhizosphere
 results_rhizo <- merge(
   results_rhizo,
   taxonomy,
@@ -198,6 +199,7 @@ results_rhizo <- merge(
   by.y = 0
 )
 
+# Root
 results_root <- merge(
   x = results_root,
   y = taxonomy,
@@ -233,7 +235,7 @@ asv_RA_long <- as.data.frame(asv_table_RA) %>%
   pivot_longer(cols = -ASVid, names_to = "SampleID", values_to = "RA") %>%
   left_join(design %>% select(SampleID, Compartment, Genotype), by = "SampleID")
 
-# Filtering for WT
+# Keep only WT samples
 asv_RA_wt <- asv_RA_long %>%
   filter(Genotype=="WT") %>%
   group_by(ASVid, Compartment) %>%
@@ -369,7 +371,6 @@ p_bubble <- ggplot(da_all, aes(x = ASVid, y = Genotype, fill = DA)) +
     axis.title.x = element_blank(),
     axis.title.y = element_text(color = "black", size = 6),
     strip.placement = "outside",
-    # strip.background = element_rect(fill = "grey80", color = "grey50"),
     strip.text.y.left = element_text(
       color = "black",
       size = 6,
@@ -422,7 +423,6 @@ p_RA <- ggplot(asv_RA_wt, aes(x = ASVid, y = mean_RA)) +
     space = "free_y"
   ) +
   labs(y = "Mean relative\nabundance in WT") +
-  # scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   scale_y_continuous(expand = c(0, 0)) +
   theme_bw() +
   ggtitle("Lotus") +
@@ -440,11 +440,6 @@ p_RA <- ggplot(asv_RA_wt, aes(x = ASVid, y = mean_RA)) +
     panel.spacing = unit(0.4, "lines")
   ) +
   force_panelsizes(cols = c(1, 1, 1), rows = c(1, 1, 0.7)) +
-  # facetted_pos_scales(
-  #   y = list(
-  #     Compartment == "Nod-\nules" ~ scale_y_continuous(breaks = c(0, 0.25, 0.5))
-  #   )
-  # )+
   facetted_pos_scales(
     y = list(
       Compartment == "Nod-\nules" ~ scale_y_continuous(
@@ -520,8 +515,6 @@ p_RA_no_nod <- ggplot(asv_RA_wt_no_nod, aes(x = ASVid, y = mean_RA)) +
   )
 
 ## Combining plots -------------------------------------------------------------
-# once with all compartments, once with rhizo + root only
-
 
 # Removing individual legends from plots
 p_tax_clean <- p_tax + theme(legend.position = "none")
@@ -537,12 +530,6 @@ main_plot_no_nod <- p_RA_no_nod /
   p_tax_clean /
   (p_bubble + theme(legend.position = "none")) +
   plot_layout(heights = c(0.35, 0.05, 0.6))
-
-# lgd_bubble <- ggpubr::get_legend(p_bubble, position = "bottom")
-# lgd_tax <- ggpubr::get_legend(p_tax, position = "bottom")
-# lgd <- plot_grid(lgd_bubble, lgd_tax, ncol = 2)
-#
-# plot_grid(final_plot, lgd, rel_heights = c(0.9, 0.1), ncol = 1)
 
 # Saving plots
 ggsave(
