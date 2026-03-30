@@ -1,11 +1,11 @@
-# Clean up
+# Cleaning up
 options(warn = -1)
 rm(list = ls())
 
-# Set working directory to source file location
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load the ASV table.
+# Load data
 asv_table <- read.table(
   "LotusSC_ASVtable.tsv",
   sep = "\t",

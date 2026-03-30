@@ -172,14 +172,13 @@ bar_plot <- ggplot(df_summary, aes(y = Genotype, x = mean_RA, fill = order)) +
 
 # Saving plot
 ggsave(
-  "LotusSC_order_RA_stackedbp.pdf",
-  bar_plot,
+  filename = "1_rds_files/LotusSC_order_RA_stackedbp.pdf",
+  plot = bar_plot,
   width = 12,
   height = 6,
   unit = "cm"
 )
-saveRDS(bar_plot, file = "LotusSC_order_RA_stackedbp.rds")
-saveRDS(bar_plot, file = "../../3_final_figures/LotusSC_order_RA_stackedbp.rds")
+saveRDS(object = bar_plot, file = "2_figures/LotusSC_order_RA_stackedbp.rds")
 
 # Order level comparisons with Maaslin2 ---------------------------------------
 df_summary$Genotype <- factor(
@@ -306,18 +305,17 @@ p_sig <- ggplot(df_ord, aes(x = order, y = mean_RA, fill = Genotype)) +
 
 colnames(df_ord)[1] <- "Order"
 df_ord$Host <- "Lotus"
-write.csv(df_ord, "df_ord_Lj.csv")
+
+write.csv(x = df_ord, file = "3_tables/df_ord_Lj.csv")
 
 ggsave(
-  "Lotus_order_RA_sign_orders_asterisks.pdf",
-  p_sig,
+  filename = "2_figures/Lotus_order_RA_sign_orders_asterisks.pdf",
+  plot = p_sig,
   width = 12,
   height = 6,
   unit = "cm"
 )
-saveRDS(p_sig, file = "Lotus_order_RA_sign_orders_asterisks.rds")
 saveRDS(
-  p_sig,
-  file = "../../3_final_figures/Lotus_order_RA_sign_orders_asterisks.rds"
+  object = p_sig,
+  file = "1_rds_files/Lotus_order_RA_sign_orders_asterisks.rds"
 )
-

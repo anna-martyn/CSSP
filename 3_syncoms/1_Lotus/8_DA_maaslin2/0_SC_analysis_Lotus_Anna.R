@@ -16,7 +16,9 @@ pkg <- c(
   "tidyr",
   "patchwork"
 )
-for(pk in pkg) library(pk, character.only = TRUE)
+for(pk in pkg){
+  library(pk, character.only = TRUE)
+}
 
 # Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
@@ -219,8 +221,8 @@ root_any[is.na(root_any)] <- FALSE
 isolate_keep <- results_rhizo$ASVid[rhizo_any|root_any]
 
 # Saving results
-write.csv(results_rhizo, file = "DA_SynCom_Lotus_rhizo.csv")
-write.csv(results_root, file = "DA_SynCom_Lotus_rhizo.csv")
+write.csv(x = results_rhizo, file = "3_tables/DA_SynCom_Lotus_rhizo.csv")
+write.csv(x = results_root, file = "3_tables/DA_SynCom_Lotus_root.csv")
 
 # Plot highlighting DA ASVs ----------------------------------------------------
 
@@ -228,8 +230,8 @@ write.csv(results_root, file = "DA_SynCom_Lotus_rhizo.csv")
 asv_table_RA <- sweep(asv_table_matched, 2, colSums(asv_table_matched), "/")
 asv_RA_long <- as.data.frame(asv_table_RA) %>%
   rownames_to_column("ASVid") %>%
-  pivot_longer(cols=-ASVid, names_to="SampleID", values_to="RA") %>%
-  left_join(design %>% select(SampleID, Compartment, Genotype), by="SampleID")
+  pivot_longer(cols = -ASVid, names_to = "SampleID", values_to = "RA") %>%
+  left_join(design %>% select(SampleID, Compartment, Genotype), by = "SampleID")
 
 # Filtering for WT
 asv_RA_wt <- asv_RA_long %>%
@@ -544,32 +546,30 @@ main_plot_no_nod <- p_RA_no_nod /
 
 # Saving plots
 ggsave(
-  "LotusSynCom_DA_withNodule.pdf",
+  filename = "2_figures/LotusSynCom_DA_withNodule.pdf",
   plot = main_plot_all,
   width = 21,
   height = 20,
   units = "cm"
 )
-saveRDS(main_plot_all, file = "LotusSynCom_DA_withNodule.rds")
 saveRDS(
-  main_plot_all,
-  file = "../../3_final_figures/LotusSynCom_DA_with_Nodule.rds"
+  object = main_plot_all,
+  file = "1_rds_files/LotusSynCom_DA_withNodule.rds"
 )
 
 ggsave(
-  "LotusSynCom_DA_noNodule.pdf",
+  filename = "2_figures/LotusSynCom_DA_noNodule.pdf",
   plot = main_plot_no_nod,
   width = 21,
   height = 20,
   units = "cm"
 )
-saveRDS(main_plot_no_nod, file = "LotusSynCom_DA_noNodule.rds")
 saveRDS(
-  main_plot_no_nod,
-  file = "../../3_final_figures/LotusSynCom_DA_noNodule.rds"
+  object = main_plot_no_nod,
+  file = "1_rds_files/LotusSynCom_DA_noNodule.rds"
 )
 
-saveRDS(p_RA, file = "p_RA_Lj_withNodule.rds")
-saveRDS(p_RA_no_nod, file = "p_RA_Lj_noNodule.rds")
-saveRDS(p_tax_clean, file = "p_tax_clean_Lj.rds")
-saveRDS(p_bubble, file = "p_bubble_Lj.rds")
+saveRDS(object = p_RA, file = "1_rds_files/p_RA_Lj_withNodule.rds")
+saveRDS(object = p_RA_no_nod, file = "1_rds_files/p_RA_Lj_noNodule.rds")
+saveRDS(object = p_tax_clean, file = "1_rds_files/p_tax_clean_Lj.rds")
+saveRDS(object = p_bubble, file = "1_rds_files/p_bubble_Lj.rds")

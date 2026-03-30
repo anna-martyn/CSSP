@@ -13,7 +13,11 @@ for(pk in pkg){
 }
 
 # Loading data
-counts <- read.table("LotusSC_nodule_counts.txt", header = T, sep = "\t")
+counts <- read.table(
+  file = "../1_data/LotusSC_nodule_counts.txt",
+  header = TRUE,
+  sep = "\t"
+)
 
 # Selecting pink nodules and setting factor levels for genotypes
 counts <- counts %>%
@@ -138,6 +142,10 @@ box_plot <- ggplot(counts, aes(x = Genotype, y = Number, fill = Genotype)) +
   )
 
 # Saving plot
-ggsave("LotusSC_nodule_cts.pdf", box_plot, width = 5, height = 6)
-saveRDS(box_plot, "LotusSC_nodule_cts.rds")
-saveRDS(box_plot, "../../3_final_figures/LotusSC_nodule_cts.rds")
+ggsave(
+  filename = "2_figures/LotusSC_nodule_cts.pdf",
+  plot = box_plot,
+  width = 5,
+  height = 6
+)
+saveRDS(object = box_plot, file = "1_rds_files/LotusSC_nodule_cts.rds")

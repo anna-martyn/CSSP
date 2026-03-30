@@ -14,7 +14,7 @@ for(pk in pkg){
 
 # Loading data
 weight <- read.table(
-  "LotusSC_shootfw_input.txt",
+  file = "../1_data/LotusSC_shootfw_input.txt",
   header = TRUE,
   sep = "\t",
   dec = ","
@@ -111,14 +111,16 @@ box_plot <- ggplot(weight, aes(x = Genotype, y = Fresh_weight, fill = Genotype))
 # Saving plots and results of hypothesis tests
 weight$Host <- "Lotus"
 weight_summary$Host <- "Lotus"
-write.csv(weight, "LotusSC_shoot_fw_ANOVA.csv")
-write.csv(weight_summary, "LotusSC_shoot_fw_significance_letters.csv")
+write.csv(x = weight, file = "3_tables/LotusSC_shoot_fw_ANOVA.csv")
+write.csv(
+  weight_summary,
+  file = "3_tables/LotusSC_shoot_fw_significance_letters.csv"
+)
 ggsave(
-  "LotusSC_shootfw_boxplots.pdf",
-  box_plot,
+  filename = "2_figures/LotusSC_shootfw_boxplots.pdf",
+  plot = box_plot,
   width = 5,
   height = 6,
   units = "cm"
 )
-saveRDS(box_plot, "LotusSC_shootfw_boxplots.rds")
-saveRDS(box_plot, "../../3_final_figures/LotusSC_shootfw_boxplots.rds")
+saveRDS(object = box_plot, file = "1_rds_files/LotusSC_shootfw_boxplots.rds")

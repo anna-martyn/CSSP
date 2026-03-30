@@ -26,7 +26,6 @@ min_depth <- min(sample_sums(phs))
 cat("Lowest sequencing depth in the dataset:", min_depth, "\n")
 # All samples have a depth of >5000 reads, so no filtering required
 
-
 # We will perform the rarefication in two ways:
 ## 1. Including all ASVs (the ones matched to a Lotus SynCom member, and other ASVs/contaminants).
 ## 2. Including only ASVs matched to Lotus SynCom members. (later used for final plots)
@@ -67,21 +66,24 @@ asv_tabe_rare_filt <- asv_tabe_rare_filt[, c(
   setdiff(names(asv_tabe_rare_filt), "ASVid")
 )]
 
-# Saveing rarefied ASV tables
-write.csv(asv_tabe_rare, file = "LotusSC_rfd.csv")
+# Saving rarefied ASV tables
+write.csv(x = asv_tabe_rare, file = "1_tables/LotusSC_rfd.csv")
 write.table(
-  asv_tabe_rare,
-  file = "LotusSC_rfd.txt",
+  x = asv_tabe_rare,
+  file = "1_tables/LotusSC_rfd.txt",
   sep = "\t",
   row.names = FALSE,
   col.names = TRUE,
   quote = FALSE
 )
 
-write.csv(asv_tabe_rare_filt, file = "LotusSC_rfd_nocontaminants.csv")
+write.csv(
+  x = asv_tabe_rare_filt,
+  file = "1_tables/LotusSC_rfd_nocontaminants.csv"
+)
 write.table(
-  asv_tabe_rare_filt,
-  file = "LotusSC_rfd_nocontaminants.txt",
+  x = asv_tabe_rare_filt,
+  file = "1_tables/LotusSC_rfd_nocontaminants.txt",
   sep = "\t",
   row.names = FALSE,
   col.names = TRUE,

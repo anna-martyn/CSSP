@@ -7,9 +7,14 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Load data.
 design <- read.table("../1_data/LotusSC_metadata.txt", header=T, sep="\t")
-asv_table <- read.table("../1_data/LotusSC_ASVtable_nospike.tsv",
-                        sep = "\t", header = TRUE, row.names = 1, 
-                        check.names = FALSE, comment.char = "")
+asv_table <- read.table(
+  "../1_data/LotusSC_ASVtable_nospike.tsv",
+  sep = "\t",
+  header = TRUE,
+  row.names = 1,
+  check.names = FALSE,
+  comment.char = ""
+)
 
 # Load required packages.
 pkg <- c("data.table", "dplyr", "tidyr", "ggplot2", "vegan", "cowplot", "ggtext")
@@ -38,22 +43,23 @@ legend_labels <- c(
   "nsp2"   = "*nsp2*"
 )
 
-main_theme <- theme(panel.background=element_blank(),
-                    panel.grid.major = element_line(color = "gray90"),
-                    panel.border = element_rect(colour = "black", fill=NA,
-                                                linewidth=1),
-                    axis.line.x=element_line(color="black"),
-                    axis.line.y=element_line(color="black"),
-                    axis.ticks=element_line(color="black"),
-                    axis.text = element_text(size = 8, color = "black"),
-                    legend.text = element_text(size=8, color = "black"),
-                    legend.key=element_blank(),
-                    axis.title.y = element_text(size = 8),
-                    text=element_text(size=8, color="black"),
-                    legend.position="right",
-                    # legend.background=element_rect(colour="black", fill=NA),
-                    legend.background=element_blank(),
-                    plot.title = element_text(size=8, hjust=0.9))
+main_theme <- theme(
+  panel.background = element_blank(),
+  panel.grid.major = element_line(color = "gray90"),
+  panel.border = element_rect(colour = "black", fill = NA, linewidth = 1),
+  axis.line.x = element_line(color = "black"),
+  axis.line.y = element_line(color = "black"),
+  axis.ticks = element_line(color = "black"),
+  axis.text = element_text(size = 8, color = "black"),
+  legend.text = element_text(size = 8, color = "black"),
+  legend.key = element_blank(),
+  axis.title.y = element_text(size = 8),
+  text = element_text(size = 8, color = "black"),
+  legend.position = "right",
+  # legend.background=element_rect(colour="black", fill=NA),
+  legend.background = element_blank(),
+  plot.title = element_text(size = 8, hjust = 0.9)
+)
 
 compartments <- unique(design_filtered$Compartment)
 segments_list <- list()
@@ -79,15 +85,23 @@ for(i in 1:length(compartments)){
   var_expl <- pcoa$eig[1:2]/sum(pcoa$eig[pcoa$eig>0])
   text_dt <- data.table(
     Compartment = comp,
-    text = paste0(round(var_expl[1]*100, 1), "%", "-", 
-                  round(var_expl[2]*100, 1), "%")
+    text = paste0(
+      round(var_expl[1] * 100, 1),
+      "%",
+      "-",
+      round(var_expl[2] * 100, 1),
+      "%"
+    )
   )
   text_list[[i]] <- text_dt
   
   # Centroids & segments
   centroids <- aggregate(cbind(x,y) ~ Genotype, data=points, FUN=mean)
-  segments <- merge(points, setNames(centroids, c("Genotype","seg_x","seg_y")),
-                    by = "Genotype")
+  segments <- merge(
+    points,
+    setNames(centroids, c("Genotype", "seg_x", "seg_y")),
+    by = "Genotype"
+  )
   segments_list[[i]] <- segments
   points_list[[i]] <- points
 }
@@ -100,16 +114,9 @@ points[,Host := "Lotus"]
 segments[,Host := "Lotus"]
 text_dt[,Host := "Lotus"]
 
-outdir <- "./additional_outputs"
-
-# Create directory if it doesn't exist.
-if (!dir.exists(outdir)) {
-  dir.create(outdir, recursive = TRUE)
-}
-
-fwrite(points, file.path(outdir, "LotusSC_PCoA_points.csv"))
-fwrite(segments, file.path(outdir, "LotusSC_PCoA_segments.csv"))
-fwrite(text_dt, file.path(outdir, "LotusSC_PCoA_text.csv"))
+fwrite(points, "additional_outputs/LotusSC_PCoA_points.csv")
+fwrite(segments, "additional_outputs/LotusSC_PCoA_segments.csv")
+fwrite(text_dt, "additional_outputs/LotusSC_PCoA_text.csv")
 
 # p <- ggplot(points, aes(x=x, y=y, color=Genotype)) +
 #   geom_point(size=1.5, alpha=0.7) +

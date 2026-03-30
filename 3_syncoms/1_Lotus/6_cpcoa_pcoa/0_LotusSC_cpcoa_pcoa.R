@@ -33,22 +33,24 @@ genotype_labels_legend <- c("WT"="WT","symrk"="*symrk*","ccamk"="*ccamk*",
                             "nsp1"="*nsp1*","nsp2"="*nsp2*")
 
 # Set plotting parameters.
-main_theme <- theme(panel.background=element_blank(),
-                    panel.grid.major = element_line(color = "gray90"),
-                    panel.border = element_rect(colour = "black", fill=NA, linewidth=1),
-                    axis.line.x=element_line(color="black"),
-                    axis.line.y=element_line(color="black"),
-                    axis.ticks=element_line(color="black"),
-                    axis.text = element_text(size = 6, color = "black"),
-                    # legend.text = element_text(size = 6, color = "black"),
-                    legend.text = ggtext::element_markdown(size = 6, color = "black"),
-                    legend.key=element_blank(),
-                    axis.title.y = element_text(size = 6),
-                    text=element_text(size = 6, color="black"),
-                    legend.position="right",
-                    # legend.background=element_rect(colour="black", fill=NA),
-                    legend.background=element_blank(),
-                    plot.title = element_text(size = 6, hjust=0.9))
+main_theme <- theme(
+  panel.background = element_blank(),
+  panel.grid.major = element_line(color = "gray90"),
+  panel.border = element_rect(colour = "black", fill = NA, linewidth = 1),
+  axis.line.x = element_line(color = "black"),
+  axis.line.y = element_line(color = "black"),
+  axis.ticks = element_line(color = "black"),
+  axis.text = element_text(size = 6, color = "black"),
+  # legend.text = element_text(size = 6, color = "black"),
+  legend.text = ggtext::element_markdown(size = 6, color = "black"),
+  legend.key = element_blank(),
+  axis.title.y = element_text(size = 6),
+  text = element_text(size = 6, color = "black"),
+  legend.position = "right",
+  # legend.background=element_rect(colour="black", fill=NA),
+  legend.background = element_blank(),
+  plot.title = element_text(size = 6, hjust = 0.9)
+)
 
 # Write the function for making cpcoa and pcoa plots.
 
@@ -103,9 +105,17 @@ run_beta_diversity <- function(asv_table, table_name) {
     theme(plot.title = element_text(face = "bold", size = 6, hjust = 0))
 
   # Save CPCoA plot
-  ggsave(paste0("LotusSC_cpcoa_", table_name, ".pdf"), CPCoA_plot, width=5, height=5)
-  saveRDS(CPCoA_plot, paste0("LotusSC_cpcoa_", table_name, ".rds"))
-  saveRDS(CPCoA_plot, paste0("../../3_final_figures/LotusSC_cpcoa_", table_name, ".rds"))
+  ggsave(
+    filename = paste0("2_figures/LotusSC_cpcoa_", table_name, ".pdf"),
+    plot = CPCoA_plot,
+    width = 5,
+    height = 5,
+    units = "cm"
+  )
+  saveRDS(
+    object = CPCoA_plot,
+    file = paste0("1_rds_files/LotusSC_cpcoa_", table_name, ".rds")
+  )
 
   # pcoa plots (rhizosphere and root).
   for(comp in c("Root","Rhizosphere")) {
@@ -140,12 +150,26 @@ run_beta_diversity <- function(asv_table, table_name) {
       theme(plot.title = element_text(size = 6, hjust=0))
 
     # Save PCoA
-    ggsave(paste0("LotusSC_pcoa_", table_name, "_", comp, ".pdf"), p, width=5, height=5)
-    saveRDS(p, paste0("LotusSC_pcoa_", table_name, "_", comp, ".rds"))
-    saveRDS(p, paste0("../../3_final_figures/LotusSC_pcoa_", table_name, "_", comp, ".rds"))
+    ggsave(
+      filename = paste0(
+        "2_figures/LotusSC_pcoa_",
+        table_name,
+        "_",
+        comp,
+        ".pdf"
+      ),
+      plot = p,
+      width = 5,
+      height = 5,
+      units = "cm"
+    )
+    saveRDS(
+      object = p,
+      file = paste0("1_rds_files/LotusSC_pcoa_", table_name, "_", comp, ".rds")
+    )
   }
 }
 
 # Run the function for both ASV tables (all ASVs and matched ASVs only).
-run_beta_diversity(asv_table_all, "all_ASVs")
-run_beta_diversity(asv_table_matched, "matched_ASVs")
+run_beta_diversity(asv_table = asv_table_all, table_name = "all_ASVs")
+run_beta_diversity(asv_table = asv_table_matched, table_name = "matched_ASVs")

@@ -222,6 +222,11 @@ box_plot <- ggplot(df_plot, aes(x = Compartment, y = RA, fill = Genotype)) +
   )
 
 # Saving plot
-ggsave("LotusSynCom_symbionts_RA.pdf", plot = box_plot, width = 12, height = 6)
-saveRDS(box_plot, file = "LotusSynCom_symbionts_RA.rds")
-saveRDS(box_plot, file = "../../3_final_figures/LotusSynCom_symbionts_RA.rds")
+ggsave(
+  filename = "2_figures/LotusSynCom_symbionts_RA.pdf",
+  plot = box_plot,
+  width = 12,
+  height = 6
+)
+
+saveRDS(object = box_plot, file = "1_rds_files/LotusSynCom_symbionts_RA.rds")
