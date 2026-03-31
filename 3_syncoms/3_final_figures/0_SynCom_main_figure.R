@@ -1,5 +1,5 @@
 # Clean up
-options(warn=-1)
+options(warn = -1)
 rm(list=ls())
 
 # Set working directory
@@ -109,20 +109,20 @@ row2 <- plot_grid(
 # p_RA_Hv <- readRDS("../../2_Hordeum/8_final_figures/p_RA_Hv.rds")
 # p_tax_clean_Hv <- readRDS("../../2_Hordeum/8_final_figures/p_tax_clean_Hv.rds")
 # p_bubble_Hv <- readRDS("../../2_Hordeum/8_final_figures/p_bubble_Hv.rds")
-# 
+#
 # p_RA_Lj <- readRDS("p_RA_Lj.rds")
 # p_tax_clean_Lj <- readRDS("p_tax_clean_Lj.rds")
 # p_bubble_Lj <- readRDS("p_bubble_Lj.rds")
-# 
+#
 # row3 <- p_RA_Lj + p_RA_Hv + p_tax_clean_Lj + p_tax_clean_Hv +
-#   p_bubble_Lj + p_bubble_Hv + 
-#   plot_layout(nrow = 3, ncol = 2, 
+#   p_bubble_Lj + p_bubble_Hv +
+#   plot_layout(nrow = 3, ncol = 2,
 #               heights = c(0.54, 0.04, 0.42),
 #               widths = c(0.57, 0.43))
 
 # p5 <- p5 + guides(fill = "none")
 # p6 <- p6 + guides(fill = "none")
-# 
+#
 # row3 <- plot_grid(
 #   p5, p6,
 #   ncol = 2,
@@ -136,14 +136,17 @@ row2 <- plot_grid(
 # p5 <- p5 + theme(plot.margin = margin(c(0.5, 0, 0.5, 0), unit = "lines"))
 # p6 <- p6 + theme(plot.margin = margin(c(0.5, 0, 0.5, 0), unit = "lines"))
 
-row3 <- ggarrange(p4, p5,
-                  nrow = 1,
-                  labels = c("E", ""),
-                  font.label = list(size = 12),
-                  widths = c(0.57, 0.43),
-                  # common.legend = T,
-                  # legend = "bottom",
-                  align = "h")
+row3 <- ggarrange(
+  p4,
+  p5,
+  nrow = 1,
+  labels = c("E", ""),
+  font.label = list(size = 12),
+  widths = c(0.57, 0.43),
+  # common.legend = T,
+  # legend = "bottom",
+  align = "h"
+)
 
 ## Combine all rows.
 final_plot <- plot_grid(

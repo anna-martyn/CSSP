@@ -13,10 +13,10 @@ for(pk in pkg){
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Lotus plot
-axis_title <- readRDS("1_Lotus/LotusCSSP_Askov_DA_axis_title.rds")
-lotus_barplot <- readRDS("1_Lotus/LotusCSSP_Askov_DA_barplot.rds")
-lotus_taxonomy <- readRDS("1_Lotus/LotusCSSP_Askov_DA_taxonomy.rds")
-lotus_heatmap <- readRDS("1_Lotus/LotusCSSP_Askov_DA_heatmap.rds")
+axis_title <- readRDS("1_Lotus/1_rds_files/LotusCSSP_Askov_DA_axis_title.rds")
+lotus_barplot <- readRDS("1_Lotus/1_rds_files/LotusCSSP_Askov_DA_barplot.rds")
+lotus_taxonomy <- readRDS("1_Lotus/1_rds_files/LotusCSSP_Askov_DA_taxonomy.rds")
+lotus_heatmap <- readRDS("1_Lotus/1_rds_files/LotusCSSP_Askov_DA_heatmap.rds")
 
 lotus_top_plot <- (lotus_taxonomy | axis_title) +
   plot_layout(widths = c(0.9, 0.1))
@@ -28,9 +28,9 @@ lotus_main_plot
 
 # Hordeum plot
 empty <- ggplot() + theme_void()
-hordeum_barplot <- readRDS("2_Hordeum/HordeumCSSP_Askov_DA_barplot.rds")
-hordeum_taxonomy <- readRDS("2_Hordeum/HordeumCSSP_Askov_DA_taxonomy.rds")
-hordeum_heatmap <- readRDS("2_Hordeum/HordeumCSSP_Askov_DA_heatmap.rds")
+hordeum_barplot <- readRDS("2_Hordeum/1_rds_files/HordeumCSSP_Askov_DA_barplot.rds")
+hordeum_taxonomy <- readRDS("2_Hordeum/1_rds_files/HordeumCSSP_Askov_DA_taxonomy.rds")
+hordeum_heatmap <- readRDS("2_Hordeum/1_rds_files/HordeumCSSP_Askov_DA_heatmap.rds")
 
 tax_leg <-  get_legend(hordeum_taxonomy)
 heat_leg <- get_legend(hordeum_heatmap)

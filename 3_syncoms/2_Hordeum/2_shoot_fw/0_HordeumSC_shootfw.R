@@ -13,7 +13,7 @@ for(pk in pkg){
 }
 
 # Loading data
-weight <- read.table("HordeumSC_shootfw.txt", header = TRUE, sep = "\t")
+weight <- read.table("../1_data/HordeumSC_shootfw.txt", header = TRUE, sep = "\t")
 
 # Setting genotype colours and factor levels
 colors <- c(

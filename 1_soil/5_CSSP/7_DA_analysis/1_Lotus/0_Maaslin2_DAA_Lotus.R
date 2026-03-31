@@ -260,7 +260,7 @@ da_asv_amount[, ":="(
   Soil = factor(Soil, levels = c("NPK", "PK", "UF"))
 )]
 da_asv_amount <- da_asv_amount[order(Soil, Compartment, Genotype)]
-fwrite(da_asv_amount, "Lotus_DA_ASVs_overview.csv")
+fwrite(da_asv_amount, "2_tables/Lotus_DA_ASVs_overview.csv")
 
 da_asv_res <- rbindlist(
   lapply(daa_results, function(x) x$res_dt)
@@ -273,7 +273,7 @@ da_asv_res[,
   )
 ]
 da_asv_res <- da_asv_res[order(Soil, Compartment, Genotype, ASV)]
-fwrite(da_asv_res, "Lotus_DAanalysis_results.csv")
+fwrite(da_asv_res, "2_tables/Lotus_DA_analysis_results.csv")
 
 mean_RA_res <- rbindlist(
   lapply(daa_results, function(x) x$mean_RA_res)
@@ -461,7 +461,7 @@ p_axis_title <- ggplot() +
   xlab(NULL) + ylab(NULL)
 
 # Saving plots -----------------------------------------------------------------
-saveRDS(heatmap, "LotusCSSP_Askov_DA_heatmap.rds")
-saveRDS(bar_plot, "LotusCSSP_Askov_DA_barplot.rds")
-saveRDS(p_tax, "LotusCSSP_Askov_DA_taxonomy.rds")
-saveRDS(p_axis_title, "LotusCSSP_Askov_DA_axis_title.rds")
+saveRDS(object = heatmap, "1_rds_files/LotusCSSP_Askov_DA_heatmap.rds")
+saveRDS(bar_plot, "1_rds_files/LotusCSSP_Askov_DA_barplot.rds")
+saveRDS(p_tax, "1_rds_files/LotusCSSP_Askov_DA_taxonomy.rds")
+saveRDS(p_axis_title, "1_rds_files/LotusCSSP_Askov_DA_axis_title.rds")
