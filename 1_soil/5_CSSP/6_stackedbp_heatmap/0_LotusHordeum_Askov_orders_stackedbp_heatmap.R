@@ -1,32 +1,60 @@
-# Clean up.
-options(warn=-1)
-rm(list=ls())
+# Seup ------------------------------------------------------------------------
+# Cleaning up
+options(warn = -1)
+rm(list = ls())
 
-# Set working directory to source file location.
+# Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Load the required packages.
+# Loading packages
 pkg <- c("dplyr", "tidyr", "ggplot2", "tibble", "ggh4x", "scales")
 for(pk in pkg){
   library(pk, character.only = T)
 }
 
-# Load the Lotus and Hordeum input files.
-Lotus_design <- read.table("../../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt", header=T, sep="\t")
-Lotus_asv_table <- read.table( "../../1_data/1_Lotus/LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv",
-  sep = "\t", header = TRUE, row.names = 1, 
-  check.names = FALSE, comment.char = "")
-Lotus_taxonomy <- read.table("../../1_data/1_Lotus/LotusCSSP_AskovSoils_taxonomy_10_4.tsv", sep="\t", header=TRUE, fill=TRUE)
+# Loading data
+lotus_design <- read.table(
+  file = "../../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt",
+  header = TRUE,
+  sep = "\t"
+)
+lotus_asv_table <- read.table(
+  file = "../../1_data/1_Lotus/LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv",
+  sep = "\t",
+  header = TRUE,
+  row.names = 1,
+  check.names = FALSE,
+  comment.char = ""
+)
+lotus_taxonomy <- read.table(
+  "../../1_data/1_Lotus/LotusCSSP_AskovSoils_taxonomy_10_4.tsv",
+  sep = "\t",
+  header = TRUE,
+  fill = TRUE
+)
 
-Hordeum_design <- read.table("../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt", header=T, sep="\t")
-Hordeum_asv_table <- read.table(
-  "../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_ASVtable_10_4.tsv",
-  sep = "\t", header = TRUE, row.names = 1, 
-  check.names = FALSE, comment.char = "", skip = 1)
-Hordeum_taxonomy <- read.table("../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_taxonomy_10_4.tsv",
-  sep="\t", header=TRUE, fill=TRUE)
+hordeum_design <- read.table(
+  file = "../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt",
+  header = TRUE,
+  sep = "\t"
+)
+hordeum_asv_table <- read.table(
+  file = "../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_ASVtable_10_4.tsv",
+  sep = "\t",
+  header = TRUE,
+  row.names = 1,
+  check.names = FALSE,
+  comment.char = "",
+  skip = 1
+)
+hordeum_taxonomy <- read.table(
+  "../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_taxonomy_10_4.tsv",
+  sep = "\t",
+  header = TRUE,
+  fill = TRUE
+)
 
-# Clean up the taxonomy file layouts.
+# Cleaning taxonomy
 rename_tax <- function(tax_table){
   colnames(tax_table)[colnames(tax_table) == "Feature.ID"] <- "ASVid"
   tax_table %>%
@@ -37,138 +65,164 @@ rename_tax <- function(tax_table){
     select(ASVid, Kingdom, Phylum, Class, Order, Family, Genus, Species, Confidence)
 }
 
-Lotus_taxonomy <- rename_tax(Lotus_taxonomy)
-Hordeum_taxonomy <- rename_tax(Hordeum_taxonomy)
+lotus_taxonomy <- rename_tax(lotus_taxonomy)
+hordeum_taxonomy <- rename_tax(hordeum_taxonomy)
 
-# Re-order the data matrices (only keep samples in design that are found in ASV table, and then filter for ones present in taxonomy file and adjust).
-Lotus_design <- Lotus_design %>%
-  filter(SampleID %in% colnames(Lotus_asv_table)) 
-Lotus_asv_table <- Lotus_asv_table %>% 
-  select(all_of(Lotus_design$SampleID)) %>%
-  filter(rownames(.) %in% Lotus_taxonomy$ASVid)
+# Keep only samples with metadata and ASVs with taxonomy
+lotus_design <- lotus_design %>%
+  filter(SampleID %in% colnames(lotus_asv_table)) 
+lotus_asv_table <- lotus_asv_table %>% 
+  select(all_of(lotus_design$SampleID)) %>%
+  filter(rownames(.) %in% lotus_taxonomy$ASVid)
 
-Hordeum_design <- Hordeum_design %>%
-  filter(SampleID %in% colnames(Hordeum_asv_table)) 
-Hordeum_asv_table <- Hordeum_asv_table %>%
-  select(all_of(Hordeum_design$SampleID)) %>%
-  filter(rownames(.) %in% Hordeum_taxonomy$ASVid)
+hordeum_design <- hordeum_design %>%
+  filter(SampleID %in% colnames(hordeum_asv_table)) 
+hordeum_asv_table <- hordeum_asv_table %>%
+  select(all_of(hordeum_design$SampleID)) %>%
+  filter(rownames(.) %in% hordeum_taxonomy$ASVid)
 
-# Convert ASV reads to relative abundances and save as new dataframe.
-asv_to_df <- function(asv_table, taxonomy){
+# Relative abundances
+reads_to_RA <- function(asv_table, taxonomy){
   df <- sweep(asv_table, 2, colSums(asv_table), "/") %>%
-    as.data.frame() %>%
+    # as.data.frame() %>%
     rownames_to_column(var="ASVid") %>%
     left_join(taxonomy %>% select(ASVid, Order), by="ASVid")
   df
 }
 
-Lotus_df <- asv_to_df(Lotus_asv_table, Lotus_taxonomy)
-Hordeum_df <- asv_to_df(Hordeum_asv_table, Hordeum_taxonomy)
+lotus_asv_table_RA <- reads_to_RA(lotus_asv_table, lotus_taxonomy)
+hordeum_asv_table_RA <- reads_to_RA(hordeum_asv_table, hordeum_taxonomy)
 
-# Reshape to long format and filter for WT and mutant samples in the rhizosphere and root compartment only.
-Lotus_df.long <- Lotus_df %>%
-  pivot_longer(cols=-c(ASVid, Order), names_to="sampleID", values_to="RA") %>%
-  left_join(Lotus_design %>% select(SampleID, Soil, Genotype, Compartment), by=c("sampleID"="SampleID")) %>%
-  filter(
-    Genotype %in% c("WT", "symrk", "ccamk", "nsp1", "nsp2"),
-    Compartment %in% c("Rhizosphere", "Root")
-  )
+# Identifying top orders ------------------------------------------------------
+# Function to convert ASV table to long form, merge with design, 
+# and keep only WT samples
+get_long_form <- function(asv_table, design){
+  long_form_asv_table <- asv_table %>%
+    pivot_longer(
+      cols = -c(ASVid, Order),
+      names_to = "sampleID",
+      values_to = "RA"
+    ) %>%
+    left_join(
+      design %>% select(SampleID, Plant, Soil, Genotype, Compartment),
+      by = c("sampleID" = "SampleID")
+    ) %>%
+    filter(Compartment %in% c("Rhizosphere", "Root"))
 
-Hordeum_df.long <- Hordeum_df %>%
-  pivot_longer(cols=-c(ASVid, Order), names_to="sampleID", values_to="RA") %>%
-  left_join(Hordeum_design %>% select(SampleID, Plant, Soil, Genotype, Compartment), by=c("sampleID"="SampleID")) %>%
-  filter(
-    Genotype %in% c("WT", "symrk", "ccamk", "nsp1", "nsp2"),
-    Compartment %in% c("Rhizosphere", "Root")
-  )
-
-# Next we want to choose which bacterial orders to use for representation of the bacterial community structure in a stacked barplot.
-# For this, we will first make a summary of the relative abundances by order per sample-soil-compartment group for Lotus and Hordeum.
-Lotus_order_summary <- Lotus_df.long %>%
-  group_by(Order, sampleID, Soil, Compartment, Genotype) %>%
-  summarise(RA = sum(RA, na.rm = TRUE), .groups = "drop")
-
-Hordeum_order_summary <- Hordeum_df.long %>%
-  group_by(Order, sampleID, Soil, Compartment, Genotype) %>%
-  summarise(RA = sum(RA, na.rm = TRUE), .groups = "drop")
-
-## Next, we look at the bacterial orders with highest relative abundances in the samples in order to choose which orders to display.
-## We previously did this for the stacked bp showing the differences between Lotus and Hordeum WT across the three soils in both compartments.
-## We will do the same here, calculating the top 20 orders in Lotus and Hordeum WT across all soils, and using these orders for displaying the differences
-## of those top20 orders in the mutants compared to WT. Also, we filter for the orders with a relative abundance of min. 1% as done previously.
-
-### Step 1: Subset for WT samples.
-Lotus_RR <- Lotus_order_summary %>% filter(Genotype == "WT")
-Hordeum_RR <- Hordeum_order_summary %>% filter(Genotype == "WT")
-
-### Step 2: Calculate the overall mean RA per order across these samples, identify the top 20 orders by overall mean RA, and keep only those with mean RA ≥ 0.01.
-get_top_orders <- function(df){
-  df %>%
-    group_by(Order) %>%
-    summarise(MeanRA = mean(RA, na.rm=T), .groups="drop") %>%
-    arrange(desc(MeanRA)) %>%
-    slice_head(n=20) %>%
-    # filter(MeanRA >= 0.01) %>%
-    pull(Order)
+  return(long_form_asv_table)
 }
 
-Lotus_top <- get_top_orders(Lotus_RR)
-Hordeum_top <- get_top_orders(Hordeum_RR)
-combined_top_orders <- unique(c(Lotus_top, Hordeum_top))
-saveRDS(combined_top_orders, "../7_DA_analysis/Orders_to_display.rds")
+get_top_abn_orders <- function(asv_table, design, top, thresh){
+  
+  # Long form and filter WT
+  asv_table_long_form <- get_long_form(asv_table, design)
 
-### Step 3: Combine the orders for Lotus and Hordeum and show how many unique orders would be displayed.
-combined_top_orders <- unique(c(Lotus_top, Hordeum_top))
-length(combined_top_orders)
+  # Aggregating ASV table at order-level
+  asv_table_order_summary <- asv_table_long_form %>%
+    group_by(Order, sampleID, Soil, Compartment, Genotype) %>%
+    summarise(RA = sum(RA, na.rm = TRUE), .groups = "drop")
 
-# We will work with the selected bacterial orders, go back to the original dataframes and rename all other bacterial orders "Other".
-Lotus_df.long <- Lotus_df.long %>%
-  mutate(Order = if_else(Order %in% combined_top_orders, Order, "Other"))
+  # Identifying top orders with RA above threshold
+  top_orders <- asv_table_order_summary %>%
+    filter(Genotype == "WT") %>%
+    group_by(Order) %>%
+    summarise(MeanRA = mean(RA, na.rm = TRUE), .groups = "drop") %>%
+    arrange(desc(MeanRA)) %>%
+    slice_head(n = top) %>%
+    filter(MeanRA >= thresh) %>%
+    pull(Order)
 
-Hordeum_df.long <- Hordeum_df.long %>%
-  mutate(Order = if_else(Order %in% combined_top_orders, Order, "Other"))
+  return(top_orders)
+}
 
-# We then add a new column "Plant" to both dataframes and combine them.
-Lotus_df.long <- Lotus_df.long %>% mutate(Plant = "Lotus")
-Hordeum_df.long <- Hordeum_df.long %>% mutate(Plant = "Hordeum")
-
-combined_df <- bind_rows(Lotus_df.long, Hordeum_df.long)
-
-# We now summarise the mean RA per plant-genotype-compartment-soil combination.
-df.sample_order <- combined_df %>%
-  group_by(sampleID, Plant, Compartment, Soil, Genotype, Order) %>%
-  summarise(RA=sum(RA), .groups="drop")
-
-df.mean_order <- df.sample_order %>%
-  group_by(Plant, Compartment, Soil, Genotype, Order) %>%
-  summarise(RA=mean(RA), .groups="drop") %>%
-  mutate(Order=factor(Order, levels=c(sort(unique(Order[Order!="Other"])), "Other")),
-         Plant=factor(Plant, levels=c("Lotus","Hordeum")),
-         Compartment=factor(Compartment, levels=c("Rhizosphere","Root","Nodules")),
-         Soil=factor(Soil, levels=c("NPK","PK","UF")),
-         Genotype=factor(Genotype, levels=c("WT","symrk","ccamk","nsp1","nsp2")))
-
-# Set the main theme for the stacked barplot.
-main_theme <- theme(
-  panel.background=element_blank(),
-  panel.grid=element_blank(),
-  panel.border=element_rect(colour="black", fill=NA, linewidth=1),
-  axis.line.x=element_line(color="black"),
-  axis.line.y=element_line(color="black"),
-  axis.ticks=element_line(color="black"),
-  axis.text=element_text(size=8, color="black"),
-  legend.text=element_text(size=8, color="black"),
-  legend.key=element_blank(),
-  axis.title.y=element_text(size=8),
-  legend.position="right",
-  legend.background=element_blank(),
-  text=element_text(family="sans", size=8, color="black")
+# Using function to extract top 20 orders
+top_orders_lotus <- get_top_abn_orders(
+  asv_table = lotus_asv_table_RA,
+  design = lotus_design,
+  top = 20,
+  thresh = 0
+)
+top_orders_hordeum <- get_top_abn_orders(
+  asv_table = hordeum_asv_table_RA,
+  design = hordeum_design,
+  top = 20,
+  thresh = 0
 )
 
-# Set the colours for the bacterial orders.
-colors <- read.table("../../../0_files/Bacterial_order_colors.csv", header = T, sep = ",", comment.char = "")
+# Get orders belong to the top 20 orders in at least one plant
+top_orders <- union(top_orders_lotus, top_orders_hordeum)
+saveRDS(top_orders, "../7_DA_analysis/Orders_to_display.rds")
 
-# Make genotype names italic for mutants.
+# Get long form ASV tables
+lotus_asv_table_RA_long <- get_long_form(lotus_asv_table_RA, lotus_design)
+hordeum_asv_table_RA_long <- get_long_form(hordeum_asv_table_RA, hordeum_design)
+
+# Assigning all orders not in top_orders to "Other"
+lotus_asv_table_RA_long <- lotus_asv_table_RA_long %>%
+  mutate(Order = if_else(Order %in% top_orders, Order, "Other"))
+
+hordeum_asv_table_RA_long <- hordeum_asv_table_RA_long %>%
+  mutate(Order = if_else(Order %in% top_orders, Order, "Other"))
+
+# Combining long-form ASV tables from Lotus and Hordeum
+asv_table_RA_long <- bind_rows(
+  lotus_asv_table_RA_long,
+  hordeum_asv_table_RA_long
+)
+
+# Stacked barplot -------------------------------------------------------------
+# Aggregating long-form ASV table at order-level
+order_table_RA_long <- asv_table_RA_long %>%
+  group_by(sampleID, Plant, Compartment, Soil, Genotype, Order) %>%
+  summarise(RA = sum(RA), .groups = "drop")
+
+# factor levels
+non_orders <- c("Unknown", "Other")
+order_levels <- sort(setdiff(top_orders, non_orders))
+order_levels <- c(order_levels, non_orders)
+
+plant_levels <- c("Lotus", "Hordeum")
+compartment_levels <- c("Rhizosphere", "Root", "Nodules")
+soil_levels <- c("NPK", "PK", "UF")
+genotype_levels <- c("WT", "symrk", "ccamk", "nsp1", "nsp2")
+
+order_table_means <- order_table_RA_long %>%
+  group_by(Plant, Compartment, Soil, Genotype, Order) %>%
+  summarise(RA = mean(RA), .groups = "drop") %>%
+  mutate(
+    Order = factor(Order, levels = order_levels),
+    Plant = factor(Plant, levels = plant_levels),
+    Compartment = factor(Compartment, levels = compartment_levels),
+    Soil = factor(Soil, levels = soil_levels),
+    Genotype = factor(Genotype, levels = genotype_levels)
+  )
+
+# Main theme
+main_theme <- theme(
+  panel.background = element_blank(),
+  panel.grid = element_blank(),
+  panel.border = element_rect(colour = "black", fill = NA, linewidth = 1),
+  axis.line.x = element_line(color = "black"),
+  axis.line.y = element_line(color = "black"),
+  axis.ticks = element_line(color = "black"),
+  axis.text = element_text(size = 8, color = "black"),
+  legend.text = element_text(size = 8, color = "black"),
+  legend.key = element_blank(),
+  axis.title.y = element_text(size = 8),
+  legend.position = "right",
+  legend.background = element_blank(),
+  text = element_text(family = "sans", size = 8, color = "black")
+)
+
+# Loading order colours
+colors <- read.table(
+  "../../../0_files/Bacterial_order_colors.csv",
+  header = TRUE,
+  sep = ",",
+  comment.char = ""
+)
+
+# Mutant genotype names in italics
 genotype_labels <- c(
   "WT"    = "WT",
   "symrk" = "italic(symrk)",
@@ -177,137 +231,162 @@ genotype_labels <- c(
   "nsp2"  = "italic(nsp2)"
 )
 
-# Make the stacked barplot.
-p1 <- ggplot(df.mean_order, aes(x=Genotype, y=RA, fill=Order)) +
-  geom_bar(stat="identity", width=0.7) +
+# Stacked barplot
+bar_plot <- ggplot(order_table_means, aes(x = Genotype, y = RA, fill = Order)) +
+  geom_bar(stat = "identity", width = 0.7) +
   scale_fill_manual(values = colors$Color, breaks = colors$Order) +
-  scale_y_continuous(expand=c(0,0)) +
+  scale_y_continuous(expand = c(0, 0)) +
   scale_x_discrete(labels = function(x) parse(text = genotype_labels[x])) +
   main_theme +
   ylab("Mean relative abundance") +
-  labs(fill="Bacterial order") +
+  labs(fill = "Bacterial order") +
   xlab("") +
-  guides(fill=guide_legend(ncol=1)) +
-  facet_nested(~ Plant + Compartment + Soil, scales="free_x", space="free_x") +
+  guides(fill = guide_legend(ncol = 1)) +
+  facet_nested(
+    ~ Plant + Compartment + Soil,
+    scales = "free_x",
+    space = "free_x"
+  ) +
   theme(
-    axis.text.x = element_text(size=8, color="black", angle=90, vjust=1, hjust=1),
-    strip.text.x = element_text(size=8, face="bold"),
+    axis.text.x = element_text(
+      size = 8,
+      color = "black",
+      angle = 90,
+      vjust = 1,
+      hjust = 1
+    ),
+    strip.text.x = element_text(size = 8, face = "bold"),
     legend.key.size = unit(0.25, 'cm'),
     legend.margin = margin(l = -8)
   )
 
-p1
-
-# Save the plot.
+# Saving plot
 ggsave(
   filename = "2_figures/LotusHordeum_Askov_stackedbp_top20_meanRA.pdf",
-  plot = p1,
+  plot = bar_plot,
   width = 21,
   height = 6,
   unit = "cm"
 )
 saveRDS(
-  object = p1,
+  object = bar_plot,
   file = "1_rds_files/LotusHordeum_Askov_stackedbp_top20_meanRA.rds"
 )
 
-# Make a heatmap that displays these data and includes info on significance (differences between WT and individual mutants in each plant-soil-compartment combination.)
-## Define input dataframe, filter out Unknown and Other orders, and set factor levels.
-df.plot <- df.sample_order %>%
+# Heatmap - soil effects ------------------------------------------------------
+# Remvoing 'Other' and 'unknown' orders and setting factor levels
+order_table_means <- order_table_RA_long %>%
   filter(!(Order %in% c("Other", "Unknown"))) %>%
   mutate(
-    Plant = factor(Plant, levels = c("Lotus", "Hordeum")),
-    Compartment = factor(Compartment, levels = c("Rhizosphere", "Root")),
-    Genotype = factor(Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2")),
+    Plant = factor(Plant, levels = plant_levels),
+    Compartment = factor(Compartment, levels = compartment_levels),
+    Genotype = factor(Genotype, levels = genotype_levels),
     Order = factor(Order, levels = sort(unique(Order)))
   )
 
-## Perform significance analysis using linear regression to obtain tests for mutants vs. WT.
-mutants <- c("symrk", "ccamk", "nsp1", "nsp2")
+# Linear regression to obtain with genotype as covariate, WT as reference level
+mutants <- genotype_levels[-1]
 
-Opt <- expand.grid(
-  Plant = unique(df.plot$Plant),
-  Order = unique(df.plot$Order),
-  Compartment = unique(df.plot$Compartment),
-  Soil = unique(df.plot$Soil)
+opt <- expand.grid(
+  Plant = unique(order_table_means$Plant),
+  Order = unique(order_table_means$Order),
+  Compartment = unique(order_table_means$Compartment),
+  Soil = unique(order_table_means$Soil)
 )
 
 df_list <- list()
-for(i in 1:nrow(Opt)){
-  df <- df.plot %>%
-  filter(
-    Plant == Opt$Plant[i] & 
-      Compartment == Opt$Compartment[i] & 
-      Soil == Opt$Soil[i] & 
-      Order == Opt$Order[i]
-  )
+for(i in 1:nrow(opt)){
+  current_plant <- opt$Plant[i]
+  current_compartment <- opt$Compartment[i]
+  current_soil <- opt$Soil[i]
+  current_order <- opt$Order[i]
+
+  df <- order_table_means %>%
+    filter(
+      Plant == current_plant &
+        Compartment == current_compartment &
+        Soil == current_soil &
+        Order == current_order
+    )
   p_vals <- coef(summary(lm(RA~Genotype, data = df)))[-1,"Pr(>|t|)"]
   df_list[[i]] <- tibble(
-    Plant = Opt$Plant[i],
-    Compartment = Opt$Compartment[i], 
-    Soil = Opt$Soil[i],
-    Order = Opt$Order[i],
+    Plant = opt$Plant[i],
+    Compartment = opt$Compartment[i], 
+    Soil = opt$Soil[i],
+    Order = opt$Order[i],
     Genotype = gsub("Genotype", "", names(p_vals)),
     p.value = p_vals
   )
 }
 df_pvals <- bind_rows(df_list)
 
-# df_pvals <- df.plot %>%
-#   group_by(Plant, Compartment, Soil, Order) %>%
-#   summarise(
-#     p.value = wilcox.test(
-#       RA,
-#       df.plot$RA[
-#         df.plot$Plant == unique(Plant) &
-#           df.plot$Compartment == unique(Compartment) &
-#           df.plot$Soil == unique(Soil) &
-#           df.plot$Order == unique(Order) &
-#           df.plot$Genotype == "WT"
-#       ],
-#       exact = FALSE
-#     )$p.value,
-#     .groups = "drop"
-#   )
-
-## Adjust p-values using Benjamini-Hochberg.
+# Correction for multiple testing
+## Note: Before this used BH. Changed to bonferroni to be consistent with ANOVA 
+# and Tukey used elsewhere. However we really need to change this so it's done properly.
 df_pvals <- df_pvals %>%
   group_by(Plant, Compartment, Soil, Order) %>%
-  mutate(p.adj = p.adjust(p.value, method = "BH")) %>%
+  mutate(p.adj = p.adjust(p.value, method = "bonferroni")) %>%
   ungroup() %>%
   mutate(sig = ifelse(p.adj < 0.05, "*", ""))
 
-## Join the significance info with the heatmap data.
-df.plot <- df.plot %>%
-  left_join(df_pvals %>% select(-p.value), 
-            by = c("Plant", "Compartment", "Soil", "Order", "Genotype"))
+# Joining results from analysis with order RA table
+order_table_means <- order_table_means %>%
+  left_join(
+    df_pvals %>% select(-p.value),
+    by = c("Plant", "Compartment", "Soil", "Order", "Genotype")
+  )
 
-## Define the heatmap colours and breaks.
+# Defining colours and breaks for heatmap
 breaks <- c(0, 0.005, 0.052, 0.052001, 0.15999, 0.16, 0.34, 0.64)
-heat_colors <- c("#1F78B4", "#A6CEE3", "white","#FFFF99",
-                 "#FF7F00", "#FB9A99", "#E31A1C", "#902121")
+heat_colors <- c(
+  "#1F78B4",
+  "#A6CEE3",
+  "white",
+  "#FFFF99",
+  "#FF7F00",
+  "#FB9A99",
+  "#E31A1C",
+  "#902121"
+)
 values <- rescale(breaks, to = c(0, 1))
 
-## Make mutant genotype names italic.
+# Mutant genotype names in italics
 genotype_labels_heatmap <- c(
-  "WT"    = "WT",
+  "WT" = "WT",
   "symrk" = "italic(symrk)",
   "ccamk" = "italic(ccamk)",
-  "nsp1"  = "italic(nsp1)",
-  "nsp2"  = "italic(nsp2)"
+  "nsp1" = "italic(nsp1)",
+  "nsp2" = "italic(nsp2)"
 )
 
-## Make the heatmap plot.
-df.plot$Genotype <- factor(df.plot$Genotype, levels = c("WT", "symrk", "ccamk", "nsp1", "nsp2"))
-p_heatmap <- ggplot(df.plot, aes(x = Genotype, y = Order, fill = RA)) +
+# Factor levels
+order_table_means$Genotype <- factor(
+  order_table_means$Genotype,
+  levels = genotype_levels
+)
+
+# Heatmap
+heat_map <- ggplot(order_table_means, aes(x = Genotype, y = Order, fill = RA)) +
   geom_tile(color = "grey50") +
   geom_text(aes(label = sig), na.rm = TRUE, size = 3) +
-  scale_fill_gradientn(colors = heat_colors, values = values,
-                       limits = c(0, max(df.plot$RA, na.rm = TRUE)),
-                       name = "Relative abundance") +
-  scale_y_discrete(limits = rev(levels(df.plot$Order)), position = "right") +
-  scale_x_discrete(labels = function(x) parse(text = genotype_labels_heatmap[x])) +
-  facet_nested(~ Plant + Compartment + Soil, scales = "free_x", space = "free_x") +
+  scale_fill_gradientn(
+    colors = heat_colors,
+    values = values,
+    limits = c(0, max(order_table_means$RA, na.rm = TRUE)),
+    name = "Relative abundance"
+  ) +
+  scale_y_discrete(
+    limits = rev(levels(order_table_means$Order)),
+    position = "right"
+  ) +
+  scale_x_discrete(labels = function(x) {
+    parse(text = genotype_labels_heatmap[x])
+  }) +
+  facet_nested(
+    ~ Plant + Compartment + Soil,
+    scales = "free_x",
+    space = "free_x"
+  ) +
   theme(
     panel.background = element_blank(),
     panel.grid = element_blank(),
@@ -328,14 +407,12 @@ p_heatmap <- ggplot(df.plot, aes(x = Genotype, y = Order, fill = RA)) +
   xlab(NULL) +
   ylab("Bacterial order")
 
-p_heatmap
-
-# Save the heatmap.
+# Saving plot
 ggsave(
   filename = "2_figures/LotusHordeum_Askov_orders_heatmap.pdf",
-  plot = p_heatmap,
+  plot = heat_map,
   width = 12,
   height = 6,
   unit = "cm"
 )
-saveRDS(object = p_heatmap, file = "1_rds_files/LotusHordeum_Askov_orders_heatmap.rds")
+saveRDS(object = heat_map, file = "1_rds_files/LotusHordeum_Askov_orders_heatmap.rds")
