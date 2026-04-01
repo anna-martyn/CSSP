@@ -2,7 +2,7 @@
 # Loading packages
 pkg <- c("data.table", "codacore","tensorflow")
 for(pk in pkg){
-  library(pk, character.only = T)
+  library(pk, character.only = TRUE)
 }
 
 # Setting working directory to source file location
@@ -11,32 +11,32 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 # Loading data
 ## Lotus
 lotus_asv_table <- fread(
-  "../1_data/1_Lotus/LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv"
+  "../../1_data/1_Lotus/LotusCSSP_AskovSoils_ASVtable_10_4_nospike.tsv"
 )
 colnames(lotus_asv_table)[1] <- "ASVid"
 
 lotus_design <- fread(
-  "../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt", drop = c(5,7,8)
+  "../../1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt", drop = c(5,7,8)
 )
 ### Removing Nodule samples from metadata
 lotus_design <- lotus_design[Compartment != "Nodules"]
 
-lotus_taxonomy <- fread("../1_data/1_Lotus/LotusCSSP_AskovSoils_taxonomy_10_4.tsv")
+lotus_taxonomy <- fread("../../1_data/1_Lotus/LotusCSSP_AskovSoils_taxonomy_10_4.tsv")
 
 ## Hordeum
 hordeum_asv_table <- fread(
-  "../1_data/2_Hordeum/HordeumCSSP_AskovSoils_ASVtable_10_4.tsv"
+  "../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_ASVtable_10_4.tsv"
 )
 colnames(hordeum_asv_table)[1] <- "ASVid"
 
 hordeum_design <- fread(
-  "../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt", drop = c(2,3,8)
+  "../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt", drop = c(2,3,8)
 )
 ### Removing soil samples from metadata
 hordeum_design <- hordeum_design[Compartment != "Soil"]
 
 hordeum_taxonomy <- fread(
-  "../1_data/2_Hordeum/HordeumCSSP_AskovSoils_taxonomy_10_4.tsv"
+  "../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_taxonomy_10_4.tsv"
 )
 
 # Cleaning up taxonomy
@@ -394,7 +394,7 @@ for(i in 1:nrow(Opt)){
 # plant-compartment combinations
 tax_summary <- rbindlist(tax_summary_list)
 tax_summary[,.(RA = sum(RA)), .(Plant, Compartment, Soil)]
-fwrite(tax_summary, "Pred_taxonomic_composition.csv")
+fwrite(tax_summary, "1_tables/Pred_taxonomic_composition.csv")
 
 # Collecting information on which ASVs are used for predictions in all 
 # plant-compartment combinations
@@ -402,7 +402,10 @@ res <- rbindlist(res_list)
 ratio_summary <- rbindlist(ratio_summary_list)
 ratio_summary <- merge(ratio_summary, taxonomy, by = "ASVid")
 ratio_summary <- ratio_summary[order(Host, Compartment, Prediction, Role)]
-fwrite(ratio_summary, file = "LotusHordeum_Askov_prediction_ratios_summary.csv")
+fwrite(
+  ratio_summary,
+  file = "1_tables/LotusHordeum_Askov_prediction_ratios_summary.csv"
+)
 
 # Collecting information on the amount of ASVs used for predictions in all 
 # plant-compartment combinations and their accuracies
@@ -412,10 +415,10 @@ ratio_amount[,":="(
   Compartment = relevel(Compartment, ref = "Rhizosphere")
 )]
 ratio_amount <- ratio_amount[order(Host, Compartment)]
-fwrite(ratio_amount, "Pred_accuracy_summary.csv")
+fwrite(ratio_amount, "1_tables/Pred_accuracy_summary.csv")
 
 # Collecting information on the observed vs. predicted soils in all
 # samples in the test data
-fwrite(res, "Prediction_results.csv")
+fwrite(res, "1_tables/Prediction_results.csv")
 
 res[,.(Accuracy = mean(Obs == Pred)), .(Host, Compartment)]
