@@ -18,19 +18,14 @@ asv_table <- read.table(
   check.names = FALSE
 )
 
-# Creating phyloseq object
+# Phyloseq object
 phs <- phyloseq(otu_table(asv_table, taxa_are_rows = TRUE))
 
+# Filtering low-depth samples -------------------------------------------------
 # Checking minimum sequencing depth ASV table
 min_depth <- min(sample_sums(phs))
 cat("Lowest sequencing depth in the dataset:", min_depth, "\n")
 # All samples have a depth of >5000 reads, so no filtering required
-
-# We will perform the rarefication in two ways:
-## 1. Including all ASVs (the ones matched to a Lotus SynCom member, and other ASVs/contaminants).
-## 2. Including only ASVs matched to Lotus SynCom members. (later used for final plots)
-
-# For this we will make a second filtered dataframe, which we also load as phyloseq file.
 
 # Filtered dataset containing only ASVs matched to SynCom
 asv_table_filt <- asv_table[grepl("Lj", rownames(asv_table)), ]
@@ -41,35 +36,36 @@ min_depth <- min(sample_sums(phs_filt))
 cat("Lowest sequencing depth in the dataset:", min_depth, "\n")
 # Minimum sequencing depth is still >5000, so no filtering required
 
+# Rarefying -------------------------------------------------------------------
 # Rarefying full and filtered ASV tables
 set.seed(1673967505)
 phs_rare <- rarefy_even_depth(phs)
 phs_rare_filt <- rarefy_even_depth(phs_filt)
 
 # Converting rarefied ASV tables to dataframes
-asv_tabe_rare <- as.matrix(otu_table(phs_rare))
-asv_tabe_rare <- as.data.frame(asv_tabe_rare)
+asv_table_rare <- as.matrix(otu_table(phs_rare))
+asv_table_rare <- as.data.frame(asv_table_rare)
 
-asv_tabe_rare_filt <- as.matrix(otu_table(phs_rare_filt))
-asv_tabe_rare_filt <- as.data.frame(asv_tabe_rare_filt)
+asv_table_rare_filt <- as.matrix(otu_table(phs_rare_filt))
+asv_table_rare_filt <- as.data.frame(asv_table_rare_filt)
 
 # Adding 'ASVid' as a column
-asv_tabe_rare$ASVid <- rownames(asv_tabe_rare)
-asv_tabe_rare <- asv_tabe_rare[, c(
+asv_table_rare$ASVid <- rownames(asv_table_rare)
+asv_table_rare <- asv_table_rare[, c(
   "ASVid",
-  setdiff(names(asv_tabe_rare), "ASVid")
+  setdiff(names(asv_table_rare), "ASVid")
 )]
 
-asv_tabe_rare_filt$ASVid <- rownames(asv_tabe_rare_filt)
-asv_tabe_rare_filt <- asv_tabe_rare_filt[, c(
+asv_table_rare_filt$ASVid <- rownames(asv_table_rare_filt)
+asv_table_rare_filt <- asv_table_rare_filt[, c(
   "ASVid",
-  setdiff(names(asv_tabe_rare_filt), "ASVid")
+  setdiff(names(asv_table_rare_filt), "ASVid")
 )]
 
 # Saving rarefied ASV tables
-write.csv(x = asv_tabe_rare, file = "1_tables/LotusSC_rfd.csv")
+write.csv(x = asv_table_rare, file = "1_tables/LotusSC_rfd.csv")
 write.table(
-  x = asv_tabe_rare,
+  x = asv_table_rare,
   file = "1_tables/LotusSC_rfd.txt",
   sep = "\t",
   row.names = FALSE,
@@ -78,11 +74,11 @@ write.table(
 )
 
 write.csv(
-  x = asv_tabe_rare_filt,
+  x = asv_table_rare_filt,
   file = "1_tables/LotusSC_rfd_nocontaminants.csv"
 )
 write.table(
-  x = asv_tabe_rare_filt,
+  x = asv_table_rare_filt,
   file = "1_tables/LotusSC_rfd_nocontaminants.txt",
   sep = "\t",
   row.names = FALSE,

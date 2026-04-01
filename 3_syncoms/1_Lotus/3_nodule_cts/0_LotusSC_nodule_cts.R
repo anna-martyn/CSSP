@@ -31,6 +31,7 @@ counts <- counts %>%
     )
   )
 
+# Hypothesis test -------------------------------------------------------------
 # Hypothesis testing with ANOVA and Tukey HSD
 get_tukey_letters <- function(df){
   if (length(unique(df$Number)) == 1) {
@@ -78,6 +79,7 @@ if (length(unique(counts$Number)) == 1) {
 y_max <- max(counts$Number, na.rm = TRUE)
 y_pos_asterisk <- y_max * 1.05
 
+# Plot ------------------------------------------------------------------------
 # Summary for plotting letters
 letters_df$y_pos <- counts %>%
   group_by(Genotype) %>%

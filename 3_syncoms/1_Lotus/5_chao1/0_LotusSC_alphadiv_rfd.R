@@ -91,7 +91,6 @@ main_theme <- theme(
 # Note: Nodules only present in WT, so no hypothesis testing is carried out in
 # that compartment
 
-# Function
 # Function that produces letters ith Tukey HSD, and skip compartments with data
 # for only 1 genotype.
 get_tukey_letters <- function(df) {

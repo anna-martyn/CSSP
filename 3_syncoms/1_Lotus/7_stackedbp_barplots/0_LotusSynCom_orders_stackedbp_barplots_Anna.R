@@ -178,7 +178,7 @@ ggsave(
   height = 6,
   unit = "cm"
 )
-saveRDS(object = bar_plot, file = "2_figures/LotusSC_order_RA_stackedbp.rds")
+saveRDS(object = bar_plot, file = "1_rds_files/LotusSC_order_RA_stackedbp.rds")
 
 # Order level comparisons with Maaslin2 ---------------------------------------
 df_summary$Genotype <- factor(
