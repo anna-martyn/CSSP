@@ -8,7 +8,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 # Loading data
 pkg <- c("ggplot2", "ggpubr", "cowplot")
 for(pk in pkg){
-  library(pk, character.only = T)
+  library(pk, character.only = TRUE)
 }
 
 # Blank placeholder
