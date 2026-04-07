@@ -20,13 +20,17 @@ design_Lj <- fread(
 annotation_Lj <- fread(
   "../1_data/1_Lotus/LotusCSSP_rootex_canopus_structure_summary.tsv",
   drop = 21
-)fread(
-  "../1_data/1_Lotus/LotusCSSP_rootex_metadata.txt",
-  drop = c(2, 4:6)
 )
+
 # Setting feature names in feature table
 setnames(metabolite_data_Lj, "row ID", "Feature")
 metabolite_data_Lj[, Feature := paste0("Feature", Feature)]
+
+sample_numbers <- unlist(lapply(
+  strsplit(colnames(metabolite_data_Lj)[-1], "_"),
+  function(x) x[1]
+))
+colnames(metabolite_data_Lj)[-1] <- sample_numbers
 
 # Removing quality-control samples from feature table
 qc_idx <- grepl("QC", colnames(metabolite_data_Lj))
@@ -103,7 +107,7 @@ annotation_Hv[, Feature := paste0("Feature", Feature)]
 # Subset the data --------------------------------------------------------------
 
 # Keeping only Lotus features present more than 10% of replicates
-present_features_idx <- rowMeans(metabolite_data_Lj[,-1] != 0) > 0.1
+present_features_idx <- rowMeans(metabolite_data_Lj[,-1] != 0) >= 0.1
 present_features <- metabolite_data_Lj$Feature[present_features_idx]
 metabolite_data_Lj <- metabolite_data_Lj[Feature %in% present_features]
 
@@ -111,7 +115,7 @@ metabolite_data_Lj <- metabolite_data_Lj[Feature %in% present_features]
 metabolite_data_Lj <- metabolite_data_Lj[Feature %in% annotation_Lj$Feature]
 
 # Keeping only Hordeum features present more than 10% of replicates
-present_features_idx <- rowMeans(metabolite_data_Hv[,-1] != 0) > 0.1
+present_features_idx <- rowMeans(metabolite_data_Hv[,-1] != 0) >= 0.1
 present_features <- metabolite_data_Hv$Feature[present_features_idx]
 metabolite_data_Hv <- metabolite_data_Hv[Feature %in% present_features]
 

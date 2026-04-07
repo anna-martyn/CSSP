@@ -174,6 +174,7 @@ idx_remove <- unlist(idx_remove_lst)
 res_Lj <- res_Lj[-idx_remove]
 
 fwrite(res_Lj, "../10_suppl_tables/Lotus_metabolite_test_results_tobit.csv")
+fwrite(res_Lj, "1_tables/Lotus_metabolite_test_results_tobit.csv")
 
 ## Hordeum --------------------------------------------------------------------
 # Setting factor levels
@@ -267,4 +268,5 @@ res_Hv <- merge(res_Hv, Feat_tab_Hv, by = "Feature")
 res_Hv <- merge(res_Hv, annotation_Hv, by = "Feature", all.x = TRUE)
 
 fwrite(res_Hv, "../10_suppl_tables/Hordeum_metabolite_test_results_tobit.csv")
+fwrite(res_Hv, "1_tables/Hordeum_metabolite_test_results_tobit.csv")
 

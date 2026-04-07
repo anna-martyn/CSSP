@@ -107,7 +107,7 @@ annotation_Hv[, Feature := paste0("Feature", Feature)]
 ## Lotus -----------------------------------------------------------------------
 # Loading results of Genotype effect tests
 res_Lj <- fread(
-  "../4_genotype_effects/1_tables/Lotus_metabolite_test_results_tobit_new.csv"
+  "../4_genotype_effects/1_tables/Lotus_metabolite_test_results_tobit.csv"
 )
 
 # Specifying needed columns
@@ -158,7 +158,7 @@ sum_tab_Lj[, Host := "Lotus"]
 ## Hordeum ---------------------------------------------------------------------
 # Loading results of Genotype effect tests
 res_Hv <- fread(
-  "../4_genotype_effects/1_tables/Hordeum_metabolite_test_results_tobit_new.csv"
+  "../4_genotype_effects/1_tables/Hordeum_metabolite_test_results_tobit.csv"
 )
 
 # Specifying needed columns
