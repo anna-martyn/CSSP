@@ -6,9 +6,7 @@ rm(list = ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Loading packages
-pkg <- c(
-  "ggplot2", "ggtext", "ggpubr", "cowplot"
-)
+pkg <- c("ggplot2", "ggtext", "ggpubr", "cowplot")
 for(pk in pkg){
   library(pk, character.only = TRUE)
 }

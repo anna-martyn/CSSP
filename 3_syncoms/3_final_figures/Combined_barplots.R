@@ -1,9 +1,7 @@
 # Set working directory and load packages --------------------------------------
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-pkg <- c(
-  "data.table", "ggplot2", "ggtext", "ggh4x"
-)
+pkg <- c("data.table", "ggplot2", "ggtext", "ggh4x")
 for(pk in pkg){
   library(pk, character.only = T)
 }

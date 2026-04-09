@@ -7,11 +7,10 @@ rm(list = ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Loading packages
-library(dplyr)
-library(multcompView)
-# library(patchwork)
-library(ggplot2)
-# library(ggtext)
+pkg <- c("ggplot2", "dplyr", "multcompView")
+for(pk in pkg){
+  library(pk, character.only = T)
+}
 
 # Loading data
 ## Alpha diversity estimated from all ASVs
