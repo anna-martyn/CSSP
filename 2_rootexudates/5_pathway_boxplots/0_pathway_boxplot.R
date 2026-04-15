@@ -1,5 +1,5 @@
 # Seup ------------------------------------------------------------------------
-pkg <- c("data.table", "ggplot2", "ggtext")
+pkg <- c("data.table", "ggplot2", "ggtext", "ggh4x", "scales")
 for(pk in pkg){
   library(pk, character.only = TRUE)
 }
@@ -111,7 +111,7 @@ annotation_Lj <- annotation_Lj[Feature %in% metabolite_data_Lj$Feature]
 pathway_Lj <- merge(metabolite_data_Lj, annotation_Lj, by = "Feature")
 
 # Removing features with pathway probability less than 60%
-# pathway_Lj <- pathway_Lj[`NPC#pathway Probability` < 0.6]
+pathway_Lj <- pathway_Lj[`NPC#pathway Probability` < 0.6]
 
 # Aggregating on pathway level
 sample_names_Lj <- colnames(metabolite_data_Lj)[-1]
@@ -251,9 +251,7 @@ pathway_full <- merge(
 )
 
 # Adjusting y-positions separetely by plant
-pathway_full[,
-  Label_pos := ifelse(Plant == "Lotus", Label_pos + 250000, Label_pos + 20000)
-]
+pathway_full[, Label_pos := Label_pos + 10000]
 
 # Adding line breaks to some pathway names for plot
 pathway_full[,
@@ -269,6 +267,7 @@ box_plot <- ggplot(
   pathway_full,
   aes(x = Genotype, y = Intensity, fill = Genotype)
 ) +
+  # coord_transform(y = "log2") + 
   geom_boxplot(width = 0.3, alpha = 0.7, outlier.size = 0.5) +
   geom_text(
     data = pathway_full,
@@ -276,7 +275,7 @@ box_plot <- ggplot(
     inherit.aes = FALSE,
     size = 20 / .pt
   ) +
-  facet_grid(Plant ~ Pathway, scales = "free_y") +
+  facet_grid2(Plant ~ Pathway, scales = "free_y", independent = "y") +
   scale_fill_manual(values = cols, labels = legend_labels) +
   theme_bw() +
   theme(
@@ -309,13 +308,17 @@ box_plot <- ggplot(
       "nsp2" = expression(italic("nsp2"))
     )
   ) +
+  scale_y_continuous(labels = scientific)+
+  expand_limits(y = 0)+
+  # scale_y_continuous(breaks = 1000*2^(1:8), limits = c(1999, 400000))+
+  # scale_y_log10(breaks = c(2000, 4000, 10000, 35000, 100000, 350000), limits = c(1999, 400000))+
   NULL
 
 # Sving figure
 ggsave(
   "../9_final_figures/Suppl_Fig5.pdf",
   box_plot,
-  width = 210,
+  width = 230,
   height = 160,
   units = "mm"
 )
