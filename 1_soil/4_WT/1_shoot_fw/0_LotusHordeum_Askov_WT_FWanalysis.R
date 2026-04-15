@@ -121,7 +121,7 @@ main_theme <- theme(
 # Plot
 weight_summary$y_pos[5:6] <- c(0.9, 0.6)
 box_plot <- ggplot(weight, aes(x = Soil_type, y = Fresh_weight, fill = Soil_type)) +
-  geom_boxplot(width = 0.3, alpha = 0.7, outlier.size = 1.5) +
+  geom_boxplot(width = 0.3, alpha = 0.7, outlier.size = 0.3, linewidth = 0.2) +
   geom_text(
     data = weight_summary,
     mapping = aes(x = Soil_type, y = y_pos * 1.2, label = label),
@@ -136,6 +136,13 @@ box_plot <- ggplot(weight, aes(x = Soil_type, y = Fresh_weight, fill = Soil_type
   theme(
     legend.position = "none",
     strip.text.x = element_text(size = 6, face = "bold"),
+    axis.text.x = element_text(
+      size = 6,
+      angle = 90,
+      vjust = 1,
+      hjust = 0.5,
+      colour = "black"
+    ),
     axis.title.x = element_blank(),
     axis.title.y = element_text(size = 6, colour = "black")
   ) +

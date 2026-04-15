@@ -82,22 +82,31 @@ main_theme <- theme(
 
 letters_df$y_pos[c(1,3)] <- c(9.5, 10.5)
 box_plot <- ggplot(nod, aes(x = Soil_type, y = pink, fill = Soil_type)) +
-  geom_boxplot(width = 0.3, alpha = 0.7, outlier.size = 1.5)+
+  geom_boxplot(width = 0.3, alpha = 0.7, outlier.size = 0.5, linewidth = 0.2) +
   scale_fill_manual(values = as.character(colors$color)) +
   geom_text(
-    data = letters_df, 
-    mapping = aes(x = Soil_type, y = y_pos*1.1, label = label),
+    data = letters_df,
+    mapping = aes(x = Soil_type, y = y_pos * 1.1, label = label),
     inherit.aes = FALSE,
-    size = 6/.pt
+    size = 6 / .pt
   ) +
   main_theme +
-  ylab("Pink nodule counts/plant")+
-  scale_y_continuous()+
-  theme(legend.position = "none", 
-        strip.text.x = element_text(size = 6),
-        axis.title.x = element_blank(),
-        axis.title.y = element_text(size = 6, colour = "black"),
-        legend.key.size = unit(1,"cm"))
+  ylab("Pink nodule counts/plant") +
+  scale_y_continuous() +
+  theme(
+    legend.position = "none",
+    strip.text.x = element_text(size = 6),
+    axis.title.x = element_blank(),
+    axis.title.y = element_text(size = 6, colour = "black"),
+    axis.text.x = element_text(
+      size = 6,
+      angle = 90,
+      vjust = 1,
+      hjust = 0.5,
+      colour = "black"
+    ),
+    legend.key.size = unit(1, "cm")
+  )
 
 # Save plot
 ggsave(

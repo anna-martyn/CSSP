@@ -145,7 +145,7 @@ CPCoA_plot_Lj <- ggplot(
     alpha = 0.5,
     show.legend = FALSE
   ) +
-  geom_point(size = 3, alpha = 0.7) +
+  geom_point(size = 1, alpha = 0.7) +
   scale_colour_manual(values = as.character(colors$color)) +
   scale_shape_manual(values = shapes$shape) +
   labs(
@@ -173,12 +173,20 @@ CPCoA_plot_Lj <- ggplot(
   ) +
   main_theme +
   theme(
-    legend.position = "right",
+    legend.position = "bottom",
     legend.title = element_text(size = 6),
     axis.title.x = element_text(size = 6),
     plot.title = element_text(face = "bold", size = 6, hjust = 0),
-    plot.subtitle = element_text(size = 6, hjust = 0)
-  )
+    plot.subtitle = element_text(size = 6, hjust = 0),
+    legend.box = "vertical",
+    legend.margin = margin(),
+    legend.spacing.y = unit(0, "pt"),
+    legend.spacing.x = unit(0, "pt"),
+    legend.key.size = unit(0.25, 'cm'),
+    legend.key.spacing.y = unit(0, 'cm'),
+    legend.justification = c(0.75, 0)
+  ) +
+  guides(shape = guide_legend(title.position = "top", title.hjust = 0.5))
 
 # Saving plot
 ggsave(
@@ -240,7 +248,7 @@ CPCoA_plot_Hv <- ggplot(
     alpha = 0.5,
     show.legend = FALSE
   ) +
-  geom_point(size = 3, alpha = 0.7) +
+  geom_point(size = 1, alpha = 0.7) +
   scale_colour_manual(values = as.character(colors$color)) +
   scale_shape_manual(values = shapes$shape) +
   labs(
@@ -268,18 +276,27 @@ CPCoA_plot_Hv <- ggplot(
   ) +
   main_theme +
   theme(
-    legend.position = "right",
+    legend.position = "bottom",
     legend.title = element_text(size = 6),
     axis.title.x = element_text(size = 6),
     plot.title = element_text(face = "bold", size = 6, hjust = 0),
-    plot.subtitle = element_text(size = 6, hjust = 0)
-  ) 
+    plot.subtitle = element_text(size = 6, hjust = 0),
+    legend.box = "vertical",
+    legend.margin = margin(),
+    legend.spacing.y = unit(0, "pt"),
+    legend.spacing.x = unit(0, "pt"),
+    legend.key.size = unit(0.25, 'cm'),
+    legend.key.spacing.y = unit(0, 'cm'),
+    legend.justification = c(0.75, 0)
+  ) +
+  guides(shape = guide_legend(title.position = "top", title.hjust = 0.5))
 
 # Saving plot
 ggsave(
   filename = "2_figures/Hordeum_Askov_WT_cpcoa.pdf",
   plot = CPCoA_plot_Hv,
   width = 5,
-  height = 5
+  height = 7.3,
+  unit = "cm"
 )
 saveRDS(object = CPCoA_plot_Hv, file = "1_rds_files/Hordeum_Askov_WT_cpcoa.rds")

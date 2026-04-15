@@ -344,6 +344,14 @@ order_table_means <- order_table_means %>%
   filter(!(Order %in% c("Other", "Unknown"))) %>% 
   mutate(Order = droplevels(Order))
 
+order_table_means <- order_table_means %>%
+  mutate(
+    Compartment = ifelse(Compartment == "Rhizosphere", "Rhizo-\nsphere", "Root")
+  ) %>%
+  mutate(
+    Compartment = factor(Compartment, levels = c("Rhizo-\nsphere", "Root"))
+  )
+
 # Heatmap
 heat_map <- ggplot(order_table_means, aes(x = Soil, y = Order, fill = RA)) +
   geom_tile(color = "grey50") +
@@ -361,18 +369,23 @@ heat_map <- ggplot(order_table_means, aes(x = Soil, y = Order, fill = RA)) +
   guides(
     fill = guide_colorbar(
       title.position = "right",
-      barwidth = 12.5,
-      barheight = 1
+      barwidth = 6,
+      barheight = 0.5
     )
   ) +
   main_theme +
-  facet_nested(~ Plant + Compartment, scales = "free_x", space = "free_x") +
+  facet_nested(
+    ~ Plant + Compartment,
+    scales = "free_x",
+    space = "free",
+    strip = strip_nested(size = "variable")
+  ) +
   xlab(NULL) +
   ylab("Bacterial order") +
   theme(
     axis.text.x = element_text(
       size = 6,
-      angle = 0,
+      angle = 90,
       vjust = 1,
       hjust = 0.5,
       colour = "black"
@@ -386,7 +399,8 @@ heat_map <- ggplot(order_table_means, aes(x = Soil, y = Order, fill = RA)) +
     legend.text = element_text(size = 6, colour = "black"),
     legend.title = element_text(size = 6, colour = "black"),
     legend.position = "bottom",
-    plot.margin = margin(r = 10, l = 20)
+    plot.margin = margin(r = 2.5, l = 15),
+    panel.spacing.x = unit(0.1, "lines")
   )
 
 # Saving figure

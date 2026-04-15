@@ -28,25 +28,31 @@ p6 <- readRDS("../5_stacked_bp_heatmap/1_rds_files/LotusHordeum_Askov_WT_orders_
 p3_aligned <- p3 + labs(title = " ") +
   theme(plot.title = element_text(size = 6, color = NA))
 
-p4 <- p4 +
-  theme(
-    legend.position = "bottom",
-    legend.box = "vertical",
-    legend.margin = margin(),
-    legend.spacing.y = unit(0, "pt")
-  ) +
-  guides(shape = guide_legend(title.position = "top", title.hjust = 0.5))
+# p4 <- p4 +
+#   theme(
+#     legend.position = "bottom",
+#     legend.box = "vertical",
+#     legend.margin = margin(),
+#     legend.spacing.y = unit(0, "pt")
+#   )
 
-p5 <- p5 + 
-  theme(
-    legend.position = "bottom",
-    legend.box = "vertical", 
-    legend.margin = margin(),
-    legend.spacing.y = unit(0, "pt"),
-    plot.margin = margin(t = 0.5, b = 1, l = 0.5, r = 0.5, unit = "lines")
-  )+
-  guides(shape = guide_legend(title.position = "top", title.hjust=0.5))
+# p5 <- p5 + 
+#   theme(
+#     legend.position = "bottom",
+#     legend.box = "vertical", 
+#     legend.margin = margin(),
+#     legend.spacing.y = unit(0, "pt"),
+#     plot.margin = margin(t = 0.5, b = 1, l = 0.5, r = 0.5, unit = "lines")
+#   )
 
+cpcoa_legend <- ggpubr::get_legend(p4)
+p4 <- p4 + theme(legend.position = "none")
+p5 <- p5 + theme(legend.position = "none")
+
+heatmap_legend <- ggpubr::get_legend(p6)
+p6 <- p6 + theme(legend.position = "none")
+
+legends <- ggarrange(cpcoa_legend, heatmap_legend)
 
 # Assembling rows
 row1 <- plot_grid(
@@ -60,15 +66,11 @@ row1 <- plot_grid(
 )
 
 col1 <- ggarrange(
-  p4 + theme(legend.spacing.y = unit(0, "pt")),
-  p5 + theme(legend.spacing.y = unit(0, "pt")),
+  p4, p5,
   ncol = 1,
   labels = c("D", ""),
-  font.label = list(size = 12, face = "bold"),
-  common.legend = T,
-  legend = "bottom"
-) + 
-  NULL
+  font.label = list(size = 12, face = "bold")
+)
 
 bottom_rows <- plot_grid(
   col1, p6,
@@ -80,17 +82,17 @@ bottom_rows <- plot_grid(
 
 # Combining all plots
 final_plot <- plot_grid(
-  row1, bottom_rows,
+  row1, bottom_rows, legends,
   ncol = 1,
-  rel_heights = c(0.3, 0.7)
+  rel_heights = c(0.3, 0.6, 0.1)
 )
 
 # Saving figure
 ggsave(
   filename = "Figure2_Askov_WT.pdf",
   plot = final_plot,
-  width = 18,
-  height = 22,
+  width = 11,
+  height = 11,
   units = "cm"
 )
 
