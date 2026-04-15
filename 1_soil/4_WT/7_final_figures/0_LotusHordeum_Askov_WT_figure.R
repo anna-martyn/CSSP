@@ -60,7 +60,7 @@ row1 <- plot_grid(
   ncol = 3,
   rel_widths = c(1.2, 1.2, 0.6),
   labels = c("A","B","C"),
-  label_size = 12,
+  label_size = 8,
   label_fontface = "bold",
   label_x = 0, label_y = 1
 )
@@ -69,14 +69,14 @@ col1 <- ggarrange(
   p4, p5,
   ncol = 1,
   labels = c("D", ""),
-  font.label = list(size = 12, face = "bold")
+  font.label = list(size = 8, face = "bold")
 )
 
 bottom_rows <- plot_grid(
   col1, p6,
   ncol = 2,
   labels = c("", "E"),
-  label_size = 12,
+  label_size = 8,
   rel_widths = c(1/3, 2/3)
 )
 
