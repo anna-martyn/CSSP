@@ -311,7 +311,7 @@ bubble_plot <- ggplot(data = res) +
   ) +
   NULL
 
-# Bar plot showing yaxonomic composition ---------------------------------------
+# Bar plot showing taxonomic composition ---------------------------------------
 # Setting factor levels
 tax_summary[, ":="(
   Order = droplevels(factor(Order, levels = colors_order$Order)),
