@@ -74,7 +74,7 @@ mod1 <- boxGrob(
   label = "Model 1: \nPredicts NPK vs. non-NPK \nTrained on NPK, PK, and UF data",
   x = 0.28,
   y = 0.65,
-  width = unit(42, "mm"),
+  width = unit(35, "mm"),
   txt_gp = gpar(col = "black", fontsize = 6, family = "helvetica"),
   box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2)
 )
@@ -83,7 +83,7 @@ mod2 <- boxGrob(
   label = "Model 2: \nPredicts PK vs. UF \nTrained on PK and UF data",
   x = 0.78,
   y = 0.65,
-  width = unit(37, "mm"),
+  width = unit(30, "mm"),
   txt_gp = gpar(col = "black", fontsize = 6, family = "helvetica"),
   box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2)
 )
@@ -181,11 +181,11 @@ x_coords <- attr(connect4, "line")$x
 y_coords <- attr(connect4, "line")$y
 
 # Adjusting end-points of Z-shaped connection
-x_coords[2] <- x_coords[2] - unit(1.5, "mm")
-x_coords[3] <- x_coords[3] - unit(1.5, "mm")
+x_coords[2] <- x_coords[2] + unit(2.5, "mm")
+x_coords[3] <- x_coords[3] + unit(2.5, "mm")
 x_coords[4] <- coords(pred)$left + coords(pred)$width / 2 + unit(1.35, "mm")
-y_coords[3] <- y_coords[3] + unit(16, "mm")
-y_coords[4] <- y_coords[4] + unit(16, "mm")
+y_coords[3] <- y_coords[3] + unit(13, "mm")
+y_coords[4] <- y_coords[4] + unit(13, "mm")
 
 new_connection <- linesGrob(
   x = x_coords,
@@ -258,7 +258,7 @@ genotype_labels_legend <- c(
 
 bubble_plot <- ggplot(data = res) +
   geom_count(aes(x = Obs, y = Pred), color = "lightgrey") +
-  scale_size_continuous(range = c(1.5, 15)) +
+  scale_size_continuous(range = c(1, 12)) +
   geom_jitter(
     data = res[Prediction == TRUE],
     mapping = aes(x = Obs, y = Pred, fill = Genotype),
@@ -276,7 +276,7 @@ bubble_plot <- ggplot(data = res) +
   scale_shape_manual(values = c(21, 21)) +
   theme_bw() +
   labs(x = "Observed", y = "Predicted") +
-  guides(size = "none", fill = guide_legend(override.aes = list(size = 3))) +
+  guides(size = "none", fill = guide_legend(override.aes = list(size = 3), nrow = 2)) +
   facet_grid(Host ~ Compartment) +
   scale_fill_manual(values = colors_genotype, labels = genotype_labels_legend) +
   theme(
@@ -307,7 +307,8 @@ bubble_plot <- ggplot(data = res) +
       colour = "black"
     ),
     strip.text = element_text(size = 6, family = "Helvetica", face = "bold"),
-    legend.key.size = unit(5, "mm")
+    legend.key.size = unit(0.25, "mm"),
+    legend.key.spacing.y = unit(0, 'cm')
   ) +
   NULL
 
@@ -392,7 +393,7 @@ final_figure <- plot_grid(col1, col2, ncol = 2, label_size = 12)
 ggsave(
   filename = "Figure3_Askov_prediction.pdf",
   plot = final_figure,
-  width = 18,
-  height = 20,
+  width = 15,
+  height = 16,
   units = "cm"
 )
