@@ -68,25 +68,11 @@ rename_tax <- function(tax_table){
 lotus_taxonomy <- rename_tax(lotus_taxonomy)
 hordeum_taxonomy <- rename_tax(hordeum_taxonomy)
 
-# Keep only samples with metadata and ASVs with taxonomy
-lotus_design <- lotus_design %>%
-  filter(SampleID %in% colnames(lotus_asv_table)) 
-lotus_asv_table <- lotus_asv_table %>% 
-  select(all_of(lotus_design$SampleID)) %>%
-  filter(rownames(.) %in% lotus_taxonomy$ASVid)
-
-hordeum_design <- hordeum_design %>%
-  filter(SampleID %in% colnames(hordeum_asv_table)) 
-hordeum_asv_table <- hordeum_asv_table %>%
-  select(all_of(hordeum_design$SampleID)) %>%
-  filter(rownames(.) %in% hordeum_taxonomy$ASVid)
-
 # Relative abundances
 reads_to_RA <- function(asv_table, taxonomy){
   df <- sweep(asv_table, 2, colSums(asv_table), "/") %>%
-    # as.data.frame() %>%
-    rownames_to_column(var="ASVid") %>%
-    left_join(taxonomy %>% select(ASVid, Order), by="ASVid")
+    rownames_to_column(var = "ASVid") %>%
+    left_join(taxonomy %>% select(ASVid, Order), by = "ASVid")
   df
 }
 
