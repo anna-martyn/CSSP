@@ -100,7 +100,7 @@ combined <- plot_grid(
 )
 
 # Saving final figure and add a box around the piecharts
-pdf("Figure1_Askov_bulk.pdf", width = 18/2.54, height = 22/2.54)
+pdf("Figure1_Askov_bulk.pdf", width = 18/2.54, height = 20/2.54)
   combined
   grid.draw(linesGrob(x = unit(c(0.28, 0.34), "npc"), y = unit(c(0.25, 0.34), "npc")))
   grid.draw(linesGrob(x = unit(c(0.28, 0.34), "npc"), y = unit(c(0.12, 0.02), "npc")))
