@@ -289,6 +289,21 @@ top_row <- s +
 #  bottom row with 4 pies
 bottom_row <- plot_list[[4]] | plot_list[[5]] | plot_list[[6]] | plot_list[[7]]
 
+# Saving legend
+lgd <- plot_list[[4]] +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_text(size = 6),
+    legend.text = element_text(size = 6),
+    legend.key.size = unit(0.25, 'cm'),
+    legend.key.spacing.y = unit(0, 'cm')
+  ) +
+  guides(
+    fill = guide_legend(ncol = 5, title.position = "top", title.hjust = 0.5)
+  )
+lgd <- ggpubr::get_legend(lgd)
+saveRDS(lgd, "1_rds_files/order_legend.rds")
+
 # Combining rows with single legend
 final_plot <- (top_row / bottom_row) +
   plot_layout(guides = "collect") &

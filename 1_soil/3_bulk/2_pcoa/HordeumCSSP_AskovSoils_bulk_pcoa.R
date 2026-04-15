@@ -129,20 +129,38 @@ main_theme <- theme(
 
 # Plot
 PCoA_plot <- ggplot(points, aes(x = x, y = y, colour = Soil)) +
-  geom_point(alpha = 0.7, size = 3) +
+  geom_point(alpha = 0.7, size = 1.5) +
   geom_segment(
     data = segments,
-    mapping = aes(x = x, y = y, xend = seg_x, yend = seg_y, colour = Soil,),
+    mapping = aes(x = x, y = y, xend = seg_x, yend = seg_y, colour = Soil, ),
     alpha = 0.5,
     show.legend = FALSE
   ) +
-  scale_colour_manual(values=as.character(colors$colors)) +
+  scale_colour_manual(values = as.character(colors$colors)) +
   labs(
-    x = paste("PCoA 1 (", format(100 * eig[1] / sum(eig), digits = 4), "%)", sep = ""),
-    y = paste("PCoA 2 (", format(100 * eig[2] / sum(eig), digits = 4), "%)", sep = "")
+    x = paste(
+      "PCoA 1 (",
+      format(100 * eig[1] / sum(eig), digits = 4),
+      "%)",
+      sep = ""
+    ),
+    y = paste(
+      "PCoA 2 (",
+      format(100 * eig[2] / sum(eig), digits = 4),
+      "%)",
+      sep = ""
+    )
   ) +
-  main_theme+
-  scale_x_continuous(breaks = seq(-0.4, 0.4, by = 0.2))+
+  main_theme +
+  theme(
+    margins = margin(
+      t = unit(5.5, "pt"),
+      r = unit(5.5, "pt"),
+      b = unit(-9, "pt"),
+      l = unit(5.5, "pt")
+    )
+  )+
+  scale_x_continuous(breaks = seq(-0.4, 0.4, by = 0.2)) +
   NULL
 
 # Save

@@ -30,6 +30,7 @@ p6 <- readRDS("../4_venn_piecharts/1_rds_files/Hordeum_bulk_Venn_ASVs.rds")
 p7_nolegend <- readRDS(
   "../4_venn_piecharts/1_rds_files/HordeumCSSP_bulk_ASV_overlap_piecharts_nolegend.rds"
 )
+legend_p7 <- readRDS("../4_venn_piecharts/1_rds_files/order_legend.rds")
 
 # Modifying plots
 p4_aligned <- p4 + 
@@ -45,20 +46,20 @@ p5_aligned <- p5 +
 p6_aligned <- ggdraw(p6) + 
   theme(plot.margin = margin(t = 20, r = 5, b = 5, l = 5))
 
-legend_p7 <- get_legend(
-  p4_aligned + theme(
-    legend.position = "right",
-    legend.title = element_text(size = 6),
-    legend.text = element_text(size = 6),
-    legend.key.size = unit(0.25, 'cm')
-  )
-)
+# legend_p7 <- get_legend(
+#   p4_aligned + theme(
+#     legend.position = "right",
+#     legend.title = element_text(size = 6),
+#     legend.text = element_text(size = 6),
+#     legend.key.size = unit(0.25, 'cm')
+#   )
+# )
 
 # Assembling the rows for final figure
 row1 <- plot_grid(
   p1, p2, p3,
-  ncol = 3,
-  rel_widths = c(0.55, 0.15, 0.3),
+  nrow = 1,
+  rel_widths = c(0.5, 0.175, 0.325),
   labels = c("A","B","C"),
   label_size = 12,
   label_fontface = "bold",
@@ -68,7 +69,7 @@ row1 <- plot_grid(
 
 row2 <- plot_grid(
   p4_nolegend, p5_aligned,
-  ncol = 2,
+  nrow = 1,
   rel_widths = c(0.2, 0.8),
   labels = c("D","E"),
   label_size = 12,
@@ -78,34 +79,32 @@ row2 <- plot_grid(
 )
 
 row3 <- plot_grid(
-  p6_aligned, p7_nolegend, legend_p7,
-  ncol = 3,
-  rel_widths = c(0.325,0.5,0.175),
+  p6_aligned, p7_nolegend,
+  nrow = 1,
+  rel_widths = c(0.5, 0.5),
   labels = c("F","",""),
   label_size = 12,
   label_fontface = "bold",
   label_x = 0, label_y = 1
 )
 
-
-row4 <- ggplot() + theme_void()
-
 # Combine all rows
 combined <- plot_grid(
   row1,
   row2,
   row3,
+  legend_p7,
   ncol = 1,
-  rel_heights = c(0.3, 0.35, 0.35)
+  rel_heights = c(0.22, 0.36, 0.31, 0.11)
 )
 
 # Saving final figure and add a box around the piecharts
-pdf("Figure1_Askov_bulk.pdf", width = 18/2.54, height = 20/2.54)
+pdf("Figure1_Askov_bulk.pdf", width = 14/2.54, height = 16/2.54)
   combined
-  grid.draw(linesGrob(x = unit(c(0.28, 0.34), "npc"), y = unit(c(0.25, 0.34), "npc")))
-  grid.draw(linesGrob(x = unit(c(0.28, 0.34), "npc"), y = unit(c(0.12, 0.02), "npc")))
-  grid.draw(linesGrob(x = unit(c(0.34, 0.81), "npc"), y = unit(c(0.02, 0.02), "npc")))
-  grid.draw(linesGrob(x = unit(c(0.34, 0.81), "npc"), y = unit(c(0.34, 0.34), "npc")))
-  grid.draw(linesGrob(x = unit(c(0.81, 0.81), "npc"), y = unit(c(0.02, 0.34), "npc")))
-  grid.draw(linesGrob(x = unit(c(0.34, 0.34), "npc"), y = unit(c(0.02, 0.34), "npc")))
+  grid.draw(linesGrob(x = unit(c(0.35, 0.51), "npc"), y = unit(c(0.33, 0.40), "npc")))
+  grid.draw(linesGrob(x = unit(c(0.35, 0.51), "npc"), y = unit(c(0.19, 0.12), "npc")))
+  grid.draw(linesGrob(x = unit(c(0.51, 0.98), "npc"), y = unit(c(0.12, 0.12), "npc")))
+  grid.draw(linesGrob(x = unit(c(0.51, 0.98), "npc"), y = unit(c(0.40, 0.40), "npc")))
+  grid.draw(linesGrob(x = unit(c(0.98, 0.98), "npc"), y = unit(c(0.12, 0.40), "npc")))
+  grid.draw(linesGrob(x = unit(c(0.51, 0.51), "npc"), y = unit(c(0.12, 0.40), "npc")))
 dev.off()

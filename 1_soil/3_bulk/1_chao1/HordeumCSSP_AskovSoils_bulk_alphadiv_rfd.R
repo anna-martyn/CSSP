@@ -98,19 +98,35 @@ anova_p <- summary(ano)[[1]][["Pr(>F)"]][1]
 # Boxplot
 box_plot <- ggplot(index_bulk, aes(x = Soil, y = Chao1, fill = Soil)) +
   geom_boxplot(
-    alpha = 0.7, position=position_dodge(width = 0.7), outlier.color = NA, width = 0.3
+    alpha = 0.7,
+    position = position_dodge(width = 0.7),
+    outlier.color = NA,
+    width = 0.3,
+    linewidth = 0.4
   ) +
-  geom_jitter(position = position_jitter(width = 0, height = 0.17), size = 1, alpha = 1) +
+  geom_jitter(
+    position = position_jitter(width = 0, height = 0.17),
+    size = 0.75,
+    alpha = 1
+  ) +
   scale_fill_manual(values = as.character(colors$color)) +
-  labs(x = "", y = "Chao1 index") + 
+  labs(x = "", y = "Chao1 index") +
   geom_text(
-    data = label_df, 
-    aes(x = Soil, y = y_position, label = Letters), 
-    inherit.aes = FALSE, 
-    size = 6/.pt
+    data = label_df,
+    aes(x = Soil, y = y_position, label = Letters),
+    inherit.aes = FALSE,
+    size = 6 / .pt
   ) +
   main_theme +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+    margins = margin(
+      t = unit(5.5, "pt"),
+      r = unit(1, "pt"),
+      b = unit(-20, "pt"),
+      l = unit(0, "pt")
+    )
+  ) +
   NULL
 
 # Saving plot
