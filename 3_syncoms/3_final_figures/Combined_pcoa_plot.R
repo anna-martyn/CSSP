@@ -74,7 +74,7 @@ text_dt[, text := gsub("52", "52.0", text)]
 
 # Visualisation ----------------------------------------------------------------
 cpcoa_plot <- ggplot(pcoa_point, aes(x = PCo1, y = PCo2, color = Genotype)) +
-  geom_point(size = 1.5, alpha = 0.7) +
+  geom_point(size = 1, alpha = 0.7) +
   facet_grid(Host ~ Compartment, switch = "y") +
   geom_segment(
     data = pcoa_point,
@@ -83,7 +83,7 @@ cpcoa_plot <- ggplot(pcoa_point, aes(x = PCo1, y = PCo2, color = Genotype)) +
   ) +
   geom_label(
     data = text_dt,
-    aes(x = -0.175, y = -0.25, label = text),
+    aes(x = -0.19, y = -0.255, label = text),
     colour = "black",
     fill = "grey",
     alpha = 0.2,

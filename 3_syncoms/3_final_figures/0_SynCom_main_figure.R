@@ -62,7 +62,7 @@ row3 <- ggarrange(
   nrow = 1,
   labels = c("E", ""),
   font.label = list(size = 12),
-  widths = c(0.57, 0.43),
+  widths = c(0.6, 0.4),
   align = "h"
 )
 
@@ -77,4 +77,4 @@ final_plot <- plot_grid(
 )
 
 # Saving plot
-ggsave("Figure_6_SynCom.pdf", final_plot, width = 18, height = 22, units = "cm")
+ggsave("Figure_6_SynCom.pdf", final_plot, width = 16, height = 20, units = "cm")

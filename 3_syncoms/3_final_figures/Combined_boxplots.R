@@ -69,8 +69,11 @@ weight_summary$y_pos[c(6, 7, 10)] <- c(0.4, 0.38, 0.3)
 weight_summary$y_pos[3:5] <- c(0.041, 0.038, 0.042)
 weight$dummy <- "Hack"
 weight_summary$dummy <- "Hack"
-box_plot <- ggplot(weight, aes(x = Genotype, y = Fresh_weight, fill = Genotype)) +
-  geom_boxplot(width = 0.3, outlier.color = NA, alpha = 0.7) +
+box_plot <- ggplot(
+  weight,
+  aes(x = Genotype, y = Fresh_weight, fill = Genotype)
+) +
+  geom_boxplot(width = 0.3, outlier.color = NA, alpha = 0.7, linewidth = 0.3) +
   geom_text(
     data = weight_summary,
     aes(x = Genotype, y = y_pos * 1.1, label = label),
