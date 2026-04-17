@@ -37,21 +37,11 @@ design_Lj <- fread(
   drop = 4:6
 )
 
-annotation_Lj <- fread(
-  "../1_data/1_Lotus/LotusCSSP_rootex_canopus_structure_summary.tsv",
-  drop = 21
-)
-
 # Setting sample names in metadata
 design_Lj[, Sample_ID := paste0("Sample", Sample_ID)]
 
 # Removing samples not in feature table from metadata
 design_Lj <- design_Lj[ Sample_ID %in% colnames(metabolite_data_Lj)]
-
-# Setting feature names in annotation table
-setnames(annotation_Lj, "mappingFeatureId", "Feature")
-setcolorder(annotation_Lj, "Feature")
-annotation_Lj[, Feature := paste0("Feature", Feature)]
 
 # Removing control samples from metadata and feature table
 non_control_samples <- design_Lj[Genotype != "control", Sample_ID]
@@ -61,21 +51,6 @@ metabolite_data_Lj <- metabolite_data_Lj[,
   with = FALSE
 ]
 
-## Removing duplicate features in annotation table
-n_anno_feature <- table(annotation_Lj$Feature)
-duplicated_features <- names(n_anno_feature)[n_anno_feature > 1]
-
-## Identifying annotation with maximal probabilty for each duplicated feature
-idx_remove_lst <- list()
-for(i in 1:length(duplicated_features)){
-  idx_remove <- which(annotation_Lj$Feature == duplicated_features[i])
-  idx_keep <- which.max(annotation_Lj$`ClassyFire#class Probability`[idx_remove])
-  idx_remove <- idx_remove[-idx_keep]
-  idx_remove_lst[[i]] <- idx_remove
-}
-idx_remove <- unlist(idx_remove_lst)
-annotation_Lj <- annotation_Lj[-idx_remove]
-
 ## Loading Hordeum data -------------------------------------------------------
 metabolite_data_Hv <- fread(
   "../2_background_removal/1_tables/feature_table_Hordeum_filtered.csv"
@@ -83,10 +58,6 @@ metabolite_data_Hv <- fread(
 design_Hv <- fread(
   "../1_data/2_Hordeum/HordeumCSSP_rootex_metadata.txt",
   drop = c(2, 4:7)
-)
-annotation_Hv <- fread(
-  "../1_data/2_Hordeum/HordeumCSSP_rootex_canopus_structure_summary.tsv",
-  drop = 21
 )
 
 # Setting sample names in metadata
@@ -97,11 +68,6 @@ design_Hv <- design_Hv[ Sample_ID %in% colnames(metabolite_data_Hv)]
 
 # Adding plant variable to hordeum metadata
 design_Hv[,Plant := "Hordeum"]
-
-# Setting feature names in annotation table
-setnames(annotation_Hv, "mappingFeatureId", "Feature")
-setcolorder(annotation_Hv, "Feature")
-annotation_Hv[, Feature := paste0("Feature", Feature)]
 
 # Volcano plots ----------------------------------------------------------------
 # Loading p-values and log-fold changes from genotype effects

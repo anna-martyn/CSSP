@@ -28,21 +28,11 @@ design_Lj <- fread(
   drop = 4:6
 )
 
-annotation_Lj <- fread(
-  "../1_data/1_Lotus/LotusCSSP_rootex_canopus_structure_summary.tsv",
-  drop = 21
-)
-
 # Setting sample names in metadata
 design_Lj[, Sample_ID := paste0("Sample", Sample_ID)]
 
 # Removing samples not in feature table from metadata
 design_Lj <- design_Lj[ Sample_ID %in% colnames(metabolite_data_Lj)]
-
-# Setting feature names in annotation table
-setnames(annotation_Lj, "mappingFeatureId", "Feature")
-setcolorder(annotation_Lj, "Feature")
-annotation_Lj[, Feature := paste0("Feature", Feature)]
 
 # Removing control samples from metadata and feature table
 non_control_samples <- design_Lj[Genotype != "control", Sample_ID]
@@ -60,20 +50,12 @@ design_Hv <- fread(
   "../1_data/2_Hordeum/HordeumCSSP_rootex_metadata.txt",
   drop = c(2, 4:7)
 )
-annotation_Hv <- fread(
-  "../1_data/2_Hordeum/HordeumCSSP_rootex_canopus_structure_summary.tsv"
-)
 
 # Setting sample names in metadata
 design_Hv[, Sample_ID := paste0("Sample", Sample_ID)]
 
 # Removing samples not in feature table from metadata
 design_Hv <- design_Hv[ Sample_ID %in% colnames(metabolite_data_Hv)]
-
-# Setting feature names in annotation table
-setnames(annotation_Hv, "mappingFeatureId", "Feature")
-setcolorder(annotation_Hv, "Feature")
-annotation_Hv[, Feature := paste0("Feature", Feature)]
 
 # Principal Component Analysis ------------------------------------------------
 # Lagend labels

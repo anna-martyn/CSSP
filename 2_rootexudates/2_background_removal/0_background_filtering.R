@@ -8,34 +8,53 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 source("Tobit_function.R")
 
 # Loading Lotus data ----------------------------------------------------------
+# metabolite_data_Lj <- fread(
+#   "../1_data/1_Lotus/LotusCSSP_rootex_neg_GNPS_quant.csv",
+#   drop = c(2:13, 73)
+# )
+
 metabolite_data_Lj <- fread(
-  "../1_data/1_Lotus/LotusCSSP_rootex_neg_GNPS_quant.csv",
-  drop = c(2:13, 73)
+  "../1_data/1_Lotus/LotusCSSP_RootEx_Apr26_stdAUnew_featurelist.csv"
 )
 
 design_Lj <- fread(
   "../1_data/1_Lotus/LotusCSSP_rootex_metadata.txt",
   drop = c(2, 4:6)
 )
-annotation_Lj <- fread(
-  "../1_data/1_Lotus/LotusCSSP_rootex_canopus_structure_summary.tsv",
-  drop = 21
+
+dir_name <- paste(
+  "..",
+  "1_data",
+  "1_Lotus",
+  "LotusCSSP_RootEx_Apr26_stdAUnew_canopus_structure_summary.tsv",
+  sep = "/"
 )
+annotation_Lj <- fread(dir_name, drop = 21)
 
-# Setting feature names in feature table
-setnames(metabolite_data_Lj, "row ID", "Feature")
-metabolite_data_Lj[, Feature := paste0("Feature", Feature)]
+# Keeping only columns containing the peak area
+cols <- colnames(metabolite_data_Lj)
+cols_to_keep <- cols[grepl(":area", cols)]
+metabolite_data_Lj <- metabolite_data_Lj[, c("id", cols_to_keep), with = FALSE]
 
+# Replacing NAs with zeros
+metabolite_data_Lj <- metabolite_data_Lj[,
+  lapply(.SD, function(x) ifelse(is.na(x), 0, x)),
+  id
+]
+
+# Constructing samples numbers from column names
 sample_numbers <- unlist(lapply(
   strsplit(colnames(metabolite_data_Lj)[-1], "_"),
   function(x) x[1]
 ))
+sample_numbers <- gsub("datafile:", "", sample_numbers)
+## Fixing typo in feature table
+sample_numbers[26] <- "53"
 colnames(metabolite_data_Lj)[-1] <- sample_numbers
 
-# Removing quality-control samples from feature table
-qc_idx <- grepl("QC", colnames(metabolite_data_Lj))
-cols_to_remove <- colnames(metabolite_data_Lj)[qc_idx]
-metabolite_data_Lj[,c(cols_to_remove):=NULL]
+# Setting feature names in feature table
+setnames(metabolite_data_Lj, "id", "Feature")
+metabolite_data_Lj[, Feature := paste0("Feature", Feature)]
 
 # Setting sample names in feature tables
 colnames(metabolite_data_Lj)[-1] <- paste0(
@@ -61,25 +80,44 @@ annotation_Lj[, Feature := paste0("Feature", Feature)]
 
 # Loading Hordeum data --------------------------------------------------------
 metabolite_data_Hv <- fread(
-  "../1_data/2_Hordeum/HordeumCSSP_rootex_neg_quant.csv",
-  drop = c(2:13, 38)
+  "../1_data/2_Hordeum/HordeumCSSP_RootEx_Apr26_stdAUnew_featurelist.csv"
 )
+
 design_Hv <- fread(
   "../1_data/2_Hordeum/HordeumCSSP_rootex_metadata.txt",
   drop = c(2, 4:7)
 )
-annotation_Hv <- fread(
-  "../1_data/2_Hordeum/HordeumCSSP_rootex_canopus_structure_summary.tsv"
-)
 
-# Shortening samples names in feature tables
-sample_numbers <- unlist(
-  lapply(strsplit(colnames(metabolite_data_Hv)[-1], "_"), function(x) x[4])
+dir_name <- paste(
+  "..",
+  "1_data",
+  "2_Hordeum",
+  "HordeumCSSP_RootEx_Apr26_stdAUnew_canopus_structure_summary.tsv",
+  sep = "/"
 )
+annotation_Hv <- fread(dir_name, drop = 21)
+
+# Keeping only columns containing the peak area
+cols <- colnames(metabolite_data_Hv)
+cols_to_keep <- cols[grepl(":area", cols)]
+metabolite_data_Hv <- metabolite_data_Hv[, c("id", cols_to_keep), with = FALSE]
+
+# Replacing NAs with zeros
+metabolite_data_Hv <- metabolite_data_Hv[,
+  lapply(.SD, function(x) ifelse(is.na(x), 0, x)),
+  id
+]
+
+# Constructing samples numbers from column names
+sample_numbers <- unlist(lapply(
+  strsplit(colnames(metabolite_data_Hv)[-1], "_"),
+  function(x) x[4]
+))
+sample_numbers <- gsub("datafile:", "", sample_numbers)
 colnames(metabolite_data_Hv)[-1] <- sample_numbers
 
 # Setting feature names in feature table
-setnames(metabolite_data_Hv, "row ID", "Feature")
+setnames(metabolite_data_Hv, "id", "Feature")
 metabolite_data_Hv[,Feature:= paste0("Feature", Feature)]
 
 # Setting sample names in feature tables
@@ -259,8 +297,8 @@ fwrite(metabolite_data_Hv, file = "1_tables/feature_table_Hordeum_filtered.csv")
 # Saving feature tables for supplementary tables
 metabolite_data_Lj[, Feature := gsub("Feature", "", Feature)]
 metabolite_data_Hv[, Feature := gsub("Feature", "", Feature)]
-setnames(metabolite_data_Lj, "Feature", "Row ID")
-setnames(metabolite_data_Hv, "Feature", "Row ID")
+setnames(metabolite_data_Lj, "Feature", "id")
+setnames(metabolite_data_Hv, "Feature", "id")
 colnames(metabolite_data_Lj) <- gsub("Sample", "", colnames(metabolite_data_Lj))
 colnames(metabolite_data_Hv) <- gsub("Sample", "", colnames(metabolite_data_Hv))
 

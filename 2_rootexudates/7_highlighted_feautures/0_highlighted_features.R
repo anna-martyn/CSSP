@@ -64,23 +64,35 @@ design_Hv[,Plant := "Hordeum"]
 ## Lotus ----------------------------------------------------------------------
 highlighted_features_Lj <- paste0(
   "Feature",
-  c(269, 455, 285, 973, 1053, 1047, 945, 976, 1177, 1182, 1046, 1320)
+  c(270, 441, 848, 928, 1783, 1130, 903, 932, 439)
 )
 
 # Setting more instructive names for highlighted features
+# name_change <- c(
+#   "Feature269" = "Coumaric\nacid (F269)",
+#   "Feature455" = "Ferulic acid\n (F455)",
+#   "Feature285" = "Vanillic acid\n (F285)",
+#   "Feature973" = "Naringenin\n (F973)",
+#   "Feature1053" = "Vestitone\n (F1053)",
+#   "Feature1047" = "BiochaninA/\nOlmelin (F1047)",
+#   "Feature945" = "Formononetin\n (F945)",
+#   "Feature976" = "Vestitol\n (F976)",
+#   "Feature1177" = "Dehydroquer-\ncetin (F1177)",
+#   "Feature1182" = "Diosmetin\n (F1182)",
+#   "Feature1046" = "Wogonin\n (F1046)",
+#   "Feature1320" = "Velutin\n (F1320)"
+# )
+
 name_change <- c(
-  "Feature269" = "Coumaric\nacid (F269)",
-  "Feature455" = "Ferulic acid\n (F455)",
-  "Feature285" = "Vanillic acid\n (F285)",
-  "Feature973" = "Naringenin\n (F973)",
-  "Feature1053" = "Vestitone\n (F1053)",
-  "Feature1047" = "BiochaninA/\nOlmelin (F1047)",
-  "Feature945" = "Formononetin\n (F945)",
-  "Feature976" = "Vestitol\n (F976)",
-  "Feature1177" = "Dehydroquer-\ncetin (F1177)",
-  "Feature1182" = "Diosmetin\n (F1182)",
-  "Feature1046" = "Wogonin\n (F1046)",
-  "Feature1320" = "Velutin\n (F1320)"
+  "Feature270" = "Coumaric\nacid (F270)",
+  "Feature441" = "Ferulic acid\n (F441)",
+  "Feature848" = "Liquiritigenin\n (F848)",
+  "Feature928" = "Naringenin\n (F928)",
+  "Feature1783" = "Quercetin\n (F1783)",
+  "Feature1130" = "Diosmetin\n (F1130)",
+  "Feature903" = "Formonetin\n (F903)",
+  "Feature932" = "Vestitol\n (F932)",
+  "Feature439" = "Buxuletin/\nScopoletin\n (F439)"
 )
 
 # Setting factor levels
@@ -149,14 +161,14 @@ box_plot_highlighted_Lj <- ggplot(
   metabolite_long_Lj,
   aes(x = Genotype, y = Intensity, fill = Genotype)
 ) +
-  geom_boxplot(linewidth = 0.3, outlier.size = 0.5, outlier.color = "red") +
+  geom_boxplot(linewidth = 0.2, outlier.size = 0.5, outlier.color = "red") +
   facet_wrap(~Feature, scales = "free", ncol = 3) +
   geom_label(
     data = p_vals_dt,
     aes(y = y_pos, label = text),
-    label.size = NA,
+    linewidth = NA,
     alpha = 0,
-    size = 20 / .pt
+    size = 12 / .pt
   ) +
   scale_fill_manual(values = cols, breaks = names(cols)) +
   theme_bw() +
@@ -176,29 +188,30 @@ box_plot_highlighted_Lj <- ggplot(
     legend.margin = margin(t = 20, unit = "pt")
   ) +
   labs(x = NULL, title = "Lotus") +
-  guides(fill = "none") +
-  facetted_pos_scales(
-    y = list(
-      Feature == "BiochaninA/\nOlmelin (F1047)" ~
-        scale_y_continuous(limits = c(0, 25000))
-    )
-  ) +
+  guides(fill = "none")
   NULL
 
 ## Hordeum --------------------------------------------------------------------
 highlighted_features_Hv <- paste0(
   "Feature",
-  c(2546, 2889, 495, 3095, 3069, 3288)
+  # c(2546, 2889, 495, 3095, 3069, 3288)
+  c(2320, 494, 3287)
 )
 
 # Setting more instructive names for highlighted features
+# name_change <- c(
+#   "Feature2546" = "Gibberellin\n (F2546)",
+#   "Feature2889" = "Abscisic \nacid (F2889)",
+#   "Feature495" = "Esculetin\n (F495)",
+#   "Feature3095" = "Paeonin C\n (F3095)",
+#   "Feature3069" = "Isoorientin\n (F3069)",
+#   "Feature3288" = "Sapopharin\n (F3288)"
+# )
+
 name_change <- c(
-  "Feature2546" = "Gibberellin\n (F2546)",
-  "Feature2889" = "Abscisic \nacid (F2889)",
-  "Feature495" = "Esculetin\n (F495)",
-  "Feature3095" = "Paeonin C\n (F3095)",
-  "Feature3069" = "Isoorientin\n (F3069)",
-  "Feature3288" = "Sapopharin\n (F3288)"
+  "Feature2320" = "Gibberellin\n (F2320)",
+  "Feature494" = "Esculetin\n (F494)",
+  "Feature3287" = "Saponarin\n (F3287)"
 )
 
 # Setting factor levels
@@ -270,14 +283,14 @@ box_plot_highlighted_Hv <- ggplot(
   metabolite_long_Hv,
   aes(x = Genotype, y = Intensity, fill = Genotype)
 ) +
-  geom_boxplot(linewidth = 0.3, outlier.size = 0.5, outlier.color = "red") +
+  geom_boxplot(linewidth = 0.2, outlier.size = 0.5, outlier.color = "red") +
   facet_wrap(~Feature, scales = "free", ncol = 3) +
   geom_label(
     data = p_vals_dt,
     aes(y = y_pos, label = text),
-    label.size = NA,
+    linewidth = NA,
     alpha = 0,
-    size = 20 / .pt
+    size = 12 / .pt
   ) +
   scale_fill_manual(values = cols, breaks = names(cols)) +
   theme_bw() +
@@ -308,7 +321,7 @@ box_plot_highlighted_Hv <- ggplot(
 box_plot_highlighted <- plot_grid(
   box_plot_highlighted_Lj, box_plot_highlighted_Hv,
   ncol = 1,
-  rel_heights = c(2/3, 1/3)
+  rel_heights = c(0.72, 0.28)
 )
 
 saveRDS(

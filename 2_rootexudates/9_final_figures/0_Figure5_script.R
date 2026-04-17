@@ -19,6 +19,15 @@ box_plot_highlighted <- readRDS(
 )
 bubble_plot <- readRDS("../8_bubble_plots/1_rds_files/bubble_plot.rds")
 
+blank <- ggplot() + geom_blank() + theme_void()
+bubble_plot <- bubble_plot + theme(legend.position = "none")
+
+bubble_plot_no_legend <- plot_grid(
+  bubble_plot, blank,
+  ncol = 1,
+  rel_heights = c(0.9, 0.1)
+)
+
 # Combining plots
 row1_no_legend <- plot_grid(
   pca_all, volcano_plot,
@@ -35,9 +44,9 @@ row1 <- plot_grid(
 )
 
 row2 <- plot_grid(
-  bubble_plot,
+  bubble_plot_no_legend,
   box_plot_highlighted,
-  rel_widths = c(0.5, 0.5),
+  rel_widths = c(0.54, 0.46),
   labels = c("C", "D"),
   label_size = 12,
   label_fontface = "bold"
@@ -49,7 +58,7 @@ final_figure <- plot_grid(row1, row2, nrow = 2, rel_heights = c(0.35, 0.65))
 ggsave(
   filename = "Figure5_LotusHordeum_rootexudates.pdf",
   plot = final_figure,
-  width = 18,
-  height = 22,
+  width = 16,
+  height = 18,
   units = "cm"
 )

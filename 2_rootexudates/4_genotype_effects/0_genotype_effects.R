@@ -9,19 +9,28 @@ source("Tobit_function.R")
 
 ## Loading Lotus data ----------------------------------------------------------
 # Lotus feature table filtered for background features
-metabolite_data_Lj <- fread(
-  "../2_background_removal/1_tables/feature_table_Lotus_filtered.csv"
+dir_name <- paste(
+  "..",
+  "2_background_removal",
+  "1_tables",
+  "feature_table_Lotus_filtered.csv",
+  sep = "/"
 )
+metabolite_data_Lj <- fread(dir_name)
 
 design_Lj <- fread(
   "../1_data/1_Lotus/LotusCSSP_rootex_metadata.txt",
   drop = 4:6
 )
 
-annotation_Lj <- fread(
-  "../1_data/1_Lotus/LotusCSSP_rootex_canopus_structure_summary.tsv",
-  drop = 21
+dir_name <- paste(
+  "..",
+  "1_data",
+  "1_Lotus",
+  "LotusCSSP_RootEx_Apr26_stdAUnew_canopus_structure_summary.tsv",
+  sep = "/"
 )
+annotation_Lj <- fread(dir_name, drop = 21)
 
 # Setting sample names in metadata
 design_Lj[, Sample_ID := paste0("Sample", Sample_ID)]
@@ -43,17 +52,27 @@ metabolite_data_Lj <- metabolite_data_Lj[,
 ]
 
 ## Loading Hordeum data --------------------------------------------------------
-metabolite_data_Hv <- fread(
-  "../2_background_removal/1_tables/feature_table_Hordeum_filtered.csv"
+dir_name <- paste(
+  "..",
+  "2_background_removal",
+  "1_tables",
+  "feature_table_Hordeum_filtered.csv",
+  sep = "/"
 )
+metabolite_data_Hv <- fread(dir_name)
 design_Hv <- fread(
   "../1_data/2_Hordeum/HordeumCSSP_rootex_metadata.txt",
   drop = c(2, 4:7)
 )
-annotation_Hv <- fread(
-  "../1_data/2_Hordeum/HordeumCSSP_rootex_canopus_structure_summary.tsv",
-  drop = 21
+
+dir_name <- paste(
+  "..",
+  "1_data",
+  "2_Hordeum",
+  "HordeumCSSP_RootEx_Apr26_stdAUnew_canopus_structure_summary.tsv",
+  sep = "/"
 )
+annotation_Hv <- fread(dir_name, drop = 21)
 
 # Setting sample names in metadata
 design_Hv[, Sample_ID := paste0("Sample", Sample_ID)]
@@ -158,20 +177,20 @@ Feat_tab_Lj <- data.table(Feature = rownames(Feat_tab_Lj), Feat_tab_Lj)
 res_Lj <- merge(res_Lj, Feat_tab_Lj, by = "Feature")
 res_Lj <- merge(res_Lj, annotation_Lj, by = "Feature", all.x = TRUE)
 
-## Removing duplicate features in annotation table
-n_anno_feature <- table(res_Lj$Feature)
-duplicated_features <- names(n_anno_feature)[n_anno_feature > 1]
+# ## Removing duplicate features in annotation table
+# n_anno_feature <- table(res_Lj$Feature)
+# duplicated_features <- names(n_anno_feature)[n_anno_feature > 1]
 
-## Identifying annotation with maximal probabilty for each duplicated feature
-idx_remove_lst <- list()
-for(i in 1:length(duplicated_features)){
-  idx_remove <- which(res_Lj$Feature == duplicated_features[i])
-  idx_keep <- which.max(res_Lj$`ClassyFire#class Probability`[idx_remove])
-  idx_remove <- idx_remove[-idx_keep]
-  idx_remove_lst[[i]] <- idx_remove
-}
-idx_remove <- unlist(idx_remove_lst)
-res_Lj <- res_Lj[-idx_remove]
+# ## Identifying annotation with maximal probabilty for each duplicated feature
+# idx_remove_lst <- list()
+# for(i in 1:length(duplicated_features)){
+#   idx_remove <- which(res_Lj$Feature == duplicated_features[i])
+#   idx_keep <- which.max(res_Lj$`ClassyFire#class Probability`[idx_remove])
+#   idx_remove <- idx_remove[-idx_keep]
+#   idx_remove_lst[[i]] <- idx_remove
+# }
+# idx_remove <- unlist(idx_remove_lst)
+# res_Lj <- res_Lj[-idx_remove]
 
 fwrite(res_Lj, "../10_suppl_tables/Lotus_metabolite_test_results_tobit.csv")
 fwrite(res_Lj, "1_tables/Lotus_metabolite_test_results_tobit.csv")
@@ -269,4 +288,3 @@ res_Hv <- merge(res_Hv, annotation_Hv, by = "Feature", all.x = TRUE)
 
 fwrite(res_Hv, "../10_suppl_tables/Hordeum_metabolite_test_results_tobit.csv")
 fwrite(res_Hv, "1_tables/Hordeum_metabolite_test_results_tobit.csv")
-

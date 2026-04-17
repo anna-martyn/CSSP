@@ -36,10 +36,14 @@ design_Lj <- fread(
   drop = 4:6
 )
 
-annotation_Lj <- fread(
-  "../1_data/1_Lotus/LotusCSSP_rootex_canopus_structure_summary.tsv",
-  drop = 21
+dir_name <- paste(
+  "..",
+  "1_data",
+  "1_Lotus",
+  "LotusCSSP_RootEx_Apr26_stdAUnew_canopus_structure_summary.tsv",
+  sep = "/"
 )
+annotation_Lj <- fread(dir_name, drop = 21)
 
 # Setting sample names in metadata
 design_Lj[, Sample_ID := paste0("Sample", Sample_ID)]
@@ -60,21 +64,6 @@ metabolite_data_Lj <- metabolite_data_Lj[,
   with = FALSE
 ]
 
-## Removing duplicate features in annotation table
-n_anno_feature <- table(annotation_Lj$Feature)
-duplicated_features <- names(n_anno_feature)[n_anno_feature > 1]
-
-## Identifying annotation with maximal probabilty for each duplicated feature
-idx_remove_lst <- list()
-for(i in 1:length(duplicated_features)){
-  idx_remove <- which(annotation_Lj$Feature == duplicated_features[i])
-  idx_keep <- which.max(annotation_Lj$`ClassyFire#class Probability`[idx_remove])
-  idx_remove <- idx_remove[-idx_keep]
-  idx_remove_lst[[i]] <- idx_remove
-}
-idx_remove <- unlist(idx_remove_lst)
-annotation_Lj <- annotation_Lj[-idx_remove]
-
 ## Loading Hordeum data -------------------------------------------------------
 metabolite_data_Hv <- fread(
   "../2_background_removal/1_tables/feature_table_Hordeum_filtered.csv"
@@ -83,10 +72,15 @@ design_Hv <- fread(
   "../1_data/2_Hordeum/HordeumCSSP_rootex_metadata.txt",
   drop = c(2, 4:7)
 )
-annotation_Hv <- fread(
-  "../1_data/2_Hordeum/HordeumCSSP_rootex_canopus_structure_summary.tsv",
-  drop = 21
+
+dir_name <- paste(
+  "..",
+  "1_data",
+  "2_Hordeum",
+  "HordeumCSSP_RootEx_Apr26_stdAUnew_canopus_structure_summary.tsv",
+  sep = "/"
 )
+annotation_Hv <- fread(dir_name, drop = 21)
 
 # Setting sample names in metadata
 design_Hv[, Sample_ID := paste0("Sample", Sample_ID)]
@@ -268,7 +262,7 @@ box_plot <- ggplot(
   aes(x = Genotype, y = Intensity, fill = Genotype)
 ) +
   # coord_transform(y = "log2") + 
-  geom_boxplot(width = 0.3, alpha = 0.7, outlier.size = 0.5) +
+  geom_boxplot(width = 0.3, alpha = 0.7, outlier.size = 0.5, linewidth = 0.3) +
   geom_text(
     data = pathway_full,
     aes(x = Genotype, y = Label_pos, label = Label),
@@ -318,7 +312,7 @@ box_plot <- ggplot(
 ggsave(
   "../9_final_figures/Suppl_Fig5.pdf",
   box_plot,
-  width = 230,
+  width = 180,
   height = 160,
   units = "mm"
 )
