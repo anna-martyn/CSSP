@@ -105,7 +105,7 @@ annotation_Lj <- annotation_Lj[Feature %in% metabolite_data_Lj$Feature]
 pathway_Lj <- merge(metabolite_data_Lj, annotation_Lj, by = "Feature")
 
 # Removing features with pathway probability less than 60%
-pathway_Lj <- pathway_Lj[`NPC#pathway Probability` < 0.6]
+pathway_Lj <- pathway_Lj[`NPC#pathway Probability` > 0.6]
 
 # Aggregating on pathway level
 sample_names_Lj <- colnames(metabolite_data_Lj)[-1]
