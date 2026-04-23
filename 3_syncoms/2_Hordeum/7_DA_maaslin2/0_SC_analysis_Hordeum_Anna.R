@@ -27,12 +27,12 @@ source("Structural_zeros.R")
 
 # Loading data
 design <- read.table(
-  "../1_data/without_input/HordeumSC_metadata.txt",
+  "../1_data/HordeumSC_metadata.txt",
   header = TRUE,
   sep = "\t"
 )
 asv_table <- read.table(
-  "../1_data/without_input/HordeumSC_ASVtable.tsv",
+  "../1_data/HordeumSC_ASVtable.tsv",
   sep = "\t",
   header = TRUE,
   row.names = 1,
@@ -41,7 +41,7 @@ asv_table <- read.table(
   skip = 1
 )
 taxonomy <- read.table(
-  "../1_data/without_input/CerealSC_taxonomy_May23.txt",
+  "../1_data/CerealSC_taxonomy_May23.txt",
   sep = "\t",
   header = TRUE,
   fill = TRUE
