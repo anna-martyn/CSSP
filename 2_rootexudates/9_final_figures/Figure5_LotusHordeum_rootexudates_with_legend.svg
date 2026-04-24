@@ -780,10 +780,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      showgrid="false"
-     inkscape:zoom="1.1"
-     inkscape:cx="301.81818"
-     inkscape:cy="340"
-     inkscape:window-width="2560"
+     inkscape:zoom="2.2"
+     inkscape:cx="140"
+     inkscape:cy="445.90909"
+     inkscape:window-width="3440"
      inkscape:window-height="1368"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -26214,7 +26214,8 @@
        id="g19132" /><g
        id="g19134" /><g
        id="g19136" /><g
-       id="g19138"><text
+       id="g19138"
+       transform="translate(0,22.5)"><text
          transform="matrix(0,1,1,0,250.66,134.97)"
          style="font-variant:normal;font-weight:normal;font-size:6px;font-family:Helvetica;-inkscape-font-specification:Helvetica;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
          id="text19142"><tspan
