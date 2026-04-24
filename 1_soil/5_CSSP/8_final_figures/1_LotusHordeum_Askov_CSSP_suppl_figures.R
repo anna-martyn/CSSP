@@ -80,7 +80,7 @@ row1 <- plot_grid(
   p1, p2,
   ncol = 2,
   labels = c("A", "B"),
-  label_size = 15,
+  label_size = 8,
   rel_widths = c(2/3, 1/3)
 )
 
@@ -98,7 +98,7 @@ row1 <- plot_grid(
   p3, p4,
   ncol = 2,
   labels = c("A", "B"),
-  label_size = 15,
+  label_size = 8,
   rel_widths = c(1/2, 1/2)
 )
 
@@ -106,7 +106,7 @@ row2 <- plot_grid(
   p5, p6, cpcoa_legend,
   ncol = 3,
   labels = c("C", "D", ""),
-  label_size = 15,
+  label_size = 8,
   rel_widths = c(5/11, 5/11, 1/11)
 )
 
@@ -114,7 +114,7 @@ row3 <- plot_grid(
   p7, p8, pcoa_legend,
   ncol = 3,
   labels = c("E", "F"),
-  label_size = 15,
+  label_size = 8,
   rel_widths = c(5/11, 5/11, 1/11)
 )
 
@@ -132,7 +132,7 @@ row4 <- plot_grid(
   p9,
   ncol = 1,
   labels = c("A"),
-  label_size = 15,
+  label_size = 8,
   rel_widths = c(1/1)
 )
 
@@ -140,7 +140,7 @@ row5 <- plot_grid(
   p10,
   ncol = 1,
   labels = c("B"),
-  label_size = 15,
+  label_size = 8,
   rel_widths = c(1/1)
 )
 
@@ -156,21 +156,21 @@ final_plot3 <- plot_grid(
 ggsave(
   "Suppl_Figure2_Askov_CSSP.pdf",
   final_plot,
-  width = 21,
-  height = 8,
+  width = 15,
+  height = 7,
   unit = "cm"
 )
 ggsave(
   "Suppl_Figure3_Askov_CSSP.pdf",
   final_plot2,
-  width = 21,
-  height = 29.7,
+  width = 18,
+  height = 22,
   unit = "cm"
 )
 ggsave(
   "Suppl_Figure4_Askov_CSSP.pdf",
   final_plot3,
-  width = 21,
-  height = 24,
+  width = 18,
+  height = 20,
   unit = "cm"
 )

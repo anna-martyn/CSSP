@@ -74,13 +74,13 @@ main_theme <- theme(
   axis.line.y = element_line(color = "black"),
   axis.ticks = element_line(color = "black"),
   axis.text.x = element_text(
-    size = 8,
+    size = 6,
     angle = 45,
     vjust = 1,
     hjust = 1,
     colour = "black"
   ),
-  axis.text.y = element_text(size = 8, colour = "black"),
+  axis.text.y = element_text(size = 6, colour = "black"),
   legend.background = element_blank(),
   legend.key = element_blank(),
   text = element_text(family = "sans")
@@ -88,23 +88,23 @@ main_theme <- theme(
 
 # Plot
 box_plot <- ggplot(weight, aes(x = Genotype, y = Shoot_fw, fill = Genotype)) +
-  geom_boxplot(width = 0.3, outlier.color = NA, alpha = 0.7) +
+  geom_boxplot(width = 0.3, outlier.color = NA, alpha = 0.7, linewidth = 0.3) +
   geom_jitter(position = position_jitter(width = 0), size = 1, alpha = 0.3) +
   geom_text(
     data = weight_summary,
     aes(x = Genotype, y = y_pos * 1.2, label = label),
     inherit.aes = FALSE,
-    size = 8 / .pt
+    size = 6 / .pt
   ) +
-  annotate("text", x = 3, y = upper_limit * 1.05, label = asterisk, size = 8) +
+  annotate("text", x = 3, y = upper_limit * 1.05, label = asterisk, size = 6) +
   scale_fill_manual(values = colors) +
   main_theme +
   ylab("Shoot fresh weight/plant (g)") +
   theme(
     legend.position = "none",
-    plot.title = element_text(size = 8, face = "bold", hjust = 0.5),
+    plot.title = element_text(size = 6, face = "bold", hjust = 0.5),
     axis.title.x = element_blank(),
-    axis.title.y = element_text(size = 8)
+    axis.title.y = element_text(size = 6)
   ) +
   scale_x_discrete(
     labels = c(

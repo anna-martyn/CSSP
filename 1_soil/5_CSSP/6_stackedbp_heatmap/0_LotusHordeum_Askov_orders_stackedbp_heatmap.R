@@ -191,13 +191,13 @@ main_theme <- theme(
   axis.line.x = element_line(color = "black"),
   axis.line.y = element_line(color = "black"),
   axis.ticks = element_line(color = "black"),
-  axis.text = element_text(size = 8, color = "black"),
-  legend.text = element_text(size = 8, color = "black"),
+  axis.text = element_text(size = 6, color = "black"),
+  legend.text = element_text(size = 6, color = "black"),
   legend.key = element_blank(),
-  axis.title.y = element_text(size = 8),
+  axis.title.y = element_text(size = 6),
   legend.position = "right",
   legend.background = element_blank(),
-  text = element_text(family = "sans", size = 8, color = "black")
+  text = element_text(family = "sans", size = 6, color = "black")
 )
 
 # Loading order colours
@@ -235,14 +235,15 @@ bar_plot <- ggplot(order_table_means, aes(x = Genotype, y = RA, fill = Order)) +
   ) +
   theme(
     axis.text.x = element_text(
-      size = 8,
+      size = 6,
       color = "black",
       angle = 90,
       vjust = 1,
       hjust = 1
     ),
-    strip.text.x = element_text(size = 8, face = "bold"),
+    strip.text.x = element_text(size = 6, face = "bold"),
     legend.key.size = unit(0.25, 'cm'),
+    legend.key.spacing.y = unit(0, 'cm'),
     legend.margin = margin(l = -8)
   )
 
@@ -380,18 +381,19 @@ heat_map <- ggplot(order_table_means, aes(x = Genotype, y = Order, fill = RA)) +
     axis.line.x = element_line(color = "black"),
     axis.line.y = element_line(color = "black"),
     axis.ticks = element_line(color = "black"),
-    axis.text = element_text(size = 8, color = "black"),
-    axis.text.x = element_text(size = 8, angle = 90, vjust = 1, hjust = 1),
-    axis.title.y = element_text(size = 8, color = "black"),
+    axis.text = element_text(size = 6, color = "black"),
+    axis.text.x = element_text(size = 6, angle = 90, vjust = 1, hjust = 1),
+    axis.title.y = element_text(size = 6, color = "black"),
     strip.background = element_rect(fill = "grey90", color = NA),
-    strip.text = element_text(size = 8, face = "bold"),
-    legend.text = element_text(size = 8, colour = "black"),
-    legend.title = element_text(size = 8, colour = "black"),
+    strip.text = element_text(size = 6, face = "bold"),
+    legend.text = element_text(size = 6, colour = "black"),
+    legend.title = element_text(size = 6, colour = "black"),
     legend.position = "bottom",
     plot.margin = margin(r = 10, l = 20)
   ) +
   xlab(NULL) +
-  ylab("Bacterial order")
+  ylab("Bacterial order") +
+  guides(fill = guide_colourbar(barheight = 0.5))
 
 # Saving plot
 ggsave(

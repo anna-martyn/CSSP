@@ -59,7 +59,7 @@ row1 <- plot_grid(
   chao1_plot_Lj, chao1_plot_Hv,
   ncol = 2,
   labels = c("A", "B"),
-  label_size = 15,
+  label_size = 8,
   rel_widths = c(2.7/5, 2.3/5)
 )
 
@@ -67,7 +67,7 @@ row2 <- plot_grid(
   box_plot_nodules, cpcoa_plot_Lj, cpcoa_plot_Hv, legend_cpcoa,
   ncol = 4,
   labels = c("C", "D", "E", ""),
-  label_size = 15,
+  label_size = 8,
   rel_widths = c(1/3, 0.8/3, 0.8/3, 0.4/3)
 )
 
@@ -75,7 +75,7 @@ row3 <- plot_grid(
   bar_plot_Lj, bar_plot_Hv,
   ncol = 2,
   labels = c("F", "G"),
-  label_size = 15,
+  label_size = 8,
   rel_widths = c(1/2, 1/2)
 )
 
@@ -92,7 +92,7 @@ row4 <- plot_grid(
   box_plot_symbionts,
   ncol = 1,
   labels = c("A"),
-  label_size = 15,
+  label_size = 8,
   rel_widths = c(1/1)
 )
 
@@ -100,7 +100,7 @@ row5 <- plot_grid(
   bubble_plot,
   ncol = 1,
   labels = c("B"),
-  label_size = 15,
+  label_size = 8,
   rel_widths = c(1/1)
 )
 
@@ -108,22 +108,22 @@ final_plot2 <- plot_grid(
   row4,
   row5,
   ncol = 1,
-  rel_heights = c(1/5, 4/5)
+  rel_heights = c(0.35, 0.65)
 )
 
 # Saving supplementary figures
 ggsave(
   filename = "Suppl_Figure6_SynCom.pdf",
   plot = final_plot1,
-  width = 21,
-  height = 29.7,
+  width = 18,
+  height = 22,
   unit = "cm"
 )
 
 ggsave(
   filename = "Suppl_Figure7_SynCom.pdf",
   plot = final_plot2,
-  width = 21,
-  height = 29.7,
+  width = 18,
+  height = 20,
   unit = "cm"
 )

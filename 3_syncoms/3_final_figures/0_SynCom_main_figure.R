@@ -43,7 +43,7 @@ row1 <- ggarrange(
   ncol = 3,
   widths = c(0.33, 0.2, 0.47),
   labels = c("A","B","C"),
-  font.label = list(size = 12, color = "black", face = "bold"),
+  font.label = list(size = 8, color = "black", face = "bold"),
   align = "v",
   common.legend = TRUE,
   legend = "bottom"
@@ -52,7 +52,7 @@ row1 <- ggarrange(
 row2 <- plot_grid(
   p3,
   labels = "D",
-  label_size = 12,
+  label_size = 8,
   label_fontface = "bold"
 )
 
@@ -61,7 +61,7 @@ row3 <- ggarrange(
   p5,
   nrow = 1,
   labels = c("E", ""),
-  font.label = list(size = 12),
+  font.label = list(size = 8),
   widths = c(0.6, 0.4),
   align = "h"
 )

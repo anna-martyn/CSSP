@@ -373,7 +373,7 @@ col1 <- plot_grid(
   labels = c("A", "C"),
   rel_heights = c(0.8, 0.2),
   ncol = 1,
-  label_size = 12
+  label_size = 8
 )
 
 # Second column of whole figure
@@ -383,11 +383,11 @@ col2 <- plot_grid(
   labels = c("B", "D"),
   rel_heights = c(0.5, 0.5),
   ncol = 1,
-  label_size = 12
+  label_size = 8
 )
 
 # Combining columns
-final_figure <- plot_grid(col1, col2, ncol = 2, label_size = 12)
+final_figure <- plot_grid(col1, col2, ncol = 2, label_size = 8)
 
 # Saving plot
 ggsave(

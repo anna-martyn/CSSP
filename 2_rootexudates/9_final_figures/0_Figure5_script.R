@@ -33,7 +33,7 @@ row1_no_legend <- plot_grid(
   pca_all, volcano_plot,
   rel_widths = c(0.2, 0.8),
   labels = c("A", "B"),
-  label_size = 12,
+  label_size = 8,
   label_fontface = "bold"
 )
 
@@ -48,7 +48,7 @@ row2 <- plot_grid(
   box_plot_highlighted,
   rel_widths = c(0.54, 0.46),
   labels = c("C", "D"),
-  label_size = 12,
+  label_size = 8,
   label_fontface = "bold"
 )
 

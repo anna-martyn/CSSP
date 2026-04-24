@@ -30,7 +30,7 @@ row1 <- plot_grid(
   p1, p2,
   ncol = 2,
   labels = c("A", "B"),
-  label_size = 15,
+  label_size = 8,
   rel_widths = c(3/5, 2/5)
 )
 
@@ -38,7 +38,7 @@ row2 <- plot_grid(
   p3, p4,
   ncol = 2,
   labels = c("C", "D"),
-  label_size = 15,
+  label_size = 8,
   rel_widths = c(2/3, 1/3)
 )
 
@@ -54,7 +54,7 @@ final_plot <- plot_grid(
 ggsave(
   filename = "Suppl_Figure1_Askov_WT.pdf",
   plot = final_plot,
-  width = 21,
-  height = 14,
+  width = 18,
+  height = 12,
   unit = "cm"
 )

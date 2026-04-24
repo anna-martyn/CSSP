@@ -94,8 +94,8 @@ main_theme <- theme(
   axis.line.x = element_line(color = "black"),
   axis.line.y = element_line(color = "black"),
   axis.ticks = element_line(color = "black"),
-  axis.text.x = element_text(size = 8, colour = "black"),
-  axis.text.y = element_text(size = 8, colour = "black"),
+  axis.text.x = element_text(size = 6, colour = "black"),
+  axis.text.y = element_text(size = 6, colour = "black"),
   legend.background = element_blank(),
   legend.key = element_blank(),
   text = element_text(family = "sans")
@@ -127,7 +127,7 @@ box_plot <- ggplot(counts, aes(x = Genotype, y = Number, fill = Genotype)) +
   theme(
     legend.position = "none",
     axis.title.x = element_blank(),
-    axis.title.y = element_text(size = 8)
+    axis.title.y = element_text(size = 6)
   ) +
   scale_x_discrete(
     labels = c(

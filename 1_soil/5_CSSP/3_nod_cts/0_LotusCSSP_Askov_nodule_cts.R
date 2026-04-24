@@ -38,13 +38,13 @@ main_theme <- theme(
   axis.line.y = element_line(color = "black"),
   axis.ticks = element_line(color = "black"),
   axis.text.x = element_text(
-    size = 8,
+    size = 6,
     angle = 45,
     vjust = 1,
     hjust = 1,
     colour = "black"
   ),
-  axis.text.y = element_text(size = 8, colour = "black"),
+  axis.text.y = element_text(size = 6, colour = "black"),
   legend.background = element_blank(),
   legend.key = element_blank(),
   text = element_text(family = "sans")
@@ -55,6 +55,7 @@ box_plot <- ggplot(nod, aes(x = Genotype, y = pink, fill = Genotype)) +
   geom_boxplot(
     width = 0.5,
     position = position_dodge(width = 0.9),
+    linewidth = 0.3,
     outlier.size = 0.5
   ) +
   scale_fill_manual(values = as.character(colors$color)) +
@@ -64,15 +65,15 @@ box_plot <- ggplot(nod, aes(x = Genotype, y = pink, fill = Genotype)) +
   scale_y_continuous(limits = c(0, 15)) +
   theme(
     legend.position = "none",
-    plot.title = element_text(size = 8, face = "bold"),
-    legend.title = element_text(size = 8, colour = "black"),
-    strip.text = element_text(size = 8, colour = "black", face = "bold"),
-    legend.text = element_text(size = 8, colour = "black"),
+    plot.title = element_text(size = 6, face = "bold"),
+    legend.title = element_text(size = 6, colour = "black"),
+    strip.text = element_text(size = 6, colour = "black", face = "bold"),
+    legend.text = element_text(size = 6, colour = "black"),
     axis.title.x = element_blank(),
-    axis.title.y = element_text(size = 8, colour = "black"),
-    axis.text.y = element_text(size = 8, colour = "black"),
+    axis.title.y = element_text(size = 6, colour = "black"),
+    axis.text.y = element_text(size = 6, colour = "black"),
     axis.text.x = element_text(
-      size = 8,
+      size = 6,
       angle = 45,
       vjust = 1,
       hjust = 1,

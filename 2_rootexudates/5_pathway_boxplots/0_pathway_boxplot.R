@@ -250,8 +250,9 @@ pathway_full[, Label_pos := Label_pos + 10000]
 # Adding line breaks to some pathway names for plot
 pathway_full[,
   Pathway := fcase(
-    Pathway == "Shikimates and Phenylpropanoids" , "Shikimates and\nPhenylpropanoids",
+    Pathway == "Shikimates and Phenylpropanoids" , "Shikimates\nand Phenyl-\npropanoids",
     Pathway == "Amino acids and Peptides", "Amino acids\n and Peptides",
+    Pathway == "Carbohydrates", "Carbohy-\ndrates",
     default = Pathway
   )
 ]
@@ -261,7 +262,6 @@ box_plot <- ggplot(
   pathway_full,
   aes(x = Genotype, y = Intensity, fill = Genotype)
 ) +
-  # coord_transform(y = "log2") + 
   geom_boxplot(width = 0.3, alpha = 0.7, outlier.size = 0.5, linewidth = 0.3) +
   geom_text(
     data = pathway_full,
@@ -304,15 +304,13 @@ box_plot <- ggplot(
   ) +
   scale_y_continuous(labels = scientific)+
   expand_limits(y = 0)+
-  # scale_y_continuous(breaks = 1000*2^(1:8), limits = c(1999, 400000))+
-  # scale_y_log10(breaks = c(2000, 4000, 10000, 35000, 100000, 350000), limits = c(1999, 400000))+
   NULL
 
 # Sving figure
 ggsave(
   "../9_final_figures/Suppl_Fig5.pdf",
   box_plot,
-  width = 180,
-  height = 160,
-  units = "mm"
+  width = 18,
+  height = 16,
+  units = "cm"
 )

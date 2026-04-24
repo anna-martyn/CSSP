@@ -1,7 +1,7 @@
 # Set working directory and load packages --------------------------------------
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-pkg <- c("data.table", "ggplot2", "ggh4x")
+pkg <- c("data.table", "ggplot2", "ggh4x", "ggtext")
 for(pk in pkg){
   library(pk, character.only = TRUE)
 }
@@ -14,6 +14,14 @@ colors <- c(
   "ccamk" = "#FDB366",
   "nsp1" = "#C0E4EF",
   "nsp2" = "#6EA6CD"
+)
+
+legend_labels <- c(
+  "WT"     = "WT",
+  "symrk"  = "*symrk*",
+  "ccamk"  = "*ccamk*",
+  "nsp1"   = "*nsp1*",
+  "nsp2"   = "*nsp2*"
 )
 
 # Main theme
@@ -80,19 +88,19 @@ box_plot <- ggplot(
     inherit.aes = FALSE,
     size = 6 / .pt
   ) +
-  scale_fill_manual(values = colors) +
+  scale_fill_manual(values = colors, labels = legend_labels) +
   facet_grid(Host ~ dummy, scales = "free_y", switch = "y") +
   main_theme +
   ylab("Shoot fresh weight/plant (g)") +
   theme(
-    legend.position = "none",
+    legend.position = "bottom",
     plot.title = element_text(size = 6, face = "bold", hjust = 0.5),
     strip.text.y = element_text(size = 6, face = "bold"),
     strip.text.x = element_text(size = 6, color = "white"),
     strip.background.x = element_rect(fill = "white"),
     strip.placement = "outside",
     axis.title.x = element_blank(),
-    legend.text = element_text(size = 6, colour = "black"),
+    legend.text = element_markdown(size = 6, colour = "black"),
     legend.title = element_text(size = 6, colour = "black"),
     axis.text.x = element_text(angle = 90, hjust = 1, size = 6),
     axis.title.y = element_text(size = 6)

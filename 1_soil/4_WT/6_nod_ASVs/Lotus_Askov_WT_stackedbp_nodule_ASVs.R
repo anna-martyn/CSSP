@@ -166,13 +166,13 @@ main_theme <- theme(
   axis.line.x = element_line(color = "black"),
   axis.line.y = element_line(color = "black"),
   axis.ticks = element_line(color = "black"),
-  axis.text = element_text(size = 8, color = "black"),
-  legend.text = element_text(size = 8, color = "black"),
+  axis.text = element_text(size = 6, color = "black"),
+  legend.text = element_text(size = 6, color = "black"),
   legend.key = element_blank(),
-  axis.title.y = element_text(size = 8),
+  axis.title.y = element_text(size = 6),
   legend.position = "right",
   legend.background = element_blank(),
-  text = element_text(family = "sans", size = 8, color = "black")
+  text = element_text(family = "sans", size = 6, color = "black")
 )
 
 # Stacked barplot
@@ -183,8 +183,8 @@ bar_plot <- ggplot(df_long, aes(x = Soil_type, y = RA, fill = Isolate)) +
   labs(x = "", y = "Relative Abundance", title = "Nodule ASVs (top20 ≥1% RA)") +
   main_theme +
   theme(
-    plot.title = element_text(size = 8, face = "bold", hjust = 0),
-    legend.title = element_text(size = 8),
+    plot.title = element_text(size = 6, face = "bold", hjust = 0),
+    legend.title = element_text(size = 6),
     legend.key.size = unit(0.25, 'cm'),
     legend.margin = margin(l = -8)
   )

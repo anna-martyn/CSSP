@@ -42,7 +42,7 @@ row1 <- plot_grid(
   ncol = 3,
   rel_widths = c(0.33, 0.34, 0.32),
   labels = c("A","B",""),
-  label_size = 12,
+  label_size = 8,
   label_fontface = "bold",
   label_x = 0, label_y = 1
 )
@@ -52,7 +52,7 @@ row2 <- plot_grid(
   ncol = 3,
   rel_widths = c(0.45, 0.45, 0.1),
   labels = c("C","",""),
-  label_size = 12,
+  label_size = 8,
   label_fontface = "bold",
   label_x = 0, label_y = 1
 )
@@ -64,7 +64,7 @@ final_plot <- plot_grid(
   row1, row2, row3,
   ncol = 1,
   labels = c("","","D"),
-  label_size = 12,
+  label_size = 8,
   label_fontface = "bold",
   rel_heights = c(0.2, 0.2, 0.6)
 )

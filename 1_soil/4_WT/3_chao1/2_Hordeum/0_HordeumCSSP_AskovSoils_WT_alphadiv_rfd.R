@@ -104,14 +104,14 @@ main_theme <- theme(
   axis.line.x = element_line(color = "black"),
   axis.line.y = element_line(color = "black"),
   axis.ticks = element_line(color = "black"),
-  axis.text = element_text(size = 8, color = "black"),
-  legend.text = element_text(size = 8, color = "black"),
+  axis.text = element_text(size = 6, color = "black"),
+  legend.text = element_text(size = 6, color = "black"),
   legend.key = element_blank(),
-  axis.title.y = element_text(size = 8),
+  axis.title.y = element_text(size = 6),
   legend.position = "none",
-  strip.text = element_text(size = 8, color = "black"),
+  strip.text = element_text(size = 6, color = "black", face = "bold"),
   legend.background = element_blank(),
-  plot.title = element_text(size = 8, hjust = 1)
+  plot.title = element_text(size = 6, hjust = 1)
 )
 
 # Plot
@@ -120,6 +120,7 @@ box_plot <- ggplot(index, aes(x = Soil, y = Chao1, fill = Soil)) +
     alpha = 0.7,
     position = position_dodge(width = 0.7),
     outlier.color = NA,
+    linewidth = 0.3,
     width = 0.3
   ) +
   geom_jitter(position = position_jitter(width = 0, height = 0.17), size = 1, alpha = 1) +
@@ -129,11 +130,11 @@ box_plot <- ggplot(index, aes(x = Soil, y = Chao1, fill = Soil)) +
     data = label_df,
     mapping = aes(x=Soil, y = y_position, label = Letters),
     inherit.aes = FALSE,
-    size = 8/.pt
+    size = 6/.pt
   ) +
   facet_wrap(vars(factor(Compartment, levels = c("Rhizosphere", "Root"))), scales = "fixed") +
   main_theme +
-  theme(plot.title = element_text(face = "bold", size = 8, hjust = 0))
+  theme(plot.title = element_text(face = "bold", size = 6, hjust = 0))
 
 # Saving plot
 ggsave(

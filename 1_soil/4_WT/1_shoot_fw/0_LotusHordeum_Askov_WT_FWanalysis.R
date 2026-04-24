@@ -148,7 +148,7 @@ box_plot <- ggplot(weight, aes(x = Soil_type, y = Fresh_weight, fill = Soil_type
   ) +
   scale_y_continuous(
     breaks = scales::pretty_breaks(n = 4),
-    expand = expansion(mult = c(0, 0.05)),
+    expand = expansion(mult = c(0, 0.1)),
     limits = c(0, NA)
   )
 

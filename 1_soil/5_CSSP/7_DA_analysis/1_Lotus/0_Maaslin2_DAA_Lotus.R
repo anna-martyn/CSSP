@@ -273,6 +273,8 @@ da_asv_res[,
   )
 ]
 da_asv_res <- da_asv_res[order(Soil, Compartment, Genotype, ASV)]
+setnames(da_asv_res, "ASV", "ASVid")
+da_asv_res <- merge(da_asv_res, taxonomy, by = "ASVid", all.x = TRUE)
 fwrite(da_asv_res, "2_tables/Lotus_DA_analysis_results.csv")
 
 mean_RA_res <- rbindlist(

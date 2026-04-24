@@ -130,14 +130,14 @@ main_theme <- theme(
   axis.line.x = element_line(color = "black"),
   axis.line.y = element_line(color = "black"),
   axis.ticks = element_line(color = "black"),
-  axis.text = element_text(size = 8, color = "black"),
-  legend.text = element_text(size = 8, color = "black"),
+  axis.text = element_text(size = 6, color = "black"),
+  legend.text = element_text(size = 6, color = "black"),
   legend.key = element_blank(),
-  axis.title.y = element_text(size = 8),
+  axis.title.y = element_text(size = 6),
   legend.position = "none",
-  strip.text = element_text(size = 8, color = "black"),
+  strip.text = element_text(size = 6, color = "black"),
   legend.background = element_blank(),
-  plot.title = element_text(size = 8, hjust = 1)
+  plot.title = element_text(size = 6, hjust = 1)
 )
 
 box_plots <- ggplot(
@@ -148,11 +148,12 @@ box_plots <- ggplot(
     alpha = 0.7,
     position = position_dodge(width = 0.7),
     outlier.color = NA,
+    linewidth = 0.3,
     width = 0.3
   ) +
   geom_jitter(
     position = position_jitter(width = 0, height = 0.17),
-    size = 1,
+    size = 0.3,
     alpha = 1
   ) +
   scale_fill_manual(values = as.character(colors$color)) +
@@ -162,12 +163,12 @@ box_plots <- ggplot(
     data = label_df,
     aes(x = Genotype, y = y_position, label = Letters),
     inherit.aes = FALSE,
-    size = 8 / .pt
+    size = 6 / .pt
   ) +
   facet_grid(Compartment ~ Soil, scales = "free_y", drop = FALSE) +
   main_theme +
   theme(
-    plot.title = element_text(face = "bold", size = 8, hjust = 0),
+    plot.title = element_text(face = "bold", size = 6, hjust = 0),
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
 

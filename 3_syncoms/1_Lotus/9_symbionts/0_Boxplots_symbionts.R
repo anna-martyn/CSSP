@@ -91,14 +91,14 @@ main_theme <- theme(
   panel.border = element_rect(colour = "black", fill = NA, linewidth = 1),
   axis.line = element_line(color = "black"),
   axis.ticks = element_line(color = "black"),
-  axis.text = element_text(size = 8, color = "black"),
-  strip.text = element_text(size = 8, color = "black"),
-  legend.text = element_text(size = 8),
+  axis.text = element_text(size = 6, color = "black"),
+  strip.text = element_text(size = 6, color = "black"),
+  legend.text = element_text(size = 6),
   legend.key = element_blank(),
-  axis.title.y = element_text(size = 8),
+  axis.title.y = element_text(size = 6),
   legend.position = "right",
   legend.background = element_blank(),
-  text = element_text(family = "sans", size = 8, color = "black")
+  text = element_text(family = "sans", size = 6, color = "black")
 )
 
 # Hypothesis testing ----------------------------------------------------------
@@ -196,6 +196,7 @@ box_plot <- ggplot(df_plot, aes(x = Compartment, y = RA, fill = Genotype)) +
     position = position_dodge(width = 0.8),
     width = 0.7,
     outlier.shape = NA,
+    linewidth = 0.3,
     alpha = 0.7
   ) +
   geom_jitter(position = position_jitter(width = 0), size = 1, alpha = 0.3) +
@@ -207,7 +208,7 @@ box_plot <- ggplot(df_plot, aes(x = Compartment, y = RA, fill = Genotype)) +
   geom_text(
     aes(x = Compartment, y = y_pos, label = Letter, fill = Genotype),
     position = position_dodge(width = 0.8),
-    size = 8 / .pt,
+    size = 6 / .pt,
     inherit.aes = FALSE
   ) +
   # geom_text(data=asterisk_df, aes(x=Compartment, y=y_pos_ast, label=asterisk), inherit.aes=FALSE, size=6) +

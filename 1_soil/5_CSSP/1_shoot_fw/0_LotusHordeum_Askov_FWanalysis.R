@@ -105,6 +105,7 @@ box_plot_lotus <- ggplot(
   geom_boxplot(
     width = 0.5,
     position = position_dodge(width = 0.9),
+    linewidth = 0.2,
     outlier.size = 0.5
   ) +
   scale_fill_manual(values = as.character(colors$color)) +
@@ -167,6 +168,7 @@ box_plot_hordeum <- ggplot(
   geom_boxplot(
     width = 0.5,
     position = position_dodge(width = 0.9),
+    linewidth = 0.2,
     outlier.size = 0.5
   ) +
   scale_fill_manual(values = as.character(colors$color)) +
