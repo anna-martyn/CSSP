@@ -6,8 +6,8 @@
    height="10.165295mm"
    viewBox="0 0 64.096191 10.165295"
    version="1.1"
-   id="svg21562"
-   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   id="svg1"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
    sodipodi:docname="bubble_plot_legend.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -15,40 +15,36 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
-     id="namedview21564"
+     id="namedview1"
      pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageshadow="2"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     showgrid="false"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0"
-     inkscape:zoom="2.6654321"
-     inkscape:cx="57.026401"
-     inkscape:cy="40.143585"
+     inkscape:zoom="1.0645693"
+     inkscape:cx="86.419926"
+     inkscape:cy="31.468125"
      inkscape:window-width="2560"
-     inkscape:window-height="1368"
+     inkscape:window-height="1403"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
-     id="defs21559" />
+     id="defs1" />
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-79.075635,-190.39747)">
+     transform="translate(-61.11875,-140.22916)">
     <g
        id="g21897"
-       transform="translate(-97.729205,-82.461052)">
+       transform="translate(-115.68609,-132.62936)">
       <g
-         id="g16458"
+         id="g16458-3"
          transform="matrix(0.35277777,0,0,-0.35277777,183.92742,289.19037)">
         <text
            transform="matrix(1,0,0,-1,22.79,39.74)"
@@ -60,7 +56,7 @@
              id="tspan16460"># of DEMs</tspan></text>
       </g>
       <g
-         id="g16466"
+         id="g16466-6"
          transform="matrix(0.35277777,0,0,-0.35277777,181.81076,289.19037)">
         <path
            d="m 63,41.89 c 0,0.78 0.64,1.42 1.42,1.42 0.78,0 1.42,-0.64 1.42,-1.42 0,-0.78 -0.64,-1.42 -1.42,-1.42 -0.78,0 -1.42,0.64 -1.42,1.42"
@@ -68,7 +64,7 @@
            id="path16468" />
       </g>
       <g
-         id="g16472"
+         id="g16472-7"
          transform="matrix(0.35277777,0,0,-0.35277777,178.10659,289.19037)">
         <path
            d="m 87.8,41.89 c 0,1.22 1,2.21 2.21,2.21 1.22,0 2.22,-0.99 2.22,-2.21 0,-1.22 -1,-2.21 -2.22,-2.21 -1.21,0 -2.21,0.99 -2.21,2.21"
@@ -76,7 +72,7 @@
            id="path16474" />
       </g>
       <g
-         id="g16478"
+         id="g16478-5"
          transform="matrix(0.35277777,0,0,-0.35277777,174.40242,289.19037)">
         <path
            d="m 115.68,41.89 c 0,1.8 1.47,3.27 3.27,3.27 1.8,0 3.27,-1.47 3.27,-3.27 0,-1.8 -1.47,-3.27 -3.27,-3.27 -1.8,0 -3.27,1.47 -3.27,3.27"
@@ -84,7 +80,7 @@
            id="path16480" />
       </g>
       <g
-         id="g16484"
+         id="g16484-3"
          transform="matrix(0.35277777,0,0,-0.35277777,171.75659,289.19037)">
         <path
            d="m 143.83,41.89 c 0,2.23 1.82,4.05 4.05,4.05 2.23,0 4.05,-1.82 4.05,-4.05 0,-2.23 -1.82,-4.05 -4.05,-4.05 -2.23,0 -4.05,1.82 -4.05,4.05"
@@ -103,7 +99,7 @@
              id="tspan16492">1</tspan></text>
       </g>
       <g
-         id="g16498"
+         id="g16498-5"
          transform="matrix(0.35277777,0,0,-0.35277777,176.51909,289.19037)">
         <text
            transform="matrix(1,0,0,-1,98.65,38.74)"
@@ -115,7 +111,7 @@
              id="tspan16500">10</tspan></text>
       </g>
       <g
-         id="g16506"
+         id="g16506-6"
          transform="matrix(0.35277777,0,0,-0.35277777,173.34409,289.19037)">
         <text
            transform="matrix(1,0,0,-1,127.59,38.74)"
@@ -127,7 +123,7 @@
              id="tspan16508">50</tspan></text>
       </g>
       <g
-         id="g16514"
+         id="g16514-2"
          transform="matrix(0.35277777,0,0,-0.35277777,170.69826,289.19037)">
         <text
            transform="matrix(1,0,0,-1,156.52,38.74)"
@@ -139,7 +135,7 @@
              id="tspan16516">100</tspan></text>
       </g>
       <g
-         id="g16526"
+         id="g16526-9"
          transform="matrix(0.35277777,0,0,-0.35277777,174.93159,284.95704)">
         <path
            d="M 5.31,5.48 H 187 V 22.29 H 5.31 Z"
@@ -147,7 +143,7 @@
            id="path16528" />
       </g>
       <g
-         id="g16532"
+         id="g16532-1"
          transform="matrix(0.35277777,0,0,-0.35277777,174.93159,283.36954)">
         <text
            transform="matrix(1,0,0,-1,10.29,10.74)"
@@ -159,10 +155,10 @@
              id="tspan16534">Proportion of enriched DEMs</tspan></text>
       </g>
       <g
-         id="g16540"
+         id="g16540-2"
          transform="matrix(0.35277777,0,0,-0.35277777,174.93159,284.95704)">
         <g
-           id="g16542"
+           id="g16542-7"
            transform="matrix(86.4,0,0,7.2,92.63,13.1)">
           <image
              width="1"
@@ -174,7 +170,7 @@
         </g>
       </g>
       <g
-         id="g16552"
+         id="g16552-0"
          transform="matrix(0.35277777,0,0,-0.35277777,174.93159,284.95704)">
         <path
            d="M 92.77,16.56 V 13.1"
@@ -218,7 +214,7 @@
            id="path16572" />
       </g>
       <g
-         id="g16576"
+         id="g16576-9"
          transform="matrix(0.35277777,0,0,-0.35277777,174.93159,284.95704)">
         <text
            transform="matrix(1,0,0,-1,86.93,6.8)"

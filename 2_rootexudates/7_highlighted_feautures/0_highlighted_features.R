@@ -92,7 +92,7 @@ name_change <- c(
   "Feature1130" = "Diosmetin\n (F1130)",
   "Feature903" = "Formonetin\n (F903)",
   "Feature932" = "Vestitol\n (F932)",
-  "Feature439" = "Buxuletin/\nScopoletin\n (F439)"
+  "Feature439" = "Buxuletin/Sco-\npoletin (F439)"
 )
 
 # Setting factor levels
@@ -189,13 +189,12 @@ box_plot_highlighted_Lj <- ggplot(
   ) +
   labs(x = NULL, title = "Lotus") +
   guides(fill = "none")
-  NULL
 
 ## Hordeum --------------------------------------------------------------------
 highlighted_features_Hv <- paste0(
   "Feature",
   # c(2546, 2889, 495, 3095, 3069, 3288)
-  c(2320, 494, 3287)
+  c(2320, 1541, 494, 2970, 3094, 3287)
 )
 
 # Setting more instructive names for highlighted features
@@ -210,7 +209,10 @@ highlighted_features_Hv <- paste0(
 
 name_change <- c(
   "Feature2320" = "Gibberellin\n (F2320)",
+  "Feature1541" = "Epidihydropha-\nseic Acid (F1541)",
   "Feature494" = "Esculetin\n (F494)",
+  "Feature2970" = "Symplocoside\n (F2970)",
+  "Feature3094" = "Tetracentron-\nside A (F3094)",
   "Feature3287" = "Saponarin\n (F3287)"
 )
 
@@ -321,7 +323,7 @@ box_plot_highlighted_Hv <- ggplot(
 box_plot_highlighted <- plot_grid(
   box_plot_highlighted_Lj, box_plot_highlighted_Hv,
   ncol = 1,
-  rel_heights = c(0.72, 0.28)
+  rel_heights = c(0.58, 0.42)
 )
 
 saveRDS(

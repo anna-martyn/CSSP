@@ -46,7 +46,7 @@ row1 <- plot_grid(
 row2 <- plot_grid(
   bubble_plot_no_legend,
   box_plot_highlighted,
-  rel_widths = c(0.54, 0.46),
+  rel_widths = c(0.5, 0.5),
   labels = c("C", "D"),
   label_size = 8,
   label_fontface = "bold"
