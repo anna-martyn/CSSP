@@ -311,6 +311,6 @@ ggsave(
   "../9_final_figures/Suppl_Fig5.pdf",
   box_plot,
   width = 18,
-  height = 16,
+  height = 12,
   units = "cm"
 )

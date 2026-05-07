@@ -8,10 +8,6 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 source("Tobit_function.R")
 
 # Loading Lotus data ----------------------------------------------------------
-# metabolite_data_Lj <- fread(
-#   "../1_data/1_Lotus/LotusCSSP_rootex_neg_GNPS_quant.csv",
-#   drop = c(2:13, 73)
-# )
 
 metabolite_data_Lj <- fread(
   "../1_data/1_Lotus/LotusCSSP_RootEx_Apr26_stdAUnew_featurelist.csv"

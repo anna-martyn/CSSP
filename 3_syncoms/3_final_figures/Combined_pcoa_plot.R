@@ -110,7 +110,7 @@ cpcoa_plot <- ggplot(pcoa_point, aes(x = PCo1, y = PCo2, color = Genotype)) +
 ggsave(
   filename = "2_temp_figures/Plot_PCoA_matched.pdf",
   plot = cpcoa_plot,
-  width = 5,
+  width = 10,
   height = 13,
   unit = "cm"
 )

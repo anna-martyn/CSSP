@@ -1,4 +1,4 @@
-# Seup ------------------------------------------------------------------------
+# Setup ------------------------------------------------------------------------
 # Cleaning up
 options(warn = -1)
 rm(list = ls())
@@ -31,7 +31,7 @@ cat("Lowest sequencing depth in the dataset:", min_depth, "\n")
 asv_table_filt <- asv_table[grepl("Lj", rownames(asv_table)), ]
 phs_filt <- phyloseq(otu_table(asv_table_filt, taxa_are_rows = TRUE))
 
-# Ensruing that minimum sequencing depth is still sufficuent high
+# Ensuring that minimum sequencing depth is still sufficient high
 min_depth <- min(sample_sums(phs_filt))
 cat("Lowest sequencing depth in the dataset:", min_depth, "\n")
 # Minimum sequencing depth is still >5000, so no filtering required

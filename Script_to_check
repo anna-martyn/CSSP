@@ -1,8 +1,0 @@
-What to check when going through scripts:
- - Are comments sufficient?
- - Is there redundancy in the code?
- - Are variables named in a resonable way?
- - Are all loaded packages used?
- - Are excessive package collections loaded? (e.g. all of tidyverse, dplyr and magrittr at the same time etc.)
-
-

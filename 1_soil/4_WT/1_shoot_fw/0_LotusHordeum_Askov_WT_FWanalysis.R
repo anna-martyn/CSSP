@@ -1,4 +1,4 @@
-# Seup ------------------------------------------------------------------------
+# Setup -----------------------------------------------------------------------
 # Cleaning up
 options(warn = -1)
 rm(list = ls())
@@ -13,7 +13,11 @@ for(pk in pkg){
 }
 
 # Loading data
-weight <- read.table("LotusHordeum_AskovSoils_shootfw.txt", header = TRUE, sep = "\t")
+weight <- read.table(
+  "../../1_data/LotusHordeum_AskovSoils_shootfw.txt",
+  header = TRUE,
+  sep = "\t"
+)
 
 # Factor levels
 weight$Soil_type <- factor(weight$Soil_type, levels = c("NPK", "PK", "UF"))

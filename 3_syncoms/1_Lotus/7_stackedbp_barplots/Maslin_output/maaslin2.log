@@ -1,51 +1,51 @@
-2026-04-24 14:45:53.202658 INFO::Writing function arguments to log file
-2026-04-24 14:45:53.203124 DEBUG::Function arguments
-2026-04-24 14:45:53.203287 DEBUG::Output folder: Maslin_output
-2026-04-24 14:45:53.203448 DEBUG::Min Abundance: 0.000000
-2026-04-24 14:45:53.203577 DEBUG::Min Prevalence: 0.100000
-2026-04-24 14:45:53.203699 DEBUG::Normalization: TSS
-2026-04-24 14:45:53.203817 DEBUG::Transform: LOG
-2026-04-24 14:45:53.203925 DEBUG::Analysis method: LM
-2026-04-24 14:45:53.204033 DEBUG::Max significance: 0.250000
-2026-04-24 14:45:53.204139 DEBUG::Random effects:
-2026-04-24 14:45:53.204243 DEBUG::Fixed effects: Genotype
-2026-04-24 14:45:53.20436 DEBUG::Correction method: BH
-2026-04-24 14:45:53.204468 DEBUG::Standardize: TRUE
-2026-04-24 14:45:53.20457 DEBUG::Cores: 1
-2026-04-24 14:45:53.204667 INFO::Verifying options selected are valid
-2026-04-24 14:45:53.205099 INFO::Determining format of input files
-2026-04-24 14:45:53.205554 INFO::Input format is data samples as columns and metadata samples as rows
-2026-04-24 14:45:53.20606 DEBUG::Transformed data so samples are rows
-2026-04-24 14:45:53.20633 DEBUG::A total of 20 samples were found in both the data and metadata
-2026-04-24 14:45:53.206475 DEBUG::Reordering data/metadata to use same sample ordering
-2026-04-24 14:45:53.206794 INFO::Formula for fixed effects: expr ~  Genotype
-2026-04-24 14:45:53.207277 INFO::Factor detected for categorial metadata 'Genotype'. Provide a reference argument or manually set factor ordering to change reference level.
-2026-04-24 14:45:53.207689 INFO::Filter data based on min abundance and min prevalence
-2026-04-24 14:45:53.208099 INFO::Total samples in data: 20
-2026-04-24 14:45:53.208495 INFO::Min samples required with min abundance for a feature not to be filtered: 2.000000
-2026-04-24 14:45:53.209073 INFO::Total filtered features: 1
-2026-04-24 14:45:53.209595 INFO::Filtered feature names from abundance and prevalence filtering: Bacillales
-2026-04-24 14:45:53.210184 INFO::Total filtered features with variance filtering: 0
-2026-04-24 14:45:53.210662 INFO::Filtered feature names from variance filtering:
-2026-04-24 14:45:53.211046 INFO::Running selected normalization method: TSS
-2026-04-24 14:45:53.211635 INFO::Applying z-score to standardize continuous metadata
-2026-04-24 14:45:53.213633 INFO::Running selected transform method: LOG
-2026-04-24 14:45:53.214266 INFO::Running selected analysis method: LM
-2026-04-24 14:45:53.214878 INFO::Fitting model to feature number 1, Actinomycetales
-2026-04-24 14:45:53.216699 INFO::Fitting model to feature number 2, Burkholderiales
-2026-04-24 14:45:53.218463 INFO::Fitting model to feature number 3, Caulobacterales
-2026-04-24 14:45:53.220199 INFO::Fitting model to feature number 4, Flavobacteriales
-2026-04-24 14:45:53.222126 INFO::Fitting model to feature number 5, Pseudomonadales
-2026-04-24 14:45:53.224312 INFO::Fitting model to feature number 6, Rhizobiales
-2026-04-24 14:45:53.226276 INFO::Fitting model to feature number 7, Sphingomonadales
-2026-04-24 14:45:53.22803 INFO::Fitting model to feature number 8, Xanthomonadales
-2026-04-24 14:45:53.231947 INFO::Counting total values for each feature
-2026-04-24 14:45:53.233513 INFO::Writing filtered data to file Maslin_output/features/filtered_data.tsv
-2026-04-24 14:45:53.234455 INFO::Writing filtered, normalized data to file Maslin_output/features/filtered_data_norm.tsv
-2026-04-24 14:45:53.235362 INFO::Writing filtered, normalized, transformed data to file Maslin_output/features/filtered_data_norm_transformed.tsv
-2026-04-24 14:45:53.236264 WARNING::Deleting existing residuals file: Maslin_output/fits/residuals.rds
-2026-04-24 14:45:53.236994 INFO::Writing residuals to file Maslin_output/fits/residuals.rds
-2026-04-24 14:45:53.237574 WARNING::Deleting existing fitted file: Maslin_output/fits/fitted.rds
-2026-04-24 14:45:53.238314 INFO::Writing fitted values to file Maslin_output/fits/fitted.rds
-2026-04-24 14:45:53.238853 INFO::Writing all results to file (ordered by increasing q-values): Maslin_output/all_results.tsv
-2026-04-24 14:45:53.24008 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): Maslin_output/significant_results.tsv
+2026-05-07 16:14:17.149655 INFO::Writing function arguments to log file
+2026-05-07 16:14:17.150162 DEBUG::Function arguments
+2026-05-07 16:14:17.150352 DEBUG::Output folder: Maslin_output
+2026-05-07 16:14:17.150506 DEBUG::Min Abundance: 0.000000
+2026-05-07 16:14:17.150651 DEBUG::Min Prevalence: 0.100000
+2026-05-07 16:14:17.150796 DEBUG::Normalization: TSS
+2026-05-07 16:14:17.150924 DEBUG::Transform: LOG
+2026-05-07 16:14:17.151043 DEBUG::Analysis method: LM
+2026-05-07 16:14:17.151157 DEBUG::Max significance: 0.250000
+2026-05-07 16:14:17.151284 DEBUG::Random effects:
+2026-05-07 16:14:17.1514 DEBUG::Fixed effects: Genotype
+2026-05-07 16:14:17.151515 DEBUG::Correction method: BH
+2026-05-07 16:14:17.151646 DEBUG::Standardize: TRUE
+2026-05-07 16:14:17.151778 DEBUG::Cores: 1
+2026-05-07 16:14:17.151894 INFO::Verifying options selected are valid
+2026-05-07 16:14:17.152378 INFO::Determining format of input files
+2026-05-07 16:14:17.152861 INFO::Input format is data samples as columns and metadata samples as rows
+2026-05-07 16:14:17.153433 DEBUG::Transformed data so samples are rows
+2026-05-07 16:14:17.153711 DEBUG::A total of 20 samples were found in both the data and metadata
+2026-05-07 16:14:17.153897 DEBUG::Reordering data/metadata to use same sample ordering
+2026-05-07 16:14:17.154413 INFO::Formula for fixed effects: expr ~  Genotype
+2026-05-07 16:14:17.15519 INFO::Factor detected for categorial metadata 'Genotype'. Provide a reference argument or manually set factor ordering to change reference level.
+2026-05-07 16:14:17.155759 INFO::Filter data based on min abundance and min prevalence
+2026-05-07 16:14:17.156403 INFO::Total samples in data: 20
+2026-05-07 16:14:17.156907 INFO::Min samples required with min abundance for a feature not to be filtered: 2.000000
+2026-05-07 16:14:17.157573 INFO::Total filtered features: 1
+2026-05-07 16:14:17.158087 INFO::Filtered feature names from abundance and prevalence filtering: Bacillales
+2026-05-07 16:14:17.158745 INFO::Total filtered features with variance filtering: 0
+2026-05-07 16:14:17.159241 INFO::Filtered feature names from variance filtering:
+2026-05-07 16:14:17.159659 INFO::Running selected normalization method: TSS
+2026-05-07 16:14:17.160342 INFO::Applying z-score to standardize continuous metadata
+2026-05-07 16:14:17.162141 INFO::Running selected transform method: LOG
+2026-05-07 16:14:17.162875 INFO::Running selected analysis method: LM
+2026-05-07 16:14:17.163589 INFO::Fitting model to feature number 1, Actinomycetales
+2026-05-07 16:14:17.165534 INFO::Fitting model to feature number 2, Burkholderiales
+2026-05-07 16:14:17.167567 INFO::Fitting model to feature number 3, Caulobacterales
+2026-05-07 16:14:17.169376 INFO::Fitting model to feature number 4, Flavobacteriales
+2026-05-07 16:14:17.171174 INFO::Fitting model to feature number 5, Pseudomonadales
+2026-05-07 16:14:17.173103 INFO::Fitting model to feature number 6, Rhizobiales
+2026-05-07 16:14:17.174928 INFO::Fitting model to feature number 7, Sphingomonadales
+2026-05-07 16:14:17.176587 INFO::Fitting model to feature number 8, Xanthomonadales
+2026-05-07 16:14:17.180605 INFO::Counting total values for each feature
+2026-05-07 16:14:17.182254 INFO::Writing filtered data to file Maslin_output/features/filtered_data.tsv
+2026-05-07 16:14:17.18327 INFO::Writing filtered, normalized data to file Maslin_output/features/filtered_data_norm.tsv
+2026-05-07 16:14:17.18418 INFO::Writing filtered, normalized, transformed data to file Maslin_output/features/filtered_data_norm_transformed.tsv
+2026-05-07 16:14:17.185097 WARNING::Deleting existing residuals file: Maslin_output/fits/residuals.rds
+2026-05-07 16:14:17.18588 INFO::Writing residuals to file Maslin_output/fits/residuals.rds
+2026-05-07 16:14:17.186534 WARNING::Deleting existing fitted file: Maslin_output/fits/fitted.rds
+2026-05-07 16:14:17.187484 INFO::Writing fitted values to file Maslin_output/fits/fitted.rds
+2026-05-07 16:14:17.188287 INFO::Writing all results to file (ordered by increasing q-values): Maslin_output/all_results.tsv
+2026-05-07 16:14:17.18944 INFO::Writing the significant results (those which are less than or equal to the threshold of 0.250000 ) to file (ordered by increasing q-values): Maslin_output/significant_results.tsv
