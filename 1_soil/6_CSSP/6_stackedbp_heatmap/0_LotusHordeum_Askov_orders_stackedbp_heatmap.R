@@ -252,7 +252,7 @@ ggsave(
   filename = "2_figures/LotusHordeum_Askov_stackedbp_top20_meanRA.pdf",
   plot = bar_plot,
   width = 21,
-  height = 6,
+  height = 9,
   unit = "cm"
 )
 saveRDS(
@@ -399,8 +399,8 @@ heat_map <- ggplot(order_table_means, aes(x = Genotype, y = Order, fill = RA)) +
 ggsave(
   filename = "2_figures/LotusHordeum_Askov_orders_heatmap.pdf",
   plot = heat_map,
-  width = 12,
-  height = 6,
+  width = 15,
+  height = 9,
   unit = "cm"
 )
 saveRDS(object = heat_map, file = "1_rds_files/LotusHordeum_Askov_orders_heatmap.rds")

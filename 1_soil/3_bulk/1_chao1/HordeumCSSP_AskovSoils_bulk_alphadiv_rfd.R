@@ -133,7 +133,15 @@ box_plot <- ggplot(index_bulk, aes(x = Soil, y = Chao1, fill = Soil)) +
 
 ggsave(
   filename = "2_figures/HordeumCSSP_AskovSoils_bulk_chao1_rfd.pdf",
-  plot = box_plot,
+  plot = box_plot +
+    theme(
+      margins = margin(
+        t = unit(5.5, "pt"),
+        r = unit(5.5, "pt"),
+        b = unit(-10, "pt"),
+        l = unit(5.5, "pt")
+      )
+    ),
   width = 3,
   height = 5,
   units = "cm"

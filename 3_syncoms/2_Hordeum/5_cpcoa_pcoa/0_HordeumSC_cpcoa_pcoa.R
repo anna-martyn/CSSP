@@ -145,8 +145,9 @@ run_beta_diversity <- function(asv_table, table_name) {
   ggsave(
     filename = paste0("2_figures/HordeumSC_cpcoa_", table_name, ".pdf"),
     plot = cpcoa_plot,
-    width = 5,
-    height = 5
+    width = 8,
+    height = 8,
+    units = "cm"
   )
   saveRDS(
     object = cpcoa_plot,
@@ -230,8 +231,8 @@ run_beta_diversity <- function(asv_table, table_name) {
         ".pdf"
       ),
       plot = pcoa_plot,
-      width = 5,
-      height = 5,
+      width = 8,
+      height = 8,
       units = "cm"
     )
     saveRDS(pcoa_plot, paste0("1_rds_files/HordeumSC_pcoa_", table_name, "_", comp, ".rds"))

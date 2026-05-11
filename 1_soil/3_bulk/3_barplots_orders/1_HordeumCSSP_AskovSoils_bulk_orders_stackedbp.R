@@ -125,7 +125,7 @@ ggsave(
   filename = "2_figures/Hordeum_bulk_order_top20_RA_stackedbp.pdf",
   plot = bar_plot,
   width = 8,
-  height = 6,
+  height = 17,
   units = "cm"
 )
 
@@ -167,7 +167,7 @@ ggsave(
   filename = "2_figures/Hordeum_bulk_order_top20_RA_mean_stackedbp.pdf",
   plot = barplot_mean,
   width = 6,
-  height = 6,
+  height = 17,
   units = "cm"
 )
 saveRDS(

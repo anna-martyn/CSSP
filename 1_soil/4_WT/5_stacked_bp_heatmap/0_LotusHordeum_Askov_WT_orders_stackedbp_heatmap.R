@@ -234,7 +234,7 @@ bar_plot <- ggplot(order_table_means, aes(x = Soil, y = RA, fill = Order)) +
 ggsave(
   filename = "2_figures/LotusHordeum_Askov_WT_stackedbp_top20_meanRA.pdf",
   plot = bar_plot,
-  width = 10,
+  width = 12,
   height = 6,
   unit = "cm"
 )
@@ -408,7 +408,7 @@ ggsave(
   filename = "2_figures/LotusHordeum_Askov_WT_orders_heatmap.pdf",
   plot = heat_map,
   width = 12,
-  height = 6,
+  height = 9,
   unit = "cm"
 )
 saveRDS(
