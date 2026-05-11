@@ -358,7 +358,7 @@ p_bubble <- ggplot(da_all, aes(x = ASVid, y = Genotype, fill = DA)) +
   ) +
   facet_grid(Compartment ~ ., scales = "free_x", switch = "y") +
   labs(fill = "Relative abundance mutant vs. WT") +
-  labs(y = "Differencial abundance\nin mutants") +
+  labs(y = "Differential abundance\nin mutants") +
   theme_bw() +
   theme(
     axis.text.x = element_text(
