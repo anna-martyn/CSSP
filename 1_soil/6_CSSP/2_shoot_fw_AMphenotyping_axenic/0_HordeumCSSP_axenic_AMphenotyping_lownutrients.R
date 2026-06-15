@@ -205,7 +205,7 @@ am_plot <- ggplot(
     legend.position = "none",
     axis.title.x = element_blank(),
     axis.title.y = element_text(size = 6),
-    strip.text = element_text(size = 6)
+    strip.text = element_text(size = 6, face = "bold", color = "black")
   ) +
   scale_x_discrete(
     labels = c(
