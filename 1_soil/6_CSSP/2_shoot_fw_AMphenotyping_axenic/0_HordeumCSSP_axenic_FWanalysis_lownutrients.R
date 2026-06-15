@@ -78,9 +78,10 @@ for(i in seq_along(unique(weight$AM_inoculum))){
 
 shoot_labels_dt <- rbindlist(shoot_labels_list)
 
-shoot_ypos <- weight[, .(
-  y_pos = max(Shoot_weight)
-), by = .(AM_inoculum, Genotype)]
+shoot_ypos <- weight[,
+  .(y_pos = max(Shoot_weight)),
+  by = .(AM_inoculum, Genotype)
+]
 
 shoot_labels_dt <- merge(shoot_labels_dt, shoot_ypos)
 shoot_labels_dt[, y_pos := y_pos + 0.06]
@@ -167,9 +168,9 @@ labels_noAMF <- data.table(
 )
 
 ### Define y positions
-ypos_noAMF <- weight_noAMF[, .(
-  y_pos = max(Shoot_weight, na.rm = TRUE)
-), by = Genotype]
+ypos_noAMF <- weight_noAMF[,
+  .(y_pos = max(Shoot_weight, na.rm = TRUE)), by = Genotype
+]
 
 labels_noAMF <- merge(labels_noAMF, ypos_noAMF, by = "Genotype")
 labels_noAMF[, y_pos := y_pos + 0.06]

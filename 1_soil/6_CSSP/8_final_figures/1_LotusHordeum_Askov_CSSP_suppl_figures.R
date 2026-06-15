@@ -93,9 +93,8 @@ row1 <- plot_grid(
 row2 <- plot_grid(
   p4,
   ncol = 1,
-  labels =c("C"),
-  label_size = 8,
-  rel_widths = c("1/1")
+  labels = c("C"),
+  label_size = 8
 )
 
 # Combined supplementary figure 2

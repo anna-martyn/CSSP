@@ -133,7 +133,7 @@ label_positions <- am_percent %>%
 anova_labels <- am_percent %>%
   group_by(Structure) %>%
   summarise(
-    y_pos = 95,
+    y_pos = 48,
     .groups = "drop"
   ) %>%
   left_join(
@@ -196,7 +196,7 @@ am_plot <- ggplot(
   
   scale_fill_manual(values = colors) +
   scale_y_continuous(
-    limits = c(0, 100),
+    limits = c(0, 50),
     expand = expansion(mult = c(0, 0.02))
   ) +
   main_theme +
@@ -222,12 +222,12 @@ am_plot
 # Save plot --------------------------------------------------------------------
 write.csv(
   label_positions,
-  file = "./3_tables/HordeumCSSP_axenic_AMphenotyping_ANOVA.csv",
+  file = "3_tables/HordeumCSSP_axenic_AMphenotyping_ANOVA.csv",
   row.names = FALSE
 )
 
 ggsave(
-  filename = "./2_figures/HordeumCSSP_axenic_AMphenotyping_boxplot.pdf",
+  filename = "2_figures/HordeumCSSP_axenic_AMphenotyping_boxplot.pdf",
   plot = am_plot,
   width = 20,
   height = 8,
@@ -236,7 +236,7 @@ ggsave(
 
 saveRDS(
   am_plot,
-  file = "./1_rds_files/HordeumCSSP_axenic_AMphenotyping_boxplot.rds"
+  file = "1_rds_files/HordeumCSSP_axenic_AMphenotyping_boxplot.rds"
 )
 
 
