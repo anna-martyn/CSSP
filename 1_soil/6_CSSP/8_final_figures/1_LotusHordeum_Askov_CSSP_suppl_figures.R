@@ -23,41 +23,47 @@ genotype_labels <- c(
 # Loading plots for supplementary figures
 p1 <- readRDS("../3_nod_cts/1_rds_files/LotusCSSP_AskovSoils_nod_cts.rds")
 p2 <- readRDS(
-  "../2_shoot_fw_axenic/1_rds_files/HordeumCSSP_axenic_shoot_fw.rds"
+  "../2_shoot_fw_AMphenotyping_axenic/1_rds_files/HordeumCSSP_axenic_shoot_fw_highnutrients.rds"
 )
 p3 <- readRDS(
-  "../4_chao1/1_Lotus/1_rds_files/LotusCSSP_AskovSoils_chao1_rfd.rds"
+  "../2_shoot_fw_AMphenotyping_axenic/1_rds_files/HordeumCSSP_axenic_shoot_fw_lownutrients.rds"
 )
 p4 <- readRDS(
+  "../2_shoot_fw_AMphenotyping_axenic/1_rds_files/HordeumCSSP_axenic_AMphenotyping_boxplot.rds"
+)
+p5 <- readRDS(
+  "../4_chao1/1_Lotus/1_rds_files/LotusCSSP_AskovSoils_chao1_rfd.rds"
+)
+p6 <- readRDS(
   "../4_chao1/2_Hordeum/1_rds_files/HordeumCSSP_AskovSoils_chao1_rfd.rds"
 )
-p5 <- readRDS("../5_cpcoa_pcoa/1_rds_files/LotusCSSP_AskovSoils_cpcoa_all.rds")
-p6 <- readRDS(
+p7 <- readRDS("../5_cpcoa_pcoa/1_rds_files/LotusCSSP_AskovSoils_cpcoa_all.rds")
+p8 <- readRDS(
   "../5_cpcoa_pcoa/1_rds_files/HordeumCSSP_AskovSoils_cpcoa_all.rds"
 )
-p7 <- readRDS("../5_cpcoa_pcoa/1_rds_files/LotusCSSP_AskovSoils_pcoa_all.rds")
-p8 <- readRDS("../5_cpcoa_pcoa/1_rds_files/HordeumCSSP_AskovSoils_pcoa_all.rds")
-p9 <- readRDS(
+p9 <- readRDS("../5_cpcoa_pcoa/1_rds_files/LotusCSSP_AskovSoils_pcoa_all.rds")
+p10 <- readRDS("../5_cpcoa_pcoa/1_rds_files/HordeumCSSP_AskovSoils_pcoa_all.rds")
+p11 <- readRDS(
   "../6_stackedbp_heatmap/1_rds_files/LotusHordeum_Askov_stackedbp_top20_meanRA.rds"
 )
-p10 <- readRDS(
+p12 <- readRDS(
   "../6_stackedbp_heatmap/1_rds_files/LotusHordeum_Askov_orders_heatmap.rds"
 )
 
 # Adjusting plot layouts
-p3 <- p3 +
+p5 <- p5 +
   scale_x_discrete(labels = genotype_labels) +
   theme(axis.text.x = ggtext::element_markdown())
 
-p4 <- p4 +
+p6 <- p6 +
   scale_x_discrete(labels = genotype_labels) +
   theme(axis.text.x = ggtext::element_markdown())
 
-p9 <- p9 +
+p11 <- p11 +
   scale_x_discrete(labels = genotype_labels) +
   theme(axis.text.x = ggtext::element_markdown())
 
-p10 <- p10 +
+p12 <- p12 +
   scale_x_discrete(labels = genotype_labels) +
   theme(axis.text.x = ggtext::element_markdown())
 
@@ -77,25 +83,32 @@ pcoa_legend <- ggpubr::get_legend(
 
 # Individual rows for supplementary figure 2
 row1 <- plot_grid(
-  p1, p2,
-  ncol = 2,
-  labels = c("A", "B"),
+  p1, p2, p3,
+  ncol = 3,
+  labels = c("A", "B", ""),
   label_size = 8,
-  rel_widths = c(2/3, 1/3)
+  rel_widths = c(2/4, 1/4,1/4)
+)
+
+row2 <- plot_grid(
+  p4,
+  ncol = 1,
+  labels =c("C"),
+  label_size = 8,
+  rel_widths = c("1/1")
 )
 
 # Combined supplementary figure 2
 final_plot <- plot_grid(
   row1,
-  # row2,
-  # row3,
+  row2,
   ncol = 1,
-  rel_heights = c(1/1)
+  rel_heights = c(1/2, 1/2)
 )
 
 # Individual rows for supplementary figure 3
 row1 <- plot_grid(
-  p3, p4,
+  p5, p6,
   ncol = 2,
   labels = c("A", "B"),
   label_size = 8,
@@ -103,7 +116,7 @@ row1 <- plot_grid(
 )
 
 row2 <- plot_grid(
-  p5, p6, cpcoa_legend,
+  p7, p8, cpcoa_legend,
   ncol = 3,
   labels = c("C", "D", ""),
   label_size = 8,
@@ -111,7 +124,7 @@ row2 <- plot_grid(
 )
 
 row3 <- plot_grid(
-  p7, p8, pcoa_legend,
+  p9, p10, pcoa_legend,
   ncol = 3,
   labels = c("E", "F"),
   label_size = 8,
@@ -129,7 +142,7 @@ final_plot2 <- plot_grid(
 
 # Individual rows for supplementary figure 4
 row4 <- plot_grid(
-  p9,
+  p11,
   ncol = 1,
   labels = c("A"),
   label_size = 8,
@@ -137,7 +150,7 @@ row4 <- plot_grid(
 )
 
 row5 <- plot_grid(
-  p10,
+  p12,
   ncol = 1,
   labels = c("B"),
   label_size = 8,
@@ -156,8 +169,8 @@ final_plot3 <- plot_grid(
 ggsave(
   "Suppl_Figure2_Askov_CSSP.pdf",
   final_plot,
-  width = 15,
-  height = 7,
+  width = 18,
+  height = 14,
   unit = "cm"
 )
 ggsave(

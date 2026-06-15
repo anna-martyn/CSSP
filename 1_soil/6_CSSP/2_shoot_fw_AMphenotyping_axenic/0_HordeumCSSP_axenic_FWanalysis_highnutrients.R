@@ -1,4 +1,4 @@
-# Seup ------------------------------------------------------------------------
+# Setup ------------------------------------------------------------------------
 # Cleaning up
 options(warn = -1)
 rm(list = ls())
@@ -14,7 +14,7 @@ for(pk in pkg){
 
 # Loading data
 weight <- read.table(
-  file = "../../1_data/2_Hordeum/HordeumCSSP_axenic_fw_input.txt",
+  file = "../../1_data/2_Hordeum/HordeumCSSP_axenic_fw_input_highnutrients.txt",
   header = TRUE,
   sep = "\t"
 )
@@ -83,6 +83,7 @@ main_theme <- theme(
   axis.text.y = element_text(size = 6, colour = "black"),
   legend.background = element_blank(),
   legend.key = element_blank(),
+  legend.title = element_text(size = 6, colour = "black"),
   text = element_text(family = "sans")
 )
 
@@ -100,9 +101,10 @@ box_plot <- ggplot(weight, aes(x = Genotype, y = Shoot_fw, fill = Genotype)) +
   scale_fill_manual(values = colors) +
   main_theme +
   ylab("Shoot fresh weight/plant (g)") +
+  ggtitle("High nutrient levels") +
   theme(
     legend.position = "none",
-    plot.title = element_text(size = 6, face = "bold", hjust = 0.5),
+    plot.title = element_text(size = 6, face = "bold"),
     axis.title.x = element_blank(),
     axis.title.y = element_text(size = 6)
   ) +
@@ -117,18 +119,20 @@ box_plot <- ggplot(weight, aes(x = Genotype, y = Shoot_fw, fill = Genotype)) +
   ) +
   scale_y_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, 1))
 
+box_plot
+
 write.csv(
   x = weight_summary,
-  file = "3_tables/HordeumCSSP_axenic_shoot_fw_ANOVA.csv"
+  file = "3_tables/HordeumCSSP_axenic_shoot_fw_ANOVA_highnutrients.csv"
 )
 
 # Saving plot
 ggsave(
-  filename = "2_figures/HordeumCSSP_axenic_shoot_fw.pdf",
+  filename = "2_figures/HordeumCSSP_axenic_shoot_fw_highnutrients.pdf",
   plot = box_plot,
   width = 6,
   height = 6,
   units = "cm"
 )
 
-saveRDS(object = box_plot, file = "1_rds_files/HordeumCSSP_axenic_shoot_fw.rds")
+saveRDS(object = box_plot, file = "1_rds_files/HordeumCSSP_axenic_shoot_fw_highnutrients.rds")
