@@ -15,7 +15,7 @@ combined_legend <- plot_grid(pca_legend, volcano_legend)
 pca_all <- readRDS("../3_PCA/1_rds_files/PCA_plot.rds")
 volcano_plot <- readRDS("../6_volcano_plots/1_rds_files/volcano_plot.rds")
 box_plot_highlighted <- readRDS(
-  "../7_highlighted_feautures/1_rds_files/box_plot_highlighted.rds"
+  "../7_highlighted_features/1_rds_files/box_plot_highlighted.rds"
 )
 bubble_plot <- readRDS("../8_bubble_plots/1_rds_files/bubble_plot.rds")
 

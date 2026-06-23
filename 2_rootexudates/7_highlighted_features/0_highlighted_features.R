@@ -68,21 +68,6 @@ highlighted_features_Lj <- paste0(
 )
 
 # Setting more instructive names for highlighted features
-# name_change <- c(
-#   "Feature269" = "Coumaric\nacid (F269)",
-#   "Feature455" = "Ferulic acid\n (F455)",
-#   "Feature285" = "Vanillic acid\n (F285)",
-#   "Feature973" = "Naringenin\n (F973)",
-#   "Feature1053" = "Vestitone\n (F1053)",
-#   "Feature1047" = "BiochaninA/\nOlmelin (F1047)",
-#   "Feature945" = "Formononetin\n (F945)",
-#   "Feature976" = "Vestitol\n (F976)",
-#   "Feature1177" = "Dehydroquer-\ncetin (F1177)",
-#   "Feature1182" = "Diosmetin\n (F1182)",
-#   "Feature1046" = "Wogonin\n (F1046)",
-#   "Feature1320" = "Velutin\n (F1320)"
-# )
-
 name_change <- c(
   "Feature270" = "Coumaric\nacid (F270)",
   "Feature441" = "Ferulic acid\n (F441)",
@@ -193,20 +178,10 @@ box_plot_highlighted_Lj <- ggplot(
 ## Hordeum --------------------------------------------------------------------
 highlighted_features_Hv <- paste0(
   "Feature",
-  # c(2546, 2889, 495, 3095, 3069, 3288)
   c(2320, 1541, 494, 2970, 3094, 3287)
 )
 
 # Setting more instructive names for highlighted features
-# name_change <- c(
-#   "Feature2546" = "Gibberellin\n (F2546)",
-#   "Feature2889" = "Abscisic \nacid (F2889)",
-#   "Feature495" = "Esculetin\n (F495)",
-#   "Feature3095" = "Paeonin C\n (F3095)",
-#   "Feature3069" = "Isoorientin\n (F3069)",
-#   "Feature3288" = "Sapopharin\n (F3288)"
-# )
-
 name_change <- c(
   "Feature2320" = "Gibberellin\n (F2320)",
   "Feature1541" = "Epidihydropha-\nseic Acid (F1541)",
