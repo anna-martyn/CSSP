@@ -1,0 +1,12 @@
+Comment on metadata and feature table files:
+
+În the mzML files, sample number 52 appears twice: 52_N_BC5_1_23791 and 52_N_BC5_1_23798. The latter  file was inadvertently mislabeled during data acquisition and actually corresponds to sample 53.
+
+As a result, the metadata file contains the correct sample numbering (samples 52 and 53), whereas the feature table contains the original mzML file names.
+Therefore:
+52_N_BC5_1_23791 corresponds to sample 52 in the metadata
+52_N_BC5_1_23798 corresponds to sample 53 in the metadata.
+
+This labelling discrepancy was correct during downstream data processing and statistical analysis used for the publication associated with this dataset. The correction was implemented in the analysis code, ensuring that all reported results are based on the correct sample identifiers.
+
+Both samples are biological replicates of the same treatment group (water control) and correspond to biological replicates 4 and 5, respectively.
