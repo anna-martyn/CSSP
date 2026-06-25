@@ -19,15 +19,15 @@ dir_name <- paste(
 metabolite_data_Lj <- fread(dir_name)
 
 design_Lj <- fread(
-  "../1_data/1_Lotus/LotusCSSP_rootex_metadata.txt",
-  drop = 4:6
+  "../1_data/1_Lotus/LotusCSSP_RootEx_metadata.txt",
+  drop = 4:7
 )
 
 dir_name <- paste(
   "..",
   "1_data",
   "1_Lotus",
-  "LotusCSSP_RootEx_Apr26_stdAUnew_canopus_structure_summary.tsv",
+  "canopus_structure_summary.tsv",
   sep = "/"
 )
 annotation_Lj <- fread(dir_name, drop = 21)
@@ -61,7 +61,7 @@ dir_name <- paste(
 )
 metabolite_data_Hv <- fread(dir_name)
 design_Hv <- fread(
-  "../1_data/2_Hordeum/HordeumCSSP_rootex_metadata.txt",
+  "../1_data/2_Hordeum/HordeumCSSP_RootEx_metadata.txt",
   drop = c(2, 4:7)
 )
 
@@ -69,7 +69,7 @@ dir_name <- paste(
   "..",
   "1_data",
   "2_Hordeum",
-  "HordeumCSSP_RootEx_Apr26_stdAUnew_canopus_structure_summary.tsv",
+  "canopus_structure_summary.tsv",
   sep = "/"
 )
 annotation_Hv <- fread(dir_name, drop = 21)

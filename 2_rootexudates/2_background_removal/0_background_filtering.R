@@ -10,19 +10,19 @@ source("Tobit_function.R")
 # Loading Lotus data ----------------------------------------------------------
 
 metabolite_data_Lj <- fread(
-  "../1_data/1_Lotus/LotusCSSP_RootEx_Apr26_stdAUnew_featurelist.csv"
+  "../1_data/1_Lotus/LotusCSSP_RootEx_mzmine_featurelist.csv"
 )
 
 design_Lj <- fread(
-  "../1_data/1_Lotus/LotusCSSP_rootex_metadata.txt",
-  drop = c(2, 4:6)
+  "../1_data/1_Lotus/LotusCSSP_RootEx_metadata.txt",
+  drop = c(2, 4:7)
 )
 
 dir_name <- paste(
   "..",
   "1_data",
   "1_Lotus",
-  "LotusCSSP_RootEx_Apr26_stdAUnew_canopus_structure_summary.tsv",
+  "canopus_structure_summary.tsv",
   sep = "/"
 )
 annotation_Lj <- fread(dir_name, drop = 21)
@@ -45,7 +45,7 @@ sample_numbers <- unlist(lapply(
 ))
 sample_numbers <- gsub("datafile:", "", sample_numbers)
 ## Fixing typo in feature table
-sample_numbers[26] <- "53"
+sample_numbers[22] <- "53"
 colnames(metabolite_data_Lj)[-1] <- sample_numbers
 
 # Setting feature names in feature table
@@ -76,11 +76,11 @@ annotation_Lj[, Feature := paste0("Feature", Feature)]
 
 # Loading Hordeum data --------------------------------------------------------
 metabolite_data_Hv <- fread(
-  "../1_data/2_Hordeum/HordeumCSSP_RootEx_Apr26_stdAUnew_featurelist.csv"
+  "../1_data/2_Hordeum/HordeumCSSP_RootEx_mzmine_featurelist.csv"
 )
 
 design_Hv <- fread(
-  "../1_data/2_Hordeum/HordeumCSSP_rootex_metadata.txt",
+  "../1_data/2_Hordeum/HordeumCSSP_RootEx_metadata.txt",
   drop = c(2, 4:7)
 )
 
@@ -88,7 +88,7 @@ dir_name <- paste(
   "..",
   "1_data",
   "2_Hordeum",
-  "HordeumCSSP_RootEx_Apr26_stdAUnew_canopus_structure_summary.tsv",
+  "canopus_structure_summary.tsv",
   sep = "/"
 )
 annotation_Hv <- fread(dir_name, drop = 21)
@@ -109,7 +109,6 @@ sample_numbers <- unlist(lapply(
   strsplit(colnames(metabolite_data_Hv)[-1], "_"),
   function(x) x[4]
 ))
-sample_numbers <- gsub("datafile:", "", sample_numbers)
 colnames(metabolite_data_Hv)[-1] <- sample_numbers
 
 # Setting feature names in feature table

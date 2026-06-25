@@ -24,8 +24,8 @@ metabolite_data_Lj <- fread(
 )
 
 design_Lj <- fread(
-  "../1_data/1_Lotus/LotusCSSP_rootex_metadata.txt",
-  drop = 4:6
+  "../1_data/1_Lotus/LotusCSSP_RootEx_metadata.txt",
+  drop = 4:7
 )
 
 # Setting sample names in metadata
@@ -47,7 +47,7 @@ metabolite_data_Hv <- fread(
   "../2_background_removal/1_tables/feature_table_Hordeum_filtered.csv"
 )
 design_Hv <- fread(
-  "../1_data/2_Hordeum/HordeumCSSP_rootex_metadata.txt",
+  "../1_data/2_Hordeum/HordeumCSSP_RootEx_metadata.txt",
   drop = c(2, 4:7)
 )
 
