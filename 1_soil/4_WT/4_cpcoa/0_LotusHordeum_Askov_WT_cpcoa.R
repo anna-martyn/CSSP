@@ -99,6 +99,7 @@ main_theme <- theme(
 # CPCoA
 CPCoA_Lj <- capscale(
   t(Lotus_asv_table_norm) ~ Compartment*Soil,
+  # t(Lotus_asv_table_norm) ~ Compartment*Soil,
   data = Lotus_design,
   add = FALSE, 
   sqrt.dist = TRUE, 
@@ -107,14 +108,13 @@ CPCoA_Lj <- capscale(
 
 # PERMANOVA
 set.seed(1773665952)
-perm_anova <- anova.cca(CPCoA_Lj)
-print(perm_anova)
+perm_anova <- anova(CPCoA_Lj, permutations = 999, by = "terms")
 
 # Variability tables and confidence intervals for the variance
 var_tbl <- variability_table(CPCoA_Lj)
 eig <- CPCoA_Lj$CCA$eig
 variance <- var_tbl["constrained", "proportion"]
-p_val <- perm_anova[1, 4]
+p_val <- perm_anova["Compartment:Soil", "Pr(>F)"]
 
 ## Extracting the weighted average (sample) scores
 points <- CPCoA_Lj$CCA$wa[, 1:2]

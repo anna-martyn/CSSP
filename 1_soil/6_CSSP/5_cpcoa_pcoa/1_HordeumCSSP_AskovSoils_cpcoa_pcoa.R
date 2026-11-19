@@ -66,9 +66,6 @@ for(i in 1:length(cond)){
   asv_table_RA <- apply(asv_table_sub, 2, function(x) x/sum(x))
   rownames(asv_table_RA) <- asv_table$ASVid
   
-  # Bray-Curtis distances
-  bray_curtis <- vegdist(t(asv_table_RA), method = "bray")
-  
   # CPCoA
   CPCoA <- capscale(
     t(asv_table_RA) ~ Genotype * Soil,
@@ -81,16 +78,26 @@ for(i in 1:length(cond)){
   # Permanova
   set.seed(1762263595)
   nperm <- 999
-  perm_test <- anova.cca(CPCoA, permutations = nperm)
+  perm_test <- anova.cca(CPCoA, permutations = nperm, by = "term")
   var_expl_tot <- CPCoA$CCA$tot.chi/CPCoA$tot.chi
-  p_val <- perm_test["Model", "Pr(>F)"]
+  var_expl_covar <- perm_test[,"SumOfSqs"]/sum(perm_test[,"SumOfSqs"])
+  var_expl_covar[4] <- 1-var_expl_covar[4] # To get total variance explained by model, rather than by residuals
+  p_val <- perm_test["Genotype:Soil", "Pr(>F)"]
   p_val_print <- ifelse(
     p_val == 1 / (nperm + 1),
     paste0("p < ", p_val),
     paste0("p = ", p_val)
   )
+
+  var_perc <- paste0(round(var_expl_covar * 100, 2), "%")
+  var_summary <- matrix(c("Genotype", "Soil", "Interaction", "Total", var_perc), ncol = 2) |>
+    apply(1, paste, collapse = ": ")
+  line1 <- paste(var_summary[1:2], collapse = ", ")
+  line2 <- paste(var_summary[3:4], collapse = ", ")
+
   lower_print <- paste0(
-    round(var_expl_tot*100, 2), "% of variance; ", p_val_print
+    p_val_print, "; Variance explained:\n",
+    paste(c(line1, line2), collapse = "\n")
   )
   
   CPCo_points <- data.table(

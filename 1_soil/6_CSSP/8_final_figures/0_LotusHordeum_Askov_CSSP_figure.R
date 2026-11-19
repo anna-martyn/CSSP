@@ -36,6 +36,10 @@ Heatmap <- readRDS(
   "../7_DA_analysis/3_rds_files/LotusHordeum_CSSP_Askov_DA_figure_combined.rds"
 )
 
+Heatmap2 <- readRDS(
+  "../7_DA_analysis/3_rds_files/LotusHordeum_CSSP_Askov_DA_figure_combined_no_legend.rds"
+)
+
 # Defining individual rows for final figure
 row1 <- plot_grid(
   empty, Lotus_boxplot, Hordeum_boxplot,
@@ -57,16 +61,21 @@ row2 <- plot_grid(
   label_x = 0, label_y = 1
 )
 
-row3 <- Heatmap
+row3 <- plot_grid(
+  Heatmap2, ggplot() + theme_void(),
+  ncol = 1,
+  rel_heights = c(0.9, 0.1),
+  labels = c("D", ""),
+  label_size = 8
+)
 
 # Combining rows in final figure
 final_plot <- plot_grid(
   row1, row2, row3,
   ncol = 1,
-  labels = c("","","D"),
   label_size = 8,
   label_fontface = "bold",
-  rel_heights = c(0.2, 0.2, 0.6)
+  rel_heights = c(0.2, 0.25, 0.55)
 )
 
 # Saving final figure

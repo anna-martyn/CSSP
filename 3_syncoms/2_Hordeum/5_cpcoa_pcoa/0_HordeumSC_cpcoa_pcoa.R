@@ -81,18 +81,26 @@ run_beta_diversity <- function(asv_table, table_name) {
   # Permanova
   set.seed(1762263595)
   nperm <- 999
-  perm_test <- anova.cca(cpcoa, permutations = nperm)
+  perm_test <- anova.cca(cpcoa, permutations = nperm, by = "term")
   var_expl_tot <- cpcoa$CCA$tot.chi/cpcoa$tot.chi
-  p_val <- perm_test["Model", "Pr(>F)"]
+  var_expl_covar <- perm_test[,"SumOfSqs"]/sum(perm_test[,"SumOfSqs"])
+  var_expl_covar[4] <- 1-var_expl_covar[4] # To get total variance explained by model, rather than by residuals
+  p_val <- perm_test["Genotype:Compartment", "Pr(>F)"]
   p_val_print <- ifelse(
     p_val == 1 / (nperm + 1),
     paste0("p < ", p_val),
     paste0("p = ", p_val)
   )
+
+  var_perc <- paste0(round(var_expl_covar * 100, 2), "%")
+  var_summary <- matrix(c("Genotype", "Compartment", "Interaction", "Total", var_perc), ncol = 2) |>
+    apply(1, paste, collapse = ": ")
+  line1 <- paste(var_summary[1:2], collapse = ", ")
+  line2 <- paste(var_summary[3:4], collapse = ", ")
+
   Lower_print <- paste0(
-    round(var_expl_tot * 100, 2),
-    "% of variance; ",
-    p_val_print
+    p_val_print, "; Variance explained:\n",
+    paste(c(line1, line2), collapse = "\n")
   )
 
   # Sample scores
@@ -139,7 +147,7 @@ run_beta_diversity <- function(asv_table, table_name) {
     ) +
     main_theme +
     ggtitle("Hordeum") +
-    theme(plot.title = element_text(size = 6, hjust = 0))
+    theme(plot.title = element_text(face = "bold", size = 6, hjust = 0))
 
   # Save CPCoA plot
   ggsave(
