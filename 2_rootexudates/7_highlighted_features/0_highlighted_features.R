@@ -119,6 +119,7 @@ p_vals_dt <- p_vals_dt[Feature %in% highlighted_features_Lj]
 
 # Adding significance indicator (*)
 p_vals_dt[,text:=ifelse(p_adj < 0.05, "*", "")]
+p_vals_dt[, Genotype := gsub("Genotype", "", Genotype)]
 
 # Adding y-position for significance indicator
 y_pos <- metabolite_long_Lj[, .(y_pos = max(Intensity)), list(Feature, Genotype)]
@@ -130,8 +131,43 @@ metabolite_long_Lj[, Feature := factor(Feature, levels = name_change)]
 p_vals_dt[, Feature := name_change[as.character(Feature)]]
 p_vals_dt[, Feature := factor(Feature, levels = name_change)]
 
+# Loading non-significant results of interest
+no_test_dt <- fread("../4_genotype_effects/1_tables/non_sig_features_of_interest_Lotus.csv")
+
+# Long format
+no_test_dt <- melt(
+  no_test_dt,
+  id.vars = 1,
+  variable.name = "Genotype",
+  value.name = "diff"
+)
+
+# Keep only highlighted features
+no_test_dt <- no_test_dt[Feature %in% highlighted_features_Lj]
+
+# Changing feature names according to name_change vector and setting factor levels
+no_test_dt[, Feature := name_change[as.character(Feature)]]
+no_test_dt[, Feature := factor(Feature, levels = name_change)]
+
+# Merge with p-value table
+p_vals_dt <- merge(
+  p_vals_dt,
+  no_test_dt,
+  by = c("Feature", "Genotype"),
+  all.x = TRUE
+)
+
+# Marking non-significant but interesting results with a triangle (here, we 
+# define a non-significant result as 'interesting' if the feature is never 
+# measured in the mutant, but present WT or vice-versa)
+p_vals_dt[p_adj > 0.05 & diff != 0, text := "▲"]
+
 # Adjusting y-position of significance indicator
 p_vals_dt[, y_pos := y_pos * 1.05]
+
+# Manually adjusting y-position of some labels for aesthetic reasons
+p_vals_dt[p_adj > 0.05 & diff != 0 & grepl("F848", Feature), y_pos := 900]
+p_vals_dt[p_adj > 0.05 & diff != 0 & grepl("F439", Feature), y_pos := 700]
 
 # Setting factor level
 metabolite_long_Lj[,
@@ -149,11 +185,18 @@ box_plot_highlighted_Lj <- ggplot(
   geom_boxplot(linewidth = 0.2, outlier.size = 0.5, outlier.color = "red") +
   facet_wrap(~Feature, scales = "free", ncol = 3) +
   geom_label(
-    data = p_vals_dt,
+    data = p_vals_dt[text != "▲"],
     aes(y = y_pos, label = text),
     linewidth = NA,
     alpha = 0,
     size = 12 / .pt
+  ) +
+  geom_label(
+    data = p_vals_dt[text == "▲"],
+    aes(y = y_pos, label = text),
+    linewidth = NA,
+    alpha = 0,
+    size = 6 / .pt
   ) +
   scale_fill_manual(values = cols, breaks = names(cols)) +
   theme_bw() +
@@ -227,6 +270,7 @@ p_vals_dt <- melt(
 
 # Keep only highligted features
 p_vals_dt <- p_vals_dt[Feature %in% highlighted_features_Hv]
+p_vals_dt[, Genotype := gsub("Genotype", "", Genotype)]
 
 # Adding significance indicator (*)
 p_vals_dt[, text := ifelse(p_adj < 0.05, "*", "")]
@@ -244,8 +288,42 @@ metabolite_long_Hv[, Feature := factor(Feature, levels = name_change)]
 p_vals_dt[, Feature := name_change[as.character(Feature)]]
 p_vals_dt[, Feature := factor(Feature, levels = name_change)]
 
+# Loading non-significant results of interest
+no_test_dt <- fread("../4_genotype_effects/1_tables/non_sig_features_of_interest_Hordeum.csv")
+
+# Long format
+no_test_dt <- melt(
+  no_test_dt,
+  id.vars = 1,
+  variable.name = "Genotype",
+  value.name = "diff"
+)
+
+# Keep only highlighted features
+no_test_dt <- no_test_dt[Feature %in% highlighted_features_Hv]
+
+# Changing feature names according to name_change vector and setting factor levels
+no_test_dt[, Feature := name_change[as.character(Feature)]]
+no_test_dt[, Feature := factor(Feature, levels = name_change)]
+
+# Merge with p-value table
+p_vals_dt <- merge(
+  p_vals_dt,
+  no_test_dt,
+  by = c("Feature", "Genotype"),
+  all.x = TRUE
+)
+
+# Marking non-significant but interesting results with a triangle (here, we 
+# define a non-significant result as 'interesting' if the feature is never 
+# measured in the mutant, but present WT or vice-versa)
+p_vals_dt[p_adj > 0.05 & diff != 0, text := "▲"]
+
 # Adjusting y-position of significance indicator
 p_vals_dt[, y_pos := y_pos * 1.05]
+
+# Manually adjusting y-position of some labels for aesthetic reasons
+p_vals_dt[p_adj > 0.05 & diff != 0, y_pos := 45]
 
 # Setting factor level
 metabolite_long_Hv[,
@@ -263,11 +341,18 @@ box_plot_highlighted_Hv <- ggplot(
   geom_boxplot(linewidth = 0.2, outlier.size = 0.5, outlier.color = "red") +
   facet_wrap(~Feature, scales = "free", ncol = 3) +
   geom_label(
-    data = p_vals_dt,
+    data = p_vals_dt[text != "▲"],
     aes(y = y_pos, label = text),
     linewidth = NA,
     alpha = 0,
     size = 12 / .pt
+  ) +
+  geom_label(
+    data = p_vals_dt[text == "▲"],
+    aes(y = y_pos, label = text),
+    linewidth = NA,
+    alpha = 0,
+    size = 6 / .pt
   ) +
   scale_fill_manual(values = cols, breaks = names(cols)) +
   theme_bw() +
@@ -311,5 +396,6 @@ ggsave(
   plot = box_plot_highlighted,
   width = 9,
   height = 18,
-  units = "cm"
+  units = "cm",
+  device = cairo_pdf
 )

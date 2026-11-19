@@ -56,7 +56,7 @@ metabolite_data_Hv <- fread(
   "../2_background_removal/1_tables/feature_table_Hordeum_filtered.csv"
 )
 design_Hv <- fread(
-  "../1_data/2_Hordeum/HordeumCSSP_rootex_metadata.txt",
+  "../1_data/2_Hordeum/HordeumCSSP_RootEx_metadata.txt",
   drop = c(2, 4:7)
 )
 
@@ -101,7 +101,7 @@ lfc_dt <- melt(
 )
 
 # Cleaning up Genotype names
-p_vals_dt[, Genotype := gsub("_p_adj", "", Genotype)]
+p_vals_dt[, Genotype := gsub("Genotype", "", Genotype)]
 lfc_dt[, Genotype := gsub("Lfc_", "", Genotype)]
 
 # Combining log-fold changes and p-values
@@ -128,6 +128,7 @@ res_table[, ":="(
 
 # Tallying the number of significant features by plant-genotype combination
 text_data <- res_table[, .(N_diff = sum(Sig)), list(Plant, Genotype)]
+text_data[, y_pos := ifelse(Plant == "Lotus", 18, 29)]
 
 # Plot
 volcano_plot <- ggplot(
@@ -143,10 +144,10 @@ volcano_plot <- ggplot(
     values = c("Enriched" = "#902121", "Depleted" = "darkblue", "NS" = "gray"),
     name = "DEM"
   ) +
-  facet_grid(factor(Plant, levels = c("Lotus", "Hordeum")) ~ Genotype) +
+  facet_grid(factor(Plant, levels = c("Lotus", "Hordeum")) ~ Genotype, scales = "free") +
   geom_label(
     data = text_data,
-    aes(x = -25, y = 8.5, label = N_diff),
+    aes(x = -5.75, y = y_pos, label = N_diff),
     colour = "black",
     fill = "grey",
     alpha = 0.2,
@@ -168,7 +169,6 @@ volcano_plot <- ggplot(
     legend.text = element_text(size = 6),
     legend.title = element_text(size = 6, hjust = 0.5, margin = margin(r = 5))
   ) +
-  xlim(-30, 30) +
   guides(color = guide_legend(override.aes = list(size = 2))) +
   NULL
 

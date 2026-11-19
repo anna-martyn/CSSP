@@ -1,11 +1,14 @@
 # Seup ------------------------------------------------------------------------
 library(data.table)
+library(VGAM)
+library(ggplot2)
 
 # Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Loading Tobit regression function
 source("Tobit_function.R")
+genotypes <- c("WT", "symrk", "ccamk", "nsp1", "nsp2")
 
 ## Loading Lotus data ----------------------------------------------------------
 # Lotus feature table filtered for background features
@@ -104,38 +107,61 @@ design_Lj_df <- data.frame(design_Lj[, -1], row.names = design_Lj$Sample_ID)
 
 # Fitting Tobit regression model with Genotype as covariate (WT as 
 # reference level)
-tobit_fit_Lj <- Tobit_model(
+set.seed(1793694715)
+tobit_fit_Lj <- Tobit_model2(
   metabolites = metabolites_Lj,
   meta_data = design_Lj_df,
-  formula = ~Genotype
+  formula = ~Genotype,
+  ref = "WT",
+  test = "two-sided",
+  presence_absence = TRUE
 )
 
-# Carrying out likelihood-ratio tests for non-reference level of genotype 
-# variable
-test_symrk_Lj <- Tobit_LRT(
-  tobit_fit_Lj,
-  var = "Genotypesymrk",
-  p_adjust = "fdr"
+# Identifying non-significant features still of interest, i.e. features 
+# completely absent from a mutant, but present in the WT or vice-versa
+no_test <- matrix(NA, nrow = nrow(metabolites_Lj), ncol = 5)
+rownames(no_test) <- rownames(metabolites_Lj)
+colnames(no_test) <- genotypes
+for (i in 1:5) {
+  idx <- design_Lj[Genotype == genotypes[i], Sample_ID]
+  no_test[,i] <- apply(metabolites_Lj[,idx] == 0, 1, all)
+}
+no_test_dt <- data.table(
+  Feature = rownames(no_test),
+  no_test[, 1] - no_test[, -1]
 )
-test_ccamk_Lj <- Tobit_LRT(
-  tobit_fit_Lj,
-  var = "Genotypeccamk",
-  p_adjust = "fdr"
+no_test_dt <- no_test_dt[symrk != 0 | ccamk != 0 | nsp1 != 0| nsp2 != 0]
+fwrite(no_test_dt, file = "1_tables/non_sig_features_of_interest_Lotus.csv")
+
+# p-values
+p_vals_Lj <- tobit_fit_Lj$p_vals
+p_vals_Lj[is.na(p_vals_Lj)] <- tobit_fit_Lj$p_vals_pa[is.na(p_vals_Lj)]
+
+p_adj_Lj <- matrix(p.adjust(p_vals_Lj[,-1], "fdr"), ncol = 4)
+rownames(p_adj_Lj) <- rownames(p_vals_Lj)
+colnames(p_adj_Lj) <- colnames(p_vals_Lj)[-1]
+
+# Residual plot
+all_res <- unlist(tobit_fit_Lj$resid)
+dt <- data.table(
+  resid = c(all_res, rnorm(length(all_res))),
+  Density = rep(c("Tobit residuals", "Simnulated\nstd. normal"), each = length(all_res))
 )
-test_nsp1_Lj <- Tobit_LRT(tobit_fit_Lj, var = "Genotypensp1", p_adjust = "fdr")
-test_nsp2_Lj <- Tobit_LRT(tobit_fit_Lj, var = "Genotypensp2", p_adjust = "fdr")
+
+resid_plot_Hv <- ggplot(dt, aes(x = resid, fill = Density, colour = Density)) +
+  geom_density(alpha = 0.4, linewidth = 0.5) +
+  theme_bw()+
+  scale_fill_manual(values = c("#1a80bb", "#a00000"))+
+  scale_color_manual(values = c("#1a80bb", "#a00000"))+
+  NULL
 
 # Setting up p-value matrix
-p_adj_Lj <- data.table(
-  Feature = rownames(test_symrk_Lj),
-  symrk_p_adj = test_symrk_Lj$p_adj,
-  ccamk_p_adj = test_ccamk_Lj$p_adj,
-  nsp1_p_adj = test_nsp1_Lj$p_adj,
-  nsp2_p_adj = test_nsp2_Lj$p_adj
-)
+p_adj_Lj <- data.table(Feature = rownames(p_adj_Lj),  p_adj_Lj)
 
 # Setting up log-fold-change matrix
-lfc_Lj <- data.table(Feature = rownames(tobit_fit_Lj$res), tobit_fit_Lj$res[,2:5])
+lfc_Lj_temp <- tobit_fit_Lj$res[,2:5]
+lfc_Lj_temp[is.na(lfc_Lj_temp)] <- tobit_fit_Lj$beta_est_pa[,-1][is.na(lfc_Lj_temp)]
+lfc_Lj <- data.table(Feature = rownames(lfc_Lj_temp), lfc_Lj_temp)
 colnames(lfc_Lj) <- gsub("Genotype", "Lfc_", colnames(lfc_Lj))
 
 # Saving above results
@@ -144,23 +170,23 @@ fwrite(lfc_Lj, "1_tables/lfc_Lj.csv")
 
 # Saving results
 res_Lj <- data.table(
-  Feature = rownames(test_symrk_Lj),
-  ifelse(tobit_fit_Lj$res[,2:5] > 0, 1, -1)
+  Feature = rownames(lfc_Lj_temp),
+  ifelse(lfc_Lj_temp > 0, 1, -1)
 )
 colnames(res_Lj) <- gsub("Genotype", "", colnames(res_Lj))
 
 res_Lj[, ":="(
   symrk = ifelse(
-    p_adj_Lj$symrk_p_adj < 0.05 , symrk , 0
+    p_adj_Lj$Genotypesymrk < 0.05 , symrk , 0
   ),
   ccamk = ifelse(
-    p_adj_Lj$ccamk_p_adj < 0.05 , ccamk , 0
+    p_adj_Lj$Genotypeccamk < 0.05 , ccamk , 0
   ),
   nsp1 = ifelse(
-    p_adj_Lj$nsp1_p_adj < 0.05 , nsp1 , 0
+    p_adj_Lj$Genotypensp1 < 0.05 , nsp1 , 0
   ),
   nsp2 = ifelse(
-    p_adj_Lj$nsp2_p_adj < 0.05 , nsp2 , 0
+    p_adj_Lj$Genotypensp2 < 0.05 , nsp2 , 0
   )
 )]
 
@@ -176,21 +202,6 @@ Feat_tab_Lj <- data.table(Feature = rownames(Feat_tab_Lj), Feat_tab_Lj)
 
 res_Lj <- merge(res_Lj, Feat_tab_Lj, by = "Feature")
 res_Lj <- merge(res_Lj, annotation_Lj, by = "Feature", all.x = TRUE)
-
-# ## Removing duplicate features in annotation table
-# n_anno_feature <- table(res_Lj$Feature)
-# duplicated_features <- names(n_anno_feature)[n_anno_feature > 1]
-
-# ## Identifying annotation with maximal probabilty for each duplicated feature
-# idx_remove_lst <- list()
-# for(i in 1:length(duplicated_features)){
-#   idx_remove <- which(res_Lj$Feature == duplicated_features[i])
-#   idx_keep <- which.max(res_Lj$`ClassyFire#class Probability`[idx_remove])
-#   idx_remove <- idx_remove[-idx_keep]
-#   idx_remove_lst[[i]] <- idx_remove
-# }
-# idx_remove <- unlist(idx_remove_lst)
-# res_Lj <- res_Lj[-idx_remove]
 
 fwrite(res_Lj, "../10_suppl_tables/Lotus_metabolite_test_results_tobit.csv")
 fwrite(res_Lj, "1_tables/Lotus_metabolite_test_results_tobit.csv")
@@ -213,38 +224,51 @@ design_Hv_df <- data.frame(design_Hv[, -1], row.names = design_Hv$Sample_ID)
 
 # Fitting Tobit regression model with Genotype as covariate (WT as 
 # reference level)
-tobit_fit_Hv <- Tobit_model(
+set.seed(1793694715)
+tobit_fit_Hv <- Tobit_model2(
   metabolites = metabolites_Hv,
   meta_data = design_Hv_df,
-  formula = ~Genotype
+  formula = ~Genotype,
+  ref = "WT",
+  test = "two-sided",
+  presence_absence = TRUE
 )
 
-# Carrying out likelihood-ratio tests for non-reference level of genotype 
-# variable
-test_symrk_Hv <- Tobit_LRT(
-  tobit_fit_Hv,
-  var = "Genotypesymrk",
-  p_adjust = "fdr"
+# Identifying non-significant features still of interest, i.e. features 
+# completely absent from a mutant, but present in the WT or vice-versa
+no_test <- matrix(NA, nrow = nrow(metabolites_Hv), ncol = 5)
+rownames(no_test) <- rownames(metabolites_Hv)
+colnames(no_test) <- genotypes
+for (i in 1:5) {
+  idx <- design_Hv[Genotype == genotypes[i], Sample_ID]
+  no_test[,i] <- apply(metabolites_Hv[,idx] == 0, 1, all)
+}
+no_test_dt <- data.table(
+  Feature = rownames(no_test),
+  no_test[, 1] - no_test[, -1]
 )
-test_ccamk_Hv <- Tobit_LRT(
-  tobit_fit_Hv,
-  var = "Genotypeccamk",
-  p_adjust = "fdr"
-)
-test_nsp1_Hv <- Tobit_LRT(tobit_fit_Hv, var = "Genotypensp1", p_adjust = "fdr")
-test_nsp2_Hv <- Tobit_LRT(tobit_fit_Hv, var = "Genotypensp2", p_adjust = "fdr")
+no_test_dt <- no_test_dt[symrk != 0 | ccamk != 0 | nsp1 != 0| nsp2 != 0]
+fwrite(no_test_dt, file = "1_tables/non_sig_features_of_interest_Hordeum.csv")
+
+# p-values
+p_vals_Hv <- tobit_fit_Hv$p_vals
+p_vals_Hv[is.na(p_vals_Hv)] <- tobit_fit_Hv$p_vals_pa[is.na(p_vals_Hv)]
+
+p_adj_Hv <- matrix(p.adjust(p_vals_Hv[,-1], "fdr"), ncol = 4)
+rownames(p_adj_Hv) <- rownames(p_vals_Hv)
+colnames(p_adj_Hv) <- colnames(p_vals_Hv)[-1]
 
 # Setting up p-value matrix
-p_adj_Hv <- data.table(
-  Feature = rownames(test_symrk_Hv),
-  symrk_p_adj = test_symrk_Hv$p_adj,
-  ccamk_p_adj = test_ccamk_Hv$p_adj,
-  nsp1_p_adj = test_nsp1_Hv$p_adj,
-  nsp2_p_adj = test_nsp2_Hv$p_adj
-)
+p_adj_Hv <- data.table(Feature = rownames(p_adj_Hv), p_adj_Hv)
 
 # Setting up log-fold-change matrix
 lfc_Hv <- data.table(Feature = rownames(tobit_fit_Hv$res), tobit_fit_Hv$res[,2:5])
+colnames(lfc_Hv) <- gsub("Genotype", "Lfc_", colnames(lfc_Hv))
+
+# Setting up log-fold-change matrix
+lfc_Hv_temp <- tobit_fit_Hv$res[,2:5]
+lfc_Hv_temp[is.na(lfc_Hv_temp)] <- tobit_fit_Hv$beta_est_pa[,-1][is.na(lfc_Hv_temp)]
+lfc_Hv <- data.table(Feature = rownames(lfc_Hv_temp), lfc_Hv_temp)
 colnames(lfc_Hv) <- gsub("Genotype", "Lfc_", colnames(lfc_Hv))
 
 # Saving above results
@@ -253,23 +277,23 @@ fwrite(lfc_Hv, "1_tables/lfc_Hv.csv")
 
 # Saving results
 res_Hv <- data.table(
-  Feature = rownames(test_symrk_Hv),
-  ifelse(tobit_fit_Hv$res[,2:5] > 0, 1, -1)
+  Feature = rownames(lfc_Hv_temp),
+  ifelse(lfc_Hv_temp > 0, 1, -1)
 )
 colnames(res_Hv) <- gsub("Genotype", "", colnames(res_Hv))
 
 res_Hv[, ":="(
   symrk = ifelse(
-    p_adj_Hv$symrk_p_adj < 0.05 , symrk , 0
+    p_adj_Hv$Genotypesymrk < 0.05 , symrk , 0
   ),
   ccamk = ifelse(
-    p_adj_Hv$ccamk_p_adj < 0.05 , ccamk , 0
+    p_adj_Hv$Genotypeccamk < 0.05 , ccamk , 0
   ),
   nsp1 = ifelse(
-    p_adj_Hv$nsp1_p_adj < 0.05 , nsp1 , 0
+    p_adj_Hv$Genotypensp1 < 0.05 , nsp1 , 0
   ),
   nsp2 = ifelse(
-    p_adj_Hv$nsp2_p_adj < 0.05 , nsp2 , 0
+    p_adj_Hv$Genotypensp2 < 0.05 , nsp2 , 0
   )
 )]
 

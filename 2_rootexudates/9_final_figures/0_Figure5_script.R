@@ -60,5 +60,6 @@ ggsave(
   plot = final_figure,
   width = 16,
   height = 18,
-  units = "cm"
+  units = "cm",
+  device = cairo_pdf
 )
