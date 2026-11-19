@@ -108,9 +108,12 @@ daa_results <- lapply(asv_tables_subsets, function(X){
     dir.create("Maaslin2 files")
   }
   
+  asv_keep <- rowMeans(X$asv_table != 0) >= 0.1
+  asv_keep <- names(asv_keep)[asv_keep]
+
   # MaAsLin2
   da_maaslin <- Maaslin2(
-    input_data = X$asv_table,
+    input_data = X$asv_table[asv_keep,],
     input_metadata = X$design,
     output = "Maaslin2 files",
     max_significance = 0.05,
@@ -172,10 +175,11 @@ daa_results <- lapply(asv_tables_subsets, function(X){
     )
     da_struc_zero_wt_vs_mutant <- da_struc_zero$struc_zero_table[
       struc_zero_wt_vs_mutant,
-      c("WT", current_mutant)
+      c("WT", current_mutant),
+      drop = F
     ]
     struc_zero_signs <- apply(
-      da_struc_zero_wt_vs_mutant[, c(current_mutant, "WT")],
+      da_struc_zero_wt_vs_mutant[, c(current_mutant, "WT"), drop = F],
       1,
       diff
     )
@@ -228,8 +232,18 @@ daa_results <- lapply(asv_tables_subsets, function(X){
   # Number of DA ASVs per condition
   amount <- res_dt[,
     .(DA_ASVs = sum(DA_by_sig | DA_by_struc_zero)),
-    list(Genotype)
+    Genotype
   ]
+
+  if (any(mutants %notin% amount$Genotype)) {
+    idx <- which(mutants %notin% amount$Genotype)
+    amount <- rbind(
+      amount,
+      data.table(Genotype = mutants[idx], DA_ASVs = 0)
+    )
+    amount <- amount[match(Genotype, mutants)]
+  }
+
   amount[, ":="(
     Compartment = X$design$Compartment[1],
     Soil = X$design$Soil[1],

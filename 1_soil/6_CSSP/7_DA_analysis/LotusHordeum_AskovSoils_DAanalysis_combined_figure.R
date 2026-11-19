@@ -24,7 +24,6 @@ lotus_bottom_plot <- (lotus_heatmap | lotus_barplot) +
   plot_layout(widths = c(0.9, 0.1))
 lotus_main_plot <- (lotus_top_plot / lotus_bottom_plot) +
   plot_layout(heights = c(0.05, 0.95))
-lotus_main_plot
 
 # Hordeum plot
 empty <- ggplot() + theme_void()
@@ -44,7 +43,6 @@ hordeum_bottom_plot <- (hordeum_heatmap | hordeum_barplot) +
   plot_layout(widths = c(0.9, 0.1))
 hordeum_main_plot <- (hordeum_top_plot / hordeum_bottom_plot) +
   plot_layout(heights = c(0.05, 0.95))
-hordeum_main_plot
 
 # Combined plot
 combined_plot <- ((lotus_taxonomy | axis_title) +
@@ -74,4 +72,9 @@ ggsave(
 saveRDS(
   object = combined_plot_with_legend,
   file = "3_rds_files/LotusHordeum_CSSP_Askov_DA_figure_combined.rds"
+)
+
+saveRDS(
+  object = combined_plot,
+  file = "3_rds_files/LotusHordeum_CSSP_Askov_DA_figure_combined_no_legend.rds"
 )

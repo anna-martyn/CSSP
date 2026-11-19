@@ -177,10 +177,11 @@ daa_results <- lapply(asv_tables_subsets, function(X){
     )
     da_struc_zero_wt_vs_mutant <- da_struc_zero$struc_zero_table[
       struc_zero_wt_vs_mutant,
-      c("WT", current_mutant)
+      c("WT", current_mutant),
+      drop = F
     ]
     struc_zero_signs <- apply(
-      da_struc_zero_wt_vs_mutant[, c(current_mutant, "WT")],
+      da_struc_zero_wt_vs_mutant[, c(current_mutant, "WT"), drop = F],
       1,
       diff
     )
@@ -233,8 +234,18 @@ daa_results <- lapply(asv_tables_subsets, function(X){
   # Number of DA ASVs per condition
   amount <- res_dt[,
     .(DA_ASVs = sum(DA_by_sig | DA_by_struc_zero)),
-    list(Genotype)
+    Genotype
   ]
+
+  if (any(mutants %notin% amount$Genotype)) {
+    idx <- which(mutants %notin% amount$Genotype)
+    amount <- rbind(
+      amount,
+      data.table(Genotype = mutants[idx], DA_ASVs = 0)
+    )
+    amount <- amount[match(Genotype, mutants)]
+  }
+
   amount[, ":="(
     Compartment = X$design$Compartment[1],
     Soil = X$design$Soil[1],
@@ -297,7 +308,7 @@ heatmap_data <- lapply(
   function(X) {
     dt <- data.table(ASVid = rownames(X$res_mat), X$res_mat)
     dtt <- melt(dt, id.vars = 1, variable.name = "Genotype", value.name = "DAA")
-    dtt[, ":="(Compartment = X$res_dt$Compartment[1], Soil = X$res_dt$Soil[1])]
+    dtt[, ":="(Compartment = X$amount$Compartment[1], Soil = X$amount$Soil[1])]
     return(dtt)
   }
 )
@@ -459,7 +470,8 @@ bar_plot <- ggplot(
   ) +
   scale_x_continuous(
     expand = expansion(mult = c(0, 0.05)),
-    breaks = c(0, 0.03, 0.06)
+    # expand = c(0, 0), limits = c(0, 0.062),
+    breaks = c(0, 0.02, 0.04)
   ) +
   theme_bw() +
   theme(
