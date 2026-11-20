@@ -18,7 +18,7 @@ p1 <- placeholder <- ggplot() +
   annotate("text", x = 0.5, y = 0.5, label = "", size = 6, hjust = 0.5)
 
 # Reading plots from RDS files
-p2 <- readRDS("../1_chao1/1_rds_files/HordeumCSSP_AskovSoils_bulk_chao1_rfd.rds")
+p2 <- readRDS("../1_alpha_diversity/1_rds_files/HordeumCSSP_AskovSoils_bulk_shannon_rfd.rds")
 p3 <- readRDS("../2_pcoa/1_rds_files/Hordeum_bulk_PCoA.rds")
 p4 <- readRDS(
   "../3_barplots_orders/1_rds_files/Hordeum_bulk_order_top20_RA_mean_stackedbp.rds"

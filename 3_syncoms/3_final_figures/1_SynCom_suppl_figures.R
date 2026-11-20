@@ -13,10 +13,10 @@ for(pk in pkg){
 
 # Loading plots
 chao1_plot_Lj <- readRDS(
-  "../1_Lotus/5_chao1/1_rds_files/LotusSC_chao1_matchedASVsonly_rfd_combined.rds"
+  "../1_Lotus/5_alpha_diversity/1_rds_files/LotusSC_Shannon_matchedASVsonly_rfd_combined.rds"
 )
 chao1_plot_Hv <- readRDS(
-  "../2_Hordeum/4_chao1/1_rds_files/HordeumSC_chao1_matchedASVsonly_rfd.rds"
+  "../2_Hordeum/4_alpha_diversity/1_rds_files/HordeumSC_Shannon_matchedASVsonly_rfd.rds"
 )
 cpcoa_plot_Lj <- readRDS(
   "../1_Lotus/6_cpcoa_pcoa/1_rds_files/LotusSC_cpcoa_matched_ASVs.rds"

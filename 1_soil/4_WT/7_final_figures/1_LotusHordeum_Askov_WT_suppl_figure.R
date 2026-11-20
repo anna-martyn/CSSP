@@ -13,10 +13,10 @@ for(pk in pkg){
 
 # Loading plots
 p1 <- readRDS(
-  "../3_chao1/1_Lotus/1_rds_files/LotusCSSP_AskovSoils_WT_chao1_rfd.rds"
+  "../3_alpha_diversity/1_Lotus/1_rds_files/LotusCSSP_AskovSoils_WT_shannon_rfd.rds"
 )
 p2 <- readRDS(
-  "../3_chao1/2_Hordeum/1_rds_files/Hordeum_AskovSoils_WT_chao1_rfd.rds"
+  "../3_alpha_diversity/2_Hordeum/1_rds_files/Hordeum_AskovSoils_WT_shannon_rfd.rds"
 )
 p3 <- readRDS(
   "../5_stacked_bp_heatmap/1_rds_files/LotusHordeum_Askov_WT_stackedbp_top20_meanRA.rds"

@@ -32,10 +32,10 @@ p4 <- readRDS(
   "../2_shoot_fw_AMphenotyping_axenic/1_rds_files/HordeumCSSP_axenic_AMphenotyping_boxplot.rds"
 )
 p5 <- readRDS(
-  "../4_chao1/1_Lotus/1_rds_files/LotusCSSP_AskovSoils_chao1_rfd.rds"
+  "../4_alpha_diversity/1_Lotus/1_rds_files/LotusCSSP_AskovSoils_Shannon_rfd.rds"
 )
 p6 <- readRDS(
-  "../4_chao1/2_Hordeum/1_rds_files/HordeumCSSP_AskovSoils_chao1_rfd.rds"
+  "../4_alpha_diversity/2_Hordeum/1_rds_files/HordeumCSSP_AskovSoils_Shannon_rfd.rds"
 )
 p7 <- readRDS("../5_cpcoa_pcoa/1_rds_files/LotusCSSP_AskovSoils_cpcoa_all.rds")
 p8 <- readRDS(
