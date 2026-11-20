@@ -216,7 +216,19 @@ for(i in 1:nrow(Opt)){
 }
 
 design_pred <- rbindlist(design_pred_list)
-pred_res <- design_pred[,.(Accuracy = mean(Soil == Pred)), .(Plant, Compartment)]
+
+tests <- lapply(design_pred_list, function(X) {
+  binom.test(x = sum(X$Soil == X$Pred), n = nrow(X))
+})
+
+pred_res <- design_pred[,
+  .(
+    Accuracy = mean(Soil == Pred),
+    Accuracy_CI_lower = binom.test(sum(Soil == Pred), .N)$conf.int[1],
+    Accuracy_CI_upper = binom.test(sum(Soil == Pred), .N)$conf.int[2]
+  ),
+  .(Plant, Compartment)
+]
 pred_res <- pred_res[c(3,1,4,2)]
 
 setnames(design_pred, "Pred", "Predicted soil type")

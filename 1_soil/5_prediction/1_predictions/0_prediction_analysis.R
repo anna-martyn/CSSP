@@ -221,7 +221,7 @@ for(i in 1:nrow(Opt)){
 
   pred <- Nested_model_pred(cc, x_test)
   eval <- mean(y_test == pred)
-  
+
   # Summarising results
   pred_res <- data.table(SampleID = names(pred), Obs = y_test, Pred = pred)
   pred_res <- pred_res[order(Obs)]
@@ -410,15 +410,26 @@ fwrite(
 # Collecting information on the amount of ASVs used for predictions in all 
 # plant-compartment combinations and their accuracies
 ratio_amount <- rbindlist(ratio_amount_list)
-ratio_amount[,":="(
-  Accuracy = paste0(round(Accuracy*100, 1), "%"),
+ratio_amount[, ":="(
+  Accuracy = paste0(round(Accuracy * 100, 1), "%"),
   Compartment = relevel(Compartment, ref = "Rhizosphere")
 )]
+
+res_summary <- res[,
+  .(
+    Accuracy = mean(Obs == Pred),
+    Accuracy_CI_lower = binom.test(sum(Obs == Pred), .N)$conf.int[1],
+    Accuracy_CI_upper = binom.test(sum(Obs == Pred), .N)$conf.int[2]
+  ),
+  .(Host, Compartment)
+]
+
+# CI_print <- apply(CI*100, 1, function(x) paste0("(", x[1], ", ", x[2], ")"))
+# ratio_amount[, Accuracy := paste(Accuracy, CI_print)]
+ratio_amount <- merge(ratio_amount, res_summary[,-3], by = c("Host", "Compartment"))
 ratio_amount <- ratio_amount[order(Host, Compartment)]
 fwrite(ratio_amount, "1_tables/Pred_accuracy_summary.csv")
 
 # Collecting information on the observed vs. predicted soils in all
 # samples in the test data
 fwrite(res, "1_tables/Prediction_results.csv")
-
-res[,.(Accuracy = mean(Obs == Pred)), .(Host, Compartment)]
