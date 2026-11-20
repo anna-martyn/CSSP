@@ -58,6 +58,8 @@ train <- boxGrob(
   "Training\n Data",
   x = 0.55,
   y = 0.9,
+  width = 0.175,
+  height = 0.075,
   txt_gp = gpar(col = "black", fontsize = 6, family = "helvetica"),
   box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2)
 )
@@ -66,6 +68,8 @@ test <- boxGrob(
   label = "Test Data",
   x = 0.28,
   y = 0.9,
+  width = 0.2,
+  height = 0.075,
   txt_gp = gpar(col = "black", fontsize = 6, family = "helvetica"),
   box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2)
 )
@@ -74,6 +78,7 @@ mod1 <- boxGrob(
   label = "Model 1: \nPredicts NPK vs. non-NPK \nTrained on NPK, PK, and UF data",
   x = 0.28,
   y = 0.65,
+  height = 0.1,
   width = unit(35, "mm"),
   txt_gp = gpar(col = "black", fontsize = 6, family = "helvetica"),
   box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2)
@@ -83,6 +88,7 @@ mod2 <- boxGrob(
   label = "Model 2: \nPredicts PK vs. UF \nTrained on PK and UF data",
   x = 0.78,
   y = 0.65,
+  height = 0.1,
   width = unit(30, "mm"),
   txt_gp = gpar(col = "black", fontsize = 6, family = "helvetica"),
   box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2)
@@ -92,6 +98,8 @@ pred <- boxGrob(
   label = "Prediction on Test Data: \nNPK or non-NPK?",
   x = 0.28,
   y = 0.45,
+  width = 0.35,
+  height = 0.075,
   txt_gp = gpar(col = "black", fontsize = 6, family = "helvetica"),
   box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2)
 )
@@ -102,6 +110,8 @@ diamond_box <- boxGrob(
   box_fn = diamond_grob,
   x = 0.28,
   y = 0.3,
+  width = 0.2,
+  height = 0.1,
   txt_gp = gpar(col = "black", fontsize = 6, family = "helvetica"),
   box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2)
 )
@@ -110,6 +120,8 @@ pred2 <- boxGrob(
   label = "Prediction on Test Data: \nPK or UF?",
   x = 0.78,
   y = 0.3,
+  width = 0.4,
+  height = 0.1,
   txt_gp = gpar(col = "black", fontsize = 6, family = "helvetica"),
   box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2)
 )
@@ -118,6 +130,7 @@ concl <- boxGrob(
   label = "Prediction \nconcluded",
   x = 0.78,
   y = 0.1,
+  height = 0.1,
   txt_gp = gpar(col = "black", fontsize = 6, family = "helvetica"),
   box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2)
 )
@@ -126,6 +139,7 @@ concl2 <- boxGrob(
   label = "Prediction \nconcluded",
   x = 0.28,
   y = 0.1,
+  height = 0.1,
   txt_gp = gpar(col = "black", fontsize = 6, family = "helvetica"),
   box_gp = gpar(fill = "#f5fbff", col = "#4881b3", lwd = 2)
 )
@@ -162,6 +176,7 @@ connect1 <- connectGrob(
   "l",
   arrow_obj = custom_arrow
 )
+
 connect2 <- connectGrob(
   start = train,
   end = mod2,
@@ -169,6 +184,12 @@ connect2 <- connectGrob(
   "l",
   arrow_obj = custom_arrow
 )
+
+# Moving the vertical-to-horizontal break of the N-shaped connections upwards
+break_shift <- unit(5, "mm")
+connect1$y[2:3] <- connect1$y[2:3] + break_shift
+connect2$y[2:3] <- connect2$y[2:3] + break_shift
+
 connect3 <- connectGrob(
   start = mod1,
   end = pred,
@@ -181,9 +202,9 @@ x_coords <- attr(connect4, "line")$x
 y_coords <- attr(connect4, "line")$y
 
 # Adjusting end-points of Z-shaped connection
-x_coords[2] <- x_coords[2] + unit(2.5, "mm")
-x_coords[3] <- x_coords[3] + unit(2.5, "mm")
-x_coords[4] <- coords(pred)$left + coords(pred)$width / 2 + unit(1.35, "mm")
+x_coords[2] <- x_coords[2] + unit(11.25, "mm")
+x_coords[3] <- x_coords[3] + unit(11.25, "mm")
+x_coords[4] <- coords(pred)$left + coords(pred)$width / 2
 y_coords[3] <- y_coords[3] + unit(13, "mm")
 y_coords[4] <- y_coords[4] + unit(13, "mm")
 
@@ -361,7 +382,7 @@ bar_plot <- ggplot(data = tax_summary, aes(x = Soil, y = RA, fill = Order)) +
 
 #  Combining plots -------------------------------------------------------------
 accuracy_table <- tableGrob(
-  ratio_amount,
+  ratio_amount[,1:5],
   theme = ttheme_default(base_size = 6),
   rows = NULL
 )
