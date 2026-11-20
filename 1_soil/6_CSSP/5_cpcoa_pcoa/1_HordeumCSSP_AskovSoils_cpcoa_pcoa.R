@@ -80,7 +80,7 @@ for(i in 1:length(cond)){
   nperm <- 999
   perm_test <- anova.cca(CPCoA, permutations = nperm, by = "term")
   var_expl_tot <- CPCoA$CCA$tot.chi/CPCoA$tot.chi
-  var_expl_covar <- perm_test[,"SumOfSqs"]/sum(perm_test[,"SumOfSqs"])
+  var_expl_covar <- perm_test[,"Variance"]/sum(perm_test[,"Variance"])
   var_expl_covar[4] <- 1-var_expl_covar[4] # To get total variance explained by model, rather than by residuals
   p_val <- perm_test["Genotype:Soil", "Pr(>F)"]
   p_val_print <- ifelse(

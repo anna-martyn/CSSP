@@ -209,14 +209,13 @@ CPCoA_Hv <- capscale(
 )
 
 # Permanova
-perm_anova <- anova.cca(CPCoA_Hv)
-print(perm_anova)
+perm_anova <- anova(CPCoA_Hv, permutations = 999, by = "terms")
 
 # Variability tables and confidence intervals for the variance
 var_tbl <- variability_table(CPCoA_Hv)
 eig <- CPCoA_Hv$CCA$eig
 variance <- var_tbl["constrained", "proportion"]
-p_val <- perm_anova[1, 4]
+p_val <- perm_anova["Compartment:Soil", "Pr(>F)"]
 
 # Extracting the weighted average (sample) scores
 points <- CPCoA_Hv$CCA$wa[, 1:2]
