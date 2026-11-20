@@ -167,7 +167,7 @@ train; test; mod1; mod2; pred; diamond_box; pred2; concl; concl2
 
 # Making connections between boxes
 ## Custom arrow
-custom_arrow <- arrow(type = "closed", length = unit(0.3, "cm"))
+custom_arrow <- arrow(type = "closed", length = unit(0.2, "cm"))
 
 connect1 <- connectGrob(
   start = train,
