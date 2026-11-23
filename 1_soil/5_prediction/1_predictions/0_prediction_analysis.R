@@ -1,6 +1,6 @@
 # Seup ------------------------------------------------------------------------
 # Loading packages
-pkg <- c("data.table", "codacore","tensorflow")
+pkg <- c("data.table", "codacore", "tensorflow", "openxlsx", "caret")
 for(pk in pkg){
   library(pk, character.only = TRUE)
 }
@@ -415,15 +415,6 @@ ratio_amount[, ":="(
   Compartment = relevel(Compartment, ref = "Rhizosphere")
 )]
 
-res_summary <- res[,
-  .(
-    Accuracy = mean(Obs == Pred),
-    Accuracy_CI_lower = binom.test(sum(Obs == Pred), .N)$conf.int[1],
-    Accuracy_CI_upper = binom.test(sum(Obs == Pred), .N)$conf.int[2]
-  ),
-  .(Host, Compartment)
-]
-
 # CI_print <- apply(CI*100, 1, function(x) paste0("(", x[1], ", ", x[2], ")"))
 # ratio_amount[, Accuracy := paste(Accuracy, CI_print)]
 ratio_amount <- merge(ratio_amount, res_summary[,-3], by = c("Host", "Compartment"))
@@ -433,3 +424,55 @@ fwrite(ratio_amount, "1_tables/Pred_accuracy_summary.csv")
 # Collecting information on the observed vs. predicted soils in all
 # samples in the test data
 fwrite(res, "1_tables/Prediction_results.csv")
+
+# Creating supplementary table
+res
+ratio_summary
+res_summary
+
+res_summary <- res[,
+  .(
+    Accuracy = mean(Obs == Pred),
+    Accuracy_CI_lower = binom.test(sum(Obs == Pred), .N)$conf.int[1],
+    Accuracy_CI_upper = binom.test(sum(Obs == Pred), .N)$conf.int[2]
+  ),
+  .(Host, Compartment)
+]
+
+res_summary_by_soil <- res[,
+  .(
+    Accuracy = mean(Obs == Pred),
+    Accuracy_CI_lower = binom.test(sum(Obs == Pred), .N)$conf.int[1],
+    Accuracy_CI_upper = binom.test(sum(Obs == Pred), .N)$conf.int[2]
+  ),
+  .(Host, Compartment, Obs)
+]
+
+cm <- list()
+for (i in 1:4) {
+  pred_sub <- res[Compartment == Opt$Compartment[i] & Host == Opt$Host[i]]
+  pred <- factor(pred_sub$Pred, levels = c("NPK", "PK", "UF"))
+  obs <- factor(pred_sub$Obs, levels = c("NPK", "PK", "UF"))
+  cm[[i]] <- confusionMatrix(pred, obs)
+}
+names(cm) <- paste("Conf. mat", Opt[,1], Opt[,2])
+
+cm_dt <- lapply(cm, function(x){
+  mat <- x$table |> as.numeric() |> matrix(ncol = 3) |> data.frame()
+  dt <- data.table(Predicted = c("NPK", "PK", "UF"), mat)
+  colnames(dt)[-1] <- paste("Obs", c("NPK", "PK", "UF"), sep = "_")
+  return(dt)
+})
+
+res_to_save <- list(
+  "Full results" = res,
+  "Ratio information" = ratio_summary,
+  "Overall accuracy" = res_summary,
+  "Soil specific accuracy" = res_summary_by_soil
+)
+res_to_save <- c(res_to_save, cm_dt)
+
+write.xlsx(
+  res_to_save,
+  file = "../3_suppl_tables/Suppl_Table_Y_pred_main.xlsx"
+)
