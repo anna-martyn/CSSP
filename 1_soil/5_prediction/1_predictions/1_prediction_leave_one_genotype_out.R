@@ -1,6 +1,6 @@
 # Seup ------------------------------------------------------------------------
 # Loading packages
-pkg <- c("data.table", "codacore", "tensorflow")
+pkg <- c("data.table", "codacore", "tensorflow", "caret")
 for(pk in pkg){
   library(pk, character.only = TRUE)
 }
@@ -20,6 +20,8 @@ lotus_design <- fread(
 )
 ### Removing Nodule samples from metadata
 lotus_design <- lotus_design[Compartment != "Nodules"]
+soils <- c("NPK", "PK", "UF")
+lotus_design[, Soil := factor(Soil, levels = soils)]
 
 lotus_taxonomy <- fread("../../1_data/1_Lotus/LotusCSSP_AskovSoils_taxonomy_10_4.tsv")
 
@@ -34,6 +36,7 @@ hordeum_design <- fread(
 )
 ### Removing soil samples from metadata
 hordeum_design <- hordeum_design[Compartment != "Soil"]
+hordeum_design[, Soil := factor(Soil, levels = soils)]
 
 hordeum_taxonomy <- fread(
   "../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_taxonomy_10_4.tsv"
@@ -195,43 +198,87 @@ for(i in 1:nrow(Opt)){
   pres_idx <- which(rowMeans(asv_table_sub[,-1] != 0) >= 0.1)
   asv_table_sub <- asv_table_sub[pres_idx]
   
-  # Leave-one-out cross validation
-  n <- length(sample_sub)
-  pred <- rep(NA, n)
-  for (j in 1:n) {
-    pr <- paste(run, paste0(round(j/n*100,1), "%       ") )
-    cat(pr, "\r")
+  # Leave-one-genotype-out cross validation
+  gt <- c("WT", "symrk", "ccamk", "nsp1", "nsp2")
+  pred_list <- list()
+  for (j in 1:5) {
+    cat(paste0(run, "_", j, "      "), "\r")
+    
+    test_samples <- design_sub$SampleID[design_sub$Genotype == gt[j]]
+    training_samples <- setdiff(design_sub$SampleID, test_samples)
+
+    design_train <- design_sub[SampleID %in% training_samples]
+    design_test <- design_sub[SampleID %in% test_samples]
+
+    x_train <- asv_table_sub[, c("ASVid", design_train$SampleID), with = F]
+    x_test <- asv_table_sub[, c("ASVid", design_test$SampleID), with = F]
+
+    y_train <- design_train$Soil
+    y_test <- design_test$Soil
+
     tf$random$set_seed(1700294030)
     cc <- Nested_model(
-      asv_table = asv_table_sub[, -(j + 1), with = FALSE],
-      y = design_sub$Soil[-j],
+      asv_table = x_train,
+      y = as.character(y_train),
       seed = 1700299435,
       lambda = 1
     )
-    pred[j] <- Nested_model_pred(cc, asv_table_sub[, c(1, j + 1), with = FALSE])
+    
+    pred <- Nested_model_pred(cc, x_test) |> factor(levels = soils)
+    design_test[, Soil_pred := pred]
+    pred_list[[j]] <- design_test
   }
 
-  design_sub[, Pred := pred]
-  design_pred_list[[i]] <- design_sub
+  design_pred_list <- c(design_pred_list, pred_list)
 }
 
 design_pred <- rbindlist(design_pred_list)
 
-tests <- lapply(design_pred_list, function(X) {
-  binom.test(x = sum(X$Soil == X$Pred), n = nrow(X))
-})
-
 pred_res <- design_pred[,
   .(
-    Accuracy = mean(Soil == Pred),
-    Accuracy_CI_lower = binom.test(sum(Soil == Pred), .N)$conf.int[1],
-    Accuracy_CI_upper = binom.test(sum(Soil == Pred), .N)$conf.int[2]
+    Accuracy = mean(Soil == Soil_pred),
+    Accuracy_CI_lower = binom.test(sum(Soil == Soil_pred), .N)$conf.int[1],
+    Accuracy_CI_upper = binom.test(sum(Soil == Soil_pred), .N)$conf.int[2]
   ),
   .(Plant, Compartment)
 ]
 pred_res <- pred_res[c(3,1,4,2)]
 
-setnames(design_pred, "Pred", "Predicted soil type")
+cm <- list()
+for (i in 1:4) {
+  pred_sub <- design_pred[Compartment == Opt$Compartment[i] & Plant == Opt$Host[i]]
+  cm[[i]] <- confusionMatrix(pred_sub$Soil_pred, pred_sub$Soil)
+}
+names(cm) <- paste("Conf. mat", Opt[,1], Opt[,2])
 
-fwrite(design_pred, "1_tables/Pred_leave_one_out_full.csv")
-fwrite(pred_res, "1_tables/Pred_leave_one_out_accuracy.csv")
+cm_dt <- lapply(cm, function(x){
+  mat <- x$table |> as.numeric() |> matrix(ncol = 3) |> data.frame()
+  dt <- data.table(Predicted = soils, mat)
+  colnames(dt)[-1] <- paste("Obs", soils, sep = "_")
+  return(dt)
+})
+
+pred_res_soil <- design_pred[,
+  .(
+    Accuracy = mean(Soil == Soil_pred),
+    Accuracy_CI_lower = binom.test(sum(Soil == Soil_pred), .N)$conf.int[1],
+    Accuracy_CI_upper = binom.test(sum(Soil == Soil_pred), .N)$conf.int[2]
+  ),
+  .(Plant, Compartment, Soil)
+]
+
+setnames(design_pred, "Soil_pred", "Predicted soil type")
+
+res_to_save <- list(
+  "Full results" = design_pred,
+  "Overall accuracy" = pred_res,
+  "Soil specific accuracy" = pred_res_soil
+)
+res_to_save <- c(res_to_save, cm_dt)
+
+# Saving results
+write.xlsx(
+  res_to_save,
+  file = "../3_suppl_tables/Suppl_Table_X_pred_leave_one_genotype_out.xlsx"
+)
+
