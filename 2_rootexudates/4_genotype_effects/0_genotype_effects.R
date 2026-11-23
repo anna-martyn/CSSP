@@ -1,6 +1,7 @@
 # Seup ------------------------------------------------------------------------
 library(data.table)
 library(VGAM)
+library(brtobit)
 library(ggplot2)
 
 # Setting working directory to source file location
@@ -105,6 +106,10 @@ metabolites_Lj <- data.frame(
 )
 design_Lj_df <- data.frame(design_Lj[, -1], row.names = design_Lj$Sample_ID)
 
+feat_keep_idx <- rowSums(metabolites_Lj != 0) >= 3
+feat_keep <- rownames(metabolites_Lj)[feat_keep_idx]
+metabolites_Lj <- metabolites_Lj[feat_keep, ]
+
 # Fitting Tobit regression model with Genotype as covariate (WT as 
 # reference level)
 set.seed(1793694715)
@@ -148,7 +153,7 @@ dt <- data.table(
   Density = rep(c("Tobit residuals", "Simnulated\nstd. normal"), each = length(all_res))
 )
 
-resid_plot_Hv <- ggplot(dt, aes(x = resid, fill = Density, colour = Density)) +
+resid_plot_Lj <- ggplot(dt, aes(x = resid, fill = Density, colour = Density)) +
   geom_density(alpha = 0.4, linewidth = 0.5) +
   theme_bw()+
   scale_fill_manual(values = c("#1a80bb", "#a00000"))+
@@ -221,6 +226,10 @@ metabolites_Hv <- data.frame(
   row.names = metabolite_data_Hv$Feature
 )
 design_Hv_df <- data.frame(design_Hv[, -1], row.names = design_Hv$Sample_ID)
+
+feat_keep_idx <- rowSums(metabolites_Hv != 0) >= 3
+feat_keep <- rownames(metabolites_Hv)[feat_keep_idx]
+metabolites_Hv <- metabolites_Hv[feat_keep, ]
 
 # Fitting Tobit regression model with Genotype as covariate (WT as 
 # reference level)
