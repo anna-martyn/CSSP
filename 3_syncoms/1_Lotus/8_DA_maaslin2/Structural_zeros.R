@@ -145,8 +145,8 @@ Structural_zeros3 <- function(OTU_table, meta_data, group, ref = NULL,
       sz.d <- apply(struc_zero_mat_sub, 1, diff)
       zero_small <- names(sz.d)[sz.d == -1]
       zero_large <- names(sz.d)[sz.d == 1]
-      struc_zero_otu_table_small <- struc_zero_otu_table[zero_small,]
-      struc_zero_otu_table_large <- struc_zero_otu_table[zero_large,]
+      struc_zero_otu_table_small <- struc_zero_otu_table[zero_small,, drop = FALSE]
+      struc_zero_otu_table_large <- struc_zero_otu_table[zero_large,, drop = FALSE]
       rownames(struc_zero_otu_table_large)[ rowSums(struc_zero_otu_table_large) > min_reads
                                             & rowSums(struc_zero_otu_table_large!=0) >= min_present_reps
                                             ] -> DA_struc_large
