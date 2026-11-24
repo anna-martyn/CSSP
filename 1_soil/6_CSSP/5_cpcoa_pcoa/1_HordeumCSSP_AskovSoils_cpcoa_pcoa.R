@@ -80,7 +80,7 @@ for(i in 1:length(cond)){
   nperm <- 999
   perm_test <- anova.cca(CPCoA, permutations = nperm, by = "term")
   var_expl_tot <- CPCoA$CCA$tot.chi/CPCoA$tot.chi
-  var_expl_covar <- perm_test[,"Variance"]/sum(perm_test[,"Variance"])
+  var_expl_covar <- perm_test[,"SumOfSqs"]/sum(perm_test[,"SumOfSqs"])
   var_expl_covar[4] <- 1-var_expl_covar[4] # To get total variance explained by model, rather than by residuals
   p_val <- perm_test["Genotype:Soil", "Pr(>F)"]
   p_val_print <- ifelse(
@@ -89,15 +89,21 @@ for(i in 1:length(cond)){
     paste0("p = ", p_val)
   )
 
-  var_perc <- paste0(round(var_expl_covar * 100, 2), "%")
-  var_summary <- matrix(c("Genotype", "Soil", "Interaction", "Total", var_perc), ncol = 2) |>
-    apply(1, paste, collapse = ": ")
-  line1 <- paste(var_summary[1:2], collapse = ", ")
-  line2 <- paste(var_summary[3:4], collapse = ", ")
+  # var_perc <- paste0(round(var_expl_covar * 100, 2), "%")
+  # var_summary <- matrix(c("Genotype", "Soil", "Interaction", "Total", var_perc), ncol = 2) |>
+  #   apply(1, paste, collapse = ": ")
+  # line1 <- paste(var_summary[1:2], collapse = ", ")
+  # line2 <- paste(var_summary[3:4], collapse = ", ")
+
+  # lower_print <- paste0(
+  #   p_val_print, "; Variance explained:\n",
+  #   paste(c(line1, line2), collapse = "\n")
+  # )
 
   lower_print <- paste0(
-    p_val_print, "; Variance explained:\n",
-    paste(c(line1, line2), collapse = "\n")
+    round(var_expl_tot * 100, 2),
+    "% of variance; ",
+    p_val_print
   )
   
   CPCo_points <- data.table(

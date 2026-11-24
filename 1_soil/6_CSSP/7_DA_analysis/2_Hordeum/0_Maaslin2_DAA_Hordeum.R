@@ -471,7 +471,7 @@ bar_plot <- ggplot(
   scale_x_continuous(
     expand = expansion(mult = c(0, 0.05)),
     # expand = c(0, 0), limits = c(0, 0.062),
-    breaks = c(0, 0.02, 0.04)
+    breaks = c(0, 0.03, 0.06)
   ) +
   theme_bw() +
   theme(

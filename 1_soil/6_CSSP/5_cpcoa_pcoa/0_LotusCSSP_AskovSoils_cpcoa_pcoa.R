@@ -86,23 +86,22 @@ for(i in 1:length(cond)){
     paste0("p = ", p_val)
   )
 
-  var_perc <- paste0(round(var_expl_covar * 100, 2), "%")
-  var_summary <- matrix(c("Genotype", "Soil", "Interaction", "Total", var_perc), ncol = 2) |>
-    apply(1, paste, collapse = ": ")
-  line1 <- paste(var_summary[1:2], collapse = ", ")
-  line2 <- paste(var_summary[3:4], collapse = ", ")
+  # var_perc <- paste0(round(var_expl_covar * 100, 2), "%")
+  # var_summary <- matrix(c("Genotype", "Soil", "Interaction", "Total", var_perc), ncol = 2) |>
+  #   apply(1, paste, collapse = ": ")
+  # line1 <- paste(var_summary[1:2], collapse = ", ")
+  # line2 <- paste(var_summary[3:4], collapse = ", ")
+
+  # lower_print <- paste0(
+  #   p_val_print, "; Variance explained:\n",
+  #   paste(c(line1, line2), collapse = "\n")
+  # )
 
   lower_print <- paste0(
-    p_val_print, "; Variance explained:\n",
-    paste(c(line1, line2), collapse = "\n")
+    round(var_expl_tot * 100, 2),
+    "% of variance; ",
+    p_val_print
   )
-
-  
-  # lower_print <- paste0(
-  #   round(var_expl_tot * 100, 2),
-  #   "% of variance; ",
-  #   p_val_print
-  # )
   
   CPCo_points <- data.table(
     SampleID = rownames(CPCoA$CCA$wa),

@@ -64,7 +64,7 @@ row2 <- plot_grid(
 row3 <- plot_grid(
   Heatmap2, ggplot() + theme_void(),
   ncol = 1,
-  rel_heights = c(0.9, 0.1),
+  rel_heights = c(0.92, 0.08),
   labels = c("D", ""),
   label_size = 8
 )
@@ -75,7 +75,7 @@ final_plot <- plot_grid(
   ncol = 1,
   label_size = 8,
   label_fontface = "bold",
-  rel_heights = c(0.2, 0.25, 0.55)
+  rel_heights = c(0.2, 0.2, 0.6)
 )
 
 # Saving final figure
