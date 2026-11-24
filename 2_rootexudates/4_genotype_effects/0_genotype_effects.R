@@ -1,7 +1,6 @@
 # Seup ------------------------------------------------------------------------
 library(data.table)
 library(VGAM)
-library(brtobit)
 library(ggplot2)
 
 # Setting working directory to source file location
@@ -118,8 +117,7 @@ tobit_fit_Lj <- Tobit_model2(
   meta_data = design_Lj_df,
   formula = ~Genotype,
   ref = "WT",
-  test = "two-sided",
-  presence_absence = TRUE
+  test = "two-sided"
 )
 
 # Identifying non-significant features still of interest, i.e. features 
@@ -267,6 +265,21 @@ p_adj_Hv <- matrix(p.adjust(p_vals_Hv[,-1], "fdr"), ncol = 4)
 rownames(p_adj_Hv) <- rownames(p_vals_Hv)
 colnames(p_adj_Hv) <- colnames(p_vals_Hv)[-1]
 
+# Residual plot
+all_res <- unlist(tobit_fit_Hv$resid)
+dt <- data.table(
+  resid = c(all_res, rnorm(length(all_res))),
+  Density = rep(c("Tobit residuals", "Simnulated\nstd. normal"), each = length(all_res))
+)
+
+resid_plot_Hv <- ggplot(dt, aes(x = resid, fill = Density, colour = Density)) +
+  geom_density(alpha = 0.4, linewidth = 0.5) +
+  theme_bw()+
+  scale_fill_manual(values = c("#1a80bb", "#a00000"))+
+  scale_color_manual(values = c("#1a80bb", "#a00000"))+
+  theme()
+  NULL
+
 # Setting up p-value matrix
 p_adj_Hv <- data.table(Feature = rownames(p_adj_Hv), p_adj_Hv)
 
@@ -321,3 +334,20 @@ res_Hv <- merge(res_Hv, annotation_Hv, by = "Feature", all.x = TRUE)
 
 fwrite(res_Hv, "../10_suppl_tables/Hordeum_metabolite_test_results_tobit.csv")
 fwrite(res_Hv, "1_tables/Hordeum_metabolite_test_results_tobit.csv")
+
+# Residual suppl. figure
+resid_plot <- ggpubr::ggarrange(
+  resid_plot_Lj,
+  resid_plot_Hv,
+  common.legend = TRUE,
+  legend = "bottom"
+)
+
+ggsave(
+  "../9_final_figures/Suppl_Figure_X_tobit_resid.pdf",
+  resid_plot,
+  width = 160,
+  height = 90,
+  units = "mm"
+)
+
