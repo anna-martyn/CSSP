@@ -108,7 +108,8 @@ CPCoA_Lj <- capscale(
 
 # PERMANOVA
 set.seed(1773665952)
-perm_anova <- anova(CPCoA_Lj, permutations = 999, by = "terms")
+nperm <- 999
+perm_anova <- anova(CPCoA_Lj, permutations = nperm, by = "terms")
 
 # Variability tables and confidence intervals for the variance
 var_tbl <- variability_table(CPCoA_Lj)
@@ -132,6 +133,13 @@ segments <- merge(
   y = setNames(centroids, c("Soil","Compartment","seg_x","seg_y")),
   by = c("Soil", "Compartment"),
   sort = FALSE
+)
+
+upper_print <- paste(
+  format(100 * variance, digits = 3),
+  "% of variance; p", ifelse(p_val == 1/(nperm+1), "<", "="),
+  format(p_val, digits = 2),
+  sep = ""
 )
 
 # Plot
@@ -162,15 +170,7 @@ CPCoA_plot_Lj <- ggplot(
       sep = ""
     )
   ) +
-  ggtitle(
-    "Lotus",
-    subtitle = paste(
-      format(100 * variance, digits = 3),
-      "% of variance; p<",
-      format(p_val, digits = 2),
-      sep = ""
-    )
-  ) +
+  ggtitle("Lotus", subtitle = upper_print) +
   main_theme +
   theme(
     legend.position = "bottom",
@@ -209,7 +209,8 @@ CPCoA_Hv <- capscale(
 )
 
 # Permanova
-perm_anova <- anova(CPCoA_Hv, permutations = 999, by = "terms")
+nperm <- 999
+perm_anova <- anova(CPCoA_Hv, permutations = nperm, by = "terms")
 
 # Variability tables and confidence intervals for the variance
 var_tbl <- variability_table(CPCoA_Hv)
@@ -234,6 +235,13 @@ segments <- merge(
   y = setNames(centroids, c("Soil","Compartment","seg_x","seg_y")),
   by = c("Soil","Compartment"),
   sort = FALSE
+)
+
+upper_print <- paste(
+  format(100 * variance, digits = 3),
+  "% of variance; p", ifelse(p_val == 1/(nperm+1), "<", "="),
+  format(p_val, digits = 2),
+  sep = ""
 )
 
 # Plot
@@ -266,12 +274,7 @@ CPCoA_plot_Hv <- ggplot(
   ) +
   ggtitle(
     "Hordeum",
-    subtitle = paste(
-      format(100 * variance, digits = 3),
-      "% of variance; p<",
-      format(p_val, digits = 2),
-      sep = ""
-    )
+    subtitle = upper_print
   ) +
   main_theme +
   theme(

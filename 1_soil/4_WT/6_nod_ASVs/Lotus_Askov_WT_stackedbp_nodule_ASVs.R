@@ -127,7 +127,7 @@ unknown_tax_info <- taxonomy %>%
   select(ASVid, Order, Family, Genus)
 
 levels(df_long$Isolate) <- c(levels(df_long$Isolate), "Rhizobiaceae_Unknown_1")
-df_long$Isolate[df_long$Isolate == "Unknown_2"] <- "Rhizobiaceae_Unknown_1"
+df_long$Isolate[df_long$Isolate == "Unknown_1"] <- "Rhizobiaceae_Unknown_1"
 
 # Setting factor levels
 custom_order <- c(

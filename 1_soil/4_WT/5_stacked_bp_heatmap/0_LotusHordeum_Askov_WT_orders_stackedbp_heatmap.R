@@ -249,9 +249,12 @@ saveRDS(
 order_table_means <- order_table_means %>% filter(Compartment != "Nodules")
 
 # Settting factor levels
-non_orders <- c("Unknown", "Other")
 order_levels <- unique(order_table_RA_long$Order)
-order_levels <- c(setdiff(order_levels, non_orders), non_orders)
+non_orders <- c("Unknown", "Other")
+order_levels <- c(
+  setdiff(order_levels, non_orders),
+  intersect(non_orders, order_levels)
+)
 
 order_table_means <- order_table_means %>%
   mutate(
