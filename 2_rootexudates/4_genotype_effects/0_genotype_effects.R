@@ -260,6 +260,7 @@ fwrite(no_test_dt, file = "1_tables/non_sig_features_of_interest_Hordeum.csv")
 # p-values
 p_vals_Hv <- tobit_fit_Hv$p_vals
 p_vals_Hv[is.na(p_vals_Hv)] <- tobit_fit_Hv$p_vals_pa[is.na(p_vals_Hv)]
+# p_adj_Hv <- apply(p_vals_Hv[,-1], 2, p.adjust, method = "fdr")
 
 p_adj_Hv <- matrix(p.adjust(p_vals_Hv[,-1], "fdr"), ncol = 4)
 rownames(p_adj_Hv) <- rownames(p_vals_Hv)
@@ -277,7 +278,7 @@ resid_plot_Hv <- ggplot(dt, aes(x = resid, fill = Density, colour = Density)) +
   theme_bw()+
   scale_fill_manual(values = c("#1a80bb", "#a00000"))+
   scale_color_manual(values = c("#1a80bb", "#a00000"))+
-  theme()
+  theme()+
   NULL
 
 # Setting up p-value matrix

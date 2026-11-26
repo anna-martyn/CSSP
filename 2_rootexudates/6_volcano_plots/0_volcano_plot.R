@@ -129,6 +129,9 @@ res_table[, ":="(
 # Tallying the number of significant features by plant-genotype combination
 text_data <- res_table[, .(N_diff = sum(Sig)), list(Plant, Genotype)]
 text_data[, y_pos := ifelse(Plant == "Lotus", 18, 29)]
+text_data[,
+  x_pos := ifelse(Plant == "Lotus" & Genotype %in% c("nsp1", "nsp2") , 5.75, -5.75)
+]
 
 # Plot
 volcano_plot <- ggplot(
@@ -147,7 +150,8 @@ volcano_plot <- ggplot(
   facet_grid(factor(Plant, levels = c("Lotus", "Hordeum")) ~ Genotype, scales = "free") +
   geom_label(
     data = text_data,
-    aes(x = -5.75, y = y_pos, label = N_diff),
+    aes(x = 5.75, y = 4.5, label = N_diff),
+    # aes(x = -5.75, y = y_pos, label = N_diff),
     colour = "black",
     fill = "grey",
     alpha = 0.2,
@@ -170,7 +174,7 @@ volcano_plot <- ggplot(
     legend.title = element_text(size = 6, hjust = 0.5, margin = margin(r = 5))
   ) +
   guides(color = guide_legend(override.aes = list(size = 2))) +
-  NULL
+  NULL; volcano_plot
 
 volcano_legend <- get_plot_component(volcano_plot, 'guide-box', return_all = TRUE)
 volcano_plot <- volcano_plot + guides(colour = "none")

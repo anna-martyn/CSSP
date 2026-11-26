@@ -202,9 +202,9 @@ Tobit_model2 <- function(
       idx <- rownames(res)[-2]
 
       if (test == "one-sided") {
-        p_vals_tobit <- pnorm(-res[idx, 3])
+        p_vals_tobit <- pt(-res[idx, 3], df = nrow(dt) - ncol(X))
       } else if(test == "two-sided"){
-        p_vals_tobit <- res[idx, 4]
+        p_vals_tobit <- 2*pt(-abs(res[idx, 3]), df = nrow(dt) - ncol(X))
       }
 
       sigma_est[i] <- exp(res[2, 1])
