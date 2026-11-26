@@ -22,7 +22,9 @@ phs <- phyloseq(otu_table(asv_table, taxa_are_rows = TRUE))
 
 # Checking minimum sequencing depth
 min_depth <- min(sample_sums(phs))
-min_depth > 1000 # >1000 reads in all samples, no further filtering
+min_depth > 4000 # >4000 reads in all samples, no further filtering
+asv_table_filt <- asv_table[,sample_sums(phs) > 4000]
+phs <- phyloseq(otu_table(asv_table_filt, taxa_are_rows = TRUE))
 
 # Rarefying ASV table
 set.seed(1673967505)
