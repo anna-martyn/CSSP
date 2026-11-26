@@ -79,6 +79,8 @@ run_beta_diversity <- function(asv_table, table_name) {
     levels = c("Rhizosphere", "Root", "Nodules")
   )
 
+  asv_RA <- asv_RA[,design$SampleID]
+
   cpcoa <- capscale(
     t(asv_RA) ~ Genotype * Compartment,
     data = design,

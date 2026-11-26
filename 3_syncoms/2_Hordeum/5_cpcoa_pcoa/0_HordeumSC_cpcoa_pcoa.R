@@ -65,10 +65,8 @@ run_beta_diversity <- function(asv_table, table_name) {
   asv_mat <- as.matrix(asv_table[, -1, with = FALSE])
   rownames(asv_mat) <- asv_table$ASVid
   asv_RA <- apply(asv_mat, 2, function(x) x/sum(x))
-
-  # Bray-Curtis
-  bray_curtis <- vegdist(t(asv_RA), method = "bray")
-
+  asv_RA <- asv_RA[,design$SampleID]
+  
   # CPCoA
   cpcoa <- capscale(
     t(asv_RA) ~ Genotype * Compartment,

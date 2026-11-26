@@ -96,6 +96,10 @@ main_theme <- theme(
 )
 
 # Lotus CPCoA and plot --------------------------------------------------------
+if (!identical(colnames(Lotus_asv_table_norm), Lotus_design$SampleID)) {
+  Lotus_asv_table_norm <- Lotus_asv_table_norm[, Lotus_design$SampleID]
+}
+
 # CPCoA
 CPCoA_Lj <- capscale(
   t(Lotus_asv_table_norm) ~ Compartment*Soil,
