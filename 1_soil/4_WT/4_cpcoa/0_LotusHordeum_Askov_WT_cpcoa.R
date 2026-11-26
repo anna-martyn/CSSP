@@ -204,6 +204,10 @@ ggsave(
 saveRDS(object = CPCoA_plot_Lj, file = "1_rds_files/Lotus_Askov_WT_cpcoa.rds")
 
 # Hordeum CPCoA and plot ------------------------------------------------------
+if (!identical(colnames(Hordeum_asv_table_norm), Hordeum_design$SampleID)) {
+  Hordeum_asv_table_norm <- Hordeum_asv_table_norm[, Hordeum_design$SampleID]
+}
+
 CPCoA_Hv <- capscale(
   t(Hordeum_asv_table_norm) ~ Compartment*Soil, 
   data = Hordeum_design, 
