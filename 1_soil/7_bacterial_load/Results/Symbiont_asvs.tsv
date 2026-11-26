@@ -1,0 +1,33 @@
+soil	ASV	mean_ra_wt_nodules	n_nodule_samples	definition	Taxon
+NPK	fd20bdf653287dd3de85661cd7eb5cc8	0.5160791764799045	6	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae
+NPK	6983af9387085b361df4d6ec10d8a801	0.17323350706835147	6	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+NPK	291a58ac54b2011dacb098ccf128aea9	0.11368368790884989	6	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+NPK	36d152ade5576217b77b12bc9329f447	0.09893710793002955	5	all_nodule	d__Bacteria; p__Proteobacteria; c__Gammaproteobacteria; o__Pseudomonadales; f__Pseudomonadaceae; g__Pseudomonas
+NPK	7561b7cae1fca93bac59989bc456c185	0.04739378305822448	1	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+NPK	a20f500706b0005fe884f0ecf17a8d8c	0.018034893621797676	3	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+PK	fd20bdf653287dd3de85661cd7eb5cc8	0.4746848421293026	6	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae
+PK	291a58ac54b2011dacb098ccf128aea9	0.26110837037472207	6	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+PK	acf01e53700dc702dc4f487d1848974b	0.1079681190148359	6	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+PK	6983af9387085b361df4d6ec10d8a801	0.080664422899907	6	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+PK	c7bd01a51a1287b12b29414097ba0965	0.03405733287603163	4	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+PK	a20f500706b0005fe884f0ecf17a8d8c	0.020331136495208523	5	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+UF	fd20bdf653287dd3de85661cd7eb5cc8	0.4035454638814116	6	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae
+UF	acf01e53700dc702dc4f487d1848974b	0.2516920743668202	6	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+UF	6983af9387085b361df4d6ec10d8a801	0.1446225655465343	6	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+UF	291a58ac54b2011dacb098ccf128aea9	0.13198073738080687	6	all_nodule	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+UF	36d152ade5576217b77b12bc9329f447	0.054465464620263304	6	all_nodule	d__Bacteria; p__Proteobacteria; c__Gammaproteobacteria; o__Pseudomonadales; f__Pseudomonadaceae; g__Pseudomonas
+NPK	fd20bdf653287dd3de85661cd7eb5cc8	0.5160791764799045	6	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae
+NPK	6983af9387085b361df4d6ec10d8a801	0.17323350706835147	6	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+NPK	291a58ac54b2011dacb098ccf128aea9	0.11368368790884989	6	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+NPK	7561b7cae1fca93bac59989bc456c185	0.04739378305822448	1	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+NPK	a20f500706b0005fe884f0ecf17a8d8c	0.018034893621797676	3	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+PK	fd20bdf653287dd3de85661cd7eb5cc8	0.4746848421293026	6	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae
+PK	291a58ac54b2011dacb098ccf128aea9	0.26110837037472207	6	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+PK	acf01e53700dc702dc4f487d1848974b	0.1079681190148359	6	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+PK	6983af9387085b361df4d6ec10d8a801	0.080664422899907	6	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+PK	c7bd01a51a1287b12b29414097ba0965	0.03405733287603163	4	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+PK	a20f500706b0005fe884f0ecf17a8d8c	0.020331136495208523	5	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+UF	fd20bdf653287dd3de85661cd7eb5cc8	0.4035454638814116	6	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae
+UF	acf01e53700dc702dc4f487d1848974b	0.2516920743668202	6	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+UF	6983af9387085b361df4d6ec10d8a801	0.1446225655465343	6	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium
+UF	291a58ac54b2011dacb098ccf128aea9	0.13198073738080687	6	rhizobiales	d__Bacteria; p__Proteobacteria; c__Alphaproteobacteria; o__Rhizobiales; f__Rhizobiaceae; g__Mesorhizobium

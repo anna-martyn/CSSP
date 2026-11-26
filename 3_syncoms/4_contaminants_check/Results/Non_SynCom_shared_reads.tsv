@@ -1,0 +1,17 @@
+host	compartment	mutant	mut_reads_in_WT_ASVs_pct	WT_reads_in_mut_ASVs_pct
+Lotus	Rhizosphere	symrk	99.2	97
+Lotus	Rhizosphere	ccamk	76.7	97.5
+Lotus	Rhizosphere	nsp1	99.8	98.5
+Lotus	Rhizosphere	nsp2	98.3	97.3
+Lotus	Root	symrk	98.1	94
+Lotus	Root	ccamk	77.1	93.3
+Lotus	Root	nsp1	95.5	95.8
+Lotus	Root	nsp2	96.1	95.3
+Hordeum	Rhizosphere	symrk	82	96.5
+Hordeum	Rhizosphere	ccamk	84.4	5.6
+Hordeum	Rhizosphere	nsp1	75.5	5.9
+Hordeum	Rhizosphere	nsp2	77.7	87.6
+Hordeum	Root	symrk	96.5	97
+Hordeum	Root	ccamk	94.5	43.8
+Hordeum	Root	nsp1	95.5	44.7
+Hordeum	Root	nsp2	93.3	86.6

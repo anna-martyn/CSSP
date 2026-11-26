@@ -1,0 +1,13 @@
+ASV	Taxon	rhizobiales	compartment	WT	symrk	ccamk	nsp1	nsp2
+G37_LjNodule209	Rhizobiales; Mesorhizobium	TRUE	Rhizosphere	0.004	0.002	0.001	0.001	0.001
+G37_LjNodule209	Rhizobiales; Mesorhizobium	TRUE	Root	0.235	0.001	0.001	0.002	0
+G37_LjNodule209	Rhizobiales; Mesorhizobium	TRUE	Nodules	0.561	NA	NA	NA	NA
+LjRoot228	Rhizobiales; Mesorhizobium	TRUE	Rhizosphere	0.005	0.001	0	0	0.001
+LjRoot228	Rhizobiales; Mesorhizobium	TRUE	Root	0.112	0.001	0	0.002	0.001
+LjRoot228	Rhizobiales; Mesorhizobium	TRUE	Nodules	0.36	NA	NA	NA	NA
+G8_LjRoot126	Burkholderiales; Variovorax	FALSE	Rhizosphere	0.064	0.028	0.032	0.04	0.05
+G8_LjRoot126	Burkholderiales; Variovorax	FALSE	Root	0.026	0.012	0.015	0.016	0.014
+G8_LjRoot126	Burkholderiales; Variovorax	FALSE	Nodules	0.017	NA	NA	NA	NA
+G3_LjRoot129	Burkholderiales; Acidovorax	FALSE	Rhizosphere	0.021	0.062	0.062	0.044	0.056
+G3_LjRoot129	Burkholderiales; Acidovorax	FALSE	Root	0.018	0.046	0.071	0.033	0.065
+G3_LjRoot129	Burkholderiales; Acidovorax	FALSE	Nodules	0.012	NA	NA	NA	NA

@@ -1,0 +1,7 @@
+ASV	mean_ra_wt_nodules	n_nodule_samples	definition	Taxon
+G37_LjNodule209	0.560845859660636	4	all_nodule	Rhizobiales; Mesorhizobium
+LjRoot228	0.36020342686583506	4	all_nodule	Rhizobiales; Mesorhizobium
+G8_LjRoot126	0.016618271459005345	4	all_nodule	Burkholderiales; Variovorax
+G3_LjRoot129	0.012480846788837183	4	all_nodule	Burkholderiales; Acidovorax
+G37_LjNodule209	0.560845859660636	4	rhizobiales	Rhizobiales; Mesorhizobium
+LjRoot228	0.36020342686583506	4	rhizobiales	Rhizobiales; Mesorhizobium
