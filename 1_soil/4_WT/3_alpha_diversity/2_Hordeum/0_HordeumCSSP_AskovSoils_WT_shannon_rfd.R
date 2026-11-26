@@ -1,6 +1,6 @@
 # Setup ------------------------------------------------------------------------
 # Alpha diversity (Shannon entropy) of WT samples by compartment and soil.
-# Rarefaction and alpha diversity are both computed here in R.
+# Uses the pre-rarefied ASV table from 2_rarefication_chao1.
 
 # Cleaning up
 options(warn = -1)
@@ -10,20 +10,20 @@ rm(list = ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Loading packages
-pkg <- c("ggplot2", "dplyr", "multcompView", "phyloseq", "vegan")
+pkg <- c("ggplot2", "dplyr", "multcompView", "vegan")
 for(pk in pkg){
   library(pk, character.only = TRUE)
 }
 
 # Loading data
-asv_table <- read.table(
-  "../../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_ASVtable_10_4.tsv",
+# Rarefied ASV table (samples with <1000 reads removed), from
+# 2_rarefication_chao1/2_Hordeum/1_rarefication/Hordeum_Askov_ASV10_4_rarefication.R
+asv_table_rarefied <- read.table(
+  file = "../../../2_rarefication_chao1/2_Hordeum/1_rarefication/HordeumCSSP_AskovSoils_ASVtable_10_4_rfd_min1000reads.txt",
   sep = "\t",
   header = TRUE,
   row.names = 1,
-  check.names = FALSE,
-  comment.char = "",
-  skip = 1
+  check.names = FALSE
 )
 design <- read.table(
   "../../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt",
@@ -32,14 +32,6 @@ design <- read.table(
   row.names = 1,
   check.names = FALSE
 )
-
-# Rarefaction ------------------------------------------------------------------
-depths <- colSums(asv_table)
-asv_table_filtered <- asv_table[, depths >= 1000]
-phs <- phyloseq(otu_table(asv_table_filtered, taxa_are_rows = TRUE))
-set.seed(1673967505)
-phs_rarefied <- rarefy_even_depth(phs, verbose = FALSE)
-asv_table_rarefied <- as.matrix(otu_table(phs_rarefied))
 
 # Alpha diversity --------------------------------------------------------------
 # Shannon entropy (natural logarithm) per sample

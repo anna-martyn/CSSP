@@ -13,8 +13,11 @@ for(pk in pkg){
 }
 
 # Loading data
+# Rarefied ASV table (no input samples, samples with <1000 reads removed)
+# containing only ASVs matched to the SynCom, from
+# 3_rarefication/HordeumSynCom_rarefication.R
 asv_table <- fread(
-  "../1_data/HordeumSC_ASVtable.tsv"
+  "../3_rarefication/1_tables/HordeumSC_rfd_woinput_min1000reads_nocontaminants.txt"
 )
 design <- fread("../1_data/HordeumSC_metadata.txt")
 

@@ -13,14 +13,14 @@ for(pk in pkg){
 }
 
 # Loading data
+# Rarefied ASV table (samples with <1000 reads removed), from
+# 2_rarefication_chao1/2_Hordeum/1_rarefication/Hordeum_Askov_ASV10_4_rarefication.R
 asv_table <- read.table(
-  file = "../../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_ASVtable_10_4.tsv",
+  file = "../../../2_rarefication_chao1/2_Hordeum/1_rarefication/HordeumCSSP_AskovSoils_ASVtable_10_4_rfd_min1000reads.txt",
   sep = "\t",
   header = TRUE,
   row.names = 1,
-  check.names = FALSE,
-  comment.char = "",
-  skip = 1
+  check.names = FALSE
 )
 
 design <- read.table(

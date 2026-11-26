@@ -13,7 +13,9 @@ for(pk in pkg){
 }
 
 # Loading data
-asv_table <- fread("../1_data/LotusSC_ASVtable_nospike.tsv")
+# Rarefied ASV table containing only ASVs matched to the SynCom, from
+# 4_rarefication/0_LotusSC_rarefication.R
+asv_table <- fread("../4_rarefication/1_tables/LotusSC_rfd_nocontaminants.txt")
 design <- fread("../1_data/LotusSC_metadata.txt")
 
 # Computing alpha diversity
