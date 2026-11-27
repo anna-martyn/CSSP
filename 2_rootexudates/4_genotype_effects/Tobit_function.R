@@ -165,6 +165,7 @@ Tobit_model2 <- function(
   p_vals <- empty_matrix(metabolites, X)
   # resid_mat <- matrix(NA, nrow(metabolites), ncol(metabolites))
   resid_list <- list()
+  resid_no_cens <- list()
 
   if (!missing(seed)) {
     set.seed(seed)
@@ -214,18 +215,28 @@ Tobit_model2 <- function(
       eta <- predict(v)
       mu <- eta[, 1]
       sigma <- exp(eta[, 2])
-      y_obs <- y[, 2]
-
-      resid_rquant <- pnorm(y_obs, mean = mu, sd = sigma)
+      y_obs <- dt$intensity
       cens_idx <- y_obs == -Inf
-      resid_rquant[y_obs == -Inf] <- runif(
-        n = sum(y_obs == -Inf),
-        0,
-        pnorm(d[i], mean = mu, sd = sigma)
-      )
-      resid_rquant <- qnorm(resid_rquant, mean = 0, sd = 1)
+      z <- (d[i] - mu)/sigma
 
-      resid_list[[i]] <- resid_rquant
+      gen_resid <- (y_obs - mu)/sigma
+      gen_resid[cens_idx] <- -sigma[cens_idx] *
+        pnorm(z[cens_idx]) /
+        (1 - pnorm(z[cens_idx]))
+
+      # resid_rquant <- pnorm(y_obs, mean = mu, sd = sigma)
+      # cens_idx <- y_obs == -Inf
+      # resid_rquant[y_obs == -Inf] <- runif(
+      #   n = sum(y_obs == -Inf),
+      #   0,
+      #   pnorm(d[i], mean = mu, sd = sigma)
+      # )
+      # resid_rquant <- qnorm(resid_rquant, mean = 0, sd = 1)
+
+      # resid_list[[i]] <- resid_rquant
+      
+      resid_list[[i]] <- gen_resid
+      resid_no_cens[[i]] <- gen_resid[!cens_idx]
     }
   }
 
@@ -236,7 +247,8 @@ Tobit_model2 <- function(
     p_vals = p_vals,
     beta_est_pa = beta_est_pa,
     p_vals_pa = p_vals_pa,
-    resid = resid_list
+    resid = resid_list,
+    resid_no_cens = resid_no_cens
   )
 
   return(out)

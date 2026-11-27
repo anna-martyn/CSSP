@@ -111,7 +111,6 @@ metabolites_Lj <- metabolites_Lj[feat_keep, ]
 
 # Fitting Tobit regression model with Genotype as covariate (WT as 
 # reference level)
-set.seed(1793694715)
 tobit_fit_Lj <- Tobit_model2(
   metabolites = metabolites_Lj,
   meta_data = design_Lj_df,
@@ -133,8 +132,8 @@ no_test_dt <- data.table(
   Feature = rownames(no_test),
   no_test[, 1] - no_test[, -1]
 )
-no_test_dt <- no_test_dt[symrk != 0 | ccamk != 0 | nsp1 != 0| nsp2 != 0]
-fwrite(no_test_dt, file = "1_tables/non_sig_features_of_interest_Lotus.csv")
+no_test_dt_Lj <- no_test_dt[symrk != 0 | ccamk != 0 | nsp1 != 0| nsp2 != 0]
+# fwrite(no_test_dt, file = "1_tables/non_sig_features_of_interest_Lotus.csv")
 
 # p-values
 p_vals_Lj <- tobit_fit_Lj$p_vals
@@ -145,10 +144,11 @@ rownames(p_adj_Lj) <- rownames(p_vals_Lj)
 colnames(p_adj_Lj) <- colnames(p_vals_Lj)[-1]
 
 # Residual plot
+set.seed(1793694715)
 all_res <- unlist(tobit_fit_Lj$resid)
 dt <- data.table(
   resid = c(all_res, rnorm(length(all_res))),
-  Density = rep(c("Tobit residuals", "Simnulated\nstd. normal"), each = length(all_res))
+  Density = rep(c("Tobit residuals", "Simulated\nstd. normal"), each = length(all_res))
 )
 
 resid_plot_Lj <- ggplot(dt, aes(x = resid, fill = Density, colour = Density)) +
@@ -156,6 +156,7 @@ resid_plot_Lj <- ggplot(dt, aes(x = resid, fill = Density, colour = Density)) +
   theme_bw()+
   scale_fill_manual(values = c("#1a80bb", "#a00000"))+
   scale_color_manual(values = c("#1a80bb", "#a00000"))+
+  labs(x = "Generalised residuals", y = "Probability density")+
   NULL
 
 # Setting up p-value matrix
@@ -231,7 +232,6 @@ metabolites_Hv <- metabolites_Hv[feat_keep, ]
 
 # Fitting Tobit regression model with Genotype as covariate (WT as 
 # reference level)
-set.seed(1793694715)
 tobit_fit_Hv <- Tobit_model2(
   metabolites = metabolites_Hv,
   meta_data = design_Hv_df,
@@ -254,8 +254,8 @@ no_test_dt <- data.table(
   Feature = rownames(no_test),
   no_test[, 1] - no_test[, -1]
 )
-no_test_dt <- no_test_dt[symrk != 0 | ccamk != 0 | nsp1 != 0| nsp2 != 0]
-fwrite(no_test_dt, file = "1_tables/non_sig_features_of_interest_Hordeum.csv")
+no_test_dt_Hv <- no_test_dt[symrk != 0 | ccamk != 0 | nsp1 != 0| nsp2 != 0]
+# fwrite(no_test_dt, file = "1_tables/non_sig_features_of_interest_Hordeum.csv")
 
 # p-values
 p_vals_Hv <- tobit_fit_Hv$p_vals
@@ -267,10 +267,11 @@ rownames(p_adj_Hv) <- rownames(p_vals_Hv)
 colnames(p_adj_Hv) <- colnames(p_vals_Hv)[-1]
 
 # Residual plot
+set.seed(1793694715)
 all_res <- unlist(tobit_fit_Hv$resid)
 dt <- data.table(
   resid = c(all_res, rnorm(length(all_res))),
-  Density = rep(c("Tobit residuals", "Simnulated\nstd. normal"), each = length(all_res))
+  Density = rep(c("Tobit residuals", "Simulated\nstd. normal"), each = length(all_res))
 )
 
 resid_plot_Hv <- ggplot(dt, aes(x = resid, fill = Density, colour = Density)) +
@@ -279,6 +280,7 @@ resid_plot_Hv <- ggplot(dt, aes(x = resid, fill = Density, colour = Density)) +
   scale_fill_manual(values = c("#1a80bb", "#a00000"))+
   scale_color_manual(values = c("#1a80bb", "#a00000"))+
   theme()+
+  labs(x = "Generalised residuals", y = "Probability density")+
   NULL
 
 # Setting up p-value matrix
@@ -352,3 +354,8 @@ ggsave(
   units = "mm"
 )
 
+# Zero vs. non-zero tables
+openxlsx::write.xlsx(
+  list("Lotus" = no_test_dt_Lj, "Hordeum" = no_test_dt_Hv),
+  file = "../10_suppl_tables/suppl_tab_metabolites_zero_vs_nonzero.xlsx"
+)
