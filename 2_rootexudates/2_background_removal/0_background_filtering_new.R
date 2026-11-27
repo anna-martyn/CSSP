@@ -2,6 +2,7 @@
 library(data.table)
 library(VGAM)
 library(logistf)
+library(pmp)
 
 # Setting working directory to source file location
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
@@ -173,6 +174,11 @@ design_Lj_df$Genotype <- factor(
   design_Lj_df$Genotype,
   levels = c("control", "WT", "symrk", "ccamk", "nsp1", "nsp2")
 )
+
+idx <- which(colnames(metabolites_Lj) %in% design_Lj[Genotype == "control", Sample_ID])
+metabolites_Lj[,idx]
+
+pqn_normalisation(df = metabolite_data_Lj, classes = design_Lj_df$Genotype, ref_mean = 1:25)
 
 all(colnames(metabolites_Lj) == rownames(design_Lj_df))
 p_vals_pa <- matrix(NA, ncol = 5, nrow = nrow(metabolites_Lj))
