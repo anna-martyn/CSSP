@@ -29,7 +29,7 @@ legend_labels <- c(
 ## Loading Lotus data ---------------------------------------------------------
 # Lotus feature table filtered for background features
 metabolite_data_Lj <- fread(
-  "../2_background_removal/1_tables/feature_table_Lotus_filtered.csv"
+  "../2_background_removal/1_tables/feature_table_Lotus_filtered_pqn.csv"
 )
 
 design_Lj <- fread(
@@ -53,7 +53,7 @@ metabolite_data_Lj <- metabolite_data_Lj[,
 
 ## Loading Hordeum data -------------------------------------------------------
 metabolite_data_Hv <- fread(
-  "../2_background_removal/1_tables/feature_table_Hordeum_filtered.csv"
+  "../2_background_removal/1_tables/feature_table_Hordeum_filtered_pqn.csv"
 )
 design_Hv <- fread(
   "../1_data/2_Hordeum/HordeumCSSP_RootEx_metadata.txt",

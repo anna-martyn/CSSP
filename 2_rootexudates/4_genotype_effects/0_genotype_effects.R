@@ -16,7 +16,7 @@ dir_name <- paste(
   "..",
   "2_background_removal",
   "1_tables",
-  "feature_table_Lotus_filtered.csv",
+  "feature_table_Lotus_filtered_pqn.csv",
   sep = "/"
 )
 metabolite_data_Lj <- fread(dir_name)
@@ -59,7 +59,7 @@ dir_name <- paste(
   "..",
   "2_background_removal",
   "1_tables",
-  "feature_table_Hordeum_filtered.csv",
+  "feature_table_Hordeum_filtered_pqn.csv",
   sep = "/"
 )
 metabolite_data_Hv <- fread(dir_name)
@@ -260,7 +260,6 @@ no_test_dt_Hv <- no_test_dt[symrk != 0 | ccamk != 0 | nsp1 != 0| nsp2 != 0]
 # p-values
 p_vals_Hv <- tobit_fit_Hv$p_vals
 p_vals_Hv[is.na(p_vals_Hv)] <- tobit_fit_Hv$p_vals_pa[is.na(p_vals_Hv)]
-# p_adj_Hv <- apply(p_vals_Hv[,-1], 2, p.adjust, method = "fdr")
 
 p_adj_Hv <- matrix(p.adjust(p_vals_Hv[,-1], "fdr"), ncol = 4)
 rownames(p_adj_Hv) <- rownames(p_vals_Hv)

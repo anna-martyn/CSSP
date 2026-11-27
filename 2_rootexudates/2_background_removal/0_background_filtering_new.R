@@ -175,10 +175,16 @@ design_Lj_df$Genotype <- factor(
   levels = c("control", "WT", "symrk", "ccamk", "nsp1", "nsp2")
 )
 
-idx <- which(colnames(metabolites_Lj) %in% design_Lj[Genotype == "control", Sample_ID])
-metabolites_Lj[,idx]
-
-pqn_normalisation(df = metabolite_data_Lj, classes = design_Lj_df$Genotype, ref_mean = 1:25)
+# PQN
+metabolites_Lj[metabolites_Lj == 0] <- NA
+metabolites_Lj <- pqn_normalisation(
+  df = metabolites_Lj,
+  classes = ifelse(design_Lj_df$Genotype == "control", "control", "biological"),
+  qc_label = "biological",
+  sample_frac = 0.1,
+  ref_method = "median"
+)
+metabolites_Lj[is.na(metabolites_Lj)] <- 0
 
 all(colnames(metabolites_Lj) == rownames(design_Lj_df))
 p_vals_pa <- matrix(NA, ncol = 5, nrow = nrow(metabolites_Lj))
@@ -237,6 +243,16 @@ design_Hv_df$Genotype <- factor(
   levels = c("control", "WT", "symrk", "ccamk", "nsp1", "nsp2")
 )
 
+metabolites_Hv[metabolites_Hv == 0] <- NA
+metabolites_Hv <- pqn_normalisation(
+  df = metabolites_Hv,
+  classes = design_Hv_df$Genotype,
+  qc_label = "control",
+  sample_frac = 0.1
+)
+metabolites_Hv[is.na(metabolites_Hv)] <- 0
+
+
 all(colnames(metabolites_Hv) == rownames(design_Hv_df))
 p_vals_pa <- matrix(NA, ncol = 5, nrow = nrow(metabolites_Hv))
 for (i in 1:nrow(metabolites_Hv)) {
@@ -253,14 +269,6 @@ p_adj_pa <- apply(p_vals_pa, 2, p.adjust, method = "fdr")
 keep_idx <- apply(p_adj_pa < 0.05, 1, any)
 feature_keep_pa <- rownames(metabolites_Hv)[keep_idx]
 feature_other <- setdiff(rownames(metabolites_Hv), feature_keep_pa)
-
-# cidx <- design_Hv[Genotype == "control", Sample_ID]
-# cidx <- which(colnames(metabolites_Hv) %in% cidx)
-# ct_all0 <- apply(metabolites_Hv[,cidx], 1, function(x) all(x == 0))
-# zcidx <- which(ct_all0)
-
-# pres_met <- apply(metabolites_Hv[,-cidx], 1, function(x) mean(x != 0) > 0.1)
-# feature_keep_pa <- names(ct_all0)[ct_all0 & pres_met]
 
 set.seed(1793694715)
 tobit_fit_Hv <- Tobit_model2(
@@ -284,10 +292,10 @@ feature_keep_Hv <- union(feature_keep_pa, feature_keep_tr)
 # Lotus
 ## Removing control samples from feature tables
 samples_keep <- design_Lj[Genotype != "control", Sample_ID]
-metabolite_data_Lj <- metabolite_data_Lj[,
-  c("Feature", samples_keep),
-  with = FALSE
-]
+metabolite_data_Lj <- data.table(
+  Feature = feature_keep_Lj,
+  metabolites_Lj[feature_keep_Lj, samples_keep]
+)
 
 ## Keeping only features with higher intensity in at least one plant genotype 
 ## than in control samples
@@ -300,10 +308,10 @@ metabolite_data_Lj <- metabolite_data_Lj[non_zero_obs,]
 # Hordeum
 ## Removing control samples from feature tables
 samples_keep <- design_Hv[Genotype != "control", Sample_ID]
-metabolite_data_Hv <- metabolite_data_Hv[,
-  c("Feature", samples_keep),
-  with = FALSE
-]
+metabolite_data_Hv <- data.table(
+  Feature = feature_keep_Hv,
+  metabolites_Hv[feature_keep_Hv, samples_keep]
+)
 
 ## Keeping only features with higher intensity in at least one plant genotype 
 ## than in control samples
@@ -314,8 +322,8 @@ non_zero_obs <- rowSums(metabolite_data_Hv != 0) >= 3
 metabolite_data_Hv <- metabolite_data_Hv[non_zero_obs,]
 
 # Saving feature tables for use in other scripts
-fwrite(metabolite_data_Lj, file = "1_tables/feature_table_Lotus_filtered.csv")
-fwrite(metabolite_data_Hv, file = "1_tables/feature_table_Hordeum_filtered.csv")
+fwrite(metabolite_data_Lj, file = "1_tables/feature_table_Lotus_filtered_pqn.csv")
+fwrite(metabolite_data_Hv, file = "1_tables/feature_table_Hordeum_filtered_pqn.csv")
 
 # Saving feature tables for supplementary tables
 metabolite_data_Lj[, Feature := gsub("Feature", "", Feature)]
@@ -327,9 +335,9 @@ colnames(metabolite_data_Hv) <- gsub("Sample", "", colnames(metabolite_data_Hv))
 
 fwrite(
   metabolite_data_Lj,
-  file = "../10_suppl_tables/suppl_tab_filtered_feature_table_lotus.csv"
+  file = "../10_suppl_tables/suppl_tab_filtered_feature_table_lotus_pqn.csv"
 )
 fwrite(
   metabolite_data_Hv,
-  file = "../10_suppl_tables/suppl_tab_filtered_feature_table_Hordeum.csv"
+  file = "../10_suppl_tables/suppl_tab_filtered_feature_table_Hordeum_pqn.csv"
 )
