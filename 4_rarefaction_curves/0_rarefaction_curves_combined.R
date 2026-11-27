@@ -82,7 +82,7 @@ lotus_soil_design <- read_design(
   "../1_soil/1_data/1_Lotus/LotusCSSP_AskovSoils_metadata.txt"
 )
 lotus_soil_depth <- rarefied_depth(
-  "../1_soil/2_rarefication_chao1/1_Lotus/1_rarefication/LotusCSSP_AskovSoils_ASVtable10_4_rfd.txt"
+  "../1_soil/2_rarefication/1_Lotus/LotusCSSP_AskovSoils_ASVtable10_4_rfd.txt"
 )
 
 # Hordeum soil
@@ -94,7 +94,7 @@ hordeum_soil_design <- read_design(
   "../1_soil/1_data/2_Hordeum/HordeumCSSP_AskovSoils_metadata.txt"
 )
 hordeum_soil_depth <- rarefied_depth(
-  "../1_soil/2_rarefication_chao1/2_Hordeum/1_rarefication/HordeumCSSP_AskovSoils_ASVtable_10_4_rfd_min1000reads.txt"
+  "../1_soil/2_rarefication/2_Hordeum/HordeumCSSP_AskovSoils_ASVtable_10_4_rfd.txt"
 )
 
 # Lotus SynCom, keeping only ASVs matched to the SynCom (as in
@@ -115,7 +115,7 @@ hordeum_sc <- read_asv(
 hordeum_sc <- hordeum_sc[grepl("_", rownames(hordeum_sc)), ]
 hordeum_sc_design <- read_design("../3_syncoms/2_Hordeum/1_data/HordeumSC_metadata.txt")
 hordeum_sc_depth <- rarefied_depth(
-  "../3_syncoms/2_Hordeum/3_rarefication/1_tables/HordeumSC_rfd_woinput_min1000reads_nocontaminants.txt"
+  "../3_syncoms/2_Hordeum/3_rarefication/1_tables/HordeumSC_rfd_nocontaminants.txt"
 )
 
 # Rarefaction curves -----------------------------------------------------------
@@ -219,6 +219,13 @@ ggsave(
 )
 ggsave(
   filename = "2_figures/rarefaction_curves_combined_zoom.pdf",
+  plot = rare_plot_zoom,
+  width = 18,
+  height = 14,
+  units = "cm"
+)
+ggsave(
+  filename = "Suppl_Figure_X_Rarefaction_curves.pdf",
   plot = rare_plot_zoom,
   width = 18,
   height = 14,

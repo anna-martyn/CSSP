@@ -19,7 +19,7 @@ for(pk in pkg){
 # Rarefied ASV table, from
 # 2_rarefication_chao1/1_Lotus/1_rarefication/Lotus_Askov_ASV10_4_rarefication.R
 asv_table_rarefied <- read.table(
-  file = "../../../2_rarefication_chao1/1_Lotus/1_rarefication/LotusCSSP_AskovSoils_ASVtable10_4_rfd.txt",
+  file = "../../../2_rarefication/1_Lotus/LotusCSSP_AskovSoils_ASVtable10_4_rfd.txt",
   sep = "\t",
   header = TRUE,
   row.names = 1,

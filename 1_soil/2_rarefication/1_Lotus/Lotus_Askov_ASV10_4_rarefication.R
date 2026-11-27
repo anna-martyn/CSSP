@@ -22,7 +22,11 @@ phs <- phyloseq(otu_table(asv_table, taxa_are_rows = TRUE))
 
 # Checking minimum sequencing depth
 min_depth <- min(sample_sums(phs))
-min_depth > 4000 # >4000 reads in all samples, no further filtering
+min_depth > 4000
+
+# Based on rarefaction curves (CSSP/4_rarefaction_curves/0_rarefaction_curves_combined.R), 
+# we remove samples with >4000 reads as a compromise between maintaining as many samples as 
+# possible, while as many samples as possible has stabilised species richness.
 asv_table_filt <- asv_table[,sample_sums(phs) > 4000]
 phs <- phyloseq(otu_table(asv_table_filt, taxa_are_rows = TRUE))
 

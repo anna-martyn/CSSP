@@ -7,7 +7,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Loading data
 asv_table <- read.table(
-  file = "../../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_ASVtable_10_4.tsv",
+  file = "../../1_data/2_Hordeum/HordeumCSSP_AskovSoils_ASVtable_10_4.tsv",
   sep = "\t",
   header = TRUE,
   row.names = 1,
@@ -22,10 +22,13 @@ library(phyloseq)
 # Phyloseq object
 phs <- phyloseq(otu_table(asv_table, taxa_are_rows = TRUE))
 
-# Filtering samples with >=1000 reads
+# Examining sequencing depths
 depths <- sample_sums(phs)
-keep_samples <- names(depths[depths >= 1000])
-asv_table_filtered <- asv_table[, keep_samples]
+sort(depths)[1:5]
+
+# Removing sample AM_S_3 with 86 reads
+idx <- which(colnames(asv_table) == "AM_S_3")
+asv_table_filtered <- asv_table[, -idx]
 
 # Rarefying filtered ASV table
 phs_filt <- phyloseq(otu_table(asv_table_filtered, taxa_are_rows = TRUE))
@@ -37,10 +40,10 @@ asv_table_rarefied <- as.matrix(otu_table(phs_rarefied))
 asv_table_rarefied <- data.frame(ASVid = rownames(asv_table_rarefied), asv_table_rarefied)
 
 # Saving rarefied ASV table
-write.csv(asv_table_rarefied, file = "HordeumCSSP_AskovSoils_ASVtable_10_4_rfd_min1000reads.csv")
+write.csv(asv_table_rarefied, file = "HordeumCSSP_AskovSoils_ASVtable_10_4_rfd.csv")
 write.table(
   asv_table_rarefied, 
-  file = "HordeumCSSP_AskovSoils_ASVtable_10_4_rfd_min1000reads.txt", 
+  file = "HordeumCSSP_AskovSoils_ASVtable_10_4_rfd.txt", 
   sep = "\t",
   row.names = FALSE,
   col.names = TRUE, 

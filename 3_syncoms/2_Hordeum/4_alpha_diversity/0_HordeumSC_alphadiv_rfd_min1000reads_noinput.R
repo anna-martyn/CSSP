@@ -17,7 +17,7 @@ for(pk in pkg){
 # containing only ASVs matched to the SynCom, from
 # 3_rarefication/HordeumSynCom_rarefication.R
 asv_table <- fread(
-  "../3_rarefication/1_tables/HordeumSC_rfd_woinput_min1000reads_nocontaminants.txt"
+  "../3_rarefication/1_tables/HordeumSC_rfd_nocontaminants.txt"
 )
 design <- fread("../1_data/HordeumSC_metadata.txt")
 
